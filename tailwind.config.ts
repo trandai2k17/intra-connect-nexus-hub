@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,26 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Custom colors for the intranet portal
+				'intranet': {
+					'primary': '#3B82F6',
+					'primary-light': '#60A5FA',
+					'secondary': '#8B5CF6',
+					'accent': '#06B6D4',
+					'success': '#10B981',
+					'warning': '#F59E0B',
+					'danger': '#EF4444',
+					'gray-50': '#F9FAFB',
+					'gray-100': '#F3F4F6',
+					'gray-200': '#E5E7EB',
+					'gray-300': '#D1D5DB',
+					'gray-400': '#9CA3AF',
+					'gray-500': '#6B7280',
+					'gray-600': '#4B5563',
+					'gray-700': '#374151',
+					'gray-800': '#1F2937',
+					'gray-900': '#111827'
 				}
 			},
 			borderRadius: {
@@ -84,11 +105,39 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'slide-right': {
+					'0%': { transform: 'translateX(100%)', opacity: '0' },
+					'100%': { transform: 'translateX(0)', opacity: '1' }
+				},
+				'slide-up': {
+					'0%': { transform: 'translateY(100%)', opacity: '0' },
+					'100%': { transform: 'translateY(0)', opacity: '1' }
+				},
+				'fade-in': {
+					'0%': { opacity: '0', transform: 'translateY(20px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
+				'scroll-up': {
+					'0%': { transform: 'translateY(100%)' },
+					'100%': { transform: 'translateY(-100%)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'slide-right': 'slide-right 0.8s ease-out',
+				'slide-up': 'slide-up 0.6s ease-out',
+				'fade-in': 'fade-in 0.6s ease-out',
+				'scroll-up': 'scroll-up 20s linear infinite'
+			},
+			backgroundImage: {
+				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+				'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+				'glass': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2))'
+			},
+			backdropBlur: {
+				'xs': '2px'
 			}
 		}
 	},
