@@ -49,16 +49,16 @@ export function AppSidebar() {
   const isCollapsed = state === "collapsed";
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-white/20 bg-white/10 backdrop-blur-md">
+    <Sidebar collapsible="icon" className="border-r border-gray-200 bg-white">
       <SidebarHeader className="p-6">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-intranet-primary to-intranet-secondary rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">IT</span>
           </div>
           {!isCollapsed && (
             <div>
-              <h2 className="font-bold text-intranet-gray-800">IT Portal</h2>
-              <p className="text-xs text-intranet-gray-600">Cổng thông tin nội bộ</p>
+              <h2 className="font-bold text-gray-800">IT Portal</h2>
+              <p className="text-xs text-gray-600">Cổng thông tin nội bộ</p>
             </div>
           )}
         </div>
@@ -66,7 +66,7 @@ export function AppSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-intranet-gray-600 font-medium">
+          <SidebarGroupLabel className="text-gray-600 font-medium">
             Navigation
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -77,6 +77,7 @@ export function AppSidebar() {
                     asChild 
                     isActive={isActive(item.url)}
                     tooltip={isCollapsed ? item.title : undefined}
+                    className="hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 data-[active=true]:bg-blue-100 data-[active=true]:text-blue-700"
                   >
                     <NavLink to={item.url} className="flex items-center space-x-3">
                       <item.icon className="w-5 h-5" />
@@ -92,7 +93,7 @@ export function AppSidebar() {
 
       <SidebarFooter className="p-4">
         {!isCollapsed && (
-          <div className="text-xs text-intranet-gray-500 text-center">
+          <div className="text-xs text-gray-500 text-center">
             © 2024 IT Department
           </div>
         )}
