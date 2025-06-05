@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import { useIsMobile } from "@/hooks/use-mobile"
 
@@ -49,9 +50,24 @@ const SidebarProvider = React.forwardRef<
     const isMobile = useIsMobile()
     const [openMobile, setOpenMobile] = React.useState(false)
 
+    // Initialize state from cookie or default
+    const getInitialState = () => {
+      if (typeof window === "undefined") return defaultOpen
+      
+      const cookieValue = document.cookie
+        .split("; ")
+        .find(row => row.startsWith(SIDEBAR_COOKIE_NAME + "="))
+        ?.split("=")[1]
+      
+      // Auto-collapse on mobile by default
+      if (isMobile) return false
+      
+      return cookieValue ? cookieValue === "true" : defaultOpen
+    }
+
     // This is the internal state of the sidebar.
     // We use openProp and setOpenProp for control from outside the component.
-    const [_open, _setOpen] = React.useState(defaultOpen)
+    const [_open, _setOpen] = React.useState(getInitialState)
     const open = openProp ?? _open
     const setOpen = React.useCallback(
       (value: boolean | ((value: boolean) => boolean)) => {
@@ -67,6 +83,13 @@ const SidebarProvider = React.forwardRef<
       },
       [setOpenProp, open]
     )
+
+    // Auto-collapse on mobile
+    React.useEffect(() => {
+      if (isMobile && open) {
+        setOpen(false)
+      }
+    }, [isMobile, open, setOpen])
 
     // Helper to toggle the sidebar.
     const toggleSidebar = React.useCallback(() => {
@@ -113,8 +136,8 @@ const SidebarProvider = React.forwardRef<
         <div
           style={
             {
-              "--sidebar-width": "16rem",
-              "--sidebar-width-icon": "3rem",
+              "--sidebar-width": "18rem",
+              "--sidebar-width-icon": "4rem",
               ...style,
             } as React.CSSProperties
           }

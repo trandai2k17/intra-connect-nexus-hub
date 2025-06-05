@@ -35,13 +35,17 @@ export function SidebarNavigation() {
   };
 
   return (
-    <div className="p-3 bg-gradient-to-b from-white/95 to-white/90 backdrop-blur-xl flex-1 overflow-auto">
+    <div className={`transition-all duration-300 bg-gradient-to-b from-white/95 to-white/90 backdrop-blur-xl flex-1 overflow-auto ${
+      isCollapsed ? 'p-1' : 'p-3'
+    }`}>
       <SidebarGroup>
-        <SidebarGroupLabel className="text-gray-600 font-semibold text-xs uppercase tracking-wider mb-3 px-2">
-          {!isCollapsed && "Điều hướng"}
-        </SidebarGroupLabel>
+        {!isCollapsed && (
+          <SidebarGroupLabel className="text-gray-600 font-semibold text-xs uppercase tracking-wider mb-3 px-2">
+            Điều hướng
+          </SidebarGroupLabel>
+        )}
         <SidebarGroupContent>
-          <SidebarMenu className="space-y-1">
+          <SidebarMenu className={`space-y-1 ${isCollapsed ? 'space-y-2' : ''}`}>
             {navigationItems.map((item) => (
               <SidebarMenuItem key={item.title}>
                 {item.subItems ? (
@@ -128,12 +132,11 @@ export function SidebarNavigation() {
                       </Collapsible>
                     ) : (
                       <SidebarMenuButton 
-                        className="hover:bg-white/80 text-gray-700 hover:text-gray-800 transition-all duration-200 rounded-xl p-3 font-medium bg-white/70 shadow-sm hover:shadow-lg group"
+                        className="w-12 h-12 rounded-lg p-0 m-1 hover:bg-white/80 text-gray-700 hover:text-blue-600 transition-all duration-200 font-medium bg-white/70 shadow-sm hover:shadow-lg group hover:scale-105"
                         tooltip={item.title}
                       >
-                        <div className="flex flex-col items-center space-y-1 w-full">
-                          <item.icon className={`w-5 h-5 ${item.color} group-hover:scale-110 transition-transform`} />
-                          <span className="text-xs font-medium text-center leading-tight">{item.title}</span>
+                        <div className="flex flex-col items-center justify-center w-full h-full">
+                          <item.icon className={`w-6 h-6 ${item.color} group-hover:scale-110 transition-transform duration-200`} />
                         </div>
                       </SidebarMenuButton>
                     )}
@@ -143,13 +146,26 @@ export function SidebarNavigation() {
                     asChild 
                     isActive={isActive(item.url)}
                     tooltip={isCollapsed ? item.title : undefined}
-                    className="hover:bg-white/80 text-gray-700 hover:text-gray-800 transition-all duration-200 data-[active=true]:bg-gradient-to-r data-[active=true]:from-blue-50 data-[active=true]:to-purple-50 data-[active=true]:text-blue-800 data-[active=true]:border-l-4 data-[active=true]:border-blue-500 data-[active=true]:shadow-md rounded-xl p-3 font-medium bg-white/70 shadow-sm hover:shadow-lg group"
+                    className={`transition-all duration-200 font-medium shadow-sm hover:shadow-lg group ${
+                      isCollapsed 
+                        ? 'w-12 h-12 rounded-lg p-0 m-1 hover:bg-white/80 text-gray-700 hover:text-blue-600 bg-white/70 hover:scale-105 data-[active=true]:bg-gradient-to-br data-[active=true]:from-blue-500 data-[active=true]:to-purple-600 data-[active=true]:text-white data-[active=true]:shadow-lg' 
+                        : 'hover:bg-white/80 text-gray-700 hover:text-gray-800 data-[active=true]:bg-gradient-to-r data-[active=true]:from-blue-50 data-[active=true]:to-purple-50 data-[active=true]:text-blue-800 data-[active=true]:border-l-4 data-[active=true]:border-blue-500 data-[active=true]:shadow-md rounded-xl p-3 bg-white/70'
+                    }`}
                   >
-                    <NavLink to={item.url} className={`flex items-center ${isCollapsed ? 'flex-col space-y-1 justify-center' : 'space-x-3'} w-full`}>
-                      <item.icon className={`w-5 h-5 ${item.color} group-hover:scale-110 transition-transform`} />
-                      {isCollapsed ? (
-                        <span className="text-xs font-medium text-center leading-tight">{item.title}</span>
-                      ) : (
+                    <NavLink 
+                      to={item.url} 
+                      className={`flex items-center w-full transition-all duration-200 ${
+                        isCollapsed 
+                          ? 'justify-center h-full' 
+                          : 'space-x-3'
+                      }`}
+                    >
+                      <item.icon className={`transition-transform duration-200 group-hover:scale-110 ${
+                        isCollapsed 
+                          ? 'w-6 h-6' 
+                          : `w-5 h-5 ${item.color}`
+                      }`} />
+                      {!isCollapsed && (
                         <span className="text-sm">{item.title}</span>
                       )}
                     </NavLink>
