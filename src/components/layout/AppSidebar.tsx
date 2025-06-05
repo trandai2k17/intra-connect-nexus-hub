@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { 
   Home, 
@@ -152,6 +153,7 @@ export function AppSidebar() {
       className={`border-r border-white/20 shadow-2xl z-50 bg-white/95 backdrop-blur-xl transition-all duration-300 ${
         isCollapsed ? 'w-20' : 'w-72'
       }`}
+      collapsible="icon"
     >
       <SidebarHeader className="p-4 border-b border-white/20 bg-gradient-to-r from-white/95 to-white/90 backdrop-blur-xl">
         <div className="flex items-center justify-between">
@@ -169,7 +171,7 @@ export function AppSidebar() {
             )}
           </div>
           
-          {/* Round toggle button */}
+          {/* Round toggle button - always visible */}
           <button
             onClick={toggleSidebar}
             className="w-10 h-10 hover:bg-white/80 rounded-full flex items-center justify-center transition-all duration-200 group border border-white/30 bg-white/90 shadow-lg hover:shadow-xl"
@@ -193,94 +195,100 @@ export function AppSidebar() {
               {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   {item.subItems ? (
-                    <Collapsible
-                      open={!isCollapsed && openGroups[item.title]}
-                      onOpenChange={() => !isCollapsed && toggleGroup(item.title)}
-                    >
-                      <CollapsibleTrigger asChild>
-                        <SidebarMenuButton 
-                          className="hover:bg-white/80 text-gray-700 hover:text-gray-800 transition-all duration-200 rounded-xl p-3 font-medium w-full group bg-white/70 shadow-sm hover:shadow-lg"
-                          tooltip={isCollapsed ? item.title : undefined}
-                          style={{
-                            background: openGroups[item.title] ? 'rgba(59, 130, 246, 0.1)' : 'rgba(255, 255, 255, 0.7)'
-                          }}
+                    <>
+                      {!isCollapsed ? (
+                        <Collapsible
+                          open={openGroups[item.title]}
+                          onOpenChange={() => toggleGroup(item.title)}
                         >
-                          <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} w-full`}>
-                            <div className={`flex items-center ${isCollapsed ? 'flex-col space-y-1' : 'space-x-3'}`}>
-                              <item.icon className={`w-5 h-5 ${item.color}`} />
-                              {isCollapsed ? (
-                                <span className="text-xs font-medium text-center leading-tight">{item.title}</span>
-                              ) : (
-                                <span className="text-sm">{item.title}</span>
-                              )}
-                            </div>
-                            {!isCollapsed && (
-                              <ChevronRight className={`w-4 h-4 transition-transform duration-200 ${
-                                openGroups[item.title] ? 'rotate-90' : ''
-                              }`} />
-                            )}
-                          </div>
-                        </SidebarMenuButton>
-                      </CollapsibleTrigger>
-                      
-                      {!isCollapsed && (
-                        <CollapsibleContent className="ml-4 mt-1 space-y-1">
-                          {item.subItems.map((subItem) => (
-                            <div key={subItem.title}>
-                              {subItem.subItems ? (
-                                <Collapsible
-                                  open={openGroups[subItem.title]}
-                                  onOpenChange={() => toggleGroup(subItem.title)}
-                                >
-                                  <CollapsibleTrigger asChild>
-                                    <SidebarMenuButton 
-                                      className="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all duration-200 text-gray-600 hover:bg-white/80 hover:text-gray-800 w-full bg-white/60 shadow-sm"
+                          <CollapsibleTrigger asChild>
+                            <SidebarMenuButton 
+                              className="hover:bg-white/80 text-gray-700 hover:text-gray-800 transition-all duration-200 rounded-xl p-3 font-medium w-full group bg-white/70 shadow-sm hover:shadow-lg"
+                              style={{
+                                background: openGroups[item.title] ? 'rgba(59, 130, 246, 0.1)' : 'rgba(255, 255, 255, 0.7)'
+                              }}
+                            >
+                              <div className="flex items-center justify-between w-full">
+                                <div className="flex items-center space-x-3">
+                                  <item.icon className={`w-5 h-5 ${item.color}`} />
+                                  <span className="text-sm">{item.title}</span>
+                                </div>
+                                <ChevronRight className={`w-4 h-4 transition-transform duration-200 ${
+                                  openGroups[item.title] ? 'rotate-90' : ''
+                                }`} />
+                              </div>
+                            </SidebarMenuButton>
+                          </CollapsibleTrigger>
+                          
+                          <CollapsibleContent className="ml-4 mt-1 space-y-1">
+                            {item.subItems.map((subItem) => (
+                              <div key={subItem.title}>
+                                {subItem.subItems ? (
+                                  <Collapsible
+                                    open={openGroups[subItem.title]}
+                                    onOpenChange={() => toggleGroup(subItem.title)}
+                                  >
+                                    <CollapsibleTrigger asChild>
+                                      <SidebarMenuButton 
+                                        className="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all duration-200 text-gray-600 hover:bg-white/80 hover:text-gray-800 w-full bg-white/60 shadow-sm"
+                                      >
+                                        <subItem.icon className={`w-4 h-4 ${subItem.color}`} />
+                                        <span className="flex-1 text-left">{subItem.title}</span>
+                                        <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${
+                                          openGroups[subItem.title] ? 'rotate-90' : ''
+                                        }`} />
+                                      </SidebarMenuButton>
+                                    </CollapsibleTrigger>
+                                    <CollapsibleContent className="ml-4 mt-1 space-y-1">
+                                      {subItem.subItems.map((nestedItem) => (
+                                        <SidebarMenuButton key={nestedItem.title} asChild>
+                                          <NavLink 
+                                            to={nestedItem.url} 
+                                            className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-xs transition-all duration-200 ${
+                                              isActive(nestedItem.url) 
+                                                ? 'bg-gradient-to-r from-blue-50 to-purple-50 text-blue-800 border-l-4 border-blue-500 shadow-md' 
+                                                : 'text-gray-600 hover:bg-white/80 hover:text-gray-800'
+                                            } bg-white/50`}
+                                          >
+                                            <nestedItem.icon className={`w-3 h-3 ${nestedItem.color}`} />
+                                            <span>{nestedItem.title}</span>
+                                          </NavLink>
+                                        </SidebarMenuButton>
+                                      ))}
+                                    </CollapsibleContent>
+                                  </Collapsible>
+                                ) : (
+                                  <SidebarMenuButton key={subItem.title} asChild>
+                                    <NavLink 
+                                      to={subItem.url} 
+                                      className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+                                        isActive(subItem.url) 
+                                          ? 'bg-gradient-to-r from-blue-50 to-purple-50 text-blue-800 border-l-4 border-blue-500 shadow-md' 
+                                          : 'text-gray-600 hover:bg-white/80 hover:text-gray-800'
+                                      } bg-white/60`}
                                     >
                                       <subItem.icon className={`w-4 h-4 ${subItem.color}`} />
-                                      <span className="flex-1 text-left">{subItem.title}</span>
-                                      <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${
-                                        openGroups[subItem.title] ? 'rotate-90' : ''
-                                      }`} />
-                                    </SidebarMenuButton>
-                                  </CollapsibleTrigger>
-                                  <CollapsibleContent className="ml-4 mt-1 space-y-1">
-                                    {subItem.subItems.map((nestedItem) => (
-                                      <SidebarMenuButton key={nestedItem.title} asChild>
-                                        <NavLink 
-                                          to={nestedItem.url} 
-                                          className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-xs transition-all duration-200 ${
-                                            isActive(nestedItem.url) 
-                                              ? 'bg-gradient-to-r from-blue-50 to-purple-50 text-blue-800 border-l-4 border-blue-500 shadow-md' 
-                                              : 'text-gray-600 hover:bg-white/80 hover:text-gray-800'
-                                          } bg-white/50`}
-                                        >
-                                          <nestedItem.icon className={`w-3 h-3 ${nestedItem.color}`} />
-                                          <span>{nestedItem.title}</span>
-                                        </NavLink>
-                                      </SidebarMenuButton>
-                                    ))}
-                                  </CollapsibleContent>
-                                </Collapsible>
-                              ) : (
-                                <SidebarMenuButton key={subItem.title} asChild>
-                                  <NavLink 
-                                    to={subItem.url} 
-                                    className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
-                                      isActive(subItem.url) 
-                                        ? 'bg-gradient-to-r from-blue-50 to-purple-50 text-blue-800 border-l-4 border-blue-500 shadow-md' 
-                                        : 'text-gray-600 hover:bg-white/80 hover:text-gray-800'
-                                    } bg-white/60`}
-                                  >
-                                    <subItem.icon className={`w-4 h-4 ${subItem.color}`} />
-                                    <span>{subItem.title}</span>
-                                  </NavLink>
-                                </SidebarMenuButton>
-                              )}
-                            </div>
-                          ))}
-                        </CollapsibleContent>
+                                      <span>{subItem.title}</span>
+                                    </NavLink>
+                                  </SidebarMenuButton>
+                                )}
+                              </div>
+                            ))}
+                          </CollapsibleContent>
+                        </Collapsible>
+                      ) : (
+                        // Collapsed view - show only main icon
+                        <SidebarMenuButton 
+                          className="hover:bg-white/80 text-gray-700 hover:text-gray-800 transition-all duration-200 rounded-xl p-3 font-medium bg-white/70 shadow-sm hover:shadow-lg"
+                          tooltip={item.title}
+                        >
+                          <div className="flex flex-col items-center space-y-1 w-full">
+                            <item.icon className={`w-5 h-5 ${item.color}`} />
+                            <span className="text-xs font-medium text-center leading-tight">{item.title}</span>
+                          </div>
+                        </SidebarMenuButton>
                       )}
-                    </Collapsible>
+                    </>
                   ) : (
                     <SidebarMenuButton 
                       asChild 
