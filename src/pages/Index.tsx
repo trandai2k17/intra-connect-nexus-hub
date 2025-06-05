@@ -24,7 +24,12 @@ const Index = () => {
               </section>
               
               {/* Tab Navigation */}
-              <section className="bg-glass backdrop-blur-sm rounded-3xl p-6 shadow-lg border border-white/20">
+              <section className="rounded-3xl p-6 shadow-lg border border-white/30"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  backdropFilter: 'blur(20px)'
+                }}
+              >
                 <TabNavigation 
                   activeTab={activeTab} 
                   onTabChange={setActiveTab} 
@@ -32,17 +37,26 @@ const Index = () => {
               </section>
               
               {/* Applications Section */}
-              <section className="bg-glass backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
+              <section className="rounded-3xl p-8 shadow-xl border border-white/30"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  backdropFilter: 'blur(20px)'
+                }}
+              >
                 <div className="flex items-center justify-between mb-8">
                   <div>
-                    <h2 className="text-3xl font-bold text-white">
+                    <h2 className="text-3xl font-bold text-gradient-bright">
                       Ứng dụng & Phần mềm
                     </h2>
-                    <p className="text-white/80 mt-2 text-lg font-medium">
+                    <p className="text-gray-700 mt-2 text-lg font-medium">
                       Truy cập nhanh các công cụ và hệ thống nội bộ
                     </p>
                   </div>
-                  <div className="text-sm font-medium text-white/70 bg-white/20 px-4 py-2 rounded-full border border-white/30">
+                  <div className="text-sm font-medium text-gray-600 px-4 py-2 rounded-full border border-white/40"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.7)'
+                    }}
+                  >
                     Cập nhật: 29/11/2024
                   </div>
                 </div>
@@ -52,40 +66,67 @@ const Index = () => {
 
               {/* Quick Stats */}
               <section className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-                <div className="bg-glass backdrop-blur-sm rounded-3xl p-8 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="rounded-3xl p-8 border border-white/30 shadow-lg hover:shadow-xl transition-all duration-300"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 182, 193, 0.8) 0%, rgba(255, 255, 255, 0.9) 100%)',
+                    backdropFilter: 'blur(20px)'
+                  }}
+                >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-white font-semibold text-lg">Ứng dụng đang hoạt động</p>
-                      <p className="text-4xl font-bold text-white mt-2">42</p>
-                      <p className="text-white/80 text-sm mt-1 font-medium">+3 từ tuần trước</p>
+                      <p className="text-gray-800 font-semibold text-lg">Ứng dụng đang hoạt động</p>
+                      <p className="text-4xl font-bold text-gradient mt-2">42</p>
+                      <p className="text-gray-600 text-sm mt-1 font-medium">+3 từ tuần trước</p>
                     </div>
-                    <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
+                      style={{
+                        background: 'linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%)'
+                      }}
+                    >
                       <span className="text-white font-bold text-xl">42</span>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-glass backdrop-blur-sm rounded-3xl p-8 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="rounded-3xl p-8 border border-white/30 shadow-lg hover:shadow-xl transition-all duration-300"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(173, 216, 230, 0.8) 0%, rgba(255, 255, 255, 0.9) 100%)',
+                    backdropFilter: 'blur(20px)'
+                  }}
+                >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-white font-semibold text-lg">Người dùng hoạt động</p>
-                      <p className="text-4xl font-bold text-white mt-2">1,247</p>
-                      <p className="text-white/80 text-sm mt-1 font-medium">+156 hôm nay</p>
+                      <p className="text-gray-800 font-semibold text-lg">Người dùng hoạt động</p>
+                      <p className="text-4xl font-bold text-gradient mt-2">1,247</p>
+                      <p className="text-gray-600 text-sm mt-1 font-medium">+156 hôm nay</p>
                     </div>
-                    <div className="w-16 h-16 bg-gradient-to-br from-secondary-500 to-secondary-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
+                      style={{
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                      }}
+                    >
                       <span className="text-white font-bold text-lg">1K+</span>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-glass backdrop-blur-sm rounded-3xl p-8 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="rounded-3xl p-8 border border-white/30 shadow-lg hover:shadow-xl transition-all duration-300"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 218, 185, 0.8) 0%, rgba(255, 255, 255, 0.9) 100%)',
+                    backdropFilter: 'blur(20px)'
+                  }}
+                >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-white font-semibold text-lg">Uptime hệ thống</p>
-                      <p className="text-4xl font-bold text-white mt-2">99.8%</p>
-                      <p className="text-white/80 text-sm mt-1 font-medium">30 ngày qua</p>
+                      <p className="text-gray-800 font-semibold text-lg">Uptime hệ thống</p>
+                      <p className="text-4xl font-bold text-gradient mt-2">99.8%</p>
+                      <p className="text-gray-600 text-sm mt-1 font-medium">30 ngày qua</p>
                     </div>
-                    <div className="w-16 h-16 bg-gradient-to-br from-accent-500 to-accent-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
+                      style={{
+                        background: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)'
+                      }}
+                    >
                       <span className="text-white font-bold text-lg">99%</span>
                     </div>
                   </div>

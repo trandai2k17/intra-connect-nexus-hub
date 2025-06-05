@@ -27,7 +27,7 @@ export function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
+      setIsScrolled(window.scrollY > 20);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -59,23 +59,35 @@ export function Header() {
   }, []);
 
   return (
-    <header className={`${isScrolled ? 'fixed' : 'relative'} top-0 left-0 right-0 z-40 h-20 bg-glass backdrop-blur-xl border-b border-white/20 shadow-lg transition-all duration-300`}>
+    <header className={`${isScrolled ? 'fixed' : 'relative'} top-0 left-0 right-0 z-30 h-20 transition-all duration-300`}
+      style={{
+        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 182, 193, 0.9) 50%, rgba(173, 216, 230, 0.95) 100%)',
+        backdropFilter: 'blur(20px)',
+        boxShadow: isScrolled ? '0 8px 32px rgba(0, 0, 0, 0.1)' : 'none',
+        border: '1px solid rgba(255, 255, 255, 0.3)'
+      }}
+    >
       <div className="flex h-full items-center justify-between px-8">
         {/* Left side - Sidebar trigger and announcement */}
         <div className="flex items-center space-x-6 flex-1">
-          <SidebarTrigger className="lg:hidden p-3 hover:bg-white/20 rounded-xl transition-all duration-200 text-white" />
+          <SidebarTrigger className="lg:hidden p-3 hover:bg-white/30 rounded-xl transition-all duration-200 text-gray-700" />
           
           {/* Running announcement */}
           <div className="hidden md:block flex-1 max-w-2xl">
             <div 
-              className={`overflow-hidden bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 border border-white/30 transition-all duration-1000 ${
+              className={`overflow-hidden rounded-full px-6 py-3 border transition-all duration-1000 ${
                 showAnnouncement ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform -translate-y-4'
               }`}
+              style={{
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 192, 203, 0.6) 100%)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.4)'
+              }}
             >
               <div className={`whitespace-nowrap transition-transform duration-1000 ${
                 showAnnouncement ? 'animate-running-text' : ''
               }`}>
-                <span className="text-white font-medium text-sm">
+                <span className="text-gray-800 font-medium text-sm">
                   {announcements[currentAnnouncement]}
                 </span>
               </div>
@@ -85,7 +97,7 @@ export function Header() {
 
         {/* Center - Company name */}
         <div className="hidden lg:block">
-          <h1 className="text-2xl font-bold text-white">
+          <h1 className="text-2xl font-bold text-gradient-bright">
             Cổng Thông Tin Nội Bộ
           </h1>
         </div>
@@ -96,13 +108,20 @@ export function Header() {
           <Button 
             variant="outline" 
             size="sm" 
-            className="hidden md:flex bg-white/20 border-white/30 hover:bg-white/30 text-white font-semibold px-6 py-3 rounded-xl backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-200"
+            className="hidden md:flex border-white/40 hover:bg-white/30 text-gray-700 font-semibold px-6 py-3 rounded-xl backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-200"
+            style={{
+              background: 'rgba(255, 255, 255, 0.7)',
+              border: '1px solid rgba(255, 255, 255, 0.4)'
+            }}
           >
             Đăng nhập
           </Button>
           <Button 
             size="sm" 
-            className="hidden md:flex bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+            className="hidden md:flex text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+            style={{
+              background: 'linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%)'
+            }}
           >
             Đăng ký
           </Button>
@@ -111,13 +130,19 @@ export function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="relative p-3 hover:bg-white/20 rounded-xl transition-all duration-200 group">
-                <Bell className="w-6 h-6 text-white group-hover:text-white" />
-                <Badge className="absolute -top-1 -right-1 w-6 h-6 p-0 bg-red-500 text-white text-xs flex items-center justify-center border-2 border-white">
+                <Bell className="w-6 h-6 text-gray-700 group-hover:text-gray-800" />
+                <Badge className="absolute -top-1 -right-1 w-6 h-6 p-0 bg-gradient-to-r from-pink-500 to-rose-500 text-white text-xs flex items-center justify-center border-2 border-white">
                   3
                 </Badge>
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80 bg-glass backdrop-blur-xl border-white/20 shadow-xl rounded-2xl">
+            <DropdownMenuContent align="end" className="w-80 z-50 rounded-2xl border-white/30 shadow-xl"
+              style={{
+                background: 'rgba(255, 255, 255, 0.95)',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255, 255, 255, 0.3)'
+              }}
+            >
               <div className="p-6 border-b border-white/20">
                 <h3 className="font-bold text-gray-800 text-lg">Thông báo</h3>
               </div>
@@ -137,20 +162,26 @@ export function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="flex items-center space-x-3 p-3 hover:bg-white/20 rounded-xl transition-all duration-200 group">
-                <Avatar className="w-10 h-10 border-2 border-white/30">
+                <Avatar className="w-10 h-10 border-2 border-white/50">
                   <AvatarImage src="/api/placeholder/40/40" alt="User" />
-                  <AvatarFallback className="bg-gradient-to-br from-primary-600 to-primary-700 text-white font-bold">
+                  <AvatarFallback className="bg-gradient-to-br from-blue-400 to-purple-500 text-white font-bold">
                     NV
                   </AvatarFallback>
                 </Avatar>
                 <div className="hidden md:block text-left">
-                  <p className="text-sm font-semibold text-white group-hover:text-white">Nguyễn Văn A</p>
-                  <p className="text-xs text-white/80 font-medium">IT Developer</p>
+                  <p className="text-sm font-semibold text-gray-800 group-hover:text-gray-900">Nguyễn Văn A</p>
+                  <p className="text-xs text-gray-600 font-medium">IT Developer</p>
                 </div>
-                <ChevronDown className="w-4 h-4 text-white/80 group-hover:text-white" />
+                <ChevronDown className="w-4 h-4 text-gray-600 group-hover:text-gray-800" />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 bg-glass backdrop-blur-xl border-white/20 shadow-xl rounded-2xl">
+            <DropdownMenuContent align="end" className="w-56 z-50 rounded-2xl border-white/30 shadow-xl"
+              style={{
+                background: 'rgba(255, 255, 255, 0.95)',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255, 255, 255, 0.3)'
+              }}
+            >
               <DropdownMenuItem className="cursor-pointer p-4 hover:bg-white/10 rounded-xl m-1">
                 <User className="mr-3 h-5 w-5 text-gray-600" />
                 <span className="font-medium text-gray-700">Hồ sơ</span>
