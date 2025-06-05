@@ -29,7 +29,7 @@ interface TabNavigationProps {
 export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
   return (
     <div className="mb-8">
-      <div className="flex items-center space-x-1 p-1 bg-white/50 backdrop-blur-sm rounded-2xl border border-white/30 overflow-x-auto">
+      <div className="flex items-center space-x-2 p-2 bg-white/80 backdrop-blur-sm rounded-2xl border border-white/40 overflow-x-auto shadow-sm">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -39,23 +39,23 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
               className={cn(
-                "flex items-center space-x-2 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 whitespace-nowrap",
-                "hover:bg-white/70 hover:shadow-md",
+                "flex items-center space-x-3 px-6 py-4 rounded-xl font-semibold text-sm transition-all duration-200 whitespace-nowrap shadow-sm",
+                "hover:bg-white/90 hover:shadow-md",
                 isActive 
-                  ? "bg-gradient-to-r from-intranet-primary to-intranet-secondary text-white shadow-lg shadow-intranet-primary/25" 
-                  : "text-intranet-gray-600 hover:text-intranet-primary"
+                  ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25" 
+                  : "text-neutral-600 hover:text-blue-600 bg-white/50"
               )}
             >
               <Icon className={cn(
-                "w-4 h-4 transition-colors duration-200",
-                isActive ? "text-white" : "text-intranet-gray-500"
+                "w-5 h-5 transition-colors duration-200",
+                isActive ? "text-white" : "text-neutral-500"
               )} />
               <span>{tab.label}</span>
               <span className={cn(
-                "px-2 py-0.5 rounded-full text-xs font-medium transition-colors duration-200",
+                "px-3 py-1 rounded-full text-xs font-bold transition-colors duration-200",
                 isActive 
-                  ? "bg-white/20 text-white" 
-                  : "bg-intranet-gray-100 text-intranet-gray-600"
+                  ? "bg-white/25 text-white" 
+                  : "bg-neutral-100 text-neutral-600"
               )}>
                 {tab.count}
               </span>
