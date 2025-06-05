@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
@@ -304,12 +303,25 @@
   }
 }
 
+@keyframes running-text {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-20px);
+  }
+}
+
 .animate-scroll-up {
   animation: scroll-up 20s linear infinite;
 }
 
 .animate-scroll-up:hover {
   animation-play-state: paused;
+}
+
+.animate-running-text {
+  animation: running-text 10s ease-in-out infinite alternate;
 }
 
 /* Smooth transitions */

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/AppSidebar";
@@ -12,11 +11,11 @@ const Index = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gradient-light">
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-100">
         <AppSidebar />
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col">
           <Header />
-          <main className="flex-1 overflow-y-auto bg-gradient-to-br from-blue-50/30 via-white to-purple-50/30">
+          <main className="flex-1 pt-20 bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-100">
             <div className="p-8 space-y-10">
               {/* Hero Banner */}
               <section className="mb-10">
@@ -24,7 +23,7 @@ const Index = () => {
               </section>
               
               {/* Tab Navigation */}
-              <section className="bg-white/70 backdrop-blur-sm rounded-3xl p-6 shadow-lg border border-white/30">
+              <section className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg border border-white/50">
                 <TabNavigation 
                   activeTab={activeTab} 
                   onTabChange={setActiveTab} 
@@ -32,17 +31,17 @@ const Index = () => {
               </section>
               
               {/* Applications Section */}
-              <section className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/40">
+              <section className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/60">
                 <div className="flex items-center justify-between mb-8">
                   <div>
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                       Ứng dụng & Phần mềm
                     </h2>
-                    <p className="text-neutral-600 mt-2 text-lg font-medium">
+                    <p className="text-gray-600 mt-2 text-lg font-medium">
                       Truy cập nhanh các công cụ và hệ thống nội bộ
                     </p>
                   </div>
-                  <div className="text-sm font-medium text-neutral-500 bg-neutral-100 px-4 py-2 rounded-full">
+                  <div className="text-sm font-medium text-gray-500 bg-gray-100 px-4 py-2 rounded-full">
                     Cập nhật: 29/11/2024
                   </div>
                 </div>
@@ -65,27 +64,27 @@ const Index = () => {
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-3xl p-8 border border-green-200/50 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="bg-gradient-to-br from-cyan-50 to-cyan-100 rounded-3xl p-8 border border-cyan-200/50 shadow-lg hover:shadow-xl transition-all duration-300">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-green-700 font-semibold text-lg">Người dùng hoạt động</p>
-                      <p className="text-4xl font-bold text-green-800 mt-2">1,247</p>
-                      <p className="text-green-600 text-sm mt-1 font-medium">+156 hôm nay</p>
+                      <p className="text-cyan-700 font-semibold text-lg">Người dùng hoạt động</p>
+                      <p className="text-4xl font-bold text-cyan-800 mt-2">1,247</p>
+                      <p className="text-cyan-600 text-sm mt-1 font-medium">+156 hôm nay</p>
                     </div>
-                    <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg">
                       <span className="text-white font-bold text-lg">1K+</span>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-3xl p-8 border border-purple-200/50 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl p-8 border border-blue-200/50 shadow-lg hover:shadow-xl transition-all duration-300">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-purple-700 font-semibold text-lg">Uptime hệ thống</p>
-                      <p className="text-4xl font-bold text-purple-800 mt-2">99.8%</p>
-                      <p className="text-purple-600 text-sm mt-1 font-medium">30 ngày qua</p>
+                      <p className="text-blue-700 font-semibold text-lg">Uptime hệ thống</p>
+                      <p className="text-4xl font-bold text-blue-800 mt-2">99.8%</p>
+                      <p className="text-blue-600 text-sm mt-1 font-medium">30 ngày qua</p>
                     </div>
-                    <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg">
                       <span className="text-white font-bold text-lg">99%</span>
                     </div>
                   </div>
