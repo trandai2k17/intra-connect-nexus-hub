@@ -139,8 +139,19 @@
     font-weight: 400;
     line-height: 1.6;
     letter-spacing: -0.01em;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #87CEEB 0%, #98FB98 25%, #FFB6C1 50%, #DDA0DD 75%, #87CEFA 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease-in-out infinite;
     min-height: 100vh;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -233,18 +244,27 @@
   }
 
   .gradient-bg {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #87CEEB 0%, #98FB98 25%, #FFB6C1 50%, #DDA0DD 75%, #87CEFA 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease-in-out infinite;
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .text-gradient-bright {
-    background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 50%, #45b7d1 100%);
+    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #F59E0B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-white {
+    background: linear-gradient(135deg, #1F2937 0%, #374151 50%, #4B5563 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
