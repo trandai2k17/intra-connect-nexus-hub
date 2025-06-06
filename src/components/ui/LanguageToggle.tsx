@@ -18,7 +18,7 @@ export function LanguageToggle() {
       className="h-10 px-3 border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm"
     >
       <Globe className="h-4 w-4 mr-2" />
-      <span className="font-medium">{language === 'vi' ? 'EN' : 'VI'}</span>
+      <span className="font-medium">{language === 'vi' ? 'VI' : 'EN'}</span>
     </Button>
   );
 }

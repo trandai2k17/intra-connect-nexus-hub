@@ -17,9 +17,11 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { navigationItems } from "./navigationData";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function SidebarNavigation() {
   const { state } = useSidebar();
+  const { t } = useLanguage();
   const location = useLocation();
   const currentPath = location.pathname;
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
@@ -41,6 +43,42 @@ export function SidebarNavigation() {
     }
   };
 
+  // Function to get translated title based on navigation key
+  const getTranslatedTitle = (title: string) => {
+    const keyMap: Record<string, string> = {
+      'Dashboard': 'sidebar.dashboard',
+      'Hệ thống ERP': 'sidebar.erp',
+      'Sản xuất': 'sidebar.production',
+      'MES': 'sidebar.mes',
+      'Lập kế hoạch': 'sidebar.planning',
+      'Chất lượng': 'sidebar.quality',
+      'QC Mobile': 'sidebar.qc',
+      'Kiểm tra': 'sidebar.inspection',
+      'Giao tiếp': 'sidebar.communication',
+      'Microsoft Teams': 'sidebar.teams',
+      'Outlook': 'sidebar.outlook',
+      'SharePoint': 'sidebar.sharepoint',
+      'Phát triển': 'sidebar.development',
+      'GitLab': 'sidebar.gitlab',
+      'Jenkins': 'sidebar.jenkins',
+      'Giám sát': 'sidebar.monitoring',
+      'Nhân sự': 'sidebar.hr',
+      'Nghỉ phép': 'sidebar.leave',
+      'Lương': 'sidebar.payroll',
+      'Đào tạo': 'sidebar.training',
+      'Tài chính': 'sidebar.finance',
+      'Kế toán': 'sidebar.accounting',
+      'Ngân sách': 'sidebar.budget',
+      'Báo cáo': 'sidebar.reports',
+      'IT': 'sidebar.it',
+      'Helpdesk': 'sidebar.helpdesk',
+      'Tài sản': 'sidebar.assets',
+      'Bảo mật': 'sidebar.security'
+    };
+    
+    return keyMap[title] ? t(keyMap[title]) : title;
+  };
+
   return (
     <div className={`transition-all duration-300 bg-gradient-to-b from-white/95 to-white/90 backdrop-blur-xl flex-1 overflow-auto ${
       isCollapsed ? 'p-1' : 'p-3'
@@ -48,7 +86,7 @@ export function SidebarNavigation() {
       <SidebarGroup>
         {!isCollapsed && (
           <SidebarGroupLabel className="text-gray-600 font-semibold text-xs uppercase tracking-wider mb-3 px-2">
-            Điều hướng
+            {t('sidebar.navigation')}
           </SidebarGroupLabel>
         )}
         <SidebarGroupContent>
@@ -72,7 +110,7 @@ export function SidebarNavigation() {
                             <div className="flex items-center justify-between w-full">
                               <div className="flex items-center space-x-3">
                                 <item.icon className={`w-5 h-5 ${item.color}`} />
-                                <span className="text-sm">{item.title}</span>
+                                <span className="text-sm">{getTranslatedTitle(item.title)}</span>
                               </div>
                               <ChevronRight className={`w-4 h-4 transition-transform duration-200 ${
                                 openGroups[item.title] ? 'rotate-90' : ''
@@ -94,7 +132,7 @@ export function SidebarNavigation() {
                                       className="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all duration-200 text-gray-600 hover:bg-white/80 hover:text-gray-800 w-full bg-white/60 shadow-sm"
                                     >
                                       <subItem.icon className={`w-4 h-4 ${subItem.color}`} />
-                                      <span className="flex-1 text-left">{subItem.title}</span>
+                                      <span className="flex-1 text-left">{getTranslatedTitle(subItem.title)}</span>
                                       <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${
                                         openGroups[subItem.title] ? 'rotate-90' : ''
                                       }`} />
@@ -113,7 +151,7 @@ export function SidebarNavigation() {
                                           } bg-white/50`}
                                         >
                                           <nestedItem.icon className={`w-3 h-3 ${nestedItem.color}`} />
-                                          <span>{nestedItem.title}</span>
+                                          <span>{getTranslatedTitle(nestedItem.title)}</span>
                                         </NavLink>
                                       </SidebarMenuButton>
                                     ))}
@@ -131,7 +169,7 @@ export function SidebarNavigation() {
                                     } bg-white/60`}
                                   >
                                     <subItem.icon className={`w-4 h-4 ${subItem.color}`} />
-                                    <span>{subItem.title}</span>
+                                    <span>{getTranslatedTitle(subItem.title)}</span>
                                   </NavLink>
                                 </SidebarMenuButton>
                               )}
@@ -142,7 +180,7 @@ export function SidebarNavigation() {
                     ) : (
                       <SidebarMenuButton 
                         className="w-12 h-12 rounded-lg p-0 m-1 hover:bg-white/80 text-gray-700 hover:text-blue-600 transition-all duration-200 font-medium bg-white/70 shadow-sm hover:shadow-lg group hover:scale-105"
-                        tooltip={item.title}
+                        tooltip={getTranslatedTitle(item.title)}
                         onClick={() => alert("Feature not yet deploy")}
                       >
                         <div className="flex flex-col items-center justify-center w-full h-full">
@@ -155,7 +193,7 @@ export function SidebarNavigation() {
                   <SidebarMenuButton 
                     asChild 
                     isActive={isActive(item.url)}
-                    tooltip={isCollapsed ? item.title : undefined}
+                    tooltip={isCollapsed ? getTranslatedTitle(item.title) : undefined}
                     className={`transition-all duration-200 font-medium shadow-sm hover:shadow-lg group ${
                       isCollapsed 
                         ? 'w-12 h-12 rounded-lg p-0 m-1 hover:bg-white/80 text-gray-700 hover:text-blue-600 bg-white/70 hover:scale-105 data-[active=true]:bg-gradient-to-br data-[active=true]:from-blue-500 data-[active=true]:to-purple-600 data-[active=true]:text-white data-[active=true]:shadow-lg' 
@@ -177,7 +215,7 @@ export function SidebarNavigation() {
                           : `w-5 h-5 ${item.color}`
                       }`} />
                       {!isCollapsed && (
-                        <span className="text-sm">{item.title}</span>
+                        <span className="text-sm">{getTranslatedTitle(item.title)}</span>
                       )}
                     </NavLink>
                   </SidebarMenuButton>
