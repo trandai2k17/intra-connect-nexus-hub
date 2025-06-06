@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'vi' | 'en';
@@ -31,8 +32,23 @@ const translations = {
     
     // Sidebar Menu Items
     'sidebar.dashboard': 'Trang chủ',
-    'sidebar.erp': 'Hệ thống ERP',
+    'sidebar.home': 'Trang chủ',
+    'sidebar.apps': 'Ứng dụng',
+    'sidebar.announcements': 'Thông báo',
+    'sidebar.it-management': 'Quản lý IT',
+    'sidebar.systems': 'Hệ thống',
+    'sidebar.software': 'Phần mềm',
+    'sidebar.devices': 'Thiết bị',
     'sidebar.production': 'Sản xuất',
+    'sidebar.inventory': 'Kho bãi',
+    'sidebar.purchase': 'Mua hàng',
+    'sidebar.documents': 'Tài liệu',
+    'sidebar.support': 'Hỗ trợ',
+    'sidebar.faq': 'FAQ',
+    'sidebar.contact-it': 'Liên hệ IT',
+    'sidebar.security': 'Bảo mật',
+    'sidebar.settings': 'Cài đặt',
+    'sidebar.erp': 'Hệ thống ERP',
     'sidebar.mes': 'MES',
     'sidebar.planning': 'Lập kế hoạch',
     'sidebar.quality': 'Chất lượng',
@@ -57,7 +73,6 @@ const translations = {
     'sidebar.it': 'IT',
     'sidebar.helpdesk': 'Helpdesk',
     'sidebar.assets': 'Tài sản',
-    'sidebar.security': 'Bảo mật',
     
     // Home page
     'home.hero.title': 'Chào mừng đến với Cổng Thông Tin IT',
@@ -117,8 +132,23 @@ const translations = {
     
     // Sidebar Menu Items
     'sidebar.dashboard': 'Dashboard',
-    'sidebar.erp': 'ERP System',
+    'sidebar.home': 'Home',
+    'sidebar.apps': 'Applications',
+    'sidebar.announcements': 'Announcements',
+    'sidebar.it-management': 'IT Management',
+    'sidebar.systems': 'Systems',
+    'sidebar.software': 'Software',
+    'sidebar.devices': 'Devices',
     'sidebar.production': 'Production',
+    'sidebar.inventory': 'Inventory',
+    'sidebar.purchase': 'Purchase',
+    'sidebar.documents': 'Documents',
+    'sidebar.support': 'Support',
+    'sidebar.faq': 'FAQ',
+    'sidebar.contact-it': 'Contact IT',
+    'sidebar.security': 'Security',
+    'sidebar.settings': 'Settings',
+    'sidebar.erp': 'ERP System',
     'sidebar.mes': 'MES',
     'sidebar.planning': 'Planning',
     'sidebar.quality': 'Quality',
@@ -143,7 +173,6 @@ const translations = {
     'sidebar.it': 'IT',
     'sidebar.helpdesk': 'Helpdesk',
     'sidebar.assets': 'Assets',
-    'sidebar.security': 'Security',
     
     // Home page
     'home.hero.title': 'Welcome to IT Information Portal',

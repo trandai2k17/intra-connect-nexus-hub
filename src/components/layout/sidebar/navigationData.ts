@@ -4,7 +4,6 @@ import {
   Globe, 
   Bell, 
   FileText, 
-  Users, 
   BarChart3, 
   HelpCircle, 
   Shield, 
@@ -13,15 +12,11 @@ import {
   Code,
   Monitor,
   Smartphone,
-  UserCheck,
   Calendar,
   Mail,
-  Phone,
   Building,
-  Car,
-  ShoppingCart,
-  DollarSign,
-  Package
+  Package,
+  ShoppingCart
 } from "lucide-react";
 
 const iconColors = [
@@ -54,47 +49,15 @@ export const navigationItems = [
     ]
   },
   { 
-    title: "Tài chính", 
-    icon: DollarSign,
+    title: "Sản xuất", 
+    icon: Building,
     color: getRandomColor(),
     subItems: [
-      { title: "Báo cáo tài chính", url: "/finance/reports", icon: BarChart3, color: getRandomColor() },
-      { title: "Ngân sách", url: "/finance/budget", icon: Package, color: getRandomColor() },
-      { title: "Thanh toán", url: "/finance/payments", icon: ShoppingCart, color: getRandomColor() },
+      { title: "Kho bãi", url: "/production/inventory", icon: Package, color: getRandomColor() },
+      { title: "Mua hàng", url: "/production/purchase", icon: ShoppingCart, color: getRandomColor() },
     ]
   },
   { title: "Tài liệu", url: "/documents", icon: FileText, color: getRandomColor() },
-  { title: "Thống kê", url: "/analytics", icon: BarChart3, color: getRandomColor() },
-  { 
-    title: "Nhân sự", 
-    icon: Users,
-    color: getRandomColor(),
-    subItems: [
-      { title: "Nhân viên", url: "/hr/employees", icon: UserCheck, color: getRandomColor() },
-      { title: "Lịch làm việc", url: "/hr/schedule", icon: Calendar, color: getRandomColor() },
-      { title: "Liên hệ", url: "/hr/contacts", icon: Phone, color: getRandomColor() },
-      { 
-        title: "Phòng ban", 
-        url: "/hr/departments", 
-        icon: Building, 
-        color: getRandomColor(),
-        subItems: [
-          { title: "IT Department", url: "/hr/departments/it", icon: Code, color: getRandomColor() },
-          { title: "HR Department", url: "/hr/departments/hr", icon: Users, color: getRandomColor() },
-          { title: "Sales Department", url: "/hr/departments/sales", icon: ShoppingCart, color: getRandomColor() },
-        ]
-      },
-    ]
-  },
-  { 
-    title: "Logistics", 
-    icon: Car,
-    color: getRandomColor(),
-    subItems: [
-      { title: "Vận chuyển", url: "/logistics/shipping", icon: Car, color: getRandomColor() },
-      { title: "Kho hàng", url: "/logistics/warehouse", icon: Package, color: getRandomColor() },
-    ]
-  },
   { 
     title: "Hỗ trợ", 
     icon: HelpCircle,
