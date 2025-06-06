@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from "react";
-import { Bell, User, Settings, LogOut, ChevronDown } from "lucide-react";
+import { Bell, User, Settings, LogOut, ChevronDown, LogIn, UserPlus } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
@@ -106,36 +105,11 @@ export function Header() {
           </div>
         </div>
 
-        {/* Center - Company name */}
-        <div className="hidden lg:block">
-          <h1 className="text-2xl font-bold text-gradient dark:text-white">
-            {t('header.title')}
-          </h1>
-        </div>
-
-        {/* Right side - Toggle buttons, Auth buttons and user menu */}
+        {/* Right side - Toggle buttons, Notifications and user menu */}
         <div className="flex items-center space-x-4">
           {/* Theme and Language toggles */}
           <ThemeToggle />
           <LanguageToggle />
-
-          {/* Login/Register buttons */}
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="hidden md:flex border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-semibold px-6 py-3 rounded-xl backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-200 bg-white/80 dark:bg-gray-800/80"
-          >
-            {t('header.login')}
-          </Button>
-          <Button 
-            size="sm" 
-            className="hidden md:flex text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
-            style={{
-              background: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)'
-            }}
-          >
-            {t('header.register')}
-          </Button>
 
           {/* Notifications */}
           <DropdownMenu>
@@ -181,6 +155,15 @@ export function Header() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 z-50 rounded-2xl border-gray-200 dark:border-gray-700 shadow-xl bg-white/95 dark:bg-gray-800/95 backdrop-blur-20">
+              <DropdownMenuItem className="cursor-pointer p-4 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl m-1">
+                <LogIn className="mr-3 h-5 w-5 text-gray-600 dark:text-gray-400" />
+                <span className="font-medium text-gray-700 dark:text-gray-300">{t('header.login')}</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer p-4 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl m-1">
+                <UserPlus className="mr-3 h-5 w-5 text-gray-600 dark:text-gray-400" />
+                <span className="font-medium text-gray-700 dark:text-gray-300">{t('header.register')}</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="my-2 bg-gray-200 dark:bg-gray-700" />
               <DropdownMenuItem className="cursor-pointer p-4 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl m-1">
                 <User className="mr-3 h-5 w-5 text-gray-600 dark:text-gray-400" />
                 <span className="font-medium text-gray-700 dark:text-gray-300">{t('header.profile')}</span>
