@@ -34,6 +34,13 @@ export function SidebarNavigation() {
     }));
   };
 
+  const handleMenuClick = (e: React.MouseEvent, url: string) => {
+    if (url !== '/') {
+      e.preventDefault();
+      alert("Feature not yet deploy");
+    }
+  };
+
   return (
     <div className={`transition-all duration-300 bg-gradient-to-b from-white/95 to-white/90 backdrop-blur-xl flex-1 overflow-auto ${
       isCollapsed ? 'p-1' : 'p-3'
@@ -98,6 +105,7 @@ export function SidebarNavigation() {
                                       <SidebarMenuButton key={nestedItem.title} asChild>
                                         <NavLink 
                                           to={nestedItem.url} 
+                                          onClick={(e) => handleMenuClick(e, nestedItem.url)}
                                           className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-xs transition-all duration-200 ${
                                             isActive(nestedItem.url) 
                                               ? 'bg-gradient-to-r from-blue-50 to-purple-50 text-blue-800 border-l-4 border-blue-500 shadow-md' 
@@ -115,6 +123,7 @@ export function SidebarNavigation() {
                                 <SidebarMenuButton key={subItem.title} asChild>
                                   <NavLink 
                                     to={subItem.url} 
+                                    onClick={(e) => handleMenuClick(e, subItem.url)}
                                     className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                                       isActive(subItem.url) 
                                         ? 'bg-gradient-to-r from-blue-50 to-purple-50 text-blue-800 border-l-4 border-blue-500 shadow-md' 
@@ -134,6 +143,7 @@ export function SidebarNavigation() {
                       <SidebarMenuButton 
                         className="w-12 h-12 rounded-lg p-0 m-1 hover:bg-white/80 text-gray-700 hover:text-blue-600 transition-all duration-200 font-medium bg-white/70 shadow-sm hover:shadow-lg group hover:scale-105"
                         tooltip={item.title}
+                        onClick={() => alert("Feature not yet deploy")}
                       >
                         <div className="flex flex-col items-center justify-center w-full h-full">
                           <item.icon className={`w-6 h-6 ${item.color} group-hover:scale-110 transition-transform duration-200`} />
@@ -154,6 +164,7 @@ export function SidebarNavigation() {
                   >
                     <NavLink 
                       to={item.url} 
+                      onClick={(e) => handleMenuClick(e, item.url)}
                       className={`flex items-center w-full transition-all duration-200 ${
                         isCollapsed 
                           ? 'justify-center h-full' 

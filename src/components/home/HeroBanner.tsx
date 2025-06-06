@@ -3,74 +3,76 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, ArrowRight, AlertTriangle, Info, CheckCircle, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-const newsSlides = [
-  {
-    id: 1,
-    title: "Triển khai hệ thống MES mới cho nhà máy 2",
-    description: "Hệ thống quản lý sản xuất thông minh sẽ được triển khai từ tháng 12/2024, giúp tối ưu hóa quy trình sản xuất và theo dõi real-time.",
-    image: "/api/placeholder/600/400",
-    category: "Sản xuất",
-    date: "28/11/2024"
-  },
-  {
-    id: 2,
-    title: "Ứng dụng QC Mobile chính thức ra mắt",
-    description: "Ứng dụng kiểm tra chất lượng trên thiết bị di động giúp QC team thực hiện kiểm tra nhanh chóng và cập nhật kết quả real-time.",
-    image: "/api/placeholder/600/400",
-    category: "Chất lượng",
-    date: "27/11/2024"
-  },
-  {
-    id: 3,
-    title: "Cập nhật chính sách bảo mật IT 2024",
-    description: "Các quy định mới về mật khẩu, 2FA và truy cập VPN. Tất cả nhân viên cần đọc và tuân thủ để đảm bảo an toàn thông tin.",
-    image: "/api/placeholder/600/400",
-    category: "Bảo mật",
-    date: "26/11/2024"
-  }
-];
-
-const sideWindows = [
-  {
-    id: 1,
-    title: "Bảo trì hệ thống ERP",
-    content: "Hệ thống ERP sẽ bảo trì từ 22:00 hôm nay đến 02:00 ngày mai",
-    type: "warning",
-    time: "19:00 - 29/11/2024"
-  },
-  {
-    id: 2,
-    title: "Cảnh báo Phishing",
-    content: "Phát hiện email giả mạo từ domain hr-company.net",
-    type: "danger",
-    time: "14:30 - 29/11/2024"
-  },
-  {
-    id: 3,
-    title: "Đào tạo Office 365",
-    content: "Khóa đào tạo Teams & SharePoint vào 9:00 ngày 02/12",
-    type: "info",
-    time: "10:00 - 29/11/2024"
-  },
-  {
-    id: 4,
-    title: "Server mới đã sẵn sàng",
-    content: "Server backup mới đã được cài đặt và test thành công",
-    type: "success",
-    time: "08:15 - 29/11/2024"
-  }
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function HeroBanner() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const { t } = useLanguage();
+
+  const newsSlides = [
+    {
+      id: 1,
+      title: t('banner.news.title1'),
+      description: t('banner.news.desc1'),
+      image: "/api/placeholder/600/400",
+      category: t('banner.news.category1'),
+      date: "28/11/2024"
+    },
+    {
+      id: 2,
+      title: t('banner.news.title2'),
+      description: t('banner.news.desc2'),
+      image: "/api/placeholder/600/400",
+      category: t('banner.news.category2'),
+      date: "27/11/2024"
+    },
+    {
+      id: 3,
+      title: t('banner.news.title3'),
+      description: t('banner.news.desc3'),
+      image: "/api/placeholder/600/400",
+      category: t('banner.news.category3'),
+      date: "26/11/2024"
+    }
+  ];
+
+  const sideWindows = [
+    {
+      id: 1,
+      title: t('banner.window.title1'),
+      content: t('banner.window.content1'),
+      type: "warning",
+      time: "19:00 - 29/11/2024"
+    },
+    {
+      id: 2,
+      title: t('banner.window.title2'),
+      content: t('banner.window.content2'),
+      type: "danger",
+      time: "14:30 - 29/11/2024"
+    },
+    {
+      id: 3,
+      title: t('banner.window.title3'),
+      content: t('banner.window.content3'),
+      type: "info",
+      time: "10:00 - 29/11/2024"
+    },
+    {
+      id: 4,
+      title: t('banner.window.title4'),
+      content: t('banner.window.content4'),
+      type: "success",
+      time: "08:15 - 29/11/2024"
+    }
+  ];
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % newsSlides.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, []);
+  }, [newsSlides.length]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % newsSlides.length);
@@ -137,7 +139,7 @@ export function HeroBanner() {
                       size="sm" 
                       className="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white"
                     >
-                      Khám phá <ArrowRight className="w-4 h-4 ml-1" />
+                      {t('banner.explore')} <ArrowRight className="w-4 h-4 ml-1" />
                     </Button>
                   </div>
                 </div>
