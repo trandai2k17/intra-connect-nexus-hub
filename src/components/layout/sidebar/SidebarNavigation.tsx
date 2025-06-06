@@ -61,7 +61,23 @@ export function SidebarNavigation() {
       'FAQ': 'sidebar.faq',
       'Liên hệ IT': 'sidebar.contact-it',
       'Bảo mật': 'sidebar.security',
-      'Cài đặt': 'sidebar.settings'
+      'Cài đặt': 'sidebar.settings',
+      'ERP': 'sidebar.erp',
+      'MES': 'sidebar.mes',
+      'Lập kế hoạch': 'sidebar.planning',
+      'Chất lượng': 'sidebar.quality',
+      'QC Mobile': 'sidebar.qc',
+      'Kiểm tra': 'sidebar.inspection',
+      'Giao tiếp': 'sidebar.communication',
+      'Microsoft Teams': 'sidebar.teams',
+      'Outlook': 'sidebar.outlook',
+      'SharePoint': 'sidebar.sharepoint',
+      'Phát triển': 'sidebar.development',
+      'GitLab': 'sidebar.gitlab',
+      'Jenkins': 'sidebar.jenkins',
+      'Giám sát': 'sidebar.monitoring',
+      'Helpdesk': 'sidebar.helpdesk',
+      'Tài sản': 'sidebar.assets'
     };
     
     return keyMap[title] ? t(keyMap[title]) : title;
