@@ -49,10 +49,13 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
 
   return (
     <div className={cn(
-      "mb-8 transition-all duration-300",
+      "mb-8 transition-all duration-300 relative",
       scrollPosition > 100 ? "sticky top-20 z-20" : ""
     )}>
-      <div className="flex items-center space-x-2 p-2 bg-white/80 backdrop-blur-sm rounded-2xl border border-white/40 overflow-x-auto shadow-sm">
+      {/* Background with geometric elements */}
+      <div className="absolute inset-0 bg-gradient-to-r from-white/90 to-blue-50/90 backdrop-blur-sm rounded-3xl border border-white/40 shadow-lg geometric-bg"></div>
+      
+      <div className="relative flex items-center space-x-2 p-4 overflow-x-auto">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -62,26 +65,37 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
               className={cn(
-                "flex items-center space-x-3 px-6 py-4 rounded-xl font-semibold text-sm transition-all duration-200 whitespace-nowrap shadow-sm",
-                "hover:bg-white/90 hover:shadow-md",
+                "flex items-center space-x-3 px-6 py-4 rounded-2xl font-semibold text-sm transition-all duration-300 whitespace-nowrap relative overflow-hidden group",
+                "hover:shadow-lg hover:scale-105 transform",
                 isActive 
-                  ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25" 
-                  : "text-neutral-600 hover:text-blue-600 bg-white/50"
+                  ? "bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 text-white shadow-xl shadow-blue-500/25 animate-brand-pulse" 
+                  : "text-gray-700 hover:bg-white/80 hover:text-blue-600 bg-white/60 backdrop-blur-sm border border-white/30"
               )}
             >
+              {/* Geometric decoration for active tab */}
+              {isActive && (
+                <>
+                  <div className="absolute top-1 right-1 w-3 h-3 bg-white/20 rounded transform rotate-45"></div>
+                  <div className="absolute bottom-1 left-1 w-2 h-2 bg-white/15 rounded transform rotate-12"></div>
+                </>
+              )}
+              
               <Icon className={cn(
-                "w-5 h-5 transition-colors duration-200",
-                isActive ? "text-white" : "text-neutral-500"
+                "w-5 h-5 transition-all duration-300",
+                isActive ? "text-white" : "text-blue-600 group-hover:text-blue-700"
               )} />
-              <span>{t(tab.labelKey)}</span>
+              <span className="font-medium">{t(tab.labelKey)}</span>
               <span className={cn(
-                "px-3 py-1 rounded-full text-xs font-bold transition-colors duration-200",
+                "px-3 py-1 rounded-full text-xs font-bold transition-all duration-300 min-w-[2rem] text-center",
                 isActive 
-                  ? "bg-white/25 text-white" 
-                  : "bg-neutral-100 text-neutral-600"
+                  ? "bg-white/25 text-white shadow-sm" 
+                  : "bg-blue-100 text-blue-700 group-hover:bg-blue-200"
               )}>
                 {tab.count}
               </span>
+              
+              {/* Hover effect overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
             </button>
           );
         })}

@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
@@ -44,75 +45,32 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Custom color palette for modern design */
-    --color-primary-50: 239 246 255;
-    --color-primary-100: 219 234 254;
-    --color-primary-500: 59 130 246;
-    --color-primary-600: 37 99 235;
-    --color-primary-700: 29 78 216;
-    
-    --color-secondary-50: 250 245 255;
-    --color-secondary-100: 243 232 255;
-    --color-secondary-500: 139 92 246;
-    --color-secondary-600: 124 58 237;
-    
-    --color-accent-50: 236 254 255;
-    --color-accent-100: 207 250 254;
-    --color-accent-500: 6 182 212;
-    --color-accent-600: 8 145 178;
-    
-    --color-success-50: 240 253 244;
-    --color-success-100: 220 252 231;
-    --color-success-500: 34 197 94;
-    --color-success-600: 22 163 74;
-    
-    --color-warning-50: 255 251 235;
-    --color-warning-100: 254 243 199;
-    --color-warning-500: 245 158 11;
-    --color-warning-600: 217 119 6;
-    
-    --color-danger-50: 254 242 242;
-    --color-danger-100: 254 226 226;
-    --color-danger-500: 239 68 68;
-    --color-danger-600: 220 38 38;
-    
-    --color-neutral-50: 250 250 250;
-    --color-neutral-100: 245 245 245;
-    --color-neutral-200: 229 229 229;
-    --color-neutral-300: 212 212 212;
-    --color-neutral-400: 163 163 163;
-    --color-neutral-500: 115 115 115;
-    --color-neutral-600: 82 82 82;
-    --color-neutral-700: 64 64 64;
-    --color-neutral-800: 38 38 38;
-    --color-neutral-900: 23 23 23;
+    /* Brand Colors inspired by the images */
+    --brand-primary: #2563eb; /* Deep blue */
+    --brand-secondary: #7c3aed; /* Purple */
+    --brand-accent: #1e40af; /* Darker blue */
+    --brand-light: #dbeafe; /* Light blue */
+    --brand-gradient-start: #1e3a8a; /* Navy blue */
+    --brand-gradient-end: #3730a3; /* Indigo */
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
-
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
@@ -138,18 +96,61 @@
     font-weight: 400;
     line-height: 1.6;
     letter-spacing: -0.01em;
-    background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 25%, #81d4fa 50%, #4fc3f7 75%, #29b6f6 100%);
+    /* New brand gradient background inspired by the images */
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 25%, #2563eb 50%, #3730a3 75%, #7c3aed 100%);
     background-size: 400% 400%;
-    animation: gradientShift 8s ease-in-out infinite;
+    animation: brandGradientShift 12s ease-in-out infinite;
     min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
   }
 
-  @keyframes gradientShift {
+  /* Add geometric shapes overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 15% 85%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* Add floating geometric elements */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 10%;
+    right: 10%;
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border-radius: 20px;
+    transform: rotate(15deg);
+    z-index: -1;
+    animation: float 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes brandGradientShift {
     0%, 100% {
       background-position: 0% 50%;
     }
     50% {
       background-position: 100% 50%;
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: rotate(15deg) translateY(0px);
+    }
+    50% {
+      transform: rotate(15deg) translateY(-20px);
     }
   }
 
@@ -185,88 +186,74 @@
     line-height: 1.7;
   }
 
-  .text-primary-brand {
-    color: hsl(var(--color-primary-600));
+  /* Brand color utilities */
+  .text-brand-primary {
+    color: var(--brand-primary);
   }
 
-  .bg-primary-brand {
-    background-color: hsl(var(--color-primary-500));
+  .bg-brand-primary {
+    background-color: var(--brand-primary);
   }
 
-  .bg-primary-light {
-    background-color: hsl(var(--color-primary-50));
+  .bg-brand-gradient {
+    background: linear-gradient(135deg, var(--brand-gradient-start) 0%, var(--brand-gradient-end) 100%);
   }
 
-  .bg-secondary-light {
-    background-color: hsl(var(--color-secondary-50));
+  .bg-brand-light {
+    background-color: var(--brand-light);
   }
 
-  .bg-accent-light {
-    background-color: hsl(var(--color-accent-50));
-  }
-
-  .bg-success-light {
-    background-color: hsl(var(--color-success-50));
-  }
-
-  .bg-warning-light {
-    background-color: hsl(var(--color-warning-50));
-  }
-
-  .bg-danger-light {
-    background-color: hsl(var(--color-danger-50));
-  }
-
-  .text-neutral-600 {
-    color: hsl(var(--color-neutral-600));
-  }
-
-  .text-neutral-700 {
-    color: hsl(var(--color-neutral-700));
-  }
-
-  .text-neutral-800 {
-    color: hsl(var(--color-neutral-800));
-  }
-
+  /* Enhanced glass effect with brand colors */
   .bg-glass {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(30, 64, 175, 0.1);
   }
 
   .bg-glass-dark {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(30, 58, 138, 0.1);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .gradient-bg {
-    background: linear-gradient(135deg, #87CEEB 0%, #98FB98 25%, #FFB6C1 50%, #DDA0DD 75%, #87CEFA 100%);
-    background-size: 400% 400%;
-    animation: gradientShift 8s ease-in-out infinite;
-  }
-
-  .text-gradient {
-    background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%);
+  /* Brand gradient text */
+  .text-brand-gradient {
+    background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .text-gradient-bright {
-    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #F59E0B 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  /* Geometric decorative elements */
+  .geometric-bg {
+    position: relative;
   }
 
-  .text-gradient-white {
-    background: linear-gradient(135deg, #1F2937 0%, #374151 50%, #4B5563 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .geometric-bg::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.2));
+    border-radius: 12px;
+    transform: rotate(15deg);
+    z-index: 1;
+  }
+
+  .geometric-bg::after {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(45deg, rgba(124, 58, 237, 0.15), rgba(37, 99, 235, 0.15));
+    border-radius: 8px;
+    transform: rotate(-15deg);
+    z-index: 1;
   }
 }
 
@@ -285,93 +272,91 @@
     overflow: hidden;
   }
 
+  /* Enhanced glass utilities with brand theme */
   .glass {
     background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.18);
   }
 
-  .glass-dark {
-    background: rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+  .glass-brand {
+    background: rgba(30, 64, 175, 0.1);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(37, 99, 235, 0.2);
   }
 
-  /* Custom scrollbar */
-  .scrollbar-thin {
+  /* Custom scrollbar with brand colors */
+  .scrollbar-brand {
     scrollbar-width: thin;
-    scrollbar-color: rgb(203 213 225) transparent;
+    scrollbar-color: var(--brand-primary) transparent;
   }
 
-  .scrollbar-thin::-webkit-scrollbar {
+  .scrollbar-brand::-webkit-scrollbar {
     width: 4px;
   }
 
-  .scrollbar-thin::-webkit-scrollbar-track {
+  .scrollbar-brand::-webkit-scrollbar-track {
     background: transparent;
   }
 
-  .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: rgb(203 213 225);
+  .scrollbar-brand::-webkit-scrollbar-thumb {
+    background-color: var(--brand-primary);
     border-radius: 2px;
   }
 
-  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background-color: rgb(148 163 184);
+  .scrollbar-brand::-webkit-scrollbar-thumb:hover {
+    background-color: var(--brand-accent);
   }
 
-  /* Gradient backgrounds */
+  /* Brand gradient backgrounds */
   .bg-gradient-brand {
-    background: linear-gradient(135deg, hsl(var(--color-primary-500)) 0%, hsl(var(--color-secondary-500)) 100%);
+    background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
   }
 
-  .bg-gradient-accent {
-    background: linear-gradient(135deg, hsl(var(--color-accent-500)) 0%, hsl(var(--color-primary-500)) 100%);
+  .bg-gradient-brand-light {
+    background: linear-gradient(135deg, var(--brand-light) 0%, rgba(124, 58, 237, 0.1) 100%);
   }
 
-  .bg-gradient-light {
-    background: linear-gradient(135deg, hsl(var(--color-neutral-50)) 0%, hsl(var(--color-primary-50)) 100%);
+  /* Floating animation for geometric elements */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
   }
 
-  .bg-gradient-bright {
-    background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 50%, #45b7d1 100%);
-  }
-}
-
-/* Custom animations */
-@keyframes scroll-up {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-50%);
+  .animate-float-delayed {
+    animation: float 6s ease-in-out infinite 2s;
   }
 }
 
-@keyframes running-text {
-  0% {
-    transform: translateX(0);
+/* Custom animations for brand theme */
+@keyframes geometricFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
   }
-  100% {
-    transform: translateX(-20px);
+  50% {
+    transform: translateY(-15px) rotate(5deg);
   }
 }
 
-.animate-scroll-up {
-  animation: scroll-up 20s linear infinite;
+@keyframes brandPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(37, 99, 235, 0.5);
+  }
 }
 
-.animate-scroll-up:hover {
-  animation-play-state: paused;
+.animate-geometric-float {
+  animation: geometricFloat 8s ease-in-out infinite;
 }
 
-.animate-running-text {
-  animation: running-text 10s ease-in-out infinite alternate;
+.animate-brand-pulse {
+  animation: brandPulse 2s ease-in-out infinite;
 }
 
-/* Smooth transitions */
+/* Smooth transitions with brand theme */
 * {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+  transition-duration: 300ms;
 }
