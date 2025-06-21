@@ -26,36 +26,42 @@ const navigationItems = [
     url: '/it',
     icon: Monitor,
     iconColor: 'text-blue-500',
+    borderColor: 'border-t-blue-400',
   },
   {
     title: 'sidebar.production',
     url: '/production',
     icon: Building2,
     iconColor: 'text-green-500',
+    borderColor: 'border-t-green-400',
   },
   {
     title: 'sidebar.quality',
     url: '/quality',
     icon: BarChart3,
     iconColor: 'text-purple-500',
+    borderColor: 'border-t-purple-400',
   },
   {
     title: 'sidebar.hr',
     url: '/hr',
     icon: Users,
     iconColor: 'text-orange-500',
+    borderColor: 'border-t-orange-400',
   },
   {
     title: 'sidebar.inventory',
     url: '/inventory',
     icon: Package,
     iconColor: 'text-indigo-500',
+    borderColor: 'border-t-indigo-400',
   },
   {
     title: 'sidebar.purchase',
     url: '/purchase',
     icon: ShoppingCart,
     iconColor: 'text-red-500',
+    borderColor: 'border-t-red-400',
   },
 ];
 
@@ -75,7 +81,7 @@ export function SidebarNavigation() {
             const isActive = location.pathname === item.url;
 
             return (
-              <SidebarMenuItem key={item.title}>
+              <SidebarMenuItem key={item.title} className={`border-t-2 ${item.borderColor} border-opacity-60`}>
                 <SidebarMenuButton asChild>
                   <NavLink
                     to={item.url}
@@ -83,9 +89,12 @@ export function SidebarNavigation() {
                       flex items-center gap-4 px-6 py-4 rounded-xl text-base font-medium transition-all duration-300 group relative overflow-hidden min-h-[56px]
                       ${isActive 
                         ? 'bg-gradient-to-r from-[#4c4cff] to-[#00d2ff] text-white shadow-lg shadow-blue-500/25' 
-                        : 'text-black dark:text-white hover:bg-gradient-to-r hover:from-[#4c4cff] hover:to-[#00d2ff] hover:text-white hover:shadow-lg hover:shadow-blue-500/20'
+                        : 'text-[#090909] dark:text-white hover:bg-gradient-to-r hover:from-[#4c4cff] hover:to-[#00d2ff] hover:text-white hover:shadow-lg hover:shadow-blue-500/20'
                       }
                     `}
+                    style={{
+                      color: isActive ? 'white' : '#090909'
+                    }}
                   >
                     {/* Icon with individual color and background */}
                     <div className={`
@@ -102,7 +111,7 @@ export function SidebarNavigation() {
                       }`} />
                     </div>
                     
-                    <span className="font-medium transition-all duration-300 text-base">
+                    <span className="font-medium transition-all duration-300 text-base" style={{ color: 'inherit' }}>
                       {t(item.title)}
                     </span>
 
