@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'vi' | 'en';
@@ -111,6 +110,41 @@ const translations = {
     'banner.window.content3': 'Khóa đào tạo Teams & SharePoint vào 9:00 ngày 02/12',
     'banner.window.title4': 'Server mới đã sẵn sàng',
     'banner.window.content4': 'Server backup mới đã được cài đặt và test thành công',
+
+    // Material Request translations
+    'material.title': 'Online Material Request',
+    'material.subtitle': 'Hệ thống yêu cầu nguyên vật liệu trực tuyến',
+    'material.employee.info': 'Thông tin nhân viên',
+    'material.employee.id': 'Mã nhân viên',
+    'material.employee.name': 'Tên nhân viên',
+    'material.department': 'Bộ phận',
+    'material.location': 'Location',
+    'material.process': 'Công đoạn',
+    'material.history': 'Lịch sử order',
+    'material.new.request': 'Tạo phiếu yêu cầu mới',
+    'material.order.info': 'Thông tin đặt hàng',
+    'material.order.detail': 'Chi tiết phiếu',
+    'material.back.new': 'Quay lại tạo phiếu mới',
+    'material.renew': 'Re-new',
+    'material.delete': 'Delete',
+    'material.save': 'Lưu',
+    'material.print': 'Print',
+    'material.login': 'Đăng nhập',
+    'material.login.employee.id': 'Mã nhân viên',
+    'material.login.employee.name': 'Tên nhân viên',
+    'material.login.department': 'Bộ phận',
+    'material.select.location': 'Chọn location',
+    'material.select.process': 'Chọn công đoạn',
+    'material.search': 'Tìm kiếm nguyên vật liệu',
+    'material.add': 'Thêm nguyên vật liệu',
+    'material.quantity': 'Số lượng',
+    'material.unit': 'Đơn vị',
+    'material.notes': 'Ghi chú',
+    'material.remove': 'Xóa',
+    'material.no.materials': 'Chưa có nguyên vật liệu nào được chọn',
+    'material.confirm.delete': 'Bạn có chắc chắn muốn xóa phiếu này không?',
+    'material.save.success': 'Phiếu đã được lưu thành công!',
+    'material.delete.success': 'Phiếu đã được xóa thành công!'
   },
   en: {
     // Header
@@ -211,6 +245,41 @@ const translations = {
     'banner.window.content3': 'Teams & SharePoint training course at 9:00 on December 2nd',
     'banner.window.title4': 'New Server Ready',
     'banner.window.content4': 'New backup server has been installed and tested successfully',
+
+    // Material Request translations
+    'material.title': 'Online Material Request',
+    'material.subtitle': 'Online material request system',
+    'material.employee.info': 'Employee Information',
+    'material.employee.id': 'Employee ID',
+    'material.employee.name': 'Employee Name',
+    'material.department': 'Department',
+    'material.location': 'Location',
+    'material.process': 'Process',
+    'material.history': 'Order History',
+    'material.new.request': 'Create New Request',
+    'material.order.info': 'Order Information',
+    'material.order.detail': 'Order Details',
+    'material.back.new': 'Back to New Request',
+    'material.renew': 'Re-new',
+    'material.delete': 'Delete',
+    'material.save': 'Save',
+    'material.print': 'Print',
+    'material.login': 'Login',
+    'material.login.employee.id': 'Employee ID',
+    'material.login.employee.name': 'Employee Name',
+    'material.login.department': 'Department',
+    'material.select.location': 'Select location',
+    'material.select.process': 'Select process',
+    'material.search': 'Search Materials',
+    'material.add': 'Add Material',
+    'material.quantity': 'Quantity',
+    'material.unit': 'Unit',
+    'material.notes': 'Notes',
+    'material.remove': 'Remove',
+    'material.no.materials': 'No materials selected yet',
+    'material.confirm.delete': 'Are you sure you want to delete this request?',
+    'material.save.success': 'Request saved successfully!',
+    'material.delete.success': 'Request deleted successfully!'
   }
 };
 

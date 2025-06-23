@@ -7,6 +7,8 @@ import LocationSelector from '@/components/material-request/LocationSelector';
 import MaterialSelector from '@/components/material-request/MaterialSelector';
 import PrintTemplate from '@/components/material-request/PrintTemplate';
 import HistoryOrders from '@/components/material-request/HistoryOrders';
+import { MaterialLanguageToggle } from '@/components/material-request/MaterialLanguageToggle';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface MaterialItem {
   id: string;
@@ -30,6 +32,7 @@ interface RequestData {
 }
 
 const MaterialRequest = () => {
+  const { t } = useLanguage();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [requestData, setRequestData] = useState<RequestData>({
     employeeId: '',
@@ -86,7 +89,7 @@ const MaterialRequest = () => {
   const handleSave = () => {
     console.log('Saving request:', requestData);
     // Here you would typically save to database
-    alert('Phiếu đã được lưu thành công!');
+    alert(t('material.save.success'));
   };
 
   const handlePrint = () => {
@@ -114,11 +117,11 @@ const MaterialRequest = () => {
   };
 
   const handleDeleteRequest = () => {
-    if (confirm('Bạn có chắc chắn muốn xóa phiếu này không?')) {
+    if (confirm(t('material.confirm.delete'))) {
       // Here you would typically delete from database
       console.log('Deleting request:', requestData.requestId);
       handleNewRequest(); // Reset to new request after delete
-      alert('Phiếu đã được xóa thành công!');
+      alert(t('material.delete.success'));
     }
   };
 
@@ -128,15 +131,16 @@ const MaterialRequest = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <MaterialLanguageToggle />
       <div className="container-fluid px-3 py-4">
         <div className="max-w-full mx-auto">
           {/* Header */}
           <div className="mb-4 text-center">
             <h1 className="text-3xl font-bold text-brand-gradient mb-1">
-              Online Material Request
+              {t('material.title')}
             </h1>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
-              Hệ thống yêu cầu nguyên vật liệu trực tuyến
+              {t('material.subtitle')}
             </p>
           </div>
 
@@ -150,7 +154,7 @@ const MaterialRequest = () => {
                   <CardHeader className="pb-3 flex-shrink-0">
                     <CardTitle className="text-indigo-600 dark:text-indigo-400 flex items-center gap-2 text-sm">
                       <History className="w-4 h-4" />
-                      Lịch sử order
+                      {t('material.history')}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="flex-1 overflow-hidden">
@@ -169,21 +173,21 @@ const MaterialRequest = () => {
                   <CardHeader className="pb-2">
                     <CardTitle className="text-blue-600 dark:text-blue-400 flex items-center gap-2 text-sm">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      Thông tin nhân viên
+                      {t('material.employee.info')}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <div>
-                        <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Mã nhân viên</label>
+                        <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.employee.id')}</label>
                         <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.employeeId}</p>
                       </div>
                       <div>
-                        <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Tên nhân viên</label>
+                        <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.employee.name')}</label>
                         <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.employeeName}</p>
                       </div>
                       <div>
-                        <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Bộ phận</label>
+                        <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.department')}</label>
                         <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.department}</p>
                       </div>
                     </div>
@@ -196,7 +200,7 @@ const MaterialRequest = () => {
                         className="flex items-center gap-2 text-xs h-8"
                       >
                         <RotateCcw className="w-3 h-3" />
-                        Re-new
+                        {t('material.renew')}
                       </Button>
                       <Button
                         onClick={handleDeleteRequest}
@@ -204,21 +208,21 @@ const MaterialRequest = () => {
                         className="flex items-center gap-2 text-xs h-8"
                       >
                         <Trash2 className="w-3 h-3" />
-                        Delete
+                        {t('material.delete')}
                       </Button>
                       <Button
                         onClick={handleSave}
                         className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2 text-xs h-8"
                       >
                         <Save className="w-3 h-3" />
-                        Lưu
+                        {t('material.save')}
                       </Button>
                       <Button
                         onClick={handlePrint}
                         className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 text-xs h-8"
                       >
                         <Printer className="w-3 h-3" />
-                        Print
+                        {t('material.print')}
                       </Button>
                     </div>
                   </CardContent>
@@ -234,7 +238,7 @@ const MaterialRequest = () => {
                         className="flex items-center gap-2 text-xs h-8"
                       >
                         <ChevronLeft className="w-3 h-3" />
-                        Quay lại tạo phiếu mới
+                        {t('material.back.new')}
                       </Button>
                       <Button
                         onClick={handleNewRequest}
@@ -242,7 +246,7 @@ const MaterialRequest = () => {
                         className="flex items-center gap-2 text-xs h-8"
                       >
                         <RotateCcw className="w-3 h-3" />
-                        Re-new
+                        {t('material.renew')}
                       </Button>
                       <Button
                         onClick={handleDeleteRequest}
@@ -250,10 +254,10 @@ const MaterialRequest = () => {
                         className="flex items-center gap-2 text-xs h-8"
                       >
                         <Trash2 className="w-3 h-3" />
-                        Delete
+                        {t('material.delete')}
                       </Button>
                       <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-                        Chi tiết phiếu: {viewingOrder.requestId}
+                        {t('material.order.detail')}: {viewingOrder.requestId}
                       </h2>
                     </div>
 
@@ -262,18 +266,18 @@ const MaterialRequest = () => {
                       <CardHeader className="pb-2">
                         <CardTitle className="text-green-600 dark:text-green-400 flex items-center gap-2 text-sm">
                           <FileText className="w-4 h-4" />
-                          Thông tin đặt hàng
+                          {t('material.order.info')}
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 py-2">
                         <div className="space-y-1">
-                          <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Location</label>
+                          <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.location')}</label>
                           <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg border text-sm">
                             {viewingOrder.location}
                           </div>
                         </div>
                         <div className="space-y-1">
-                          <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Công đoạn</label>
+                          <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.process')}</label>
                           <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg border text-sm">
                             {viewingOrder.process}
                           </div>
@@ -297,7 +301,7 @@ const MaterialRequest = () => {
                   <div className="space-y-4 flex-1 flex flex-col overflow-hidden">
                     <div className="flex items-center gap-2 flex-shrink-0">
                       <FileText className="w-5 h-5 text-blue-600" />
-                      <h2 className="text-lg font-bold text-gray-900 dark:text-white">Tạo phiếu yêu cầu mới</h2>
+                      <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('material.new.request')}</h2>
                     </div>
 
                     {/* Location Selection */}
