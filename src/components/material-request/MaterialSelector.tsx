@@ -23,9 +23,10 @@ interface MaterialSelectorProps {
   onMaterialAdd: (material: MaterialItem) => void;
   onMaterialUpdate: (id: string, updates: Partial<MaterialItem>) => void;
   onMaterialRemove: (id: string) => void;
+  readOnly?: boolean;
 }
 
-const MaterialSelector = ({ materials, onMaterialAdd, onMaterialUpdate, onMaterialRemove }: MaterialSelectorProps) => {
+const MaterialSelector = ({ materials, onMaterialAdd, onMaterialUpdate, onMaterialRemove, readOnly = false }: MaterialSelectorProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(true);
 
@@ -75,55 +76,57 @@ const MaterialSelector = ({ materials, onMaterialAdd, onMaterialUpdate, onMateri
 
   return (
     <div className="space-y-6">
-      {/* Material Search */}
-      <Card className="bg-glass border-white/20 shadow-xl">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-purple-600 dark:text-purple-400 flex items-center gap-2">
-            <Search className="w-5 h-5" />
-            Tìm kiếm nguyên vật liệu
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              placeholder="Tìm theo mã hoặc tên nguyên vật liệu..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 h-12"
-            />
-          </div>
-
-          {searchTerm && (
-            <div className="max-h-48 overflow-y-auto space-y-2">
-              {filteredMaterials.map((material) => (
-                <div key={material.code} className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border">
-                  <div>
-                    <p className="font-medium text-gray-900 dark:text-white">{material.code}</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{material.name}</p>
-                    <Badge variant="secondary" className="text-xs">{material.unit}</Badge>
-                  </div>
-                  <Button
-                    onClick={() => handleAddMaterial(material)}
-                    size="sm"
-                    className="bg-green-600 hover:bg-green-700"
-                  >
-                    <Plus className="w-4 h-4 mr-1" />
-                    Thêm
-                  </Button>
-                </div>
-              ))}
+      {/* Material Search - Hide in read-only mode */}
+      {!readOnly && (
+        <Card className="bg-glass border-white/20 shadow-xl">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-purple-600 dark:text-purple-400 flex items-center gap-2">
+              <Search className="w-5 h-5" />
+              Tìm kiếm nguyên vật liệu
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Input
+                placeholder="Tìm theo mã hoặc tên nguyên vật liệu..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 h-12"
+              />
             </div>
-          )}
-        </CardContent>
-      </Card>
+
+            {searchTerm && (
+              <div className="max-h-48 overflow-y-auto space-y-2">
+                {filteredMaterials.map((material) => (
+                  <div key={material.code} className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border">
+                    <div>
+                      <p className="font-medium text-gray-900 dark:text-white">{material.code}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{material.name}</p>
+                      <Badge variant="secondary" className="text-xs">{material.unit}</Badge>
+                    </div>
+                    <Button
+                      onClick={() => handleAddMaterial(material)}
+                      size="sm"
+                      className="bg-green-600 hover:bg-green-700"
+                    >
+                      <Plus className="w-4 h-4 mr-1" />
+                      Thêm
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Selected Materials */}
       <Card className="bg-glass border-white/20 shadow-xl">
         <CardHeader className="pb-4">
           <CardTitle className="text-orange-600 dark:text-orange-400 flex items-center gap-2">
             <Package className="w-5 h-5" />
-            Danh sách nguyên vật liệu đã chọn ({materials.length})
+            {readOnly ? 'Danh sách nguyên vật liệu' : `Danh sách nguyên vật liệu đã chọn (${materials.length})`}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -143,8 +146,8 @@ const MaterialSelector = ({ materials, onMaterialAdd, onMaterialUpdate, onMateri
                     <TableHead>Đơn vị</TableHead>
                     <TableHead className="w-24">Số lượng</TableHead>
                     <TableHead>Ghi chú</TableHead>
-                    <TableHead className="w-16">Yêu thích</TableHead>
-                    <TableHead className="w-16"></TableHead>
+                    {!readOnly && <TableHead className="w-16">Yêu thích</TableHead>}
+                    {!readOnly && <TableHead className="w-16"></TableHead>}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -159,38 +162,54 @@ const MaterialSelector = ({ materials, onMaterialAdd, onMaterialUpdate, onMateri
                         <Badge variant="outline">{material.unit}</Badge>
                       </TableCell>
                       <TableCell>
-                        <Input
-                          type="number"
-                          min="1"
-                          value={material.quantity}
-                          onChange={(e) => handleQuantityChange(material.id, e.target.value)}
-                          className="w-20 h-8"
-                        />
+                        {readOnly ? (
+                          <div className="w-20 h-8 flex items-center font-medium">
+                            {material.quantity}
+                          </div>
+                        ) : (
+                          <Input
+                            type="number"
+                            min="1"
+                            value={material.quantity}
+                            onChange={(e) => handleQuantityChange(material.id, e.target.value)}
+                            className="w-20 h-8"
+                          />
+                        )}
                       </TableCell>
                       <TableCell>
-                        <Input
-                          placeholder="Ghi chú..."
-                          value={material.notes}
-                          onChange={(e) => handleNotesChange(material.id, e.target.value)}
-                          className="min-w-32 h-8"
-                        />
+                        {readOnly ? (
+                          <div className="min-w-32 h-8 flex items-center text-sm">
+                            {material.notes || '-'}
+                          </div>
+                        ) : (
+                          <Input
+                            placeholder="Ghi chú..."
+                            value={material.notes}
+                            onChange={(e) => handleNotesChange(material.id, e.target.value)}
+                            className="min-w-32 h-8"
+                          />
+                        )}
                       </TableCell>
-                      <TableCell>
-                        <Checkbox
-                          checked={material.isFavorite}
-                          onCheckedChange={(checked) => handleFavoriteChange(material.id, !!checked)}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => onMaterialRemove(material.id)}
-                          className="h-8 w-8 p-0"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </TableCell>
+                      {!readOnly && (
+                        <TableCell>
+                          <Checkbox
+                            checked={material.isFavorite}
+                            onCheckedChange={(checked) => handleFavoriteChange(material.id, !!checked)}
+                          />
+                        </TableCell>
+                      )}
+                      {!readOnly && (
+                        <TableCell>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => onMaterialRemove(material.id)}
+                            className="h-8 w-8 p-0"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))}
                 </TableBody>

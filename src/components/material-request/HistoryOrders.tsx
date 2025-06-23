@@ -1,17 +1,37 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { CalendarIcon, History, Eye, Clock } from 'lucide-react';
+import { CalendarIcon, Eye, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
+interface MaterialItem {
+  id: string;
+  code: string;
+  name: string;
+  unit: string;
+  quantity: number;
+  notes: string;
+  isFavorite: boolean;
+}
+
+interface RequestData {
+  employeeId: string;
+  employeeName: string;
+  department: string;
+  location: string;
+  process: string;
+  materials: MaterialItem[];
+  requestDate: string;
+  requestId: string;
+}
+
 interface HistoryOrdersProps {
   employeeId: string;
+  onViewOrder: (orderData: RequestData) => void;
 }
 
 interface HistoryOrder {
@@ -24,7 +44,7 @@ interface HistoryOrder {
   materials: string[];
 }
 
-const HistoryOrders = ({ employeeId }: HistoryOrdersProps) => {
+const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [filteredOrders, setFilteredOrders] = useState<HistoryOrder[]>([]);
 
@@ -125,129 +145,135 @@ const HistoryOrders = ({ employeeId }: HistoryOrdersProps) => {
     }
   };
 
+  const handleViewOrder = (order: HistoryOrder) => {
+    // Convert HistoryOrder to RequestData format
+    const mockMaterials = order.materials.map((matCode, index) => ({
+      id: `${order.requestId}-${index}`,
+      code: matCode,
+      name: `Material ${matCode}`,
+      unit: 'Cái',
+      quantity: Math.floor(Math.random() * 10) + 1,
+      notes: '',
+      isFavorite: false
+    }));
+
+    const requestData: RequestData = {
+      employeeId: employeeId,
+      employeeName: 'Test User',
+      department: 'Test Department',
+      location: order.location,
+      process: order.process,
+      materials: mockMaterials,
+      requestDate: order.requestDate,
+      requestId: order.requestId
+    };
+
+    onViewOrder(requestData);
+  };
+
   return (
-    <Card className="bg-glass border-white/20 shadow-xl">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
-          <History className="w-5 h-5" />
-          Lịch sử order của nhân viên {employeeId}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Date Filter */}
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-gray-500" />
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Lọc theo ngày:
-            </span>
-          </div>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "w-[240px] justify-start text-left font-normal",
-                  !selectedDate && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {selectedDate ? format(selectedDate, "dd/MM/yyyy") : "Chọn ngày cụ thể"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={setSelectedDate}
-                initialFocus
-                className={cn("p-3 pointer-events-auto")}
-              />
-            </PopoverContent>
-          </Popover>
-          {selectedDate && (
+    <div className="space-y-4">
+      {/* Date Filter */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <Clock className="w-4 h-4 text-gray-500" />
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Lọc theo ngày:
+          </span>
+        </div>
+        <Popover>
+          <PopoverTrigger asChild>
             <Button
               variant="outline"
-              size="sm"
-              onClick={() => setSelectedDate(undefined)}
+              className={cn(
+                "w-full justify-start text-left font-normal text-sm",
+                !selectedDate && "text-muted-foreground"
+              )}
             >
-              Xóa bộ lọc
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {selectedDate ? format(selectedDate, "dd/MM/yyyy") : "Chọn ngày"}
             </Button>
-          )}
-        </div>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={setSelectedDate}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
+        {selectedDate && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full text-xs"
+            onClick={() => setSelectedDate(undefined)}
+          >
+            Xóa bộ lọc
+          </Button>
+        )}
+      </div>
 
-        {/* Orders List */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h4 className="text-lg font-medium text-gray-900 dark:text-white">
-              {selectedDate ? 'Đơn hàng trong ngày' : 'Top 10 đơn hàng gần nhất'}
-            </h4>
-            <Badge variant="secondary" className="text-sm">
-              {filteredOrders.length} đơn hàng
-            </Badge>
+      {/* Orders Count */}
+      <div className="flex items-center justify-between">
+        <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+          {selectedDate ? 'Đơn trong ngày' : 'Top 10 gần nhất'}
+        </h4>
+        <Badge variant="secondary" className="text-xs">
+          {filteredOrders.length}
+        </Badge>
+      </div>
+
+      {/* Orders List */}
+      <div className="space-y-3 max-h-96 overflow-y-auto">
+        {filteredOrders.length === 0 ? (
+          <div className="text-center py-4 text-gray-500 dark:text-gray-400 text-sm">
+            <p>Không có đơn hàng</p>
           </div>
-
-          {filteredOrders.length === 0 ? (
-            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-              <History className="w-12 h-12 mx-auto mb-4 opacity-50" />
-              <p>Không có đơn hàng nào trong khoảng thời gian này</p>
+        ) : (
+          filteredOrders.map((order) => (
+            <div key={order.requestId} className="border rounded-lg p-3 bg-white dark:bg-gray-800 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="text-xs font-medium text-gray-900 dark:text-white truncate">
+                  {order.requestId}
+                </div>
+                <Badge className={cn("text-xs", getStatusColor(order.status))}>
+                  {getStatusText(order.status)}
+                </Badge>
+              </div>
+              
+              <div className="text-xs text-gray-600 dark:text-gray-400">
+                {format(new Date(order.requestDate), "dd/MM/yyyy")}
+              </div>
+              
+              <div className="text-xs text-gray-700 dark:text-gray-300 truncate">
+                {order.location}
+              </div>
+              
+              <div className="text-xs text-gray-600 dark:text-gray-400 truncate">
+                {order.process}
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <Badge variant="outline" className="text-xs">
+                  {order.totalItems} items
+                </Badge>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-6 px-2 text-xs"
+                  onClick={() => handleViewOrder(order)}
+                >
+                  <Eye className="w-3 h-3 mr-1" />
+                  Xem
+                </Button>
+              </div>
             </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Mã phiếu</TableHead>
-                    <TableHead>Ngày tạo</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Công đoạn</TableHead>
-                    <TableHead className="text-center">Số item</TableHead>
-                    <TableHead className="text-center">Trạng thái</TableHead>
-                    <TableHead className="text-center">Thao tác</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredOrders.map((order) => (
-                    <TableRow key={order.requestId}>
-                      <TableCell className="font-medium">
-                        {order.requestId}
-                      </TableCell>
-                      <TableCell>
-                        {format(new Date(order.requestDate), "dd/MM/yyyy")}
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-sm">{order.location}</span>
-                      </TableCell>
-                      <TableCell>
-                        <span className="text-sm">{order.process}</span>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Badge variant="outline">{order.totalItems}</Badge>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Badge className={cn("text-xs", getStatusColor(order.status))}>
-                          {getStatusText(order.status)}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="h-8"
-                        >
-                          <Eye className="w-4 h-4 mr-1" />
-                          Xem
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+          ))
+        )}
+      </div>
+    </div>
   );
 };
 
