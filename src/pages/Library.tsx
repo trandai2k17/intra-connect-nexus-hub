@@ -6,12 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Copy, Check, Code, Eye, Palette, Zap } from 'lucide-react';
+import { Copy, Check, Code, Eye, Palette, Zap, CreditCard, Square, Type, Menu } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
 
 const Library = () => {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const { toast } = useToast();
 
   const copyToClipboard = async (code: string, type: string) => {
@@ -32,9 +33,19 @@ const Library = () => {
     }
   };
 
-  // Component examples với code
+  // Categories for organization
+  const categories = [
+    { id: 'all', name: 'Tất cả', icon: Code },
+    { id: 'button', name: 'Button', icon: Square },
+    { id: 'card', name: 'Card', icon: CreditCard },
+    { id: 'navigation', name: 'Navigation', icon: Menu },
+    { id: 'text', name: 'Text', icon: Type },
+  ];
+
+  // Component examples với categories
   const componentExamples = [
     {
+      category: 'button',
       name: "Glass Navigation Button",
       description: "Button với hiệu ứng glass và gradient hover",
       preview: (
@@ -77,6 +88,7 @@ const Library = () => {
 }`
     },
     {
+      category: 'card',
       name: "Application Card",
       description: "Card với hover effect và gradient border",
       preview: (
@@ -130,6 +142,7 @@ const Library = () => {
 }`
     },
     {
+      category: 'navigation',
       name: "Navigation Item",
       description: "Navigation với active state và icon",
       preview: (
@@ -200,8 +213,9 @@ const Library = () => {
 }`
     },
     {
-      name: "Geometric Background",
-      description: "Background với geometric shapes và animation",
+      category: 'card',
+      name: "Geometric Background Card",
+      description: "Card với geometric shapes và animation",
       preview: (
         <div className="relative w-full h-32 bg-gradient-to-r from-[#4c4cff] to-[#00d2ff] rounded-lg overflow-hidden">
           <div className="absolute top-4 right-4 w-8 h-8 bg-white/20 rounded transform rotate-15 animate-float"></div>
@@ -255,21 +269,66 @@ const Library = () => {
     transform: rotate(15deg) translateY(-10px);
   }
 }`
+    },
+    {
+      category: 'text',
+      name: "Brand Gradient Text",
+      description: "Text với gradient màu brand",
+      preview: (
+        <div className="text-2xl font-bold bg-gradient-to-r from-[#4c4cff] to-[#00d2ff] bg-clip-text text-transparent">
+          IT Portal Brand Text
+        </div>
+      ),
+      html: `<h1 class="text-brand-gradient">IT Portal Brand Text</h1>`,
+      css: `.text-brand-gradient {
+  background: linear-gradient(135deg, #4c4cff 0%, #00d2ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.5rem;
+  font-weight: bold;
+}`
+    },
+    {
+      category: 'button',
+      name: "Collapse Button",
+      description: "Button Thu gọn với hiệu ứng hover",
+      preview: (
+        <Button variant="outline" className="border-gray-300 hover:bg-gradient-to-r hover:from-[#4c4cff] hover:to-[#00d2ff] hover:text-white hover:border-transparent transition-all duration-300">
+          Thu gọn
+        </Button>
+      ),
+      html: `<button class="collapse-btn">Thu gọn</button>`,
+      css: `.collapse-btn {
+  border: 1px solid #d1d5db;
+  background: transparent;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: all 0.3s ease;
+}
+
+.collapse-btn:hover {
+  background: linear-gradient(to right, #4c4cff, #00d2ff);
+  color: white;
+  border-color: transparent;
+}`
     }
   ];
 
   // CSS Classes examples
   const cssClasses = [
     {
-      name: "bg-glass",
-      description: "Glass morphism background effect",
-      example: "bg-glass",
+      category: 'card',
+      name: "glass-card",
+      description: "Glass morphism card effect",
+      example: "glass-card",
       css: `background: rgba(255, 255, 255, 0.95);
 backdrop-filter: blur(20px);
 border: 1px solid rgba(255, 255, 255, 0.3);
 box-shadow: 0 8px 32px rgba(76, 76, 255, 0.1);`
     },
     {
+      category: 'text',
       name: "text-brand-gradient",
       description: "Gradient text với brand colors",
       example: "text-brand-gradient",
@@ -279,6 +338,7 @@ box-shadow: 0 8px 32px rgba(76, 76, 255, 0.1);`
 background-clip: text;`
     },
     {
+      category: 'card',
       name: "animate-float",
       description: "Float animation cho geometric elements",
       example: "animate-float",
@@ -296,6 +356,15 @@ background-clip: text;`
 }`
     }
   ];
+
+  // Filter components and classes based on selected category
+  const filteredComponents = selectedCategory === 'all' 
+    ? componentExamples 
+    : componentExamples.filter(comp => comp.category === selectedCategory);
+
+  const filteredClasses = selectedCategory === 'all' 
+    ? cssClasses 
+    : cssClasses.filter(cls => cls.category === selectedCategory);
 
   const CodeBlock = ({ code, language }: { code: string; language: string }) => (
     <div className="relative">
@@ -324,7 +393,7 @@ background-clip: text;`
           <div className="flex-1 space-y-4 p-8 pt-6">
             <div className="flex items-center justify-between space-y-2">
               <div>
-                <h2 className="text-3xl font-bold tracking-tight text-brand-gradient">
+                <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-[#4c4cff] to-[#00d2ff] bg-clip-text text-transparent">
                   Component Library
                 </h2>
                 <p className="text-muted-foreground">
@@ -341,6 +410,28 @@ background-clip: text;`
               </AlertDescription>
             </Alert>
 
+            {/* Category Header Menu */}
+            <div className="flex flex-wrap gap-2 p-4 bg-muted/50 rounded-lg">
+              {categories.map((category) => {
+                const Icon = category.icon;
+                return (
+                  <Button
+                    key={category.id}
+                    variant={selectedCategory === category.id ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedCategory(category.id)}
+                    className={selectedCategory === category.id 
+                      ? "bg-gradient-to-r from-[#4c4cff] to-[#00d2ff] text-white border-none" 
+                      : "hover:bg-gradient-to-r hover:from-[#4c4cff] hover:to-[#00d2ff] hover:text-white transition-all duration-300"
+                    }
+                  >
+                    <Icon className="w-4 h-4 mr-2" />
+                    {category.name}
+                  </Button>
+                );
+              })}
+            </div>
+
             <Tabs defaultValue="components" className="space-y-4">
               <TabsList>
                 <TabsTrigger value="components" className="flex items-center gap-2">
@@ -354,68 +445,86 @@ background-clip: text;`
               </TabsList>
 
               <TabsContent value="components" className="space-y-6">
-                {componentExamples.map((component, index) => (
-                  <Card key={index} className="glass-card">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
+                {filteredComponents.length === 0 ? (
+                  <div className="text-center text-muted-foreground py-8">
+                    Không có components nào trong danh mục này
+                  </div>
+                ) : (
+                  filteredComponents.map((component, index) => (
+                    <Card key={index} className="glass-card">
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <CardTitle className="flex items-center gap-2">
+                              {component.name}
+                              <Badge variant="secondary">Component</Badge>
+                              <Badge variant="outline" className="text-xs">
+                                {categories.find(c => c.id === component.category)?.name}
+                              </Badge>
+                            </CardTitle>
+                            <CardDescription>{component.description}</CardDescription>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
                         <div>
-                          <CardTitle className="flex items-center gap-2">
-                            {component.name}
-                            <Badge variant="secondary">Component</Badge>
-                          </CardTitle>
-                          <CardDescription>{component.description}</CardDescription>
+                          <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
+                            <Eye className="w-4 h-4" />
+                            Preview
+                          </h4>
+                          <div className="p-4 border rounded-lg bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900">
+                            {component.preview}
+                          </div>
                         </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div>
-                        <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
-                          <Eye className="w-4 h-4" />
-                          Preview
-                        </h4>
-                        <div className="p-4 border rounded-lg bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900">
-                          {component.preview}
-                        </div>
-                      </div>
-                      
-                      <Tabs defaultValue="html" className="w-full">
-                        <TabsList className="grid w-full grid-cols-2">
-                          <TabsTrigger value="html">HTML</TabsTrigger>
-                          <TabsTrigger value="css">CSS</TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="html">
-                          <CodeBlock code={component.html} language="html" />
-                        </TabsContent>
-                        <TabsContent value="css">
-                          <CodeBlock code={component.css} language="css" />
-                        </TabsContent>
-                      </Tabs>
-                    </CardContent>
-                  </Card>
-                ))}
+                        
+                        <Tabs defaultValue="html" className="w-full">
+                          <TabsList className="grid w-full grid-cols-2">
+                            <TabsTrigger value="html">HTML</TabsTrigger>
+                            <TabsTrigger value="css">CSS</TabsTrigger>
+                          </TabsList>
+                          <TabsContent value="html">
+                            <CodeBlock code={component.html} language="html" />
+                          </TabsContent>
+                          <TabsContent value="css">
+                            <CodeBlock code={component.css} language="css" />
+                          </TabsContent>
+                        </Tabs>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
               </TabsContent>
 
               <TabsContent value="classes" className="space-y-6">
-                {cssClasses.map((cssClass, index) => (
-                  <Card key={index} className="glass-card">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        .{cssClass.name}
-                        <Badge variant="outline">CSS Class</Badge>
-                      </CardTitle>
-                      <CardDescription>{cssClass.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Usage</h4>
-                        <code className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-sm">
-                          className="{cssClass.example}"
-                        </code>
-                      </div>
-                      <CodeBlock code={cssClass.css} language="css" />
-                    </CardContent>
-                  </Card>
-                ))}
+                {filteredClasses.length === 0 ? (
+                  <div className="text-center text-muted-foreground py-8">
+                    Không có CSS classes nào trong danh mục này
+                  </div>
+                ) : (
+                  filteredClasses.map((cssClass, index) => (
+                    <Card key={index} className="glass-card">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          .{cssClass.name}
+                          <Badge variant="outline">CSS Class</Badge>
+                          <Badge variant="outline" className="text-xs">
+                            {categories.find(c => c.id === cssClass.category)?.name}
+                          </Badge>
+                        </CardTitle>
+                        <CardDescription>{cssClass.description}</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">Usage</h4>
+                          <code className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-sm">
+                            className="{cssClass.example}"
+                          </code>
+                        </div>
+                        <CodeBlock code={cssClass.css} language="css" />
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
               </TabsContent>
             </Tabs>
           </div>
