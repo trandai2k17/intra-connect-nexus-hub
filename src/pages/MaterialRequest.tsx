@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Printer, Save, Plus, History, FileText, Eye, ChevronLeft } from 'lucide-react';
+import { Printer, Save, Plus, History, FileText, Eye, ChevronLeft, RotateCcw, Trash2 } from 'lucide-react';
 import LoginForm from '@/components/material-request/LoginForm';
 import LocationSelector from '@/components/material-request/LocationSelector';
 import MaterialSelector from '@/components/material-request/MaterialSelector';
@@ -101,6 +101,27 @@ const MaterialRequest = () => {
     setViewingOrder(null);
   };
 
+  const handleNewRequest = () => {
+    setRequestData(prev => ({
+      ...prev,
+      location: '',
+      process: '',
+      materials: [],
+      requestDate: new Date().toISOString().split('T')[0],
+      requestId: `REQ-${Date.now()}`
+    }));
+    setViewingOrder(null);
+  };
+
+  const handleDeleteRequest = () => {
+    if (confirm('Bạn có chắc chắn muốn xóa phiếu này không?')) {
+      // Here you would typically delete from database
+      console.log('Deleting request:', requestData.requestId);
+      handleNewRequest(); // Reset to new request after delete
+      alert('Phiếu đã được xóa thành công!');
+    }
+  };
+
   if (showPrint) {
     return <PrintTemplate data={viewingOrder || requestData} onClose={() => setShowPrint(false)} />;
   }
@@ -143,7 +164,7 @@ const MaterialRequest = () => {
 
               {/* Main Content - Request Form or Order View */}
               <div className="lg:col-span-3 space-y-4 h-full flex flex-col">
-                {/* Employee Info Card */}
+                {/* Employee Info Card with Action Buttons */}
                 <Card className="bg-glass border-white/20 shadow-xl flex-shrink-0">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-blue-600 dark:text-blue-400 flex items-center gap-2 text-sm">
@@ -151,18 +172,54 @@ const MaterialRequest = () => {
                       Thông tin nhân viên
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-3 py-2">
-                    <div>
-                      <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Mã nhân viên</label>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.employeeId}</p>
+                  <CardContent className="space-y-3">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div>
+                        <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Mã nhân viên</label>
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.employeeId}</p>
+                      </div>
+                      <div>
+                        <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Tên nhân viên</label>
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.employeeName}</p>
+                      </div>
+                      <div>
+                        <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Bộ phận</label>
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.department}</p>
+                      </div>
                     </div>
-                    <div>
-                      <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Tên nhân viên</label>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.employeeName}</p>
-                    </div>
-                    <div>
-                      <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Bộ phận</label>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.department}</p>
+                    
+                    {/* Action Buttons */}
+                    <div className="flex gap-2 justify-end pt-2 border-t">
+                      <Button
+                        onClick={handleNewRequest}
+                        variant="outline"
+                        className="flex items-center gap-2 text-xs h-8"
+                      >
+                        <RotateCcw className="w-3 h-3" />
+                        Re-new
+                      </Button>
+                      <Button
+                        onClick={handleDeleteRequest}
+                        variant="destructive"
+                        className="flex items-center gap-2 text-xs h-8"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                        Delete
+                      </Button>
+                      <Button
+                        onClick={handleSave}
+                        className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2 text-xs h-8"
+                      >
+                        <Save className="w-3 h-3" />
+                        Lưu
+                      </Button>
+                      <Button
+                        onClick={handlePrint}
+                        className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 text-xs h-8"
+                      >
+                        <Printer className="w-3 h-3" />
+                        Print
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -178,6 +235,22 @@ const MaterialRequest = () => {
                       >
                         <ChevronLeft className="w-3 h-3" />
                         Quay lại tạo phiếu mới
+                      </Button>
+                      <Button
+                        onClick={handleNewRequest}
+                        variant="outline"
+                        className="flex items-center gap-2 text-xs h-8"
+                      >
+                        <RotateCcw className="w-3 h-3" />
+                        Re-new
+                      </Button>
+                      <Button
+                        onClick={handleDeleteRequest}
+                        variant="destructive"
+                        className="flex items-center gap-2 text-xs h-8"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                        Delete
                       </Button>
                       <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                         Chi tiết phiếu: {viewingOrder.requestId}
@@ -218,17 +291,6 @@ const MaterialRequest = () => {
                         readOnly={true}
                       />
                     </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex gap-3 justify-end flex-shrink-0">
-                      <Button
-                        onClick={() => setShowPrint(true)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-lg text-xs h-8"
-                      >
-                        <Printer className="w-3 h-3 mr-1" />
-                        In phiếu
-                      </Button>
-                    </div>
                   </div>
                 ) : (
                   /* Create New Request */
@@ -256,24 +318,6 @@ const MaterialRequest = () => {
                         onMaterialRemove={handleMaterialRemove}
                         location={requestData.location}
                       />
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex gap-3 justify-end flex-shrink-0">
-                      <Button
-                        onClick={handleSave}
-                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-lg text-xs h-8"
-                      >
-                        <Save className="w-3 h-3 mr-1" />
-                        Lưu phiếu
-                      </Button>
-                      <Button
-                        onClick={handlePrint}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-lg text-xs h-8"
-                      >
-                        <Printer className="w-3 h-3 mr-1" />
-                        In phiếu
-                      </Button>
                     </div>
                   </div>
                 )}
