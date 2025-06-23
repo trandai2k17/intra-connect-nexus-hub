@@ -1,45 +1,24 @@
-
 import React, { useState } from 'react';
 import { AppSidebar } from '@/components/layout/AppSidebar';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Copy, Check, Code, Eye, Palette, Zap, CreditCard, Square, Type, Menu } from 'lucide-react';
+import { Code, Eye, Palette, Zap } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useToast } from '@/hooks/use-toast';
+import { CategoryFilter } from '@/components/library/CategoryFilter';
+import { ComponentCard } from '@/components/library/ComponentCard';
+import { CSSClassCard } from '@/components/library/CSSClassCard';
 
 const Library = () => {
-  const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const { toast } = useToast();
-
-  const copyToClipboard = async (code: string, type: string) => {
-    try {
-      await navigator.clipboard.writeText(code);
-      setCopiedCode(code);
-      toast({
-        title: "Đã copy!",
-        description: `${type} đã được copy vào clipboard`,
-      });
-      setTimeout(() => setCopiedCode(null), 2000);
-    } catch (err) {
-      toast({
-        title: "Lỗi copy",
-        description: "Không thể copy code",
-        variant: "destructive",
-      });
-    }
-  };
 
   // Categories for organization
   const categories = [
-    { id: 'all', name: 'Tất cả', icon: Code },
-    { id: 'button', name: 'Button', icon: Square },
-    { id: 'card', name: 'Card', icon: CreditCard },
-    { id: 'navigation', name: 'Navigation', icon: Menu },
-    { id: 'text', name: 'Text', icon: Type },
+    { id: 'all', name: 'Tất cả' },
+    { id: 'button', name: 'Button' },
+    { id: 'card', name: 'Card' },
+    { id: 'navigation', name: 'Navigation' },
+    { id: 'text', name: 'Text' },
   ];
 
   // Component examples với categories
@@ -92,16 +71,16 @@ const Library = () => {
       name: "Application Card",
       description: "Card với hover effect và gradient border",
       preview: (
-        <Card className="app-card border-t-2 border-t-blue-400 border-opacity-60 cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group relative overflow-hidden w-48">
-          <CardHeader className="text-center">
+        <div className="app-card border-t-2 border-t-blue-400 border-opacity-60 cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group relative overflow-hidden w-48 bg-white dark:bg-gray-800 rounded-lg p-4">
+          <div className="text-center">
             <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center mx-auto mb-3">
               <Code className="w-6 h-6 text-white" />
             </div>
-            <CardTitle className="text-sm">Ứng dụng Demo</CardTitle>
-            <CardDescription className="text-xs">Mô tả ứng dụng</CardDescription>
-          </CardHeader>
+            <h3 className="text-sm font-semibold">Ứng dụng Demo</h3>
+            <p className="text-xs text-gray-500">Mô tả ứng dụng</p>
+          </div>
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-        </Card>
+        </div>
       ),
       html: `<div class="app-card border-t-2 border-t-blue-400 border-opacity-60 cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group relative overflow-hidden">
   <div class="card-header text-center">
@@ -366,25 +345,6 @@ background-clip: text;`
     ? cssClasses 
     : cssClasses.filter(cls => cls.category === selectedCategory);
 
-  const CodeBlock = ({ code, language }: { code: string; language: string }) => (
-    <div className="relative">
-      <div className="flex items-center justify-between bg-gray-800 text-white px-4 py-2 rounded-t-lg">
-        <span className="text-sm font-medium">{language.toUpperCase()}</span>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => copyToClipboard(code, language)}
-          className="h-6 text-gray-300 hover:text-white"
-        >
-          {copiedCode === code ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-        </Button>
-      </div>
-      <pre className="bg-gray-900 text-gray-100 p-4 rounded-b-lg overflow-x-auto text-sm">
-        <code>{code}</code>
-      </pre>
-    </div>
-  );
-
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
@@ -410,27 +370,10 @@ background-clip: text;`
               </AlertDescription>
             </Alert>
 
-            {/* Category Header Menu */}
-            <div className="flex flex-wrap gap-2 p-4 bg-muted/50 rounded-lg">
-              {categories.map((category) => {
-                const Icon = category.icon;
-                return (
-                  <Button
-                    key={category.id}
-                    variant={selectedCategory === category.id ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setSelectedCategory(category.id)}
-                    className={selectedCategory === category.id 
-                      ? "bg-gradient-to-r from-[#4c4cff] to-[#00d2ff] text-white border-none" 
-                      : "hover:bg-gradient-to-r hover:from-[#4c4cff] hover:to-[#00d2ff] hover:text-white transition-all duration-300"
-                    }
-                  >
-                    <Icon className="w-4 h-4 mr-2" />
-                    {category.name}
-                  </Button>
-                );
-              })}
-            </div>
+            <CategoryFilter 
+              selectedCategory={selectedCategory}
+              onCategoryChange={setSelectedCategory}
+            />
 
             <Tabs defaultValue="components" className="space-y-4">
               <TabsList>
@@ -451,46 +394,11 @@ background-clip: text;`
                   </div>
                 ) : (
                   filteredComponents.map((component, index) => (
-                    <Card key={index} className="glass-card">
-                      <CardHeader>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <CardTitle className="flex items-center gap-2">
-                              {component.name}
-                              <Badge variant="secondary">Component</Badge>
-                              <Badge variant="outline" className="text-xs">
-                                {categories.find(c => c.id === component.category)?.name}
-                              </Badge>
-                            </CardTitle>
-                            <CardDescription>{component.description}</CardDescription>
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <div>
-                          <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
-                            <Eye className="w-4 h-4" />
-                            Preview
-                          </h4>
-                          <div className="p-4 border rounded-lg bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900">
-                            {component.preview}
-                          </div>
-                        </div>
-                        
-                        <Tabs defaultValue="html" className="w-full">
-                          <TabsList className="grid w-full grid-cols-2">
-                            <TabsTrigger value="html">HTML</TabsTrigger>
-                            <TabsTrigger value="css">CSS</TabsTrigger>
-                          </TabsList>
-                          <TabsContent value="html">
-                            <CodeBlock code={component.html} language="html" />
-                          </TabsContent>
-                          <TabsContent value="css">
-                            <CodeBlock code={component.css} language="css" />
-                          </TabsContent>
-                        </Tabs>
-                      </CardContent>
-                    </Card>
+                    <ComponentCard 
+                      key={index} 
+                      component={component} 
+                      categoryName={categories.find(c => c.id === component.category)?.name || ''}
+                    />
                   ))
                 )}
               </TabsContent>
@@ -502,27 +410,11 @@ background-clip: text;`
                   </div>
                 ) : (
                   filteredClasses.map((cssClass, index) => (
-                    <Card key={index} className="glass-card">
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          .{cssClass.name}
-                          <Badge variant="outline">CSS Class</Badge>
-                          <Badge variant="outline" className="text-xs">
-                            {categories.find(c => c.id === cssClass.category)?.name}
-                          </Badge>
-                        </CardTitle>
-                        <CardDescription>{cssClass.description}</CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Usage</h4>
-                          <code className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-sm">
-                            className="{cssClass.example}"
-                          </code>
-                        </div>
-                        <CodeBlock code={cssClass.css} language="css" />
-                      </CardContent>
-                    </Card>
+                    <CSSClassCard 
+                      key={index} 
+                      cssClass={cssClass} 
+                      categoryName={categories.find(c => c.id === cssClass.category)?.name || ''}
+                    />
                   ))
                 )}
               </TabsContent>
