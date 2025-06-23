@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -108,14 +107,14 @@ const MaterialRequest = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-7xl mx-auto">
+      <div className="container-fluid px-3 py-4">
+        <div className="max-w-full mx-auto">
           {/* Header */}
-          <div className="mb-8 text-center">
-            <h1 className="text-4xl font-bold text-brand-gradient mb-2">
+          <div className="mb-4 text-center">
+            <h1 className="text-3xl font-bold text-brand-gradient mb-1">
               Online Material Request
             </h1>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
               Hệ thống yêu cầu nguyên vật liệu trực tuyến
             </p>
           </div>
@@ -123,17 +122,17 @@ const MaterialRequest = () => {
           {!isLoggedIn ? (
             <LoginForm onLogin={handleLogin} />
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[calc(100vh-140px)]">
               {/* Left Sidebar - History Orders */}
               <div className="lg:col-span-1">
-                <Card className="bg-glass border-white/20 shadow-xl h-fit">
-                  <CardHeader className="pb-4">
-                    <CardTitle className="text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
-                      <History className="w-5 h-5" />
+                <Card className="bg-glass border-white/20 shadow-xl h-full flex flex-col">
+                  <CardHeader className="pb-3 flex-shrink-0">
+                    <CardTitle className="text-indigo-600 dark:text-indigo-400 flex items-center gap-2 text-sm">
+                      <History className="w-4 h-4" />
                       Lịch sử order
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="flex-1 overflow-hidden">
                     <HistoryOrders 
                       employeeId={requestData.employeeId} 
                       onViewOrder={handleViewOrder}
@@ -143,66 +142,66 @@ const MaterialRequest = () => {
               </div>
 
               {/* Main Content - Request Form or Order View */}
-              <div className="lg:col-span-2 space-y-6">
+              <div className="lg:col-span-3 space-y-4 h-full flex flex-col">
                 {/* Employee Info Card */}
-                <Card className="bg-glass border-white/20 shadow-xl">
-                  <CardHeader className="pb-4">
-                    <CardTitle className="text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                <Card className="bg-glass border-white/20 shadow-xl flex-shrink-0">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-blue-600 dark:text-blue-400 flex items-center gap-2 text-sm">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                       Thông tin nhân viên
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-3 py-2">
                     <div>
-                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Mã nhân viên</label>
-                      <p className="text-lg font-semibold text-gray-900 dark:text-white">{requestData.employeeId}</p>
+                      <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Mã nhân viên</label>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.employeeId}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Tên nhân viên</label>
-                      <p className="text-lg font-semibold text-gray-900 dark:text-white">{requestData.employeeName}</p>
+                      <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Tên nhân viên</label>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.employeeName}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Bộ phận</label>
-                      <p className="text-lg font-semibold text-gray-900 dark:text-white">{requestData.department}</p>
+                      <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Bộ phận</label>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.department}</p>
                     </div>
                   </CardContent>
                 </Card>
 
                 {viewingOrder ? (
                   /* View Order Details */
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-4">
+                  <div className="space-y-4 flex-1 flex flex-col overflow-hidden">
+                    <div className="flex items-center gap-4 flex-shrink-0">
                       <Button 
                         onClick={handleBackToNewRequest}
                         variant="outline"
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-2 text-xs h-8"
                       >
-                        <ChevronLeft className="w-4 h-4" />
+                        <ChevronLeft className="w-3 h-3" />
                         Quay lại tạo phiếu mới
                       </Button>
-                      <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                      <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                         Chi tiết phiếu: {viewingOrder.requestId}
                       </h2>
                     </div>
 
                     {/* Location Information - Read Only */}
-                    <Card className="bg-glass border-white/20 shadow-xl">
-                      <CardHeader className="pb-4">
-                        <CardTitle className="text-green-600 dark:text-green-400 flex items-center gap-2">
-                          <FileText className="w-5 h-5" />
+                    <Card className="bg-glass border-white/20 shadow-xl flex-shrink-0">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-green-600 dark:text-green-400 flex items-center gap-2 text-sm">
+                          <FileText className="w-4 h-4" />
                           Thông tin đặt hàng
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Location</label>
-                          <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg border">
+                      <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 py-2">
+                        <div className="space-y-1">
+                          <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Location</label>
+                          <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg border text-sm">
                             {viewingOrder.location}
                           </div>
                         </div>
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Công đoạn</label>
-                          <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg border">
+                        <div className="space-y-1">
+                          <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Công đoạn</label>
+                          <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg border text-sm">
                             {viewingOrder.process}
                           </div>
                         </div>
@@ -210,62 +209,69 @@ const MaterialRequest = () => {
                     </Card>
 
                     {/* Material List - Read Only */}
-                    <MaterialSelector
-                      materials={viewingOrder.materials}
-                      onMaterialAdd={() => {}}
-                      onMaterialUpdate={() => {}}
-                      onMaterialRemove={() => {}}
-                      readOnly={true}
-                    />
+                    <div className="flex-1 overflow-hidden">
+                      <MaterialSelector
+                        materials={viewingOrder.materials}
+                        onMaterialAdd={() => {}}
+                        onMaterialUpdate={() => {}}
+                        onMaterialRemove={() => {}}
+                        readOnly={true}
+                      />
+                    </div>
 
                     {/* Action Buttons */}
-                    <div className="flex gap-4 justify-end">
+                    <div className="flex gap-3 justify-end flex-shrink-0">
                       <Button
                         onClick={() => setShowPrint(true)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-lg"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-lg text-xs h-8"
                       >
-                        <Printer className="w-4 h-4 mr-2" />
+                        <Printer className="w-3 h-3 mr-1" />
                         In phiếu
                       </Button>
                     </div>
                   </div>
                 ) : (
                   /* Create New Request */
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-2 mb-4">
-                      <FileText className="w-6 h-6 text-blue-600" />
-                      <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Tạo phiếu yêu cầu mới</h2>
+                  <div className="space-y-4 flex-1 flex flex-col overflow-hidden">
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <FileText className="w-5 h-5 text-blue-600" />
+                      <h2 className="text-lg font-bold text-gray-900 dark:text-white">Tạo phiếu yêu cầu mới</h2>
                     </div>
 
                     {/* Location Selection */}
-                    <LocationSelector 
-                      onLocationChange={handleLocationChange}
-                      selectedLocation={requestData.location}
-                      selectedProcess={requestData.process}
-                    />
+                    <div className="flex-shrink-0">
+                      <LocationSelector 
+                        onLocationChange={handleLocationChange}
+                        selectedLocation={requestData.location}
+                        selectedProcess={requestData.process}
+                      />
+                    </div>
 
                     {/* Material Selection */}
-                    <MaterialSelector
-                      materials={requestData.materials}
-                      onMaterialAdd={handleMaterialAdd}
-                      onMaterialUpdate={handleMaterialUpdate}
-                      onMaterialRemove={handleMaterialRemove}
-                    />
+                    <div className="flex-1 overflow-hidden">
+                      <MaterialSelector
+                        materials={requestData.materials}
+                        onMaterialAdd={handleMaterialAdd}
+                        onMaterialUpdate={handleMaterialUpdate}
+                        onMaterialRemove={handleMaterialRemove}
+                        location={requestData.location}
+                      />
+                    </div>
 
                     {/* Action Buttons */}
-                    <div className="flex gap-4 justify-end">
+                    <div className="flex gap-3 justify-end flex-shrink-0">
                       <Button
                         onClick={handleSave}
-                        className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-lg"
+                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-lg text-xs h-8"
                       >
-                        <Save className="w-4 h-4 mr-2" />
+                        <Save className="w-3 h-3 mr-1" />
                         Lưu phiếu
                       </Button>
                       <Button
                         onClick={handlePrint}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-lg"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-lg text-xs h-8"
                       >
-                        <Printer className="w-4 h-4 mr-2" />
+                        <Printer className="w-3 h-3 mr-1" />
                         In phiếu
                       </Button>
                     </div>

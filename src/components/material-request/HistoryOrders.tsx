@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -172,12 +171,12 @@ const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 h-full flex flex-col">
       {/* Date Filter */}
-      <div className="space-y-3">
+      <div className="space-y-2 flex-shrink-0">
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-gray-500" />
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <Clock className="w-3 h-3 text-gray-500" />
+          <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
             Lọc theo ngày:
           </span>
         </div>
@@ -186,11 +185,11 @@ const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
             <Button
               variant="outline"
               className={cn(
-                "w-full justify-start text-left font-normal text-sm",
+                "w-full justify-start text-left font-normal text-xs h-8",
                 !selectedDate && "text-muted-foreground"
               )}
             >
-              <CalendarIcon className="mr-2 h-4 w-4" />
+              <CalendarIcon className="mr-2 h-3 w-3" />
               {selectedDate ? format(selectedDate, "dd/MM/yyyy") : "Chọn ngày"}
             </Button>
           </PopoverTrigger>
@@ -207,7 +206,7 @@ const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
           <Button
             variant="outline"
             size="sm"
-            className="w-full text-xs"
+            className="w-full text-xs h-7"
             onClick={() => setSelectedDate(undefined)}
           >
             Xóa bộ lọc
@@ -216,8 +215,8 @@ const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
       </div>
 
       {/* Orders Count */}
-      <div className="flex items-center justify-between">
-        <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+      <div className="flex items-center justify-between flex-shrink-0">
+        <h4 className="text-xs font-medium text-gray-900 dark:text-white">
           {selectedDate ? 'Đơn trong ngày' : 'Top 10 gần nhất'}
         </h4>
         <Badge variant="secondary" className="text-xs">
@@ -226,14 +225,14 @@ const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
       </div>
 
       {/* Orders List */}
-      <div className="space-y-3 max-h-96 overflow-y-auto">
+      <div className="space-y-2 flex-1 overflow-y-auto">
         {filteredOrders.length === 0 ? (
-          <div className="text-center py-4 text-gray-500 dark:text-gray-400 text-sm">
+          <div className="text-center py-4 text-gray-500 dark:text-gray-400 text-xs">
             <p>Không có đơn hàng</p>
           </div>
         ) : (
           filteredOrders.map((order) => (
-            <div key={order.requestId} className="border rounded-lg p-3 bg-white dark:bg-gray-800 space-y-2">
+            <div key={order.requestId} className="border rounded-lg p-2 bg-white dark:bg-gray-800 space-y-2">
               <div className="flex items-center justify-between">
                 <div className="text-xs font-medium text-gray-900 dark:text-white truncate">
                   {order.requestId}

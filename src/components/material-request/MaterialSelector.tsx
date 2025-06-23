@@ -7,6 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Search, Package, Star, Trash2, Plus } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import MaterialSearchDialog from './MaterialSearchDialog';
 
 interface MaterialItem {
   id: string;
@@ -24,41 +25,16 @@ interface MaterialSelectorProps {
   onMaterialUpdate: (id: string, updates: Partial<MaterialItem>) => void;
   onMaterialRemove: (id: string) => void;
   readOnly?: boolean;
+  location?: string;
 }
 
-const MaterialSelector = ({ materials, onMaterialAdd, onMaterialUpdate, onMaterialRemove, readOnly = false }: MaterialSelectorProps) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showSuggestions, setShowSuggestions] = useState(true);
+const MaterialSelector = ({ materials, onMaterialAdd, onMaterialUpdate, onMaterialRemove, readOnly = false, location = '' }: MaterialSelectorProps) => {
+  const [showSearchDialog, setShowSearchDialog] = useState(false);
 
-  // Mock material database
-  const materialDatabase = [
-    { code: 'MAT001', name: 'Thép tấm dày 10mm', unit: 'Tấm' },
-    { code: 'MAT002', name: 'Ống thép phi 100', unit: 'Mét' },
-    { code: 'MAT003', name: 'Đinh ốc M10', unit: 'Cái' },
-    { code: 'MAT004', name: 'Sơn chống gỉ', unit: 'Lít' },
-    { code: 'MAT005', name: 'Cao su chống rung', unit: 'Miếng' },
-    { code: 'MAT006', name: 'Dầu thủy lực', unit: 'Lít' },
-    { code: 'MAT007', name: 'Vòng bi SKF 6205', unit: 'Cái' },
-    { code: 'MAT008', name: 'Dây curoa', unit: 'Mét' }
-  ];
-
-  const filteredMaterials = materialDatabase.filter(
-    material => 
-      material.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      material.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleAddMaterial = (material: any) => {
-    const newMaterial: MaterialItem = {
-      id: Date.now().toString(),
-      code: material.code,
-      name: material.name,
-      unit: material.unit,
-      quantity: 1,
-      notes: '',
-      isFavorite: false
-    };
-    onMaterialAdd(newMaterial);
+  const handleMaterialsSelect = (selectedMaterials: MaterialItem[]) => {
+    selectedMaterials.forEach(material => {
+      onMaterialAdd(material);
+    });
   };
 
   const handleQuantityChange = (id: string, quantity: string) => {
@@ -75,55 +51,32 @@ const MaterialSelector = ({ materials, onMaterialAdd, onMaterialUpdate, onMateri
   };
 
   return (
-    <div className="space-y-6">
-      {/* Material Search - Hide in read-only mode */}
+    <div className="space-y-4">
+      {/* Material Search Button - Hide in read-only mode */}
       {!readOnly && (
         <Card className="bg-glass border-white/20 shadow-xl">
-          <CardHeader className="pb-4">
+          <CardHeader className="pb-3">
             <CardTitle className="text-purple-600 dark:text-purple-400 flex items-center gap-2">
               <Search className="w-5 h-5" />
               Tìm kiếm nguyên vật liệu
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                placeholder="Tìm theo mã hoặc tên nguyên vật liệu..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 h-12"
-              />
-            </div>
-
-            {searchTerm && (
-              <div className="max-h-48 overflow-y-auto space-y-2">
-                {filteredMaterials.map((material) => (
-                  <div key={material.code} className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border">
-                    <div>
-                      <p className="font-medium text-gray-900 dark:text-white">{material.code}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{material.name}</p>
-                      <Badge variant="secondary" className="text-xs">{material.unit}</Badge>
-                    </div>
-                    <Button
-                      onClick={() => handleAddMaterial(material)}
-                      size="sm"
-                      className="bg-green-600 hover:bg-green-700"
-                    >
-                      <Plus className="w-4 h-4 mr-1" />
-                      Thêm
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            )}
+          <CardContent>
+            <Button
+              onClick={() => setShowSearchDialog(true)}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+              disabled={!location}
+            >
+              <Search className="w-4 h-4 mr-2" />
+              {location ? `Tìm kiếm NVL tại ${location}` : 'Vui lòng chọn Location trước'}
+            </Button>
           </CardContent>
         </Card>
       )}
 
       {/* Selected Materials */}
       <Card className="bg-glass border-white/20 shadow-xl">
-        <CardHeader className="pb-4">
+        <CardHeader className="pb-3">
           <CardTitle className="text-orange-600 dark:text-orange-400 flex items-center gap-2">
             <Package className="w-5 h-5" />
             {readOnly ? 'Danh sách nguyên vật liệu' : `Danh sách nguyên vật liệu đã chọn (${materials.length})`}
@@ -131,39 +84,39 @@ const MaterialSelector = ({ materials, onMaterialAdd, onMaterialUpdate, onMateri
         </CardHeader>
         <CardContent>
           {materials.length === 0 ? (
-            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-              <Package className="w-12 h-12 mx-auto mb-4 opacity-50" />
-              <p>Chưa có nguyên vật liệu nào được chọn</p>
+            <div className="text-center py-6 text-gray-500 dark:text-gray-400">
+              <Package className="w-10 h-10 mx-auto mb-3 opacity-50" />
+              <p className="text-sm">Chưa có nguyên vật liệu nào được chọn</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto max-h-64 overflow-y-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-12"></TableHead>
-                    <TableHead>Mã NVL</TableHead>
-                    <TableHead>Tên nguyên vật liệu</TableHead>
-                    <TableHead>Đơn vị</TableHead>
-                    <TableHead className="w-24">Số lượng</TableHead>
-                    <TableHead>Ghi chú</TableHead>
-                    {!readOnly && <TableHead className="w-16">Yêu thích</TableHead>}
-                    {!readOnly && <TableHead className="w-16"></TableHead>}
+                    <TableHead className="w-8"></TableHead>
+                    <TableHead className="text-xs">Mã NVL</TableHead>
+                    <TableHead className="text-xs">Tên nguyên vật liệu</TableHead>
+                    <TableHead className="text-xs">ĐV</TableHead>
+                    <TableHead className="w-20 text-xs">SL</TableHead>
+                    <TableHead className="text-xs">Ghi chú</TableHead>
+                    {!readOnly && <TableHead className="w-12 text-xs">YT</TableHead>}
+                    {!readOnly && <TableHead className="w-12"></TableHead>}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {materials.map((material) => (
-                    <TableRow key={material.id}>
+                    <TableRow key={material.id} className="text-sm">
                       <TableCell>
                         <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                       </TableCell>
-                      <TableCell className="font-medium">{material.code}</TableCell>
-                      <TableCell>{material.name}</TableCell>
+                      <TableCell className="font-medium text-xs">{material.code}</TableCell>
+                      <TableCell className="text-xs">{material.name}</TableCell>
                       <TableCell>
-                        <Badge variant="outline">{material.unit}</Badge>
+                        <Badge variant="outline" className="text-xs">{material.unit}</Badge>
                       </TableCell>
                       <TableCell>
                         {readOnly ? (
-                          <div className="w-20 h-8 flex items-center font-medium">
+                          <div className="w-16 h-7 flex items-center font-medium text-xs">
                             {material.quantity}
                           </div>
                         ) : (
@@ -172,13 +125,13 @@ const MaterialSelector = ({ materials, onMaterialAdd, onMaterialUpdate, onMateri
                             min="1"
                             value={material.quantity}
                             onChange={(e) => handleQuantityChange(material.id, e.target.value)}
-                            className="w-20 h-8"
+                            className="w-16 h-7 text-xs"
                           />
                         )}
                       </TableCell>
                       <TableCell>
                         {readOnly ? (
-                          <div className="min-w-32 h-8 flex items-center text-sm">
+                          <div className="min-w-24 h-7 flex items-center text-xs">
                             {material.notes || '-'}
                           </div>
                         ) : (
@@ -186,7 +139,7 @@ const MaterialSelector = ({ materials, onMaterialAdd, onMaterialUpdate, onMateri
                             placeholder="Ghi chú..."
                             value={material.notes}
                             onChange={(e) => handleNotesChange(material.id, e.target.value)}
-                            className="min-w-32 h-8"
+                            className="min-w-24 h-7 text-xs"
                           />
                         )}
                       </TableCell>
@@ -204,9 +157,9 @@ const MaterialSelector = ({ materials, onMaterialAdd, onMaterialUpdate, onMateri
                             variant="destructive"
                             size="sm"
                             onClick={() => onMaterialRemove(material.id)}
-                            className="h-8 w-8 p-0"
+                            className="h-7 w-7 p-0"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="w-3 h-3" />
                           </Button>
                         </TableCell>
                       )}
@@ -218,6 +171,14 @@ const MaterialSelector = ({ materials, onMaterialAdd, onMaterialUpdate, onMateri
           )}
         </CardContent>
       </Card>
+
+      {/* Material Search Dialog */}
+      <MaterialSearchDialog
+        open={showSearchDialog}
+        onOpenChange={setShowSearchDialog}
+        location={location}
+        onMaterialsSelect={handleMaterialsSelect}
+      />
     </div>
   );
 };
