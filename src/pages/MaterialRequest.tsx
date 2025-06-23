@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -261,39 +262,42 @@ const MaterialRequest = () => {
                       </h2>
                     </div>
 
-                    {/* Location Information - Read Only */}
-                    <Card className="bg-glass border-white/20 shadow-xl flex-shrink-0">
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-green-600 dark:text-green-400 flex items-center gap-2 text-sm">
-                          <FileText className="w-4 h-4" />
-                          {t('material.order.info')}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 py-2">
-                        <div className="space-y-1">
-                          <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.location')}</label>
-                          <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg border text-sm">
-                            {viewingOrder.location}
+                    {/* Location Information and Material List in Same Row */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 overflow-hidden">
+                      {/* Location Information - Read Only */}
+                      <Card className="bg-glass border-white/20 shadow-xl">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-green-600 dark:text-green-400 flex items-center gap-2 text-sm">
+                            <FileText className="w-4 h-4" />
+                            {t('material.order.info')}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4 py-2">
+                          <div className="space-y-1">
+                            <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.location')}</label>
+                            <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg border text-sm">
+                              {viewingOrder.location}
+                            </div>
                           </div>
-                        </div>
-                        <div className="space-y-1">
-                          <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.process')}</label>
-                          <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg border text-sm">
-                            {viewingOrder.process}
+                          <div className="space-y-1">
+                            <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.process')}</label>
+                            <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg border text-sm">
+                              {viewingOrder.process}
+                            </div>
                           </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                        </CardContent>
+                      </Card>
 
-                    {/* Material List - Read Only */}
-                    <div className="flex-1 overflow-hidden">
-                      <MaterialSelector
-                        materials={viewingOrder.materials}
-                        onMaterialAdd={() => {}}
-                        onMaterialUpdate={() => {}}
-                        onMaterialRemove={() => {}}
-                        readOnly={true}
-                      />
+                      {/* Material List - Read Only */}
+                      <div className="overflow-hidden">
+                        <MaterialSelector
+                          materials={viewingOrder.materials}
+                          onMaterialAdd={() => {}}
+                          onMaterialUpdate={() => {}}
+                          onMaterialRemove={() => {}}
+                          readOnly={true}
+                        />
+                      </div>
                     </div>
                   </div>
                 ) : (
@@ -304,24 +308,27 @@ const MaterialRequest = () => {
                       <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('material.new.request')}</h2>
                     </div>
 
-                    {/* Location Selection */}
-                    <div className="flex-shrink-0">
-                      <LocationSelector 
-                        onLocationChange={handleLocationChange}
-                        selectedLocation={requestData.location}
-                        selectedProcess={requestData.process}
-                      />
-                    </div>
+                    {/* Order Information and Material Selection in Same Row */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 overflow-hidden">
+                      {/* Location Selection */}
+                      <div className="flex-shrink-0">
+                        <LocationSelector 
+                          onLocationChange={handleLocationChange}
+                          selectedLocation={requestData.location}
+                          selectedProcess={requestData.process}
+                        />
+                      </div>
 
-                    {/* Material Selection */}
-                    <div className="flex-1 overflow-hidden">
-                      <MaterialSelector
-                        materials={requestData.materials}
-                        onMaterialAdd={handleMaterialAdd}
-                        onMaterialUpdate={handleMaterialUpdate}
-                        onMaterialRemove={handleMaterialRemove}
-                        location={requestData.location}
-                      />
+                      {/* Material Selection */}
+                      <div className="overflow-hidden">
+                        <MaterialSelector
+                          materials={requestData.materials}
+                          onMaterialAdd={handleMaterialAdd}
+                          onMaterialUpdate={handleMaterialUpdate}
+                          onMaterialRemove={handleMaterialRemove}
+                          location={requestData.location}
+                        />
+                      </div>
                     </div>
                   </div>
                 )}

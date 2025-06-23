@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Material Request</title>
+    <link rel="stylesheet" href="material-request.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Language Toggle -->
+    <div class="language-toggle">
+        <button id="vi-btn" class="lang-btn active" data-lang="vi">VI</button>
+        <button id="en-btn" class="lang-btn" data-lang="en">EN</button>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 id="main-title">Online Material Request</h1>
+            <p id="main-subtitle">Hệ thống yêu cầu nguyên vật liệu trực tuyến</p>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-form" class="card">
+            <div class="card-header">
+                <h2 id="login-title">Đăng nhập</h2>
+            </div>
+            <div class="card-content">
+                <div class="form-group">
+                    <label for="employee-id" id="employee-id-label">Mã nhân viên</label>
+                    <input type="text" id="employee-id" placeholder="Nhập mã nhân viên">
+                </div>
+                <div class="form-group">
+                    <label for="employee-name" id="employee-name-label">Tên nhân viên</label>
+                    <input type="text" id="employee-name" placeholder="Nhập tên nhân viên">
+                </div>
+                <div class="form-group">
+                    <label for="department" id="department-label">Bộ phận</label>
+                    <select id="department">
+                        <option value="">Chọn bộ phận</option>
+                        <option value="production">Sản xuất</option>
+                        <option value="quality">Chất lượng</option>
+                        <option value="maintenance">Bảo trì</option>
+                        <option value="warehouse">Kho bãi</option>
+                    </select>
+                </div>
+                <button id="login-btn" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span id="login-btn-text">Đăng nhập</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Application (Hidden initially) -->
+        <div id="main-app" class="main-app" style="display: none;">
+            <div class="app-grid">
+                <!-- History Sidebar -->
+                <div class="sidebar">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 id="history-title">
+                                <i class="fas fa-history"></i>
+                                Lịch sử order
+                            </h3>
+                        </div>
+                        <div class="card-content">
+                            <div id="history-list" class="history-list">
+                                <!-- History items will be populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="main-content">
+                    <!-- Employee Info Card -->
+                    <div class="card employee-info">
+                        <div class="card-header">
+                            <h3 id="employee-info-title">
+                                <div class="status-dot"></div>
+                                Thông tin nhân viên
+                            </h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="employee-details">
+                                <div class="detail-item">
+                                    <label id="emp-id-label">Mã nhân viên</label>
+                                    <p id="emp-id-value"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <label id="emp-name-label">Tên nhân viên</label>
+                                    <p id="emp-name-value"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <label id="emp-dept-label">Bộ phận</label>
+                                    <p id="emp-dept-value"></p>
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <button id="renew-btn" class="btn btn-outline">
+                                    <i class="fas fa-redo"></i>
+                                    <span id="renew-text">Re-new</span>
+                                </button>
+                                <button id="delete-btn" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                    <span id="delete-text">Delete</span>
+                                </button>
+                                <button id="save-btn" class="btn btn-success">
+                                    <i class="fas fa-save"></i>
+                                    <span id="save-text">Lưu</span>
+                                </button>
+                                <button id="print-btn" class="btn btn-primary">
+                                    <i class="fas fa-print"></i>
+                                    <span id="print-text">Print</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Request Section -->
+                    <div class="request-section">
+                        <div class="section-header">
+                            <i class="fas fa-file-text"></i>
+                            <h2 id="new-request-title">Tạo phiếu yêu cầu mới</h2>
+                        </div>
+
+                        <!-- Two Column Layout -->
+                        <div class="two-column-layout">
+                            <!-- Order Information -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 id="order-info-title">
+                                        <i class="fas fa-file-text"></i>
+                                        Thông tin đặt hàng
+                                    </h3>
+                                </div>
+                                <div class="card-content">
+                                    <div class="form-group">
+                                        <label for="location" id="location-label">Location</label>
+                                        <select id="location">
+                                            <option value="">Chọn location</option>
+                                            <option value="nha-may-1">Nhà máy 1 - Hà Nội</option>
+                                            <option value="nha-may-2">Nhà máy 2 - Hồ Chí Minh</option>
+                                            <option value="kho-trung-tam">Kho trung tâm - Bình Dương</option>
+                                            <option value="nha-may-3">Nhà máy 3 - Đà Nẵng</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="process" id="process-label">Công đoạn</label>
+                                        <select id="process">
+                                            <option value="">Chọn công đoạn</option>
+                                            <option value="cutting">Cắt kim loại</option>
+                                            <option value="welding">Hàn</option>
+                                            <option value="assembly">Lắp ráp</option>
+                                            <option value="painting">Sơn</option>
+                                            <option value="quality-check">Kiểm tra chất lượng</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Material Search -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 id="material-search-title">
+                                        <i class="fas fa-search"></i>
+                                        Tìm kiếm nguyên vật liệu
+                                    </h3>
+                                </div>
+                                <div class="card-content">
+                                    <div class="search-section">
+                                        <div class="search-input-group">
+                                            <input type="text" id="material-search" placeholder="Tìm kiếm nguyên vật liệu...">
+                                            <button id="search-btn" class="btn btn-primary">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                        <button id="add-material-btn" class="btn btn-success">
+                                            <i class="fas fa-plus"></i>
+                                            <span id="add-material-text">Thêm nguyên vật liệu</span>
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Selected Materials List -->
+                                    <div id="materials-list" class="materials-list">
+                                        <div id="no-materials" class="no-materials">
+                                            <i class="fas fa-inbox"></i>
+                                            <p id="no-materials-text">Chưa có nguyên vật liệu nào được chọn</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Material Search Modal -->
+    <div id="search-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="search-modal-title">Tìm kiếm nguyên vật liệu</h3>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="search-input-group">
+                    <input type="text" id="modal-search" placeholder="Tìm theo ItemID hoặc tên nguyên vật liệu...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div id="search-results" class="search-results">
+                    <!-- Search results will be populated by JS -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-search" class="btn btn-outline">Hủy</button>
+                <button id="apply-search" class="btn btn-success">Apply (<span id="selected-count">0</span>)</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="material-request.js"></script>
+</body>
+</html>
