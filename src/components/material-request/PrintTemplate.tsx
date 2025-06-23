@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Printer } from 'lucide-react';
+import { X, Printer } from 'lucide-react';
 
 interface MaterialItem {
   id: string;
@@ -36,97 +36,118 @@ const PrintTemplate = ({ data, onClose }: PrintTemplateProps) => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Print controls - hidden when printing */}
-      <div className="no-print fixed top-4 left-4 right-4 z-10 flex justify-between items-center bg-white shadow-lg rounded-lg p-4">
-        <Button onClick={onClose} variant="outline">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Quay lại
-        </Button>
-        <Button onClick={handlePrint} className="bg-blue-600 hover:bg-blue-700 text-white">
+      <style>
+        {`
+          @media print {
+            .no-print { display: none !important; }
+            body { margin: 0; }
+            .print-content { margin: 0; padding: 20px; }
+          }
+        `}
+      </style>
+      
+      {/* Print Controls */}
+      <div className="no-print fixed top-4 right-4 flex gap-2 z-50">
+        <Button onClick={handlePrint} className="bg-blue-600 hover:bg-blue-700">
           <Printer className="w-4 h-4 mr-2" />
           In phiếu
         </Button>
+        <Button onClick={onClose} variant="outline">
+          <X className="w-4 h-4 mr-2" />
+          Đóng
+        </Button>
       </div>
 
-      {/* Print content */}
-      <div className="max-w-4xl mx-auto p-8 mt-20 print:mt-0">
+      {/* Print Content */}
+      <div className="print-content max-w-4xl mx-auto p-8">
         {/* Header */}
         <div className="text-center mb-8 border-b-2 border-gray-300 pb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
             PHIẾU YÊU CẦU NGUYÊN VẬT LIỆU
           </h1>
-          <h2 className="text-xl text-gray-600">MATERIAL REQUEST FORM</h2>
-          <div className="mt-4 text-lg">
-            <strong>Số phiếu: {data.requestId}</strong>
+          <p className="text-lg text-gray-600">MATERIAL REQUEST FORM</p>
+          <div className="mt-4 text-right">
+            <p className="text-sm text-gray-500">Mã phiếu: {data.requestId}</p>
+            <p className="text-sm text-gray-500">Ngày tạo: {new Date(data.requestDate).toLocaleDateString('vi-VN')}</p>
           </div>
         </div>
 
-        {/* Request Info */}
+        {/* Employee Information */}
         <div className="grid grid-cols-2 gap-8 mb-8">
-          <div className="space-y-4">
-            <div className="flex">
-              <span className="font-semibold w-32">Mã nhân viên:</span>
-              <span className="border-b border-gray-300 flex-1 px-2">{data.employeeId}</span>
-            </div>
-            <div className="flex">
-              <span className="font-semibold w-32">Tên nhân viên:</span>
-              <span className="border-b border-gray-300 flex-1 px-2">{data.employeeName}</span>
-            </div>
-            <div className="flex">
-              <span className="font-semibold w-32">Bộ phận:</span>
-              <span className="border-b border-gray-300 flex-1 px-2">{data.department}</span>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-200 pb-2">
+              Thông tin nhân viên
+            </h3>
+            <div className="space-y-3">
+              <div className="flex">
+                <span className="font-medium text-gray-700 w-32">Mã nhân viên:</span>
+                <span className="text-gray-900">{data.employeeId}</span>
+              </div>
+              <div className="flex">
+                <span className="font-medium text-gray-700 w-32">Tên nhân viên:</span>
+                <span className="text-gray-900">{data.employeeName}</span>
+              </div>
+              <div className="flex">
+                <span className="font-medium text-gray-700 w-32">Bộ phận:</span>
+                <span className="text-gray-900">{data.department}</span>
+              </div>
             </div>
           </div>
-          <div className="space-y-4">
-            <div className="flex">
-              <span className="font-semibold w-32">Ngày yêu cầu:</span>
-              <span className="border-b border-gray-300 flex-1 px-2">{data.requestDate}</span>
-            </div>
-            <div className="flex">
-              <span className="font-semibold w-32">Location:</span>
-              <span className="border-b border-gray-300 flex-1 px-2">{data.location}</span>
-            </div>
-            <div className="flex">
-              <span className="font-semibold w-32">Công đoạn:</span>
-              <span className="border-b border-gray-300 flex-1 px-2">{data.process}</span>
+          
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-200 pb-2">
+              Thông tin đặt hàng
+            </h3>
+            <div className="space-y-3">
+              <div className="flex">
+                <span className="font-medium text-gray-700 w-32">Location:</span>
+                <span className="text-gray-900">{data.location}</span>
+              </div>
+              <div className="flex">
+                <span className="font-medium text-gray-700 w-32">Công đoạn:</span>
+                <span className="text-gray-900">{data.process}</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Materials Table */}
+        {/* Material List */}
         <div className="mb-8">
-          <h3 className="text-lg font-semibold mb-4">CHI TIẾT NGUYÊN VẬT LIỆU</h3>
-          <table className="w-full border-collapse border border-gray-400">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-200 pb-2">
+            Danh sách nguyên vật liệu
+          </h3>
+          <table className="w-full border-collapse border border-gray-300">
             <thead>
               <tr className="bg-gray-100">
-                <th className="border border-gray-400 px-4 py-2 text-left">STT</th>
-                <th className="border border-gray-400 px-4 py-2 text-left">Mã NVL</th>
-                <th className="border border-gray-400 px-4 py-2 text-left">Tên nguyên vật liệu</th>
-                <th className="border border-gray-400 px-4 py-2 text-center">Đơn vị</th>
-                <th className="border border-gray-400 px-4 py-2 text-center">Số lượng</th>
-                <th className="border border-gray-400 px-4 py-2 text-left">Ghi chú</th>
+                <th className="border border-gray-300 px-4 py-3 text-left text-sm font-semibold text-gray-900">STT</th>
+                <th className="border border-gray-300 px-4 py-3 text-left text-sm font-semibold text-gray-900">Mã NVL</th>
+                <th className="border border-gray-300 px-4 py-3 text-left text-sm font-semibold text-gray-900">Tên nguyên vật liệu</th>
+                <th className="border border-gray-300 px-4 py-3 text-left text-sm font-semibold text-gray-900">Đơn vị</th>
+                <th className="border border-gray-300 px-4 py-3 text-center text-sm font-semibold text-gray-900">Số lượng</th>
+                <th className="border border-gray-300 px-4 py-3 text-left text-sm font-semibold text-gray-900">Ghi chú</th>
               </tr>
             </thead>
             <tbody>
               {data.materials.map((material, index) => (
                 <tr key={material.id}>
-                  <td className="border border-gray-400 px-4 py-2 text-center">{index + 1}</td>
-                  <td className="border border-gray-400 px-4 py-2">{material.code}</td>
-                  <td className="border border-gray-400 px-4 py-2">{material.name}</td>
-                  <td className="border border-gray-400 px-4 py-2 text-center">{material.unit}</td>
-                  <td className="border border-gray-400 px-4 py-2 text-center">{material.quantity}</td>
-                  <td className="border border-gray-400 px-4 py-2">{material.notes}</td>
-                </tr>
-              ))}
-              {/* Empty rows for manual addition */}
-              {Array.from({ length: Math.max(0, 10 - data.materials.length) }).map((_, index) => (
-                <tr key={`empty-${index}`}>
-                  <td className="border border-gray-400 px-4 py-2 text-center h-8"></td>
-                  <td className="border border-gray-400 px-4 py-2"></td>
-                  <td className="border border-gray-400 px-4 py-2"></td>
-                  <td className="border border-gray-400 px-4 py-2"></td>
-                  <td className="border border-gray-400 px-4 py-2"></td>
-                  <td className="border border-gray-400 px-4 py-2"></td>
+                  <td className="border border-gray-300 px-4 py-3 text-center text-sm text-gray-900">
+                    {index + 1}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-3 text-sm text-gray-900 font-medium">
+                    {material.code}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-3 text-sm text-gray-900">
+                    {material.name}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-3 text-sm text-gray-900">
+                    {material.unit}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-3 text-center text-sm text-gray-900 font-medium">
+                    {material.quantity}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-3 text-sm text-gray-900">
+                    {material.notes}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -136,50 +157,27 @@ const PrintTemplate = ({ data, onClose }: PrintTemplateProps) => {
         {/* Signatures */}
         <div className="grid grid-cols-3 gap-8 mt-12">
           <div className="text-center">
-            <div className="font-semibold mb-16">Người yêu cầu</div>
-            <div className="border-t border-gray-400 pt-2">
-              <div>Ký tên:</div>
-              <div className="text-sm text-gray-600 mt-1">{data.employeeName}</div>
-            </div>
+            <p className="font-semibold text-gray-900 mb-16">Người yêu cầu</p>
+            <div className="border-b border-gray-400 mb-2"></div>
+            <p className="text-sm text-gray-600">Ký tên, ghi rõ họ tên</p>
           </div>
           <div className="text-center">
-            <div className="font-semibold mb-16">Trưởng bộ phận</div>
-            <div className="border-t border-gray-400 pt-2">
-              <div>Ký tên:</div>
-            </div>
+            <p className="font-semibold text-gray-900 mb-16">Phụ trách bộ phận</p>
+            <div className="border-b border-gray-400 mb-2"></div>
+            <p className="text-sm text-gray-600">Ký tên, ghi rõ họ tên</p>
           </div>
           <div className="text-center">
-            <div className="font-semibold mb-16">Thủ kho</div>
-            <div className="border-t border-gray-400 pt-2">
-              <div>Ký tên:</div>
-            </div>
+            <p className="font-semibold text-gray-900 mb-16">Kho vận</p>
+            <div className="border-b border-gray-400 mb-2"></div>
+            <p className="text-sm text-gray-600">Ký tên, ghi rõ họ tên</p>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="mt-8 text-center text-sm text-gray-600">
-          <p>Phiếu này có hiệu lực khi có đầy đủ chữ ký của các bên liên quan</p>
-          <p className="mt-2">Được tạo từ hệ thống Online Material Request - {new Date().toLocaleString('vi-VN')}</p>
+        <div className="mt-8 text-center text-xs text-gray-500">
+          <p>© 2024 Online Material Request System</p>
         </div>
       </div>
-
-      {/* Print styles */}
-      <style jsx>{`
-        @media print {
-          .no-print {
-            display: none !important;
-          }
-          
-          body {
-            margin: 0;
-            padding: 0;
-          }
-          
-          .print\\:mt-0 {
-            margin-top: 0 !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };

@@ -2,11 +2,13 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Printer, Save, Plus } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Printer, Save, Plus, History, FileText } from 'lucide-react';
 import LoginForm from '@/components/material-request/LoginForm';
 import LocationSelector from '@/components/material-request/LocationSelector';
 import MaterialSelector from '@/components/material-request/MaterialSelector';
 import PrintTemplate from '@/components/material-request/PrintTemplate';
+import HistoryOrders from '@/components/material-request/HistoryOrders';
 
 interface MaterialItem {
   id: string;
@@ -31,6 +33,7 @@ interface RequestData {
 
 const MaterialRequest = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [activeTab, setActiveTab] = useState('new-request');
   const [requestData, setRequestData] = useState<RequestData>({
     employeeId: '',
     employeeName: '',
@@ -138,38 +141,58 @@ const MaterialRequest = () => {
                 </CardContent>
               </Card>
 
-              {/* Location Selection */}
-              <LocationSelector 
-                onLocationChange={handleLocationChange}
-                selectedLocation={requestData.location}
-                selectedProcess={requestData.process}
-              />
+              {/* Main Content Tabs */}
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="new-request" className="flex items-center gap-2">
+                    <FileText className="w-4 h-4" />
+                    Tạo phiếu mới
+                  </TabsTrigger>
+                  <TabsTrigger value="history" className="flex items-center gap-2">
+                    <History className="w-4 h-4" />
+                    Lịch sử order
+                  </TabsTrigger>
+                </TabsList>
 
-              {/* Material Selection */}
-              <MaterialSelector
-                materials={requestData.materials}
-                onMaterialAdd={handleMaterialAdd}
-                onMaterialUpdate={handleMaterialUpdate}
-                onMaterialRemove={handleMaterialRemove}
-              />
+                <TabsContent value="new-request" className="space-y-6 mt-6">
+                  {/* Location Selection */}
+                  <LocationSelector 
+                    onLocationChange={handleLocationChange}
+                    selectedLocation={requestData.location}
+                    selectedProcess={requestData.process}
+                  />
 
-              {/* Action Buttons */}
-              <div className="flex gap-4 justify-end">
-                <Button
-                  onClick={handleSave}
-                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-lg"
-                >
-                  <Save className="w-4 h-4 mr-2" />
-                  Lưu phiếu
-                </Button>
-                <Button
-                  onClick={handlePrint}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-lg"
-                >
-                  <Printer className="w-4 h-4 mr-2" />
-                  In phiếu
-                </Button>
-              </div>
+                  {/* Material Selection */}
+                  <MaterialSelector
+                    materials={requestData.materials}
+                    onMaterialAdd={handleMaterialAdd}
+                    onMaterialUpdate={handleMaterialUpdate}
+                    onMaterialRemove={handleMaterialRemove}
+                  />
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-4 justify-end">
+                    <Button
+                      onClick={handleSave}
+                      className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-lg"
+                    >
+                      <Save className="w-4 h-4 mr-2" />
+                      Lưu phiếu
+                    </Button>
+                    <Button
+                      onClick={handlePrint}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-lg"
+                    >
+                      <Printer className="w-4 h-4 mr-2" />
+                      In phiếu
+                    </Button>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="history" className="mt-6">
+                  <HistoryOrders employeeId={requestData.employeeId} />
+                </TabsContent>
+              </Tabs>
             </div>
           )}
         </div>

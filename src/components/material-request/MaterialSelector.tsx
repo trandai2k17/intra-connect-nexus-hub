@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
+import { Search, Package, Star, Trash2, Plus } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Plus, Search, Star, Trash2, Package } from 'lucide-react';
 
 interface MaterialItem {
   id: string;
@@ -27,214 +27,166 @@ interface MaterialSelectorProps {
 
 const MaterialSelector = ({ materials, onMaterialAdd, onMaterialUpdate, onMaterialRemove }: MaterialSelectorProps) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedMaterial, setSelectedMaterial] = useState('');
-  const [quantity, setQuantity] = useState(1);
-  const [notes, setNotes] = useState('');
-  const [showFavorites, setShowFavorites] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true);
 
   // Mock material database
-  const availableMaterials = [
-    { code: 'MAT001', name: 'Thép tấm 2mm', unit: 'kg' },
-    { code: 'MAT002', name: 'Đinh vít M6x20', unit: 'cái' },
-    { code: 'MAT003', name: 'Sơn chống gỉ', unit: 'lít' },
-    { code: 'MAT004', name: 'Gasket cao su', unit: 'cái' },
-    { code: 'MAT005', name: 'Dây điện 2.5mm', unit: 'mét' },
-    { code: 'MAT006', name: 'Ống nhựa PVC 50mm', unit: 'mét' },
-    { code: 'MAT007', name: 'Keo dán 3M', unit: 'tuýp' },
-    { code: 'MAT008', name: 'Băng keo điện', unit: 'cuộn' },
+  const materialDatabase = [
+    { code: 'MAT001', name: 'Thép tấm dày 10mm', unit: 'Tấm' },
+    { code: 'MAT002', name: 'Ống thép phi 100', unit: 'Mét' },
+    { code: 'MAT003', name: 'Đinh ốc M10', unit: 'Cái' },
+    { code: 'MAT004', name: 'Sơn chống gỉ', unit: 'Lít' },
+    { code: 'MAT005', name: 'Cao su chống rung', unit: 'Miếng' },
+    { code: 'MAT006', name: 'Dầu thủy lực', unit: 'Lít' },
+    { code: 'MAT007', name: 'Vòng bi SKF 6205', unit: 'Cái' },
+    { code: 'MAT008', name: 'Dây curoa', unit: 'Mét' }
   ];
 
-  const filteredMaterials = availableMaterials.filter(material => 
-    material.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    material.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMaterials = materialDatabase.filter(
+    material => 
+      material.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      material.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const favoriteItems = JSON.parse(localStorage.getItem('favoriteMaterials') || '[]');
-
-  const handleAddMaterial = () => {
-    const selected = availableMaterials.find(m => m.code === selectedMaterial);
-    if (!selected || quantity <= 0) {
-      alert('Vui lòng chọn nguyên vật liệu và nhập số lượng hợp lệ');
-      return;
-    }
-
+  const handleAddMaterial = (material: any) => {
     const newMaterial: MaterialItem = {
-      id: `${Date.now()}-${Math.random()}`,
-      code: selected.code,
-      name: selected.name,
-      unit: selected.unit,
-      quantity,
-      notes,
-      isFavorite: favoriteItems.includes(selected.code)
+      id: Date.now().toString(),
+      code: material.code,
+      name: material.name,
+      unit: material.unit,
+      quantity: 1,
+      notes: '',
+      isFavorite: false
     };
-
     onMaterialAdd(newMaterial);
-    setSelectedMaterial('');
-    setQuantity(1);
-    setNotes('');
   };
 
-  const handleToggleFavorite = (code: string) => {
-    const favorites = JSON.parse(localStorage.getItem('favoriteMaterials') || '[]');
-    const newFavorites = favorites.includes(code)
-      ? favorites.filter((f: string) => f !== code)
-      : [...favorites, code];
-    
-    localStorage.setItem('favoriteMaterials', JSON.stringify(newFavorites));
-    
-    // Update existing materials
-    materials.forEach(material => {
-      if (material.code === code) {
-        onMaterialUpdate(material.id, { isFavorite: newFavorites.includes(code) });
-      }
-    });
+  const handleQuantityChange = (id: string, quantity: string) => {
+    const numQuantity = parseInt(quantity) || 0;
+    onMaterialUpdate(id, { quantity: numQuantity });
+  };
+
+  const handleNotesChange = (id: string, notes: string) => {
+    onMaterialUpdate(id, { notes });
+  };
+
+  const handleFavoriteChange = (id: string, checked: boolean) => {
+    onMaterialUpdate(id, { isFavorite: checked });
   };
 
   return (
-    <Card className="bg-glass border-white/20 shadow-xl">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-purple-600 dark:text-purple-400 flex items-center gap-2">
-          <Package className="w-5 h-5" />
-          Chi tiết nguyên vật liệu
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Material Search and Add */}
-        <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border">
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Tìm và thêm nguyên vật liệu</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Tìm kiếm</label>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="Mã hoặc tên nguyên vật liệu"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            </div>
-            
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Chọn nguyên vật liệu</label>
-              <select
-                value={selectedMaterial}
-                onChange={(e) => setSelectedMaterial(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              >
-                <option value="">-- Chọn nguyên vật liệu --</option>
-                {filteredMaterials.map(material => (
-                  <option key={material.code} value={material.code}>
-                    {material.code} - {material.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Số lượng</label>
-              <Input
-                type="number"
-                min="1"
-                value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
-                className="w-full"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Ghi chú</label>
-              <Input
-                placeholder="Ghi chú thêm"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                className="w-full"
-              />
-            </div>
-          </div>
-          
-          <Button onClick={handleAddMaterial} className="bg-blue-600 hover:bg-blue-700 text-white">
-            <Plus className="w-4 h-4 mr-2" />
-            Thêm vào danh sách
-          </Button>
-        </div>
-
-        {/* Material List */}
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-900 dark:text-white">Danh sách nguyên vật liệu đã chọn</h3>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="showFavorites"
-                checked={showFavorites}
-                onCheckedChange={setShowFavorites}
-              />
-              <label htmlFor="showFavorites" className="text-sm text-gray-700 dark:text-gray-300">
-                Chỉ hiển thị yêu thích
-              </label>
-            </div>
+    <div className="space-y-6">
+      {/* Material Search */}
+      <Card className="bg-glass border-white/20 shadow-xl">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-purple-600 dark:text-purple-400 flex items-center gap-2">
+            <Search className="w-5 h-5" />
+            Tìm kiếm nguyên vật liệu
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Input
+              placeholder="Tìm theo mã hoặc tên nguyên vật liệu..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 h-12"
+            />
           </div>
 
+          {searchTerm && (
+            <div className="max-h-48 overflow-y-auto space-y-2">
+              {filteredMaterials.map((material) => (
+                <div key={material.code} className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border">
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-white">{material.code}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{material.name}</p>
+                    <Badge variant="secondary" className="text-xs">{material.unit}</Badge>
+                  </div>
+                  <Button
+                    onClick={() => handleAddMaterial(material)}
+                    size="sm"
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    <Plus className="w-4 h-4 mr-1" />
+                    Thêm
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Selected Materials */}
+      <Card className="bg-glass border-white/20 shadow-xl">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-orange-600 dark:text-orange-400 flex items-center gap-2">
+            <Package className="w-5 h-5" />
+            Danh sách nguyên vật liệu đã chọn ({materials.length})
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
           {materials.length === 0 ? (
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-              Chưa có nguyên vật liệu nào được chọn
+              <Package className="w-12 h-12 mx-auto mb-4 opacity-50" />
+              <p>Chưa có nguyên vật liệu nào được chọn</p>
             </div>
           ) : (
-            <div className="border rounded-lg overflow-hidden">
+            <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Mã</TableHead>
+                    <TableHead className="w-12"></TableHead>
+                    <TableHead>Mã NVL</TableHead>
                     <TableHead>Tên nguyên vật liệu</TableHead>
                     <TableHead>Đơn vị</TableHead>
-                    <TableHead>Số lượng</TableHead>
+                    <TableHead className="w-24">Số lượng</TableHead>
                     <TableHead>Ghi chú</TableHead>
-                    <TableHead>Yêu thích</TableHead>
-                    <TableHead>Thao tác</TableHead>
+                    <TableHead className="w-16">Yêu thích</TableHead>
+                    <TableHead className="w-16"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {materials
-                    .filter(material => !showFavorites || material.isFavorite)
-                    .map((material) => (
+                  {materials.map((material) => (
                     <TableRow key={material.id}>
+                      <TableCell>
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      </TableCell>
                       <TableCell className="font-medium">{material.code}</TableCell>
                       <TableCell>{material.name}</TableCell>
-                      <TableCell>{material.unit}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{material.unit}</Badge>
+                      </TableCell>
                       <TableCell>
                         <Input
                           type="number"
                           min="1"
                           value={material.quantity}
-                          onChange={(e) => onMaterialUpdate(material.id, { quantity: Number(e.target.value) })}
-                          className="w-20"
+                          onChange={(e) => handleQuantityChange(material.id, e.target.value)}
+                          className="w-20 h-8"
                         />
                       </TableCell>
                       <TableCell>
                         <Input
+                          placeholder="Ghi chú..."
                           value={material.notes}
-                          onChange={(e) => onMaterialUpdate(material.id, { notes: e.target.value })}
-                          className="w-32"
+                          onChange={(e) => handleNotesChange(material.id, e.target.value)}
+                          className="min-w-32 h-8"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Checkbox
+                          checked={material.isFavorite}
+                          onCheckedChange={(checked) => handleFavoriteChange(material.id, !!checked)}
                         />
                       </TableCell>
                       <TableCell>
                         <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleToggleFavorite(material.code)}
-                          className={material.isFavorite ? 'text-yellow-500' : 'text-gray-400'}
-                        >
-                          <Star className={`w-4 h-4 ${material.isFavorite ? 'fill-current' : ''}`} />
-                        </Button>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="ghost"
+                          variant="destructive"
                           size="sm"
                           onClick={() => onMaterialRemove(material.id)}
-                          className="text-red-500 hover:text-red-700"
+                          className="h-8 w-8 p-0"
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -245,9 +197,9 @@ const MaterialSelector = ({ materials, onMaterialAdd, onMaterialUpdate, onMateri
               </Table>
             </div>
           )}
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
