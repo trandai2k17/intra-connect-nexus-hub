@@ -25,7 +25,9 @@ interface RequestData {
   employeeId: string;
   employeeName: string;
   department: string;
+  warehouse: string;
   location: string;
+  usingLocation: string;
   process: string;
   materials: MaterialItem[];
   requestDate: string;
@@ -39,7 +41,9 @@ const MaterialRequest = () => {
     employeeId: '',
     employeeName: '',
     department: '',
+    warehouse: '',
     location: '',
+    usingLocation: '',
     process: '',
     materials: [],
     requestDate: new Date().toISOString().split('T')[0],
@@ -48,7 +52,7 @@ const MaterialRequest = () => {
   const [showPrint, setShowPrint] = useState(false);
   const [viewingOrder, setViewingOrder] = useState<RequestData | null>(null);
 
-  const handleLogin = (data: { employeeId: string; employeeName: string; department: string }) => {
+  const handleLogin = (data: { employeeId: string; employeeName: string; department: string; warehouse: string }) => {
     setRequestData(prev => ({
       ...prev,
       ...data
@@ -56,11 +60,11 @@ const MaterialRequest = () => {
     setIsLoggedIn(true);
   };
 
-  const handleLocationChange = (location: string, process: string) => {
+  const handleLocationChange = (location: string, usingLocation: string) => {
     setRequestData(prev => ({
       ...prev,
       location,
-      process
+      usingLocation
     }));
   };
 
@@ -89,7 +93,6 @@ const MaterialRequest = () => {
 
   const handleSave = () => {
     console.log('Saving request:', requestData);
-    // Here you would typically save to database
     alert(t('material.save.success'));
   };
 
@@ -109,6 +112,7 @@ const MaterialRequest = () => {
     setRequestData(prev => ({
       ...prev,
       location: '',
+      usingLocation: '',
       process: '',
       materials: [],
       requestDate: new Date().toISOString().split('T')[0],
@@ -119,9 +123,8 @@ const MaterialRequest = () => {
 
   const handleDeleteRequest = () => {
     if (confirm(t('material.confirm.delete'))) {
-      // Here you would typically delete from database
       console.log('Deleting request:', requestData.requestId);
-      handleNewRequest(); // Reset to new request after delete
+      handleNewRequest();
       alert(t('material.delete.success'));
     }
   };
@@ -167,34 +170,63 @@ const MaterialRequest = () => {
                 </Card>
               </div>
 
-              {/* Main Content - Request Form or Order View */}
+              {/* Main Content */}
               <div className="lg:col-span-3 space-y-4 h-full flex flex-col">
-                {/* Employee Info Card with Action Buttons */}
+                {/* Employee Info and Order Info - Two Columns */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-shrink-0">
+                  {/* Employee Info Card */}
+                  <Card className="bg-glass border-white/20 shadow-xl">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-blue-600 dark:text-blue-400 flex items-center gap-2 text-sm">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        {t('material.employee.info')}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="grid grid-cols-1 gap-3">
+                        <div>
+                          <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.employee.id')}</label>
+                          <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.employeeId}</p>
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.employee.name')}</label>
+                          <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.employeeName}</p>
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.warehouse')}</label>
+                          <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.warehouse}</p>
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.department')}</label>
+                          <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.department}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Order Info Card */}
+                  <Card className="bg-glass border-white/20 shadow-xl">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-green-600 dark:text-green-400 flex items-center gap-2 text-sm">
+                        <FileText className="w-4 h-4" />
+                        {t('material.order.info')}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4 py-2">
+                      <LocationSelector 
+                        onLocationChange={handleLocationChange}
+                        selectedLocation={requestData.location}
+                        selectedUsingLocation={requestData.usingLocation}
+                        readOnly={viewingOrder !== null}
+                      />
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Action Buttons */}
                 <Card className="bg-glass border-white/20 shadow-xl flex-shrink-0">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-blue-600 dark:text-blue-400 flex items-center gap-2 text-sm">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      {t('material.employee.info')}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                      <div>
-                        <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.employee.id')}</label>
-                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.employeeId}</p>
-                      </div>
-                      <div>
-                        <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.employee.name')}</label>
-                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.employeeName}</p>
-                      </div>
-                      <div>
-                        <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.department')}</label>
-                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{requestData.department}</p>
-                      </div>
-                    </div>
-                    
-                    {/* Action Buttons */}
-                    <div className="flex gap-2 justify-end pt-2 border-t">
+                  <CardContent className="py-3">
+                    <div className="flex gap-2 justify-end">
                       <Button
                         onClick={handleNewRequest}
                         variant="outline"
@@ -241,94 +273,39 @@ const MaterialRequest = () => {
                         <ChevronLeft className="w-3 h-3" />
                         {t('material.back.new')}
                       </Button>
-                      <Button
-                        onClick={handleNewRequest}
-                        variant="outline"
-                        className="flex items-center gap-2 text-xs h-8"
-                      >
-                        <RotateCcw className="w-3 h-3" />
-                        {t('material.renew')}
-                      </Button>
-                      <Button
-                        onClick={handleDeleteRequest}
-                        variant="destructive"
-                        className="flex items-center gap-2 text-xs h-8"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                        {t('material.delete')}
-                      </Button>
                       <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                         {t('material.order.detail')}: {viewingOrder.requestId}
                       </h2>
                     </div>
 
-                    {/* Location Information and Material List in Same Row */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 overflow-hidden">
-                      {/* Location Information - Read Only */}
-                      <Card className="bg-glass border-white/20 shadow-xl">
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-green-600 dark:text-green-400 flex items-center gap-2 text-sm">
-                            <FileText className="w-4 h-4" />
-                            {t('material.order.info')}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4 py-2">
-                          <div className="space-y-1">
-                            <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.location')}</label>
-                            <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg border text-sm">
-                              {viewingOrder.location}
-                            </div>
-                          </div>
-                          <div className="space-y-1">
-                            <label className="text-xs font-medium text-gray-700 dark:text-gray-300">{t('material.process')}</label>
-                            <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg border text-sm">
-                              {viewingOrder.process}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      {/* Material List - Read Only */}
-                      <div className="overflow-hidden">
-                        <MaterialSelector
-                          materials={viewingOrder.materials}
-                          onMaterialAdd={() => {}}
-                          onMaterialUpdate={() => {}}
-                          onMaterialRemove={() => {}}
-                          readOnly={true}
-                        />
-                      </div>
+                    {/* Material List - Read Only */}
+                    <div className="flex-1 overflow-hidden">
+                      <MaterialSelector
+                        materials={viewingOrder.materials}
+                        onMaterialAdd={() => {}}
+                        onMaterialUpdate={() => {}}
+                        onMaterialRemove={() => {}}
+                        readOnly={true}
+                      />
                     </div>
                   </div>
                 ) : (
-                  /* Create New Request */
+                  /* Create New Request - Material Selection */
                   <div className="space-y-4 flex-1 flex flex-col overflow-hidden">
                     <div className="flex items-center gap-2 flex-shrink-0">
                       <FileText className="w-5 h-5 text-blue-600" />
                       <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('material.new.request')}</h2>
                     </div>
 
-                    {/* Order Information and Material Selection in Same Row */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 overflow-hidden">
-                      {/* Location Selection */}
-                      <div className="flex-shrink-0">
-                        <LocationSelector 
-                          onLocationChange={handleLocationChange}
-                          selectedLocation={requestData.location}
-                          selectedProcess={requestData.process}
-                        />
-                      </div>
-
-                      {/* Material Selection */}
-                      <div className="overflow-hidden">
-                        <MaterialSelector
-                          materials={requestData.materials}
-                          onMaterialAdd={handleMaterialAdd}
-                          onMaterialUpdate={handleMaterialUpdate}
-                          onMaterialRemove={handleMaterialRemove}
-                          location={requestData.location}
-                        />
-                      </div>
+                    {/* Material Selection */}
+                    <div className="flex-1 overflow-hidden">
+                      <MaterialSelector
+                        materials={requestData.materials}
+                        onMaterialAdd={handleMaterialAdd}
+                        onMaterialUpdate={handleMaterialUpdate}
+                        onMaterialRemove={handleMaterialRemove}
+                        location={requestData.location}
+                      />
                     </div>
                   </div>
                 )}

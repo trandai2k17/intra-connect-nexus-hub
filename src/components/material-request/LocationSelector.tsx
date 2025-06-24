@@ -1,88 +1,94 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { MapPin, Settings } from 'lucide-react';
+import { MapPin } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface LocationSelectorProps {
-  onLocationChange: (location: string, process: string) => void;
+  onLocationChange: (location: string, usingLocation: string) => void;
   selectedLocation: string;
-  selectedProcess: string;
+  selectedUsingLocation: string;
+  readOnly?: boolean;
 }
 
-const LocationSelector = ({ onLocationChange, selectedLocation, selectedProcess }: LocationSelectorProps) => {
-  const locations = [
-    'Nhà máy 1 - Hà Nội',
-    'Nhà máy 2 - Hồ Chí Minh',
-    'Nhà máy 3 - Đà Nẵng',
-    'Kho trung tâm - Bình Dương',
-    'Chi nhánh Hải Phòng'
-  ];
+const LocationSelector = ({ 
+  onLocationChange, 
+  selectedLocation, 
+  selectedUsingLocation,
+  readOnly = false 
+}: LocationSelectorProps) => {
+  const { t } = useLanguage();
 
-  const processes = [
-    'Công đoạn chuẩn bị',
-    'Công đoạn gia công',
-    'Công đoạn lắp ráp',
-    'Công đoạn kiểm tra',
-    'Công đoạn đóng gói',
-    'Công đoạn vận chuyển'
-  ];
-
-  const handleLocationSelect = (location: string) => {
-    onLocationChange(location, selectedProcess);
+  const handleLocationChange = (location: string) => {
+    onLocationChange(location, selectedUsingLocation);
   };
 
-  const handleProcessSelect = (process: string) => {
-    onLocationChange(selectedLocation, process);
+  const handleUsingLocationChange = (usingLocation: string) => {
+    onLocationChange(selectedLocation, usingLocation);
   };
+
+  if (readOnly) {
+    return (
+      <div className="space-y-4">
+        <div>
+          <Label className="text-xs font-medium text-gray-700 dark:text-gray-300">
+            {t('material.location')}
+          </Label>
+          <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg border text-sm mt-1">
+            {selectedLocation || 'N/A'}
+          </div>
+        </div>
+        <div>
+          <Label className="text-xs font-medium text-gray-700 dark:text-gray-300">
+            {t('material.using.location')}
+          </Label>
+          <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg border text-sm mt-1">
+            {selectedUsingLocation || 'N/A'}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <Card className="bg-glass border-white/20 shadow-xl">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-green-600 dark:text-green-400 flex items-center gap-2">
-          <MapPin className="w-5 h-5" />
-          Thông tin đặt hàng
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Chọn Location
-          </label>
-          <Select value={selectedLocation} onValueChange={handleLocationSelect}>
-            <SelectTrigger className="w-full h-12 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600">
-              <SelectValue placeholder="Chọn location để order" />
-            </SelectTrigger>
-            <SelectContent className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600">
-              {locations.map((location) => (
-                <SelectItem key={location} value={location} className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                  {location}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+    <div className="space-y-4">
+      <div>
+        <Label htmlFor="location" className="text-xs font-medium text-gray-700 dark:text-gray-300">
+          {t('material.location')}
+        </Label>
+        <Select value={selectedLocation} onValueChange={handleLocationChange}>
+          <SelectTrigger className="mt-1">
+            <SelectValue placeholder={t('material.select.location')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="nha-may-1">Nhà máy 1 - Hà Nội</SelectItem>
+            <SelectItem value="nha-may-2">Nhà máy 2 - Hồ Chí Minh</SelectItem>
+            <SelectItem value="kho-trung-tam">Kho trung tâm - Bình Dương</SelectItem>
+            <SelectItem value="nha-may-3">Nhà máy 3 - Đà Nẵng</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
-            <Settings className="w-4 h-4" />
-            Chọn công đoạn
-          </label>
-          <Select value={selectedProcess} onValueChange={handleProcessSelect}>
-            <SelectTrigger className="w-full h-12 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600">
-              <SelectValue placeholder="Chọn công đoạn sử dụng" />
-            </SelectTrigger>
-            <SelectContent className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600">
-              {processes.map((process) => (
-                <SelectItem key={process} value={process} className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                  {process}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </CardContent>
-    </Card>
+      <div>
+        <Label htmlFor="usingLocation" className="text-xs font-medium text-gray-700 dark:text-gray-300">
+          {t('material.using.location')}
+        </Label>
+        <Select value={selectedUsingLocation} onValueChange={handleUsingLocationChange}>
+          <SelectTrigger className="mt-1">
+            <SelectValue placeholder={t('material.select.using.location')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="line-1">Line 1 - Production</SelectItem>
+            <SelectItem value="line-2">Line 2 - Assembly</SelectItem>
+            <SelectItem value="line-3">Line 3 - Quality Control</SelectItem>
+            <SelectItem value="warehouse-a">Warehouse A - Storage</SelectItem>
+            <SelectItem value="warehouse-b">Warehouse B - Packaging</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
   );
 };
 

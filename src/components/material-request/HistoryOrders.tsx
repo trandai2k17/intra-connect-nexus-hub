@@ -3,9 +3,10 @@ import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
-import { CalendarIcon, Eye, Clock } from 'lucide-react';
+import { CalendarIcon, Eye, Clock, RefreshCw } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface MaterialItem {
   id: string;
@@ -21,7 +22,9 @@ interface RequestData {
   employeeId: string;
   employeeName: string;
   department: string;
+  warehouse: string;
   location: string;
+  usingLocation: string;
   process: string;
   materials: MaterialItem[];
   requestDate: string;
@@ -44,10 +47,11 @@ interface HistoryOrder {
 }
 
 const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
+  const { t } = useLanguage();
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [filteredOrders, setFilteredOrders] = useState<HistoryOrder[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Mock history data - trong thực tế sẽ lấy từ API
   const mockHistoryData: HistoryOrder[] = [
     {
       requestId: 'REQ-20241201-001',
@@ -96,10 +100,12 @@ const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
     }
   ];
 
-  React.useEffect(() => {
-    // Filter orders based on selected date or show top 10 recent orders
+  const loadData = async () => {
+    setIsLoading(true);
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
     let orders = mockHistoryData.filter(order => {
-      // In real app, this would filter by employeeId from API
       return true;
     });
 
@@ -107,12 +113,20 @@ const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
       const selectedDateStr = format(selectedDate, 'yyyy-MM-dd');
       orders = orders.filter(order => order.requestDate === selectedDateStr);
     } else {
-      // Show top 10 most recent orders
       orders = orders.slice(0, 10);
     }
 
     setFilteredOrders(orders);
+    setIsLoading(false);
+  };
+
+  React.useEffect(() => {
+    loadData();
   }, [selectedDate, employeeId]);
+
+  const handleReloadData = () => {
+    loadData();
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -160,7 +174,9 @@ const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
       employeeId: employeeId,
       employeeName: 'Test User',
       department: 'Test Department',
+      warehouse: 'Test Warehouse',
       location: order.location,
+      usingLocation: 'Test Using Location',
       process: order.process,
       materials: mockMaterials,
       requestDate: order.requestDate,
@@ -172,14 +188,27 @@ const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
 
   return (
     <div className="space-y-3 h-full flex flex-col">
-      {/* Date Filter */}
+      {/* Date Filter and Reload Button */}
       <div className="space-y-2 flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <Clock className="w-3 h-3 text-gray-500" />
-          <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
-            Lọc theo ngày:
-          </span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Clock className="w-3 h-3 text-gray-500" />
+            <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+              {t('material.filter.date')}:
+            </span>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-6 px-2 text-xs"
+            onClick={handleReloadData}
+            disabled={isLoading}
+          >
+            <RefreshCw className={cn("w-3 h-3 mr-1", isLoading && "animate-spin")} />
+            {t('material.reload.data')}
+          </Button>
         </div>
+        
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -188,9 +217,10 @@ const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
                 "w-full justify-start text-left font-normal text-xs h-8",
                 !selectedDate && "text-muted-foreground"
               )}
+              disabled={isLoading}
             >
               <CalendarIcon className="mr-2 h-3 w-3" />
-              {selectedDate ? format(selectedDate, "dd/MM/yyyy") : "Chọn ngày"}
+              {selectedDate ? format(selectedDate, "dd/MM/yyyy") : t('material.select.date')}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
@@ -208,8 +238,9 @@ const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
             size="sm"
             className="w-full text-xs h-7"
             onClick={() => setSelectedDate(undefined)}
+            disabled={isLoading}
           >
-            Xóa bộ lọc
+            {t('material.clear.filter')}
           </Button>
         )}
       </div>
@@ -217,18 +248,23 @@ const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
       {/* Orders Count */}
       <div className="flex items-center justify-between flex-shrink-0">
         <h4 className="text-xs font-medium text-gray-900 dark:text-white">
-          {selectedDate ? 'Đơn trong ngày' : 'Top 10 gần nhất'}
+          {selectedDate ? t('material.orders.today') : t('material.orders.recent')}
         </h4>
         <Badge variant="secondary" className="text-xs">
-          {filteredOrders.length}
+          {isLoading ? '...' : filteredOrders.length}
         </Badge>
       </div>
 
       {/* Orders List */}
       <div className="space-y-2 flex-1 overflow-y-auto">
-        {filteredOrders.length === 0 ? (
+        {isLoading ? (
           <div className="text-center py-4 text-gray-500 dark:text-gray-400 text-xs">
-            <p>Không có đơn hàng</p>
+            <RefreshCw className="w-4 h-4 animate-spin mx-auto mb-2" />
+            <p>{t('material.loading.data')}</p>
+          </div>
+        ) : filteredOrders.length === 0 ? (
+          <div className="text-center py-4 text-gray-500 dark:text-gray-400 text-xs">
+            <p>{t('material.no.orders')}</p>
           </div>
         ) : (
           filteredOrders.map((order) => (
@@ -246,17 +282,13 @@ const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
                 {format(new Date(order.requestDate), "dd/MM/yyyy")}
               </div>
               
-              <div className="text-xs text-gray-700 dark:text-gray-300 truncate">
-                {order.location}
-              </div>
-              
               <div className="text-xs text-gray-600 dark:text-gray-400 truncate">
                 {order.process}
               </div>
               
               <div className="flex items-center justify-between">
                 <Badge variant="outline" className="text-xs">
-                  {order.totalItems} items
+                  {order.totalItems} {t('material.items')}
                 </Badge>
                 <Button
                   variant="outline"
@@ -265,7 +297,7 @@ const HistoryOrders = ({ employeeId, onViewOrder }: HistoryOrdersProps) => {
                   onClick={() => handleViewOrder(order)}
                 >
                   <Eye className="w-3 h-3 mr-1" />
-                  Xem
+                  {t('material.view')}
                 </Button>
               </div>
             </div>
