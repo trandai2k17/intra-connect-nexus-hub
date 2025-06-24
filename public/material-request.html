@@ -35,31 +35,6 @@
                     <label for="employee-id" id="employee-id-label">Mã nhân viên</label>
                     <input type="text" id="employee-id" placeholder="Nhập mã nhân viên">
                 </div>
-                <div class="form-group">
-                    <label for="employee-name" id="employee-name-label">Tên nhân viên</label>
-                    <input type="text" id="employee-name" placeholder="Nhập tên nhân viên">
-                </div>
-                <div class="form-group">
-                    <label for="warehouse" id="warehouse-label">Kho</label>
-                    <select id="warehouse">
-                        <option value="" id="select-warehouse-placeholder">Chọn kho</option>
-                        <option value="DADL">DADL</option>
-                        <option value="HNCM">HNCM</option>
-                        <option value="SGCM">SGCM</option>
-                        <option value="DNCM">DNCM</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="department" id="department-label">Bộ phận</label>
-                    <select id="department">
-                        <option value="" id="select-department-placeholder">Chọn bộ phận</option>
-                        <option value="CB-Contour">CB-Contour</option>
-                        <option value="CB-Assembly">CB-Assembly</option>
-                        <option value="CB-Quality">CB-Quality</option>
-                        <option value="CB-Maintenance">CB-Maintenance</option>
-                        <option value="CB-Warehouse">CB-Warehouse</option>
-                    </select>
-                </div>
                 <button id="login-btn" class="btn btn-primary">
                     <i class="fas fa-sign-in-alt"></i>
                     <span id="login-btn-text">Đăng nhập</span>
@@ -78,19 +53,19 @@
                                 <i class="fas fa-history"></i>
                                 Lịch sử order
                             </h3>
+                            <button id="reload-data-btn" class="btn-reload" disabled>
+                                <i class="fas fa-sync-alt" id="reload-icon"></i>
+                                <span id="reload-text">Tải lại</span>
+                            </button>
                         </div>
                         <div class="card-content">
-                            <!-- Date Filter and Reload -->
+                            <!-- Date Filter -->
                             <div class="history-controls">
                                 <div class="date-filter-row">
                                     <div class="filter-label">
                                         <i class="fas fa-clock"></i>
                                         <span id="filter-date-label">Lọc theo ngày:</span>
                                     </div>
-                                    <button id="reload-data-btn" class="btn-reload" disabled>
-                                        <i class="fas fa-sync-alt" id="reload-icon"></i>
-                                        <span id="reload-text">Tải lại</span>
-                                    </button>
                                 </div>
                                 <input type="date" id="date-filter" class="date-input">
                                 <button id="clear-filter-btn" class="btn btn-outline-small" style="display: none;">

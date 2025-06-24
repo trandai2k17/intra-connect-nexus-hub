@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LogIn } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -15,19 +14,24 @@ interface LoginFormProps {
 const LoginForm = ({ onLogin }: LoginFormProps) => {
   const { t } = useLanguage();
   const [employeeId, setEmployeeId] = useState('');
-  const [employeeName, setEmployeeName] = useState('');
-  const [department, setDepartment] = useState('');
-  const [warehouse, setWarehouse] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!employeeId || !employeeName || !department || !warehouse) {
+    if (!employeeId) {
       alert(t('material.login.required'));
       return;
     }
 
-    onLogin({ employeeId, employeeName, department, warehouse });
+    // Mock data based on employee ID
+    const mockData = {
+      employeeId,
+      employeeName: 'Nguyễn Văn An',
+      department: 'CB-Contour',
+      warehouse: 'DADL'
+    };
+
+    onLogin(mockData);
   };
 
   return (
@@ -50,49 +54,6 @@ const LoginForm = ({ onLogin }: LoginFormProps) => {
               placeholder={t('material.login.employee.id')}
               required
             />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="employeeName">{t('material.employee.name')}</Label>
-            <Input
-              id="employeeName"
-              type="text"
-              value={employeeName}
-              onChange={(e) => setEmployeeName(e.target.value)}
-              placeholder={t('material.login.employee.name')}
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="warehouse">{t('material.warehouse')}</Label>
-            <Select value={warehouse} onValueChange={setWarehouse}>
-              <SelectTrigger>
-                <SelectValue placeholder={t('material.select.warehouse')} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="DADL">DADL</SelectItem>
-                <SelectItem value="HNCM">HNCM</SelectItem>
-                <SelectItem value="SGCM">SGCM</SelectItem>
-                <SelectItem value="DNCM">DNCM</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="department">{t('material.department')}</Label>
-            <Select value={department} onValueChange={setDepartment}>
-              <SelectTrigger>
-                <SelectValue placeholder={t('material.select.department')} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="CB-Contour">CB-Contour</SelectItem>
-                <SelectItem value="CB-Assembly">CB-Assembly</SelectItem>
-                <SelectItem value="CB-Quality">CB-Quality</SelectItem>
-                <SelectItem value="CB-Maintenance">CB-Maintenance</SelectItem>
-                <SelectItem value="CB-Warehouse">CB-Warehouse</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
           
           <Button type="submit" className="w-full">
