@@ -1,250 +1,209 @@
 
-// IT Portal - Enhanced JavaScript with Bootstrap Integration
+// IT Portal - JavaScript Implementation
+// Comprehensive script with all features matching React version
+
+// Global state management
+let currentTheme = localStorage.getItem('theme') || 'light';
+let currentLanguage = localStorage.getItem('language') || 'vi';
+let currentViewMode = localStorage.getItem('viewMode') || 'grid';
+let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+let notifications = [];
+let currentCategory = 'all';
+
+// Language translations
+const translations = {
+    vi: {
+        'nav.subtitle': 'Hệ thống Thông tin Nội bộ',
+        'nav.search': 'Tìm kiếm ứng dụng...',
+        'nav.notifications': 'Thông báo',
+        'nav.profile': 'Hồ sơ',
+        'nav.settings': 'Cài đặt',
+        'nav.logout': 'Đăng xuất',
+        'nav.viewAll': 'Xem tất cả',
+        'sidebar.main': 'Điều hướng chính',
+        'sidebar.it': 'Công nghệ thông tin',
+        'sidebar.production': 'Sản xuất',
+        'sidebar.quality': 'Chất lượng',
+        'sidebar.hr': 'Nhân sự',
+        'sidebar.inventory': 'Kho hàng',
+        'sidebar.purchase': 'Mua hàng',
+        'sidebar.dashboard': 'Bảng điều khiển',
+        'sidebar.quickActions': 'Thao tác nhanh',
+        'sidebar.newRequest': 'Yêu cầu mới',
+        'sidebar.helpSupport': 'Trợ giúp & Hỗ trợ',
+        'sidebar.reportIssue': 'Báo cáo sự cố',
+        'banner.category1': 'Sản xuất',
+        'banner.title1': 'Triển khai Hệ thống MES Mới',
+        'banner.desc1': 'Hệ thống quản lý sản xuất thông minh ra mắt tháng 12/2024',
+        'banner.category2': 'Chất lượng',
+        'banner.title2': 'Ra mắt Ứng dụng QC Mobile',
+        'banner.desc2': 'Ứng dụng kiểm soát chất lượng cho thiết bị di động',
+        'banner.category3': 'Bảo mật',
+        'banner.title3': 'Cập nhật Chính sách Bảo mật IT',
+        'banner.desc3': 'Quy định mới về mật khẩu, 2FA và truy cập VPN',
+        'banner.explore': 'Khám phá',
+        'widget.maintenance': 'Bảo trì Hệ thống',
+        'widget.maintenanceDesc': 'Bảo trì ERP tối nay 22:00-02:00',
+        'widget.security': 'Cảnh báo Bảo mật',
+        'widget.securityDesc': 'Phát hiện email lừa đảo',
+        'widget.training': 'Đào tạo Office 365',
+        'widget.trainingDesc': 'Khóa học Teams & SharePoint ngày 2/12',
+        'widget.server': 'Máy chủ Mới Sẵn sàng',
+        'widget.serverDesc': 'Máy chủ sao lưu được cài đặt thành công',
+        'tabs.all': 'Tất cả',
+        'tabs.production': 'Sản xuất',
+        'tabs.inventory': 'Kho hàng',
+        'tabs.purchase': 'Mua hàng',
+        'apps.title': 'Ứng dụng & Phần mềm',
+        'apps.subtitle': 'Truy cập nhanh các công cụ và hệ thống nội bộ',
+        'apps.updated': 'Cập nhật: 29/11/2024',
+        'stats.activeApps': 'Ứng dụng Hoạt động',
+        'stats.activeUsers': 'Người dùng Hoạt động',
+        'stats.uptime': 'Thời gian Hoạt động Hệ thống'
+    },
+    en: {
+        'nav.subtitle': 'Internal Information System',
+        'nav.search': 'Search applications...',
+        'nav.notifications': 'Notifications',
+        'nav.profile': 'Profile',
+        'nav.settings': 'Settings',
+        'nav.logout': 'Logout',
+        'nav.viewAll': 'View All',
+        'sidebar.main': 'Main Navigation',
+        'sidebar.it': 'Information Technology',
+        'sidebar.production': 'Production',
+        'sidebar.quality': 'Quality',
+        'sidebar.hr': 'Human Resources',
+        'sidebar.inventory': 'Inventory',
+        'sidebar.purchase': 'Purchase',
+        'sidebar.dashboard': 'Dashboard',
+        'sidebar.quickActions': 'Quick Actions',
+        'sidebar.newRequest': 'New Request',
+        'sidebar.helpSupport': 'Help & Support',
+        'sidebar.reportIssue': 'Report Issue',
+        'banner.category1': 'Production',
+        'banner.title1': 'New MES System Deployment',
+        'banner.desc1': 'Smart manufacturing management system launching December 2024',
+        'banner.category2': 'Quality',
+        'banner.title2': 'QC Mobile App Launch',
+        'banner.desc2': 'Quality control application for mobile devices',
+        'banner.category3': 'Security',
+        'banner.title3': 'IT Security Policy Update',
+        'banner.desc3': 'New password, 2FA and VPN access regulations',
+        'banner.explore': 'Explore',
+        'widget.maintenance': 'System Maintenance',
+        'widget.maintenanceDesc': 'ERP maintenance tonight 22:00-02:00',
+        'widget.security': 'Security Alert',
+        'widget.securityDesc': 'Phishing email detected',
+        'widget.training': 'Office 365 Training',
+        'widget.trainingDesc': 'Teams & SharePoint course Dec 2',
+        'widget.server': 'New Server Ready',
+        'widget.serverDesc': 'Backup server installed successfully',
+        'tabs.all': 'All',
+        'tabs.production': 'Production',
+        'tabs.inventory': 'Inventory',
+        'tabs.purchase': 'Purchase',
+        'apps.title': 'Applications & Software',
+        'apps.subtitle': 'Quick access to internal tools and systems',
+        'apps.updated': 'Updated: 29/11/2024',
+        'stats.activeApps': 'Active Applications',
+        'stats.activeUsers': 'Active Users',
+        'stats.uptime': 'System Uptime'
+    }
+};
+
+// Applications data
+const applications = [
+    { id: 1, name: 'ERP System', description: 'Enterprise Resource Planning', icon: 'bi-building', color: 'primary', category: ['production', 'hr', 'inventory'], url: '#erp' },
+    { id: 2, name: 'QC Mobile', description: 'Quality Control App', icon: 'bi-phone', color: 'success', category: ['quality'], url: '#qc' },
+    { id: 3, name: 'HR Portal', description: 'Human Resources Management', icon: 'bi-people', color: 'info', category: ['hr'], url: '#hr' },
+    { id: 4, name: 'Inventory Manager', description: 'Stock Management System', icon: 'bi-box', color: 'warning', category: ['inventory'], url: '#inventory' },
+    { id: 5, name: 'Purchase System', description: 'Procurement Management', icon: 'bi-cart', color: 'danger', category: ['purchase'], url: '#purchase' },
+    { id: 6, name: 'IT Service Desk', description: 'IT Support Portal', icon: 'bi-headset', color: 'secondary', category: ['it'], url: '#servicedesk' },
+    { id: 7, name: 'Document Manager', description: 'Document Management System', icon: 'bi-file-text', color: 'dark', category: ['it'], url: '#docs' },
+    { id: 8, name: 'Time Tracking', description: 'Employee Time Management', icon: 'bi-clock', color: 'primary', category: ['hr'], url: '#timetrack' },
+    { id: 9, name: 'Production Dashboard', description: 'Manufacturing Analytics', icon: 'bi-speedometer2', color: 'success', category: ['production'], url: '#dashboard' },
+    { id: 10, name: 'Quality Reports', description: 'QA/QC Reporting Tool', icon: 'bi-bar-chart', color: 'info', category: ['quality'], url: '#reports' },
+    { id: 11, name: 'Asset Management', description: 'Company Asset Tracking', icon: 'bi-laptop', color: 'warning', category: ['it'], url: '#assets' },
+    { id: 12, name: 'Vendor Portal', description: 'Supplier Management', icon: 'bi-truck', color: 'danger', category: ['purchase'], url: '#vendors' }
+];
+
+// Announcement messages
+const announcements = {
+    vi: [
+        "🎉 Hệ thống ERP mới đã được cập nhật với nhiều tính năng hữu ích",
+        "📢 Bảo trì hệ thống dự kiến vào 22:00 - 02:00 đêm nay",
+        "🚀 Ứng dụng mobile QC đã ra mắt trên App Store",
+        "💡 Khóa học Excel nâng cao sẽ bắt đầu vào tuần tới",
+        "🔒 Cập nhật chính sách bảo mật - vui lòng đổi mật khẩu",
+        "📊 Báo cáo tháng 11 đã sẵn sàng để xem"
+    ],
+    en: [
+        "🎉 New ERP system has been updated with many useful features",
+        "📢 System maintenance scheduled for 22:00 - 02:00 tonight",
+        "🚀 QC mobile app has launched on the App Store",
+        "💡 Advanced Excel course will start next week",
+        "🔒 Security policy update - please change your password",
+        "📊 November reports are ready for review"
+    ]
+};
+
+// Notification data
+const notificationData = [
+    {
+        id: 1,
+        title: 'System Maintenance',
+        message: 'ERP system will be down for maintenance from 22:00 to 02:00',
+        time: '2 minutes ago',
+        type: 'warning',
+        unread: true
+    },
+    {
+        id: 2,
+        title: 'New App Available',
+        message: 'QC Mobile app is now available for download',
+        time: '1 hour ago',
+        type: 'info',
+        unread: true
+    },
+    {
+        id: 3,
+        title: 'Security Alert',
+        message: 'Suspicious login attempt detected',
+        time: '3 hours ago',
+        type: 'danger',
+        unread: false
+    }
+];
+
+// DOM Content Loaded Event
 document.addEventListener('DOMContentLoaded', function() {
-    // Global State Management
-    const AppState = {
-        currentLanguage: localStorage.getItem('language') || 'vi',
-        currentTheme: localStorage.getItem('theme') || 'light',
-        currentCategory: 'all',
-        viewMode: localStorage.getItem('viewMode') || 'grid',
-        favorites: JSON.parse(localStorage.getItem('favorites') || '[]'),
-        searchCache: new Map(),
-        isLoading: true
-    };
-
-    // Translation Data
-    const translations = {
-        vi: {
-            'nav.subtitle': 'Hệ thống thông tin nội bộ',
-            'nav.search': 'Tìm kiếm ứng dụng...',
-            'nav.notifications': 'Thông báo',
-            'nav.viewAll': 'Xem tất cả',
-            'nav.profile': 'Hồ sơ',
-            'nav.settings': 'Cài đặt',
-            'nav.logout': 'Đăng xuất',
-            'sidebar.main': 'Chính',
-            'sidebar.applications': 'Ứng dụng',
-            'sidebar.support': 'Hỗ trợ',
-            'sidebar.home': 'Trang chủ',
-            'sidebar.dashboard': 'Bảng điều khiển',
-            'sidebar.analytics': 'Phân tích',
-            'sidebar.reports': 'Báo cáo',
-            'sidebar.erp': 'Hệ thống ERP',
-            'sidebar.mes': 'Hệ thống MES',
-            'sidebar.qc': 'Kiểm soát chất lượng',
-            'sidebar.inventory': 'Quản lý kho',
-            'sidebar.helpdesk': 'Trợ giúp IT',
-            'sidebar.documentation': 'Tài liệu',
-            'banner.category1': 'Sản xuất',
-            'banner.title1': 'Triển khai hệ thống MES mới',
-            'banner.desc1': 'Hệ thống quản lý sản xuất thông minh sẽ ra mắt tháng 12/2024',
-            'banner.category2': 'Chất lượng',
-            'banner.title2': 'Ra mắt ứng dụng QC Mobile',
-            'banner.desc2': 'Ứng dụng kiểm soát chất lượng trên thiết bị di động',
-            'banner.category3': 'Bảo mật',
-            'banner.title3': 'Cập nhật chính sách bảo mật IT',
-            'banner.desc3': 'Quy định mới về mật khẩu, 2FA và truy cập VPN',
-            'banner.explore': 'Khám phá',
-            'widget.maintenance': 'Bảo trì hệ thống',
-            'widget.maintenanceDesc': 'Bảo trì ERP tối nay 22:00-02:00',
-            'widget.security': 'Cảnh báo bảo mật',
-            'widget.securityDesc': 'Phát hiện email lừa đảo',
-            'widget.training': 'Đào tạo Office 365',
-            'widget.trainingDesc': 'Khóa học Teams & SharePoint ngày 2/12',
-            'widget.server': 'Máy chủ mới sẵn sàng',
-            'widget.serverDesc': 'Máy chủ sao lưu đã cài đặt thành công',
-            'tabs.all': 'Tất cả',
-            'tabs.production': 'Sản xuất',
-            'tabs.inventory': 'Kho bãi',
-            'tabs.purchase': 'Mua hàng',
-            'apps.title': 'Ứng dụng & Phần mềm',
-            'apps.subtitle': 'Truy cập nhanh các công cụ và hệ thống nội bộ',
-            'apps.updated': 'Cập nhật: 29/11/2024',
-            'stats.activeApps': 'Ứng dụng hoạt động',
-            'stats.activeUsers': 'Người dùng hoạt động',
-            'stats.uptime': 'Thời gian hoạt động'
-        },
-        en: {
-            'nav.subtitle': 'Internal Information System',
-            'nav.search': 'Search applications...',
-            'nav.notifications': 'Notifications',
-            'nav.viewAll': 'View All',
-            'nav.profile': 'Profile',
-            'nav.settings': 'Settings',
-            'nav.logout': 'Logout',
-            'sidebar.main': 'Main',
-            'sidebar.applications': 'Applications',
-            'sidebar.support': 'Support',
-            'sidebar.home': 'Home',
-            'sidebar.dashboard': 'Dashboard',
-            'sidebar.analytics': 'Analytics',
-            'sidebar.reports': 'Reports',
-            'sidebar.erp': 'ERP System',
-            'sidebar.mes': 'MES System',
-            'sidebar.qc': 'Quality Control',
-            'sidebar.inventory': 'Inventory Management',
-            'sidebar.helpdesk': 'IT Helpdesk',
-            'sidebar.documentation': 'Documentation',
-            'banner.category1': 'Production',
-            'banner.title1': 'New MES System Deployment',
-            'banner.desc1': 'Smart manufacturing management system launching December 2024',
-            'banner.category2': 'Quality',
-            'banner.title2': 'QC Mobile App Launch',
-            'banner.desc2': 'Quality control application for mobile devices',
-            'banner.category3': 'Security',
-            'banner.title3': 'IT Security Policy Update',
-            'banner.desc3': 'New password, 2FA and VPN access regulations',
-            'banner.explore': 'Explore',
-            'widget.maintenance': 'System Maintenance',
-            'widget.maintenanceDesc': 'ERP maintenance tonight 22:00-02:00',
-            'widget.security': 'Security Alert',
-            'widget.securityDesc': 'Phishing email detected',
-            'widget.training': 'Office 365 Training',
-            'widget.trainingDesc': 'Teams & SharePoint course Dec 2',
-            'widget.server': 'New Server Ready',
-            'widget.serverDesc': 'Backup server installed successfully',
-            'tabs.all': 'All',
-            'tabs.production': 'Production',
-            'tabs.inventory': 'Inventory',
-            'tabs.purchase': 'Purchase',
-            'apps.title': 'Applications & Software',
-            'apps.subtitle': 'Quick access to internal tools and systems',
-            'apps.updated': 'Updated: 29/11/2024',
-            'stats.activeApps': 'Active Applications',
-            'stats.activeUsers': 'Active Users',
-            'stats.uptime': 'System Uptime'
-        }
-    };
-
-    // Application Data
-    const applications = [
-        { id: 1, name: 'ERP System', icon: 'bi-building', description: 'Enterprise Resource Planning', category: 'production', color: 'primary', url: '#erp' },
-        { id: 2, name: 'MES Manufacturing', icon: 'bi-gear-wide-connected', description: 'Manufacturing Execution System', category: 'production', color: 'success', url: '#mes' },
-        { id: 3, name: 'QC Mobile', icon: 'bi-phone', description: 'Quality Control Mobile App', category: 'qa', color: 'warning', url: '#qc-mobile' },
-        { id: 4, name: 'Microsoft Teams', icon: 'bi-microsoft-teams', description: 'Team Communication & Collaboration', category: 'it', color: 'info', url: 'https://teams.microsoft.com' },
-        { id: 5, name: 'SharePoint', icon: 'bi-share', description: 'Document Management & Sharing', category: 'it', color: 'secondary', url: 'https://sharepoint.com' },
-        { id: 6, name: 'Outlook', icon: 'bi-envelope', description: 'Email & Calendar Management', category: 'it', color: 'primary', url: 'https://outlook.com' },
-        { id: 7, name: 'GitLab', icon: 'bi-git', description: 'Source Code Management', category: 'it', color: 'danger', url: '#gitlab' },
-        { id: 8, name: 'Jenkins CI/CD', icon: 'bi-gear', description: 'Continuous Integration Pipeline', category: 'it', color: 'success', url: '#jenkins' },
-        { id: 9, name: 'Inventory System', icon: 'bi-box', description: 'Stock & Warehouse Management', category: 'inventory', color: 'warning', url: '#inventory' },
-        { id: 10, name: 'Purchase Portal', icon: 'bi-cart', description: 'Procurement & Purchasing', category: 'purchase', color: 'info', url: '#purchase' },
-        { id: 11, name: 'HR Portal', icon: 'bi-people', description: 'Human Resources Management', category: 'hr', color: 'secondary', url: '#hr' },
-        { id: 12, name: 'Payroll System', icon: 'bi-cash-stack', description: 'Salary & Benefits Management', category: 'hr', color: 'success', url: '#payroll' }
-    ];
-
-    // Navigation Data
-    const navigationData = {
-        main: [
-            { id: 'home', title: 'sidebar.home', icon: 'bi-house-door', url: '#home', active: true },
-            { id: 'dashboard', title: 'sidebar.dashboard', icon: 'bi-speedometer2', url: '#dashboard' },
-            { id: 'analytics', title: 'sidebar.analytics', icon: 'bi-graph-up', url: '#analytics' },
-            { id: 'reports', title: 'sidebar.reports', icon: 'bi-file-earmark-text', url: '#reports' }
-        ],
-        applications: [
-            { id: 'erp', title: 'sidebar.erp', icon: 'bi-building', url: '#erp' },
-            { id: 'mes', title: 'sidebar.mes', icon: 'bi-gear-wide-connected', url: '#mes' },
-            { id: 'qc', title: 'sidebar.qc', icon: 'bi-shield-check', url: '#qc' },
-            { id: 'inventory', title: 'sidebar.inventory', icon: 'bi-box', url: '#inventory' }
-        ],
-        support: [
-            { id: 'helpdesk', title: 'sidebar.helpdesk', icon: 'bi-headset', url: '#helpdesk' },
-            { id: 'documentation', title: 'sidebar.documentation', icon: 'bi-book', url: '#documentation' }
-        ]
-    };
-
-    // Notification Data
-    const notifications = [
-        {
-            id: 1,
-            title: 'System Maintenance Scheduled',
-            message: 'ERP system will be maintained from 22:00 today to 02:00 tomorrow',
-            time: '19:00 - 29/11/2024',
-            type: 'warning',
-            read: false,
-            icon: 'bi-exclamation-triangle'
-        },
-        {
-            id: 2,
-            title: 'Security Alert',
-            message: 'Multiple login attempts detected from unusual location',
-            time: '15:30 - 29/11/2024',
-            type: 'danger',
-            read: false,
-            icon: 'bi-shield-exclamation'
-        },
-        {
-            id: 3,
-            title: 'New Team Member',
-            message: 'Nguyen Van B has joined the IT Department',
-            time: '12:15 - 29/11/2024',
-            type: 'info',
-            read: true,
-            icon: 'bi-person-plus'
-        }
-    ];
-
-    // Announcement Data
-    const announcements = {
-        vi: [
-            '🎉 Chào mừng đến với IT Portal - Cổng thông tin hệ thống nội bộ',
-            '📢 Bảo trì hệ thống ERP dự kiến từ 22:00 đêm nay đến 02:00 sáng mai',
-            '🚀 Ứng dụng QC Mobile mới đã có sẵn trên App Store và Google Play',
-            '💡 Khóa học Excel nâng cao sẽ bắt đầu vào tuần tới - Đăng ký ngay!',
-            '🔐 Chính sách bảo mật mới: Tất cả tài khoản phải kích hoạt 2FA trước 31/12'
-        ],
-        en: [
-            '🎉 Welcome to IT Portal - Your gateway to internal systems',
-            '📢 ERP system maintenance scheduled from 22:00 tonight to 02:00 tomorrow',
-            '🚀 New QC Mobile app is now available on App Store and Google Play',
-            '💡 Advanced Excel course starting next week - Register now!',
-            '🔐 New security policy: All accounts must enable 2FA before 31/12'
-        ]
-    };
-
-    // Initialize Application
+    console.log('IT Portal initialized');
+    
+    // Initialize the application
     initializeApp();
-
-    function initializeApp() {
-        showLoadingScreen();
-        
-        // Initialize core features
-        initializeTheme();
-        initializeLanguage();
-        initializeNavigation();
-        initializeEventListeners();
-        initializeKeyboardShortcuts();
-        
-        // Render components
-        renderNotifications();
-        renderApplications();
-        startAnnouncementRotation();
-        
-        // Initialize animations
-        if (typeof AOS !== 'undefined') {
-            AOS.init({
-                duration: 800,
-                easing: 'ease-out-cubic',
-                once: true,
-                offset: 100
-            });
-        }
-        
-        // Hide loading screen
-        setTimeout(() => {
-            hideLoadingScreen();
-            AppState.isLoading = false;
-        }, 1500);
+    
+    // Setup event listeners
+    setupEventListeners();
+    
+    // Load initial data
+    loadApplications();
+    loadNotifications();
+    
+    // Start announcement rotation
+    startAnnouncementRotation();
+    
+    // Initialize AOS animations
+    if (typeof AOS !== 'undefined') {
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
     }
-
-    // Loading Screen Management
-    function showLoadingScreen() {
-        const loadingScreen = document.getElementById('loadingScreen');
-        if (loadingScreen) {
-            loadingScreen.classList.remove('hidden');
-        }
-    }
-
-    function hideLoadingScreen() {
+    
+    // Hide loading screen
+    setTimeout(() => {
         const loadingScreen = document.getElementById('loadingScreen');
         if (loadingScreen) {
             loadingScreen.classList.add('hidden');
@@ -252,678 +211,570 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadingScreen.style.display = 'none';
             }, 500);
         }
-    }
+    }, 1500);
+});
 
-    // Theme Management
-    function initializeTheme() {
-        document.documentElement.setAttribute('data-theme', AppState.currentTheme);
-        updateThemeIcon();
-    }
+// Initialize Application
+function initializeApp() {
+    console.log('Initializing IT Portal...');
+    
+    // Apply saved theme
+    applyTheme(currentTheme);
+    
+    // Apply saved language
+    applyLanguage(currentLanguage);
+    
+    // Apply saved view mode
+    applyViewMode(currentViewMode);
+    
+    // Update UI elements
+    updateLanguageToggle();
+    updateThemeToggle();
+    updateViewModeToggle();
+    
+    console.log('IT Portal initialization complete');
+}
 
-    function toggleTheme() {
-        AppState.currentTheme = AppState.currentTheme === 'light' ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', AppState.currentTheme);
-        localStorage.setItem('theme', AppState.currentTheme);
-        updateThemeIcon();
-        
-        showToast(
-            `${AppState.currentTheme === 'dark' ? 'Dark' : 'Light'} mode activated`,
-            'info'
-        );
+// Setup Event Listeners
+function setupEventListeners() {
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
     }
-
-    function updateThemeIcon() {
-        const themeIcon = document.getElementById('themeIcon');
-        if (themeIcon) {
-            themeIcon.className = AppState.currentTheme === 'light' 
-                ? 'bi bi-moon-stars-fill' 
-                : 'bi bi-sun-fill';
-        }
+    
+    // Language toggle
+    const languageToggle = document.getElementById('languageToggle');
+    if (languageToggle) {
+        languageToggle.addEventListener('click', toggleLanguage);
     }
-
-    // Language Management
-    function initializeLanguage() {
-        document.documentElement.lang = AppState.currentLanguage;
-        updateLanguageButton();
-        translatePage();
-    }
-
-    function toggleLanguage() {
-        AppState.currentLanguage = AppState.currentLanguage === 'vi' ? 'en' : 'vi';
-        document.documentElement.lang = AppState.currentLanguage;
-        localStorage.setItem('language', AppState.currentLanguage);
-        updateLanguageButton();
-        translatePage();
-        
-        showToast(
-            `Language switched to ${AppState.currentLanguage === 'vi' ? 'Vietnamese' : 'English'}`,
-            'info'
-        );
-    }
-
-    function updateLanguageButton() {
-        const languageText = document.getElementById('languageText');
-        if (languageText) {
-            languageText.textContent = AppState.currentLanguage.toUpperCase();
-        }
-    }
-
-    function translatePage() {
-        const elements = document.querySelectorAll('[data-translate]');
-        elements.forEach(element => {
-            const key = element.getAttribute('data-translate');
-            const translation = translations[AppState.currentLanguage]?.[key];
-            if (translation) {
-                element.textContent = translation;
-            }
+    
+    // View mode toggle
+    const viewModeButtons = document.querySelectorAll('#viewModeToggle button');
+    viewModeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const viewMode = this.dataset.view;
+            setViewMode(viewMode);
         });
-
-        // Update placeholders
-        const placeholderElements = document.querySelectorAll('[data-translate-placeholder]');
-        placeholderElements.forEach(element => {
-            const key = element.getAttribute('data-translate-placeholder');
-            const translation = translations[AppState.currentLanguage]?.[key];
-            if (translation) {
-                element.placeholder = translation;
-            }
+    });
+    
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const mobileSearchInput = document.getElementById('mobileSearchInput');
+    const mobileSearchToggle = document.getElementById('mobileSearchToggle');
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', handleSearch);
+        searchInput.addEventListener('focus', showSearchResults);
+        searchInput.addEventListener('blur', hideSearchResults);
+    }
+    
+    if (mobileSearchInput) {
+        mobileSearchInput.addEventListener('input', handleSearch);
+    }
+    
+    if (mobileSearchToggle) {
+        mobileSearchToggle.addEventListener('click', toggleMobileSearch);
+    }
+    
+    // Category tabs
+    const categoryTabs = document.querySelectorAll('#categoryTabs button');
+    categoryTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const category = this.dataset.category;
+            setActiveCategory(category);
         });
-
-        // Re-render dynamic content
-        renderNavigationItems();
-        startAnnouncementRotation();
-    }
-
-    // Navigation Management
-    function initializeNavigation() {
-        renderNavigationItems();
-        initializeCategoryTabs();
-        initializeViewModeToggle();
-    }
-
-    function renderNavigationItems() {
-        Object.keys(navigationData).forEach(section => {
-            const container = document.getElementById(`${section}Navigation`);
-            if (!container) return;
-
-            container.innerHTML = '';
+    });
+    
+    // Sidebar navigation
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (this.classList.contains('dropdown-toggle')) {
+                return; // Let Bootstrap handle dropdown toggles
+            }
             
-            navigationData[section].forEach(item => {
-                const navItem = document.createElement('a');
-                navItem.href = item.url;
-                navItem.className = `nav-link ${item.active ? 'active' : ''}`;
-                navItem.onclick = (e) => {
-                    e.preventDefault();
-                    handleNavigation(item.id, item.title);
-                };
+            // Update active state
+            navLinks.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+    
+    // Notification management
+    const markAllRead = document.getElementById('markAllRead');
+    if (markAllRead) {
+        markAllRead.addEventListener('click', markAllNotificationsRead);
+    }
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', handleKeyboardShortcuts);
+    
+    // Window resize handler
+    window.addEventListener('resize', handleWindowResize);
+    
+    // Click outside to close search results
+    document.addEventListener('click', function(e) {
+        const searchContainer = document.querySelector('.search-container');
+        if (searchContainer && !searchContainer.contains(e.target)) {
+            hideSearchResults();
+        }
+    });
+}
 
-                const icon = document.createElement('i');
-                icon.className = `${item.icon} me-2`;
+// Theme Management
+function toggleTheme() {
+    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+    applyTheme(currentTheme);
+    localStorage.setItem('theme', currentTheme);
+    updateThemeToggle();
+    showToast(`Switched to ${currentTheme} theme`, 'info');
+}
 
-                const text = document.createElement('span');
-                text.textContent = translations[AppState.currentLanguage][item.title] || item.title;
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    
+    // Update body class for additional styling
+    if (theme === 'dark') {
+        document.body.classList.add('dark-theme');
+    } else {
+        document.body.classList.remove('dark-theme');
+    }
+}
 
-                navItem.appendChild(icon);
-                navItem.appendChild(text);
-                container.appendChild(navItem);
+function updateThemeToggle() {
+    const themeIcon = document.getElementById('themeIcon');
+    if (themeIcon) {
+        if (currentTheme === 'dark') {
+            themeIcon.className = 'bi bi-moon-fill';
+        } else {
+            themeIcon.className = 'bi bi-sun-fill';
+        }
+    }
+}
+
+// Language Management
+function toggleLanguage() {
+    currentLanguage = currentLanguage === 'vi' ? 'en' : 'vi';
+    applyLanguage(currentLanguage);
+    localStorage.setItem('language', currentLanguage);
+    updateLanguageToggle();
+    showToast(`Language changed to ${currentLanguage.toUpperCase()}`, 'info');
+}
+
+function applyLanguage(language) {
+    const elements = document.querySelectorAll('[data-translate]');
+    elements.forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[language] && translations[language][key]) {
+            element.textContent = translations[language][key];
+        }
+    });
+    
+    // Update placeholders
+    const placeholderElements = document.querySelectorAll('[data-translate-placeholder]');
+    placeholderElements.forEach(element => {
+        const key = element.getAttribute('data-translate-placeholder');
+        if (translations[language] && translations[language][key]) {
+            element.setAttribute('placeholder', translations[language][key]);
+        }
+    });
+}
+
+function updateLanguageToggle() {
+    const languageText = document.getElementById('languageText');
+    if (languageText) {
+        languageText.textContent = currentLanguage.toUpperCase();
+    }
+}
+
+// View Mode Management
+function setViewMode(mode) {
+    currentViewMode = mode;
+    applyViewMode(mode);
+    localStorage.setItem('viewMode', mode);
+    updateViewModeToggle();
+    loadApplications(); // Reload applications with new view mode
+}
+
+function applyViewMode(mode) {
+    // This will be handled in loadApplications function
+    console.log(`View mode set to: ${mode}`);
+}
+
+function updateViewModeToggle() {
+    const buttons = document.querySelectorAll('#viewModeToggle button');
+    buttons.forEach(button => {
+        button.classList.remove('active');
+        if (button.dataset.view === currentViewMode) {
+            button.classList.add('active');
+        }
+    });
+}
+
+// Search Functionality
+function handleSearch(e) {
+    const query = e.target.value.toLowerCase();
+    const results = applications.filter(app => 
+        app.name.toLowerCase().includes(query) || 
+        app.description.toLowerCase().includes(query)
+    );
+    
+    if (query.length > 0) {
+        displaySearchResults(results);
+    } else {
+        hideSearchResults();
+    }
+}
+
+function displaySearchResults(results) {
+    const searchResults = document.getElementById('searchResults');
+    if (!searchResults) return;
+    
+    searchResults.innerHTML = '';
+    
+    if (results.length === 0) {
+        searchResults.innerHTML = '<div class="p-3 text-muted">No applications found</div>';
+    } else {
+        results.slice(0, 5).forEach(app => {
+            const resultItem = document.createElement('div');
+            resultItem.className = 'search-result-item p-3 d-flex align-items-center';
+            resultItem.innerHTML = `
+                <i class="bi ${app.icon} text-${app.color} me-3"></i>
+                <div>
+                    <div class="fw-semibold">${app.name}</div>
+                    <small class="text-muted">${app.description}</small>
+                </div>
+            `;
+            
+            resultItem.addEventListener('click', () => {
+                window.open(app.url, '_blank');
+                hideSearchResults();
             });
+            
+            searchResults.appendChild(resultItem);
         });
     }
+    
+    searchResults.classList.add('show');
+}
 
-    function handleNavigation(id, titleKey) {
-        // Update active states
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('active');
+function showSearchResults() {
+    const searchResults = document.getElementById('searchResults');
+    if (searchResults && searchResults.children.length > 0) {
+        searchResults.classList.add('show');
+    }
+}
+
+function hideSearchResults() {
+    const searchResults = document.getElementById('searchResults');
+    if (searchResults) {
+        searchResults.classList.remove('show');
+    }
+}
+
+function toggleMobileSearch() {
+    const container = document.getElementById('mobileSearchContainer');
+    if (container) {
+        const isVisible = container.style.display !== 'none';
+        container.style.display = isVisible ? 'none' : 'block';
+        
+        if (!isVisible) {
+            const input = document.getElementById('mobileSearchInput');
+            if (input) {
+                setTimeout(() => input.focus(), 100);
+            }
+        }
+    }
+}
+
+// Category Management
+function setActiveCategory(category) {
+    currentCategory = category;
+    
+    // Update tab active state
+    const tabs = document.querySelectorAll('#categoryTabs button');
+    tabs.forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.dataset.category === category) {
+            tab.classList.add('active');
+        }
+    });
+    
+    // Reload applications with filter
+    loadApplications();
+}
+
+// Application Management
+function loadApplications() {
+    const container = document.getElementById('applicationsContainer');
+    if (!container) return;
+    
+    // Filter applications by category
+    let filteredApps = applications;
+    if (currentCategory !== 'all') {
+        filteredApps = applications.filter(app => 
+            app.category.includes(currentCategory)
+        );
+    }
+    
+    if (currentViewMode === 'grid') {
+        renderGridView(container, filteredApps);
+    } else {
+        renderListView(container, filteredApps);
+    }
+}
+
+function renderGridView(container, apps) {
+    container.innerHTML = `
+        <div class="row g-4">
+            ${apps.map(app => `
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card app-card h-100 position-relative" data-aos="zoom-in" data-aos-delay="${apps.indexOf(app) * 100}">
+                        <button class="btn favorite-btn ${favorites.includes(app.id) ? 'favorited' : ''}" onclick="toggleFavorite(${app.id})">
+                            <i class="bi ${favorites.includes(app.id) ? 'bi-star-fill' : 'bi-star'}"></i>
+                        </button>
+                        <div class="card-body text-center">
+                            <div class="app-icon bg-${app.color} bg-opacity-10 text-${app.color} mb-3">
+                                <i class="bi ${app.icon}"></i>
+                            </div>
+                            <h5 class="card-title">${app.name}</h5>
+                            <p class="card-text text-muted">${app.description}</p>
+                            <a href="${app.url}" class="btn btn-${app.color} btn-sm">
+                                <i class="bi bi-box-arrow-up-right me-1"></i>
+                                Open
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function renderListView(container, apps) {
+    container.innerHTML = `
+        <div class="list-group">
+            ${apps.map(app => `
+                <div class="list-group-item app-card-list d-flex align-items-center" data-aos="fade-up" data-aos-delay="${apps.indexOf(app) * 50}">
+                    <div class="app-icon bg-${app.color} bg-opacity-10 text-${app.color} me-3">
+                        <i class="bi ${app.icon}"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1">${app.name}</h6>
+                        <p class="mb-0 text-muted small">${app.description}</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn btn-link favorite-btn p-1 ${favorites.includes(app.id) ? 'favorited' : ''}" onclick="toggleFavorite(${app.id})">
+                            <i class="bi ${favorites.includes(app.id) ? 'bi-star-fill' : 'bi-star'}"></i>
+                        </button>
+                        <a href="${app.url}" class="btn btn-${app.color} btn-sm">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                        </a>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+// Favorites Management
+function toggleFavorite(appId) {
+    const index = favorites.indexOf(appId);
+    if (index > -1) {
+        favorites.splice(index, 1);
+        showToast('Removed from favorites', 'info');
+    } else {
+        favorites.push(appId);
+        showToast('Added to favorites', 'success');
+    }
+    
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    loadApplications(); // Reload to update star icons
+}
+
+// Notification Management
+function loadNotifications() {
+    notifications = [...notificationData];
+    renderNotifications();
+    updateNotificationBadge();
+}
+
+function renderNotifications() {
+    const container = document.getElementById('notificationList');
+    if (!container) return;
+    
+    container.innerHTML = notifications.map(notification => `
+        <div class="notification-item ${notification.unread ? 'unread' : ''}" data-id="${notification.id}">
+            <div class="d-flex align-items-start">
+                <div class="flex-grow-1">
+                    <h6 class="mb-1">${notification.title}</h6>
+                    <p class="mb-1 small">${notification.message}</p>
+                    <small class="text-muted">${notification.time}</small>
+                </div>
+                <div class="text-${notification.type}">
+                    <i class="bi bi-${getNotificationIcon(notification.type)}"></i>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function getNotificationIcon(type) {
+    switch (type) {
+        case 'warning': return 'exclamation-triangle';
+        case 'danger': return 'exclamation-circle';
+        case 'info': return 'info-circle';
+        case 'success': return 'check-circle';
+        default: return 'bell';
+    }
+}
+
+function markAllNotificationsRead() {
+    notifications.forEach(notification => {
+        notification.unread = false;
+    });
+    
+    renderNotifications();
+    updateNotificationBadge();
+    showToast('All notifications marked as read', 'success');
+}
+
+function updateNotificationBadge() {
+    const badge = document.querySelector('.notification-badge');
+    const unreadCount = notifications.filter(n => n.unread).length;
+    
+    if (badge) {
+        badge.textContent = unreadCount;
+        badge.style.display = unreadCount > 0 ? 'block' : 'none';
+    }
+}
+
+// Announcement Management
+function startAnnouncementRotation() {
+    const announcementText = document.getElementById('announcementText');
+    if (!announcementText) return;
+    
+    const messages = announcements[currentLanguage];
+    let currentIndex = 0;
+    
+    function rotateAnnouncement() {
+        announcementText.style.opacity = '0';
+        
+        setTimeout(() => {
+            announcementText.textContent = messages[currentIndex];
+            announcementText.style.opacity = '1';
+            currentIndex = (currentIndex + 1) % messages.length;
+        }, 500);
+    }
+    
+    // Initial announcement
+    announcementText.textContent = messages[0];
+    
+    // Rotate every 10 seconds
+    setInterval(rotateAnnouncement, 10000);
+}
+
+// Keyboard Shortcuts
+function handleKeyboardShortcuts(e) {
+    // Ctrl + K for search
+    if (e.ctrlKey && e.key === 'k') {
+        e.preventDefault();
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.focus();
+        }
+    }
+    
+    // Ctrl + B for sidebar toggle (mobile)
+    if (e.ctrlKey && e.key === 'b') {
+        e.preventDefault();
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar && window.innerWidth < 992) {
+            const bsOffcanvas = new bootstrap.Offcanvas(sidebar);
+            bsOffcanvas.toggle();
+        }
+    }
+    
+    // Ctrl + / for shortcuts modal
+    if (e.ctrlKey && e.key === '/') {
+        e.preventDefault();
+        const shortcutsModal = new bootstrap.Modal(document.getElementById('shortcutsModal'));
+        shortcutsModal.show();
+    }
+    
+    // Escape to close modals and search
+    if (e.key === 'Escape') {
+        hideSearchResults();
+        // Close any open Bootstrap modals
+        const modals = document.querySelectorAll('.modal.show');
+        modals.forEach(modal => {
+            const bsModal = bootstrap.Modal.getInstance(modal);
+            if (bsModal) {
+                bsModal.hide();
+            }
         });
-        
-        event.target.closest('.nav-link').classList.add('active');
-        
-        const title = translations[AppState.currentLanguage][titleKey] || titleKey;
-        showToast(`Navigating to ${title}...`, 'info');
-        
-        // Close sidebar on mobile
-        if (window.innerWidth < 992) {
-            const sidebar = document.getElementById('sidebar');
+    }
+}
+
+// Utility Functions
+function showToast(message, type = 'info') {
+    const toastContainer = document.getElementById('toastContainer');
+    if (!toastContainer) return;
+    
+    const toastId = 'toast-' + Date.now();
+    const toastHTML = `
+        <div id="${toastId}" class="toast align-items-center text-white bg-${type} border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    ${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `;
+    
+    toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+    
+    const toastElement = document.getElementById(toastId);
+    const toast = new bootstrap.Toast(toastElement, {
+        autohide: true,
+        delay: 3000
+    });
+    
+    toast.show();
+    
+    // Remove from DOM after hiding
+    toastElement.addEventListener('hidden.bs.toast', () => {
+        toastElement.remove();
+    });
+}
+
+function handleWindowResize() {
+    // Handle responsive behavior
+    const sidebar = document.getElementById('sidebar');
+    if (window.innerWidth >= 992) {
+        // Desktop - ensure sidebar is shown
+        if (sidebar) {
             const bsOffcanvas = bootstrap.Offcanvas.getInstance(sidebar);
             if (bsOffcanvas) {
                 bsOffcanvas.hide();
             }
         }
     }
-
-    // Category Tabs Management
-    function initializeCategoryTabs() {
-        const categoryTabs = document.querySelectorAll('#categoryTabs .nav-link');
-        categoryTabs.forEach(tab => {
-            tab.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Update active states
-                categoryTabs.forEach(t => {
-                    t.classList.remove('active');
-                    const badge = t.querySelector('.badge');
-                    if (badge) {
-                        badge.classList.remove('bg-primary');
-                        badge.classList.add('bg-secondary');
-                    }
-                });
-
-                this.classList.add('active');
-                const badge = this.querySelector('.badge');
-                if (badge) {
-                    badge.classList.remove('bg-secondary');
-                    badge.classList.add('bg-primary');
-                }
-
-                AppState.currentCategory = this.getAttribute('data-category');
-                renderApplications();
-            });
-        });
-    }
-
-    // View Mode Management
-    function initializeViewModeToggle() {
-        const viewModeButtons = document.querySelectorAll('#viewModeToggle .btn');
-        viewModeButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                viewModeButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                
-                AppState.viewMode = this.getAttribute('data-view');
-                localStorage.setItem('viewMode', AppState.viewMode);
-                renderApplications();
-            });
-        });
-
-        // Set initial state
-        const currentViewButton = document.querySelector(`#viewModeToggle [data-view="${AppState.viewMode}"]`);
-        if (currentViewButton) {
-            viewModeButtons.forEach(btn => btn.classList.remove('active'));
-            currentViewButton.classList.add('active');
-        }
-    }
-
-    // Application Management
-    function renderApplications() {
-        const container = document.getElementById('applicationsContainer');
-        if (!container) return;
-
-        const filteredApps = AppState.currentCategory === 'all' 
-            ? applications 
-            : applications.filter(app => app.category === AppState.currentCategory);
-
-        container.innerHTML = '';
-
-        if (AppState.viewMode === 'grid') {
-            renderGridView(container, filteredApps);
-        } else {
-            renderListView(container, filteredApps);
-        }
-    }
-
-    function renderGridView(container, apps) {
-        const row = document.createElement('div');
-        row.className = 'row g-3';
-
-        apps.forEach((app, index) => {
-            const col = document.createElement('div');
-            col.className = 'col-lg-3 col-md-4 col-sm-6';
-            col.setAttribute('data-aos', 'fade-up');
-            col.setAttribute('data-aos-delay', `${index * 50}`);
-
-            const card = createAppCard(app);
-            col.appendChild(card);
-            row.appendChild(col);
-        });
-
-        container.appendChild(row);
-    }
-
-    function renderListView(container, apps) {
-        const list = document.createElement('div');
-        list.className = 'list-group list-group-flush';
-
-        apps.forEach((app, index) => {
-            const item = document.createElement('div');
-            item.className = 'list-group-item app-card-list glass-card';
-            item.setAttribute('data-aos', 'fade-right');
-            item.setAttribute('data-aos-delay', `${index * 30}`);
-            
-            item.innerHTML = `
-                <div class="d-flex align-items-center">
-                    <div class="app-icon me-3">
-                        <i class="bi ${app.icon} text-${app.color}"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <h6 class="mb-1">${app.name}</h6>
-                        <p class="text-muted mb-0 small">${app.description}</p>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <button class="btn btn-sm favorite-btn ${AppState.favorites.includes(app.id) ? 'favorited' : ''}" 
-                                onclick="toggleFavorite(${app.id})" title="Add to favorites">
-                            <i class="bi ${AppState.favorites.includes(app.id) ? 'bi-star-fill' : 'bi-star'}"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-primary" onclick="openApplication(${app.id})">
-                            <i class="bi bi-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-            `;
-
-            list.appendChild(item);
-        });
-
-        container.appendChild(list);
-    }
-
-    function createAppCard(app) {
-        const card = document.createElement('div');
-        card.className = 'card glass-card app-card h-100';
-        card.onclick = () => openApplication(app.id);
-
-        card.innerHTML = `
-            <button class="btn favorite-btn ${AppState.favorites.includes(app.id) ? 'favorited' : ''}" 
-                    onclick="event.stopPropagation(); toggleFavorite(${app.id})" title="Add to favorites">
-                <i class="bi ${AppState.favorites.includes(app.id) ? 'bi-star-fill' : 'bi-star'}"></i>
-            </button>
-            <div class="card-body">
-                <div class="app-icon">
-                    <i class="bi ${app.icon} text-${app.color}"></i>
-                </div>
-                <h6 class="card-title">${app.name}</h6>
-                <p class="card-text text-muted small">${app.description}</p>
-            </div>
-        `;
-
-        return card;
-    }
-
-    // Application Actions
-    window.openApplication = function(appId) {
-        const app = applications.find(a => a.id === appId);
-        if (!app) return;
-
-        if (app.url.startsWith('http')) {
-            window.open(app.url, '_blank');
-        } else {
-            showToast(`Opening ${app.name}...`, 'info');
-        }
-    };
-
-    window.toggleFavorite = function(appId) {
-        const index = AppState.favorites.indexOf(appId);
-        if (index > -1) {
-            AppState.favorites.splice(index, 1);
-            showToast('Removed from favorites', 'info');
-        } else {
-            AppState.favorites.push(appId);
-            showToast('Added to favorites', 'success');
-        }
-        
-        localStorage.setItem('favorites', JSON.stringify(AppState.favorites));
-        renderApplications();
-    };
-
-    // Search Management
-    function initializeSearch() {
-        const searchInput = document.getElementById('searchInput');
-        const mobileSearchInput = document.getElementById('mobileSearchInput');
-        const searchResults = document.getElementById('searchResults');
-        const mobileSearchToggle = document.getElementById('mobileSearchToggle');
-        const mobileSearchContainer = document.getElementById('mobileSearchContainer');
-
-        // Desktop search
-        if (searchInput && searchResults) {
-            searchInput.addEventListener('input', debounce((e) => {
-                handleSearch(e.target.value, searchResults);
-            }, 300));
-
-            searchInput.addEventListener('focus', () => {
-                if (searchInput.value.trim()) {
-                    searchResults.classList.add('show');
-                }
-            });
-
-            // Close search results when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-                    searchResults.classList.remove('show');
-                }
-            });
-        }
-
-        // Mobile search toggle
-        if (mobileSearchToggle && mobileSearchContainer) {
-            mobileSearchToggle.addEventListener('click', () => {
-                const isVisible = mobileSearchContainer.style.display !== 'none';
-                mobileSearchContainer.style.display = isVisible ? 'none' : 'block';
-                
-                if (!isVisible && mobileSearchInput) {
-                    setTimeout(() => mobileSearchInput.focus(), 100);
-                }
-            });
-        }
-
-        // Mobile search
-        if (mobileSearchInput) {
-            mobileSearchInput.addEventListener('input', debounce((e) => {
-                performMobileSearch(e.target.value);
-            }, 300));
-        }
-    }
-
-    function handleSearch(query, resultsContainer) {
-        if (!query || query.length < 2) {
-            resultsContainer.innerHTML = '';
-            resultsContainer.classList.remove('show');
-            return;
-        }
-
-        // Check cache first
-        if (AppState.searchCache.has(query)) {
-            displaySearchResults(AppState.searchCache.get(query), resultsContainer);
-            return;
-        }
-
-        const results = applications.filter(app => 
-            app.name.toLowerCase().includes(query.toLowerCase()) ||
-            app.description.toLowerCase().includes(query.toLowerCase()) ||
-            app.category.toLowerCase().includes(query.toLowerCase())
-        );
-
-        // Cache results
-        AppState.searchCache.set(query, results);
-        displaySearchResults(results, resultsContainer);
-    }
-
-    function displaySearchResults(results, resultsContainer) {
-        resultsContainer.innerHTML = '';
-
-        if (results.length === 0) {
-            resultsContainer.innerHTML = `
-                <div class="p-3 text-center">
-                    <i class="bi bi-search mb-2 text-muted fs-4 d-block"></i>
-                    <p class="mb-0 text-muted">No applications found</p>
-                </div>
-            `;
-            resultsContainer.classList.add('show');
-            return;
-        }
-
-        results.slice(0, 6).forEach(app => {
-            const resultItem = document.createElement('div');
-            resultItem.className = 'search-result-item';
-            resultItem.innerHTML = `
-                <div class="d-flex align-items-center">
-                    <div class="app-icon me-3" style="width: 40px; height: 40px;">
-                        <i class="bi ${app.icon} text-${app.color}"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <h6 class="mb-1">${app.name}</h6>
-                        <small class="text-muted">${app.description}</small>
-                    </div>
-                    <i class="bi bi-arrow-right text-muted"></i>
-                </div>
-            `;
-
-            resultItem.addEventListener('click', () => {
-                openApplication(app.id);
-                resultsContainer.classList.remove('show');
-                document.getElementById('searchInput').value = '';
-            });
-
-            resultsContainer.appendChild(resultItem);
-        });
-
-        if (results.length > 6) {
-            const moreResults = document.createElement('div');
-            moreResults.className = 'p-2 text-center border-top';
-            moreResults.innerHTML = `<small class="text-muted">Showing 6 of ${results.length} results</small>`;
-            resultsContainer.appendChild(moreResults);
-        }
-
-        resultsContainer.classList.add('show');
-    }
-
-    function performMobileSearch(query) {
-        if (!query || query.length < 2) return;
-
-        const results = applications.filter(app => 
-            app.name.toLowerCase().includes(query.toLowerCase()) ||
-            app.description.toLowerCase().includes(query.toLowerCase())
-        );
-
-        showToast(`Found ${results.length} applications`, 'info');
-    }
-
-    // Notification Management
-    function renderNotifications() {
-        const notificationList = document.getElementById('notificationList');
-        const notificationBadge = document.querySelector('.notification-badge');
-        
-        if (!notificationList) return;
-
-        const unreadCount = notifications.filter(n => !n.read).length;
-        
-        if (notificationBadge) {
-            notificationBadge.textContent = unreadCount;
-            notificationBadge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
-        }
-
-        notificationList.innerHTML = '';
-        
-        notifications.forEach(notification => {
-            const item = document.createElement('div');
-            item.className = `notification-item ${notification.read ? '' : 'unread'}`;
-            item.onclick = () => markNotificationAsRead(notification.id);
-
-            item.innerHTML = `
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <h6 class="mb-0 fw-semibold">${notification.title}</h6>
-                    <small class="text-${notification.type}">
-                        <i class="bi ${notification.icon}"></i>
-                    </small>
-                </div>
-                <p class="mb-1 text-muted small">${notification.message}</p>
-                <small class="text-muted">${notification.time}</small>
-            `;
-
-            notificationList.appendChild(item);
-        });
-    }
-
-    function markNotificationAsRead(id) {
-        const notification = notifications.find(n => n.id === id);
-        if (notification && !notification.read) {
-            notification.read = true;
-            renderNotifications();
-            showToast('Notification marked as read', 'success');
-        }
-    }
-
-    function markAllNotificationsAsRead() {
-        notifications.forEach(notification => {
-            notification.read = true;
-        });
-        renderNotifications();
-        showToast('All notifications marked as read', 'success');
-    }
-
-    // Announcement Management
-    function startAnnouncementRotation() {
-        let currentIndex = 0;
-        const announcementElement = document.getElementById('announcementText');
-        
-        if (!announcementElement) return;
-
-        const announceList = announcements[AppState.currentLanguage];
-        
-        // Clear existing interval
-        if (window.announcementInterval) {
-            clearInterval(window.announcementInterval);
-        }
-
-        // Set initial announcement
-        announcementElement.textContent = announceList[currentIndex];
-
-        // Rotate announcements
-        window.announcementInterval = setInterval(() => {
-            currentIndex = (currentIndex + 1) % announceList.length;
-            
-            // Fade out
-            announcementElement.style.opacity = '0';
-            
-            setTimeout(() => {
-                announcementElement.textContent = announceList[currentIndex];
-                announcementElement.style.opacity = '1';
-            }, 300);
-        }, 5000);
-    }
-
-    // Event Listeners
-    function initializeEventListeners() {
-        // Theme toggle
-        const themeToggle = document.getElementById('themeToggle');
-        if (themeToggle) {
-            themeToggle.addEventListener('click', toggleTheme);
-        }
-
-        // Language toggle
-        const languageToggle = document.getElementById('languageToggle');
-        if (languageToggle) {
-            languageToggle.addEventListener('click', toggleLanguage);
-        }
-
-        // Mark all notifications as read
-        const markAllRead = document.getElementById('markAllRead');
-        if (markAllRead) {
-            markAllRead.addEventListener('click', (e) => {
-                e.stopPropagation();
-                markAllNotificationsAsRead();
-            });
-        }
-
-        // Initialize search
-        initializeSearch();
-
-        // Initialize tooltips
-        const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        tooltips.forEach(tooltip => {
-            new bootstrap.Tooltip(tooltip);
-        });
-
-        // Window resize handler
-        window.addEventListener('resize', debounce(() => {
-            if (typeof AOS !== 'undefined') {
-                AOS.refresh();
-            }
-        }, 250));
-    }
-
-    // Keyboard Shortcuts
-    function initializeKeyboardShortcuts() {
-        document.addEventListener('keydown', (e) => {
-            // Ctrl+K or Cmd+K for search
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                e.preventDefault();
-                const searchInput = document.getElementById('searchInput');
-                if (searchInput) {
-                    searchInput.focus();
-                }
-            }
-
-            // Ctrl+B or Cmd+B for sidebar toggle
-            if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
-                e.preventDefault();
-                const sidebar = document.getElementById('sidebar');
-                const bsOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(sidebar);
-                bsOffcanvas.toggle();
-            }
-
-            // Ctrl+/ or Cmd+/ for shortcuts modal
-            if ((e.ctrlKey || e.metaKey) && e.key === '/') {
-                e.preventDefault();
-                const shortcutsModal = new bootstrap.Modal(document.getElementById('shortcutsModal'));
-                shortcutsModal.show();
-            }
-
-            // Escape to close modals and dropdowns
-            if (e.key === 'Escape') {
-                const searchResults = document.getElementById('searchResults');
-                if (searchResults) {
-                    searchResults.classList.remove('show');
-                }
-            }
-        });
-    }
-
-    // Toast Notification System
-    function showToast(message, type = 'info', duration = 3000) {
-        const toastContainer = document.getElementById('toastContainer');
-        if (!toastContainer) return;
-
-        const toastId = 'toast-' + Date.now();
-        const toastElement = document.createElement('div');
-        toastElement.className = `toast align-items-center border-0 show`;
-        toastElement.id = toastId;
-        toastElement.setAttribute('role', 'alert');
-
-        const bgClass = {
-            'success': 'bg-success',
-            'warning': 'bg-warning',
-            'danger': 'bg-danger',
-            'info': 'bg-info'
-        }[type] || 'bg-info';
-
-        const iconClass = {
-            'success': 'bi-check-circle',
-            'warning': 'bi-exclamation-triangle',
-            'danger': 'bi-x-circle',
-            'info': 'bi-info-circle'
-        }[type] || 'bi-info-circle';
-
-        toastElement.classList.add(bgClass);
-        toastElement.innerHTML = `
-            <div class="d-flex">
-                <div class="toast-body text-white">
-                    <i class="bi ${iconClass} me-2"></i>
-                    ${message}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-            </div>
-        `;
-
-        toastContainer.appendChild(toastElement);
-
-        // Auto hide
-        setTimeout(() => {
-            const toast = document.getElementById(toastId);
-            if (toast) {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }
-        }, duration);
-    }
-
-    // Utility Functions
-    function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
-
-    // Global functions for window object
-    window.AppState = AppState;
-    window.showToast = showToast;
-    window.toggleTheme = toggleTheme;
-    window.toggleLanguage = toggleLanguage;
-
-    // Log initialization
-    console.log('🚀 IT Portal initialized successfully');
-    console.log('📊 Application State:', AppState);
-});
+}
+
+// Animation utilities
+function animateElement(element, animation) {
+    element.classList.add('animate__animated', `animate__${animation}`);
+    
+    element.addEventListener('animationend', () => {
+        element.classList.remove('animate__animated', `animate__${animation}`);
+    }, { once: true });
+}
+
+// Export functions for global access
+window.toggleFavorite = toggleFavorite;
+window.showToast = showToast;
+
+// Performance monitoring
+console.log('IT Portal script loaded successfully');

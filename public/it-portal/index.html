@@ -164,25 +164,202 @@
         </div>
         <div class="offcanvas-body p-0">
             <div class="sidebar-content">
-                <div class="nav-section">
-                    <small class="nav-header text-muted fw-semibold text-uppercase px-3 mb-2" data-translate="sidebar.main">Main</small>
-                    <nav class="nav flex-column px-2" id="mainNavigation">
-                        <!-- Navigation items populated by JS -->
-                    </nav>
+                <!-- Sidebar Header -->
+                <div class="p-4 border-bottom border-light">
+                    <div class="d-flex align-items-center">
+                        <div class="logo-container me-3">
+                            <div class="dental-logo">
+                                <i class="bi bi-pc-display-horizontal"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 text-gradient">IT Portal</h5>
+                            <small class="text-muted">Internal System</small>
+                        </div>
+                    </div>
                 </div>
-                
+
+                <!-- Main Navigation -->
                 <div class="nav-section">
-                    <small class="nav-header text-muted fw-semibold text-uppercase px-3 mb-2" data-translate="sidebar.applications">Applications</small>
-                    <nav class="nav flex-column px-2" id="appNavigation">
-                        <!-- App navigation populated by JS -->
+                    <small class="nav-header text-muted fw-semibold text-uppercase px-3 mb-2" data-translate="sidebar.main">Main Navigation</small>
+                    <nav class="nav flex-column px-2" id="mainNavigation">
+                        <a href="#" class="nav-link active" data-route="dashboard">
+                            <i class="bi bi-speedometer2"></i>
+                            <span data-translate="sidebar.dashboard">Dashboard</span>
+                        </a>
+                        
+                        <!-- IT Section -->
+                        <div class="nav-item dropdown-nav">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#itCollapse">
+                                <i class="bi bi-laptop text-blue-500"></i>
+                                <span data-translate="sidebar.it">IT</span>
+                                <i class="bi bi-chevron-down ms-auto"></i>
+                            </a>
+                            <div class="collapse" id="itCollapse">
+                                <div class="nav-submenu">
+                                    <a href="#" class="nav-link nav-link-sub">
+                                        <i class="bi bi-laptop"></i>
+                                        Software
+                                    </a>
+                                    <a href="#" class="nav-link nav-link-sub">
+                                        <i class="bi bi-globe"></i>
+                                        Web Page
+                                    </a>
+                                    <a href="#" class="nav-link nav-link-sub">
+                                        <i class="bi bi-file-text"></i>
+                                        Document
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Production Section -->
+                        <div class="nav-item dropdown-nav">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#productionCollapse">
+                                <i class="bi bi-building text-green-500"></i>
+                                <span data-translate="sidebar.production">Production</span>
+                                <i class="bi bi-chevron-down ms-auto"></i>
+                            </a>
+                            <div class="collapse" id="productionCollapse">
+                                <div class="nav-submenu">
+                                    <a href="#" class="nav-link nav-link-sub">
+                                        <i class="bi bi-gear"></i>
+                                        Manufacturing
+                                    </a>
+                                    <a href="#" class="nav-link nav-link-sub">
+                                        <i class="bi bi-wrench"></i>
+                                        Maintenance
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quality Section -->
+                        <div class="nav-item dropdown-nav">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#qualityCollapse">
+                                <i class="bi bi-bar-chart text-purple-500"></i>
+                                <span data-translate="sidebar.quality">Quality</span>
+                                <i class="bi bi-chevron-down ms-auto"></i>
+                            </a>
+                            <div class="collapse" id="qualityCollapse">
+                                <div class="nav-submenu">
+                                    <a href="#" class="nav-link nav-link-sub">
+                                        <i class="bi bi-check-circle"></i>
+                                        Quality Control
+                                    </a>
+                                    <a href="#" class="nav-link nav-link-sub">
+                                        <i class="bi bi-graph-up"></i>
+                                        Reports
+                                    </a>
+                                    <a href="#" class="nav-link nav-link-sub">
+                                        <i class="bi bi-analytics"></i>
+                                        Analytics
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- HR Section -->
+                        <div class="nav-item dropdown-nav">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#hrCollapse">
+                                <i class="bi bi-people text-orange-500"></i>
+                                <span data-translate="sidebar.hr">HR</span>
+                                <i class="bi bi-chevron-down ms-auto"></i>
+                            </a>
+                            <div class="collapse" id="hrCollapse">
+                                <div class="nav-submenu">
+                                    <a href="#" class="nav-link nav-link-sub">
+                                        <i class="bi bi-person-check"></i>
+                                        Employee Management
+                                    </a>
+                                    <a href="#" class="nav-link nav-link-sub">
+                                        <i class="bi bi-calendar"></i>
+                                        Schedule
+                                    </a>
+                                    <a href="#" class="nav-link nav-link-sub">
+                                        <i class="bi bi-currency-dollar"></i>
+                                        Payroll
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Inventory Section -->
+                        <div class="nav-item dropdown-nav">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#inventoryCollapse">
+                                <i class="bi bi-box text-indigo-500"></i>
+                                <span data-translate="sidebar.inventory">Inventory</span>
+                                <i class="bi bi-chevron-down ms-auto"></i>
+                            </a>
+                            <div class="collapse" id="inventoryCollapse">
+                                <div class="nav-submenu">
+                                    <a href="#" class="nav-link nav-link-sub">
+                                        <i class="bi bi-boxes"></i>
+                                        Stock Management
+                                    </a>
+                                    <a href="#" class="nav-link nav-link-sub">
+                                        <i class="bi bi-truck"></i>
+                                        Warehouse
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Purchase Section -->
+                        <div class="nav-item dropdown-nav">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#purchaseCollapse">
+                                <i class="bi bi-cart text-red-500"></i>
+                                <span data-translate="sidebar.purchase">Purchase</span>
+                                <i class="bi bi-chevron-down ms-auto"></i>
+                            </a>
+                            <div class="collapse" id="purchaseCollapse">
+                                <div class="nav-submenu">
+                                    <a href="#" class="nav-link nav-link-sub">
+                                        <i class="bi bi-bag"></i>
+                                        Purchase Orders
+                                    </a>
+                                    <a href="#" class="nav-link nav-link-sub">
+                                        <i class="bi bi-people"></i>
+                                        Vendors
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Component Library -->
+                        <a href="#" class="nav-link" data-route="library">
+                            <i class="bi bi-code-square text-cyan-500"></i>
+                            <span>Component Library</span>
+                        </a>
                     </nav>
                 </div>
 
+                <!-- Quick Actions -->
                 <div class="nav-section">
-                    <small class="nav-header text-muted fw-semibold text-uppercase px-3 mb-2" data-translate="sidebar.support">Support</small>
-                    <nav class="nav flex-column px-2" id="supportNavigation">
-                        <!-- Support navigation populated by JS -->
+                    <small class="nav-header text-muted fw-semibold text-uppercase px-3 mb-2" data-translate="sidebar.quickActions">Quick Actions</small>
+                    <nav class="nav flex-column px-2">
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-plus-circle text-success"></i>
+                            <span data-translate="sidebar.newRequest">New Request</span>
+                        </a>
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-question-circle text-info"></i>
+                            <span data-translate="sidebar.helpSupport">Help & Support</span>
+                        </a>
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-bug text-warning"></i>
+                            <span data-translate="sidebar.reportIssue">Report Issue</span>
+                        </a>
                     </nav>
+                </div>
+
+                <!-- Footer -->
+                <div class="sidebar-footer p-3 mt-auto">
+                    <div class="text-center">
+                        <small class="text-muted">© 2024 IT Portal</small>
+                        <br>
+                        <small class="text-muted">Version 2.1.0</small>
+                    </div>
                 </div>
             </div>
         </div>
