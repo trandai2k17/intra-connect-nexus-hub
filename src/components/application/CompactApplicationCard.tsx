@@ -53,14 +53,24 @@ export function CompactApplicationCard({
     }
   };
 
+  // Use custom app styling if available, otherwise fall back to defaults
+  const appStyle = app.appStyle || {
+    gradient: "from-blue-500 to-blue-600",
+    iconBg: "from-blue-500/10 to-blue-600/10",
+    iconColor: "text-blue-600"
+  };
+
   return (
     <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/90 backdrop-blur-sm">
       <CardContent className="p-4">
         <div className="flex items-start space-x-3">
-          {/* App Icon */}
+          {/* App Icon with custom styling */}
           <div className="relative">
-            <div className="p-2 bg-gradient-to-br from-blue-500/10 to-blue-600/10 rounded-lg group-hover:scale-110 transition-transform duration-200">
-              <Icon className="w-6 h-6 text-blue-600" />
+            <div className={cn(
+              "p-2 rounded-lg group-hover:scale-110 transition-transform duration-200 bg-gradient-to-br",
+              appStyle.iconBg
+            )}>
+              <Icon className={cn("w-6 h-6", appStyle.iconColor)} />
             </div>
             <div className={cn(
               "absolute -top-1 -right-1 w-3 h-3 rounded-full",
@@ -71,7 +81,11 @@ export function CompactApplicationCard({
           {/* App Info */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-1">
-              <h3 className="font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-200 truncate">
+              <h3 className={cn(
+                "font-semibold group-hover:transition-colors duration-200 truncate",
+                `group-hover:${appStyle.iconColor}`,
+                "text-gray-800"
+              )}>
                 {app.name}
               </h3>
               <button
@@ -95,7 +109,7 @@ export function CompactApplicationCard({
             <div className="flex items-center space-x-2 mb-3">
               {app.version && (
                 <Badge variant="outline" className="text-xs">
-                  v{app.version}
+                  {app.version}
                 </Badge>
               )}
               {app.isNew && (
@@ -111,10 +125,14 @@ export function CompactApplicationCard({
               </div>
             </div>
 
-            {/* Action Button */}
+            {/* Action Button with custom gradient */}
             <Button 
               size="sm"
-              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-sm"
+              className={cn(
+                "w-full text-white shadow-sm bg-gradient-to-r hover:shadow-md transition-all duration-200",
+                appStyle.gradient,
+                `hover:${appStyle.gradient.replace('from-', 'from-').replace('to-', 'to-').replace('-500', '-600').replace('-600', '-700')}`
+              )}
               onClick={() => {
                 if (app.url) {
                   window.open(app.url, '_blank');

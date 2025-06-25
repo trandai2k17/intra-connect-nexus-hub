@@ -11,7 +11,22 @@ import {
   BarChart3
 } from "lucide-react";
 
-export const navigationItems = [
+interface SubItem {
+  title: string;
+  url: string;
+  icon: any;
+  iconColor: string;
+}
+
+interface NavigationItem {
+  title: string;
+  url?: string;
+  icon: any;
+  iconColor: string;
+  subItems?: SubItem[];
+}
+
+export const navigationItems: NavigationItem[] = [
   {
     title: "Trang chủ",
     url: "/",
