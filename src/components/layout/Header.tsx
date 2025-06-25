@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Bell, User, Settings, LogOut, ChevronDown, LogIn, UserPlus } from "lucide-react";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,9 +33,15 @@ const announcements = {
 
 export function Header() {
   const { t, language } = useLanguage();
+  const { state } = useSidebar();
+  const isCollapsed = state === "collapsed";
   const [currentAnnouncement, setCurrentAnnouncement] = useState(0);
   const [showAnnouncement, setShowAnnouncement] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  // Calculate sidebar width for proper spacing
+  const sidebarWidth = isCollapsed ? "4rem" : "18rem";
+  const headerLeftMargin = isCollapsed ? "ml-16" : "ml-72";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -89,8 +95,8 @@ export function Header() {
             <SidebarTrigger className="lg:hidden p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-all duration-200 text-gray-700 dark:text-gray-300" />
           </div>
 
-          {/* Center - Running announcement with more space from left */}
-          <div className="flex-1 flex justify-center px-8 ml-16">
+          {/* Center - Running announcement with dynamic spacing based on sidebar */}
+          <div className={`flex-1 flex justify-center px-8 transition-all duration-300 ${headerLeftMargin}`}>
             <div className="max-w-2xl w-full">
               <div 
                 className={`overflow-hidden rounded-full px-6 py-3 border border-gray-200 dark:border-gray-700 transition-all duration-1000 ${
@@ -121,9 +127,9 @@ export function Header() {
             {/* Notifications */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="relative p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-all duration-200 group">
-                  <Bell className="w-6 h-6 text-gray-700 dark:text-gray-300 group-hover:text-gray-800 dark:group-hover:text-gray-200" />
-                  <Badge className="absolute -top-1 -right-1 w-6 h-6 p-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs flex items-center justify-center border-2 border-white dark:border-gray-800">
+                <button className="relative p-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/20 dark:hover:to-blue-800/20 rounded-xl transition-all duration-200 group">
+                  <Bell className="w-6 h-6 text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
+                  <Badge className="absolute -top-1 -right-1 w-6 h-6 p-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs flex items-center justify-center border-2 border-white dark:border-gray-800 shadow-lg">
                     3
                   </Badge>
                 </button>
@@ -133,7 +139,7 @@ export function Header() {
                   <h3 className="font-bold text-gray-800 dark:text-gray-200 text-lg">{t('header.notifications')}</h3>
                 </div>
                 <div className="max-h-64 overflow-y-auto">
-                  <DropdownMenuItem className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer rounded-xl m-2">
+                  <DropdownMenuItem className="p-6 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/20 dark:hover:to-blue-800/20 cursor-pointer rounded-xl m-2">
                     <div>
                       <p className="font-semibold text-sm text-gray-800 dark:text-gray-200">Cập nhật hệ thống ERP</p>
                       <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Hệ thống sẽ bảo trì từ 22:00 - 02:00</p>
@@ -147,35 +153,35 @@ export function Header() {
             {/* User menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center space-x-3 p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-all duration-200 group">
+                <button className="flex items-center space-x-3 p-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/20 dark:hover:to-blue-800/20 rounded-xl transition-all duration-200 group">
                   <Avatar className="w-10 h-10 border-2 border-gray-300 dark:border-gray-600">
                     <AvatarImage src="/api/placeholder/40/40" alt="User" />
-                    <AvatarFallback className="bg-gradient-to-br from-blue-400 to-blue-600 text-white font-bold">
+                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white font-bold">
                       NV
                     </AvatarFallback>
                   </Avatar>
                   <div className="hidden md:block text-left">
-                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-gray-100">Nguyễn Văn A</p>
+                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400">Nguyễn Văn A</p>
                     <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">IT Developer</p>
                   </div>
-                  <ChevronDown className="w-4 h-4 text-gray-600 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-gray-200" />
+                  <ChevronDown className="w-4 h-4 text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 z-50 rounded-2xl border-gray-200 dark:border-gray-700 shadow-xl bg-white/95 dark:bg-gray-800/95 backdrop-blur-20">
-                <DropdownMenuItem className="cursor-pointer p-4 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl m-1">
+                <DropdownMenuItem className="cursor-pointer p-4 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/20 dark:hover:to-blue-800/20 rounded-xl m-1">
                   <LogIn className="mr-3 h-5 w-5 text-gray-600 dark:text-gray-400" />
                   <span className="font-medium text-gray-700 dark:text-gray-300">{t('header.login')}</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer p-4 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl m-1">
+                <DropdownMenuItem className="cursor-pointer p-4 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/20 dark:hover:to-blue-800/20 rounded-xl m-1">
                   <UserPlus className="mr-3 h-5 w-5 text-gray-600 dark:text-gray-400" />
                   <span className="font-medium text-gray-700 dark:text-gray-300">{t('header.register')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="my-2 bg-gray-200 dark:bg-gray-700" />
-                <DropdownMenuItem className="cursor-pointer p-4 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl m-1">
+                <DropdownMenuItem className="cursor-pointer p-4 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/20 dark:hover:to-blue-800/20 rounded-xl m-1">
                   <User className="mr-3 h-5 w-5 text-gray-600 dark:text-gray-400" />
                   <span className="font-medium text-gray-700 dark:text-gray-300">{t('header.profile')}</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer p-4 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl m-1">
+                <DropdownMenuItem className="cursor-pointer p-4 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/20 dark:hover:to-blue-800/20 rounded-xl m-1">
                   <Settings className="mr-3 h-5 w-5 text-gray-600 dark:text-gray-400" />
                   <span className="font-medium text-gray-700 dark:text-gray-300">{t('header.settings')}</span>
                 </DropdownMenuItem>

@@ -68,8 +68,8 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
                 "flex items-center space-x-3 px-6 py-4 rounded-2xl font-semibold text-sm transition-all duration-300 whitespace-nowrap relative overflow-hidden group",
                 "hover:shadow-lg hover:scale-105 transform",
                 isActive 
-                  ? "bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 text-white shadow-xl shadow-blue-500/25 animate-brand-pulse" 
-                  : "text-gray-700 hover:bg-white/80 hover:text-blue-600 bg-white/60 backdrop-blur-sm border border-white/30"
+                  ? "bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white shadow-xl shadow-blue-500/25 animate-brand-pulse" 
+                  : "text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 hover:text-blue-600 bg-white/60 backdrop-blur-sm border border-white/30"
               )}
             >
               {/* Geometric decoration for active tab */}
