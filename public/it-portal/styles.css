@@ -29,7 +29,7 @@
 }
 
 /* Dark Theme Variables */
-[data-theme="dark"] {
+[data-bs-theme="dark"] {
     --glass-bg: rgba(15, 23, 42, 0.95);
     --glass-border: rgba(255, 255, 255, 0.1);
     --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -64,7 +64,7 @@ body {
     overflow-x: hidden;
 }
 
-[data-theme="dark"] body {
+[data-bs-theme="dark"] body {
     background: linear-gradient(135deg, 
         #0f172a 0%, 
         #1e293b 25%, 
@@ -248,7 +248,7 @@ body {
     background: rgba(255, 255, 255, 0.98);
 }
 
-[data-theme="dark"] .search-input:focus {
+[data-bs-theme="dark"] .search-input:focus {
     background: rgba(15, 23, 42, 0.98);
 }
 
@@ -558,7 +558,7 @@ body {
     transition: var(--transition);
 }
 
-[data-theme="dark"] .nav-pills .nav-link {
+[data-bs-theme="dark"] .nav-pills .nav-link {
     background: rgba(15, 23, 42, 0.8);
 }
 
@@ -583,7 +583,7 @@ body {
     transform: translateY(-2px);
 }
 
-[data-theme="dark"] .nav-pills .nav-link:hover {
+[data-bs-theme="dark"] .nav-pills .nav-link:hover {
     background: rgba(15, 23, 42, 0.9) !important;
 }
 
@@ -843,7 +843,7 @@ body {
     background: rgba(255, 255, 255, 0.9);
 }
 
-[data-theme="dark"] .form-control:focus {
+[data-bs-theme="dark"] .form-control:focus {
     background: rgba(15, 23, 42, 0.9);
 }
 
@@ -882,7 +882,7 @@ body {
     border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0 !important;
 }
 
-[data-theme="dark"] .card-header {
+[data-bs-theme="dark"] .card-header {
     background: rgba(15, 23, 42, 0.5);
 }
 
@@ -960,27 +960,27 @@ body {
 }
 
 /* Dark Mode Overrides */
-[data-theme="dark"] .text-muted {
+[data-bs-theme="dark"] .text-muted {
     color: var(--text-muted) !important;
 }
 
-[data-theme="dark"] .card-text {
+[data-bs-theme="dark"] .card-text {
     color: var(--text-secondary) !important;
 }
 
-[data-theme="dark"] .card-title {
+[data-bs-theme="dark"] .card-title {
     color: var(--text-primary) !important;
 }
 
-[data-theme="dark"] .carousel-caption {
+[data-bs-theme="dark"] .carousel-caption {
     background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
 }
 
-[data-theme="dark"] .nav-link {
+[data-bs-theme="dark"] .nav-link {
     color: var(--text-secondary);
 }
 
-[data-theme="dark"] .nav-link:hover {
+[data-bs-theme="dark"] .nav-link:hover {
     color: #60a5fa !important;
 }
 
@@ -1111,7 +1111,7 @@ body {
         --glass-border: rgba(0, 0, 0, 0.2);
     }
     
-    [data-theme="dark"] {
+    [data-bs-theme="dark"] {
         --glass-bg: rgba(0, 0, 0, 0.98);
         --glass-border: rgba(255, 255, 255, 0.2);
     }
