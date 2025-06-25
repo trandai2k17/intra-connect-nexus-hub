@@ -395,58 +395,45 @@ export function ApplicationGrid({ activeTab }: ApplicationGridProps) {
   };
 
   return (
-    <div className="space-y-8">
-      {/* Combined Applications and Web Pages Section */}
-      <div className="bg-gradient-to-br from-white via-white to-blue-50/20 rounded-3xl border border-white/40 p-8 shadow-xl">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h3 className="text-3xl font-bold text-gray-800 mb-2">Ứng Dụng & Phần Mềm</h3>
-            <p className="text-gray-600 text-lg">Truy cập các ứng dụng và trang web của công ty</p>
-          </div>
-          <div className="text-sm font-medium text-gray-600 px-4 py-2 rounded-full border border-gray-200 bg-white/80">
-            Cập nhật: {new Date().toLocaleDateString('vi-VN')}
-          </div>
-        </div>
-
-        <Tabs value={activeAppTab} onValueChange={setActiveAppTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-8 bg-blue-50/50 p-1 rounded-xl">
-            <TabsTrigger value="software" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-              <div className="flex items-center space-x-2">
-                <Package className="w-4 h-4" />
-                <span>Phần Mềm ({filteredApps.length})</span>
-              </div>
-            </TabsTrigger>
-            <TabsTrigger value="webpages" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-              <div className="flex items-center space-x-2">
-                <Globe className="w-4 h-4" />
-                <span>Trang Web ({companyWebPages.length})</span>
-              </div>
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="software" className="mt-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredApps.map((app) => {
-                const isFavorited = favorites.includes(app.id);
-                return renderAppCard(app, isFavorited);
-              })}
+    <div className="bg-gradient-to-br from-white via-white to-blue-50/20 rounded-3xl border border-white/40 p-8 shadow-xl">
+      <Tabs value={activeAppTab} onValueChange={setActiveAppTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-2 mb-8 bg-blue-50/50 p-1 rounded-xl">
+          <TabsTrigger value="software" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
+            <div className="flex items-center space-x-2">
+              <Package className="w-4 h-4" />
+              <span>Phần Mềm ({filteredApps.length})</span>
             </div>
-          </TabsContent>
-
-          <TabsContent value="webpages" className="mt-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {companyWebPages.map((page) => {
-                return renderAppCard({
-                  ...page,
-                  type: "web",
-                  isNew: false,
-                  departments: ["all"]
-                }, false);
-              })}
+          </TabsTrigger>
+          <TabsTrigger value="webpages" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
+            <div className="flex items-center space-x-2">
+              <Globe className="w-4 h-4" />
+              <span>Trang Web ({companyWebPages.length})</span>
             </div>
-          </TabsContent>
-        </Tabs>
-      </div>
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="software" className="mt-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredApps.map((app) => {
+              const isFavorited = favorites.includes(app.id);
+              return renderAppCard(app, isFavorited);
+            })}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="webpages" className="mt-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {companyWebPages.map((page) => {
+              return renderAppCard({
+                ...page,
+                type: "web",
+                isNew: false,
+                departments: ["all"]
+              }, false);
+            })}
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
