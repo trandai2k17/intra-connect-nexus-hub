@@ -1,6 +1,7 @@
 
 import { useSidebar } from "@/components/ui/sidebar";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { DentalLogo } from "./DentalLogo";
 
 export function SidebarHeader() {
   const { state } = useSidebar();
@@ -15,17 +16,13 @@ export function SidebarHeader() {
         <div className={`flex items-center transition-all duration-300 ${
           isCollapsed ? 'justify-center' : 'space-x-3'
         }`}>
-          {/* Logo container with proper background handling */}
-          <div className={`rounded-2xl flex items-center justify-center shadow-lg border border-white/30 bg-white dark:bg-transparent transition-all duration-300 ${
-            isCollapsed ? 'w-10 h-10 p-1' : 'w-12 h-12 p-1'
+          {/* Logo container */}
+          <div className={`rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 ${
+            isCollapsed ? 'w-10 h-10' : 'w-12 h-12'
           }`}>
-            <img 
-              src="/lovable-uploads/cb0bf27b-00e3-497d-b8d9-ab79e7751d6f.png" 
-              alt="Digital Age Dental Laboratories" 
-              className={`object-contain transition-all duration-300 ${
-                isCollapsed ? 'w-8 h-8' : 'w-10 h-10'
-              }`}
-            />
+            <DentalLogo className={`transition-all duration-300 ${
+              isCollapsed ? 'w-8 h-8' : 'w-10 h-10'
+            }`} />
           </div>
           {!isCollapsed && (
             <div className="transition-opacity duration-300">
