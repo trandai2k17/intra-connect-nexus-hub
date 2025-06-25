@@ -45,13 +45,13 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Brand Colors - Updated with Blue palette */
-    --brand-primary: #2563eb; /* Main blue */
-    --brand-secondary: #3b82f6; /* Light blue */
-    --brand-accent: #1d4ed8; /* Darker blue */
-    --brand-light: #dbeafe; /* Very light blue */
-    --brand-gradient-start: #2563eb; /* Primary blue */
-    --brand-gradient-end: #06b6d4; /* Cyan blue */
+    /* Brand Colors - Updated with your preferred palette */
+    --brand-primary: #4c4cff; /* Main blue */
+    --brand-secondary: #00d2ff; /* Light blue */
+    --brand-accent: #3333e6; /* Darker blue */
+    --brand-light: #e6f0ff; /* Very light blue */
+    --brand-gradient-start: #4c4cff; /* Primary blue */
+    --brand-gradient-end: #00d2ff; /* Secondary blue */
 
     --header-height: 80px;
   }
@@ -99,13 +99,13 @@
     font-weight: 400;
     line-height: 1.6;
     letter-spacing: -0.01em;
-    background: linear-gradient(135deg, rgb(219, 234, 254) 0%, rgb(147, 197, 253) 25%, rgb(96, 165, 250) 50%, rgb(59, 130, 246) 75%, rgb(37, 99, 235) 100%) 0% 0% / 400% 400%;
+    background: linear-gradient(135deg, rgb(224, 242, 254) 0%, rgb(179, 229, 252) 25%, rgb(129, 212, 250) 50%, rgb(79, 195, 247) 75%, rgb(41, 182, 246) 100%) 0% 0% / 400% 400%;
     animation: 12s ease-in-out 0s infinite normal none running gradientShift;
     position: relative;
     overflow-x: hidden;
   }
 
-  /* Add geometric shapes overlay with blue tones */
+  /* Add geometric shapes overlay */
   body::before {
     content: '';
     position: fixed;
@@ -114,13 +114,13 @@
     width: 100%;
     height: 100%;
     background-image: 
-      radial-gradient(circle at 85% 15%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 15% 85%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+      radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 15% 85%, rgba(0, 210, 255, 0.1) 0%, transparent 50%);
     z-index: -1;
     pointer-events: none;
   }
 
-  /* Add floating geometric elements with blue gradients */
+  /* Add floating geometric elements */
   body::after {
     content: '';
     position: fixed;
@@ -128,7 +128,7 @@
     right: 10%;
     width: 200px;
     height: 200px;
-    background: linear-gradient(45deg, rgba(37, 99, 235, 0.1), rgba(6, 182, 212, 0.05));
+    background: linear-gradient(45deg, rgba(76, 76, 255, 0.1), rgba(0, 210, 255, 0.05));
     border-radius: 20px;
     transform: rotate(15deg);
     z-index: -1;
@@ -186,7 +186,7 @@
     line-height: 1.7;
   }
 
-  /* Brand color utilities - Updated with Blue theme */
+  /* Brand color utilities - Updated */
   .text-brand-primary {
     color: var(--brand-primary);
   }
@@ -208,11 +208,11 @@
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 8px 32px rgba(76, 76, 255, 0.1);
   }
 
   .bg-glass-dark {
-    background: rgba(37, 99, 235, 0.1);
+    background: rgba(76, 76, 255, 0.1);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
@@ -237,7 +237,7 @@
     right: 20px;
     width: 60px;
     height: 60px;
-    background: linear-gradient(45deg, rgba(37, 99, 235, 0.2), rgba(6, 182, 212, 0.2));
+    background: linear-gradient(45deg, rgba(76, 76, 255, 0.2), rgba(0, 210, 255, 0.2));
     border-radius: 12px;
     transform: rotate(15deg);
     z-index: 1;
@@ -250,7 +250,7 @@
     left: 20px;
     width: 40px;
     height: 40px;
-    background: linear-gradient(45deg, rgba(6, 182, 212, 0.15), rgba(37, 99, 235, 0.15));
+    background: linear-gradient(45deg, rgba(0, 210, 255, 0.15), rgba(76, 76, 255, 0.15));
     border-radius: 8px;
     transform: rotate(-15deg);
     z-index: 1;
@@ -280,7 +280,7 @@
   }
 
   .glass-brand {
-    background: rgba(37, 99, 235, 0.1);
+    background: rgba(30, 64, 175, 0.1);
     backdrop-filter: blur(15px);
     border: 1px solid rgba(37, 99, 235, 0.2);
   }
@@ -314,7 +314,7 @@
   }
 
   .bg-gradient-brand-light {
-    background: linear-gradient(135deg, var(--brand-light) 0%, rgba(59, 130, 246, 0.1) 100%);
+    background: linear-gradient(135deg, var(--brand-light) 0%, rgba(124, 58, 237, 0.1) 100%);
   }
 
   /* Floating animation for geometric elements */
