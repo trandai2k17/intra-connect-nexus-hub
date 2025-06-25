@@ -4,12 +4,10 @@ class ITPortal {
     constructor() {
         this.currentLanguage = 'vi';
         this.currentTheme = 'light';
-        this.sidebarCollapsed = false;
         this.currentTab = 'all';
         this.currentAppTab = 'software';
         this.favorites = JSON.parse(localStorage.getItem('favorites') || '[1, 4, 6, 7]');
         this.viewMode = 'grid';
-        this.searchTerm = '';
         
         this.translations = {
             vi: {
@@ -22,9 +20,7 @@ class ITPortal {
                 'sidebar.purchase': 'Mua hàng',
                 'sidebar.copyright': '© 2024 Phòng IT',
                 'header.notifications': 'Thông báo',
-                'nav.all': 'Tất cả',
-                'home.apps.title': 'Ứng dụng & Phần mềm',
-                'home.apps.subtitle': 'Truy cập nhanh các công cụ và hệ thống nội bộ'
+                'nav.all': 'Tất cả'
             },
             en: {
                 'sidebar.navigation': 'NAVIGATION',
@@ -36,9 +32,7 @@ class ITPortal {
                 'sidebar.purchase': 'Purchase',
                 'sidebar.copyright': '© 2024 IT Department',
                 'header.notifications': 'Notifications',
-                'nav.all': 'All',
-                'home.apps.title': 'Applications & Software',
-                'home.apps.subtitle': 'Quick access to internal tools and systems'
+                'nav.all': 'All'
             }
         };
 
@@ -71,8 +65,7 @@ class ITPortal {
                 iconColor: 'text-purple-500',
                 subItems: [
                     { title: 'Quality Control', url: '/quality/control', icon: 'bi-check-circle', iconColor: 'text-purple-500' },
-                    { title: 'Reports', url: '/quality/reports', icon: 'bi-graph-up', iconColor: 'text-purple-600' },
-                    { title: 'Analytics', url: '/quality/analytics', icon: 'bi-activity', iconColor: 'text-purple-700' }
+                    { title: 'Reports', url: '/quality/reports', icon: 'bi-graph-up', iconColor: 'text-purple-600' }
                 ]
             },
             {
@@ -82,8 +75,7 @@ class ITPortal {
                 iconColor: 'text-orange-500',
                 subItems: [
                     { title: 'Employee Management', url: '/hr/employees', icon: 'bi-person-check', iconColor: 'text-orange-500' },
-                    { title: 'Schedule', url: '/hr/schedule', icon: 'bi-calendar', iconColor: 'text-orange-600' },
-                    { title: 'Payroll', url: '/hr/payroll', icon: 'bi-currency-dollar', iconColor: 'text-orange-700' }
+                    { title: 'Schedule', url: '/hr/schedule', icon: 'bi-calendar', iconColor: 'text-orange-600' }
                 ]
             },
             {
@@ -157,6 +149,7 @@ class ITPortal {
         this.startAnnouncementRotation();
         this.initializeNotifications();
         this.updateTranslations();
+        this.loadSavedPreferences();
         
         // Initialize AOS
         if (typeof AOS !== 'undefined') {
@@ -180,15 +173,27 @@ class ITPortal {
         }, 1000);
     }
 
+    loadSavedPreferences() {
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            this.currentTheme = savedTheme;
+            document.documentElement.setAttribute('data-bs-theme', this.currentTheme);
+            this.updateThemeIcon();
+        }
+
+        // Load saved language
+        const savedLanguage = localStorage.getItem('language');
+        if (savedLanguage) {
+            this.currentLanguage = savedLanguage;
+            document.getElementById('languageText').textContent = this.currentLanguage.toUpperCase();
+        }
+    }
+
     initializeEventListeners() {
         // Sidebar toggle
         document.getElementById('sidebarToggle')?.addEventListener('click', () => {
             this.toggleSidebar();
-        });
-
-        // Sidebar collapse
-        document.getElementById('sidebarCollapse')?.addEventListener('click', () => {
-            this.toggleSidebarCollapse();
         });
 
         // Theme toggle
@@ -206,19 +211,7 @@ class ITPortal {
             this.toggleViewMode();
         });
 
-        // Click outside sidebar to close
-        document.addEventListener('click', (e) => {
-            const sidebar = document.getElementById('sidebar');
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            
-            if (sidebar && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
-                if (window.innerWidth < 992 && !sidebar.classList.contains('hidden')) {
-                    this.closeSidebar();
-                }
-            }
-        });
-
-        // Responsive handling
+        // Handle responsive behavior
         window.addEventListener('resize', () => {
             this.handleResize();
         });
@@ -226,75 +219,36 @@ class ITPortal {
 
     toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('mainContent');
+        const offcanvas = bootstrap.Offcanvas.getOrCreateInstance(sidebar);
         
         if (window.innerWidth < 992) {
-            // Mobile behavior
-            sidebar.classList.toggle('show');
-        } else {
-            // Desktop behavior
-            this.toggleSidebarCollapse();
-        }
-    }
-
-    toggleSidebarCollapse() {
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('mainContent');
-        
-        this.sidebarCollapsed = !this.sidebarCollapsed;
-        
-        if (this.sidebarCollapsed) {
-            sidebar.classList.add('collapsed');
-            mainContent.classList.add('sidebar-collapsed');
-        } else {
-            sidebar.classList.remove('collapsed');
-            mainContent.classList.remove('sidebar-collapsed');
-        }
-        
-        // Update collapse icon
-        const collapseIcon = document.querySelector('#sidebarCollapse i');
-        if (collapseIcon) {
-            collapseIcon.className = this.sidebarCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-left';
-        }
-    }
-
-    closeSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.remove('show');
-    }
-
-    handleResize() {
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('mainContent');
-        
-        if (window.innerWidth >= 992) {
-            sidebar.classList.remove('show');
-            if (this.sidebarCollapsed) {
-                mainContent.classList.add('sidebar-collapsed');
-            } else {
-                mainContent.classList.remove('sidebar-collapsed');
-            }
-        } else {
-            mainContent.classList.remove('sidebar-collapsed');
+            // Mobile behavior - toggle offcanvas
+            offcanvas.toggle();
         }
     }
 
     toggleTheme() {
         this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
         document.documentElement.setAttribute('data-bs-theme', this.currentTheme);
-        
+        this.updateThemeIcon();
+        localStorage.setItem('theme', this.currentTheme);
+    }
+
+    updateThemeIcon() {
         const themeIcon = document.getElementById('themeIcon');
         if (themeIcon) {
-            themeIcon.className = this.currentTheme === 'light' ? 'bi bi-sun-fill fs-5 text-gray-700' : 'bi bi-moon-fill fs-5 text-gray-300';
+            themeIcon.className = this.currentTheme === 'light' 
+                ? 'bi bi-sun-fill fs-5 text-gray-700' 
+                : 'bi bi-moon-fill fs-5 text-gray-300';
         }
-        
-        localStorage.setItem('theme', this.currentTheme);
     }
 
     toggleLanguage() {
         this.currentLanguage = this.currentLanguage === 'vi' ? 'en' : 'vi';
         document.getElementById('languageText').textContent = this.currentLanguage.toUpperCase();
         this.updateTranslations();
+        this.renderSidebarNavigation();
+        this.renderDepartmentTabs();
         localStorage.setItem('language', this.currentLanguage);
     }
 
@@ -307,6 +261,10 @@ class ITPortal {
         this.renderApplications();
     }
 
+    handleResize() {
+        // Handle responsive behavior if needed
+    }
+
     t(key) {
         return this.translations[this.currentLanguage][key] || key;
     }
@@ -316,10 +274,6 @@ class ITPortal {
             const key = element.getAttribute('data-translate');
             element.textContent = this.t(key);
         });
-        
-        // Re-render components that need translation
-        this.renderSidebarNavigation();
-        this.renderDepartmentTabs();
     }
 
     renderSidebarNavigation() {
@@ -328,25 +282,27 @@ class ITPortal {
 
         sidebarNav.innerHTML = this.navigationItems.map(item => {
             const hasSubItems = item.subItems && item.subItems.length > 0;
-            const isExpanded = false; // You can track expanded state if needed
+            const collapseId = `collapse-${item.title.replace(/\./g, '-')}`;
             
             return `
                 <div class="nav-item">
                     <a class="nav-link d-flex align-items-center ${hasSubItems ? 'dropdown-toggle' : ''}" 
-                       href="${item.url}" 
-                       ${hasSubItems ? `data-bs-toggle="collapse" data-bs-target="#submenu-${item.title}" aria-expanded="${isExpanded}"` : ''}>
-                        <i class="${item.icon} ${item.iconColor}"></i>
-                        <span class="nav-text ms-2">${this.t(item.title)}</span>
+                       href="${hasSubItems ? '#' : item.url}" 
+                       ${hasSubItems ? `data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false"` : ''}>
+                        <i class="${item.icon} ${item.iconColor} me-2"></i>
+                        <span class="nav-text">${this.t(item.title)}</span>
                         ${hasSubItems ? `<i class="bi bi-chevron-down ms-auto"></i>` : ''}
                     </a>
                     ${hasSubItems ? `
-                        <div class="collapse nav-submenu" id="submenu-${item.title}">
-                            ${item.subItems.map(subItem => `
-                                <a class="nav-link nav-link-sub" href="${subItem.url}">
-                                    <i class="${subItem.icon} ${subItem.iconColor}"></i>
-                                    <span class="nav-text ms-2">${subItem.title}</span>
-                                </a>
-                            `).join('')}
+                        <div class="collapse" id="${collapseId}">
+                            <div class="nav-submenu">
+                                ${item.subItems.map(subItem => `
+                                    <a class="nav-link nav-link-sub ms-4" href="${subItem.url}">
+                                        <i class="${subItem.icon} ${subItem.iconColor} me-2"></i>
+                                        <span class="nav-text">${subItem.title}</span>
+                                    </a>
+                                `).join('')}
+                            </div>
                         </div>
                     ` : ''}
                 </div>
@@ -364,9 +320,9 @@ class ITPortal {
                 <button class="btn dept-tab ${isActive ? 'active' : ''}" 
                         data-category="${tab.id}"
                         onclick="itPortal.setActiveTab('${tab.id}')">
-                    <i class="${tab.icon}"></i>
+                    <i class="${tab.icon} me-2"></i>
                     <span>${this.t(tab.labelKey)}</span>
-                    <span class="badge">${tab.count}</span>
+                    <span class="badge ms-2">${tab.count}</span>
                 </button>
             `;
         }).join('');
@@ -387,9 +343,9 @@ class ITPortal {
                 <li class="nav-item">
                     <button class="nav-link ${isActive ? 'active' : ''}" 
                             onclick="itPortal.setActiveAppTab('${tab.id}')">
-                        <i class="${tab.icon}"></i>
+                        <i class="${tab.icon} me-2"></i>
                         <span>${tab.label}</span>
-                        <span class="badge">${tab.count}</span>
+                        <span class="badge ms-2">${tab.count}</span>
                     </button>
                 </li>
             `;
@@ -403,11 +359,7 @@ class ITPortal {
         const filteredApps = this.applications.filter(app => {
             const matchesDept = this.currentTab === 'all' || app.departments.includes(this.currentTab);
             const matchesAppTab = app.category === this.currentAppTab;
-            const matchesSearch = !this.searchTerm || 
-                app.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                app.description.toLowerCase().includes(this.searchTerm.toLowerCase());
-            
-            return matchesDept && matchesAppTab && matchesSearch;
+            return matchesDept && matchesAppTab;
         });
 
         if (this.viewMode === 'grid') {
@@ -422,7 +374,7 @@ class ITPortal {
                             </button>
                             <div class="card-body text-center">
                                 <div class="app-icon mb-3">
-                                    <i class="${app.icon} ${app.iconColor}"></i>
+                                    <i class="${app.icon} ${app.iconColor} fs-1"></i>
                                 </div>
                                 <h6 class="card-title">${app.name}</h6>
                                 <p class="card-text small text-muted">${app.description}</p>
@@ -440,7 +392,7 @@ class ITPortal {
                             <div class="card app-card-list glass-card mb-3">
                                 <div class="card-body d-flex align-items-center">
                                     <div class="app-icon me-3">
-                                        <i class="${app.icon} ${app.iconColor}"></i>
+                                        <i class="${app.icon} ${app.iconColor} fs-3"></i>
                                     </div>
                                     <div class="flex-grow-1">
                                         <h6 class="card-title mb-1">${app.name}</h6>
@@ -546,7 +498,6 @@ class ITPortal {
     }
 
     markAsRead(notificationId) {
-        // Implementation for marking notification as read
         this.showToast('Đã đánh dấu là đã đọc');
     }
 
