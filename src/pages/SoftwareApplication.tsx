@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/AppSidebar";
@@ -78,43 +77,43 @@ const SoftwareApplication = () => {
         <div className="flex-1 flex flex-col">
           <Header />
           <main className="flex-1 gradient-bg dark:bg-gray-900">
-            <div className="p-6 space-y-6">
+            <div className="p-4 space-y-4">
               {/* Compact Header */}
-              <div className="text-center mb-6">
-                <h1 className="text-3xl font-bold text-gradient dark:text-white mb-2">
+              <div className="text-center mb-4">
+                <h1 className="text-2xl font-bold text-gradient dark:text-white mb-1">
                   Ứng dụng & Phần mềm
                 </h1>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Quản lý và truy cập tất cả các ứng dụng, phần mềm và trang web của công ty
+                <p className="text-sm text-gray-600 dark:text-gray-300">
+                  Truy cập nhanh các ứng dụng và trang web
                 </p>
               </div>
 
-              {/* Controls */}
-              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-4 border border-white/30 dark:border-gray-700/30 shadow-lg">
-                <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+              {/* Controls - more compact */}
+              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-3 border border-white/30 dark:border-gray-700/30 shadow-lg">
+                <div className="flex flex-col lg:flex-row gap-3 items-center justify-between">
                   {/* Search */}
                   <div className="relative flex-1 max-w-md">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                     <Input
-                      placeholder="Tìm kiếm ứng dụng..."
+                      placeholder="Tìm kiếm..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 bg-white/70 dark:bg-gray-700/70 border-gray-200 dark:border-gray-600"
+                      className="pl-10 bg-white/70 dark:bg-gray-700/70 border-gray-200 dark:border-gray-600 h-8 text-sm"
                     />
                   </div>
 
                   {/* Category Filter */}
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1">
                     {categories.map((category) => (
                       <Button
                         key={category.id}
                         variant={activeCategory === category.id ? "default" : "outline"}
                         size="sm"
                         onClick={() => setActiveCategory(category.id)}
-                        className="flex items-center gap-1"
+                        className="flex items-center gap-1 h-8 text-xs px-2"
                       >
                         {category.label}
-                        <Badge variant="secondary" className="ml-1 text-xs">
+                        <Badge variant="secondary" className="ml-1 text-xs h-4 px-1">
                           {category.count}
                         </Badge>
                       </Button>
@@ -122,52 +121,52 @@ const SoftwareApplication = () => {
                   </div>
 
                   {/* View Controls */}
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     <Button
                       variant={showPreview ? "default" : "outline"}
                       size="sm"
                       onClick={() => setShowPreview(!showPreview)}
-                      className="p-2"
+                      className="h-8 w-8 p-0"
                     >
-                      {showPreview ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {showPreview ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
                     </Button>
                     <Button
                       variant={viewMode === "grid" ? "default" : "outline"}
                       size="sm"
                       onClick={() => setViewMode("grid")}
-                      className="p-2"
+                      className="h-8 w-8 p-0"
                     >
-                      <Grid className="w-4 h-4" />
+                      <Grid className="w-3 h-3" />
                     </Button>
                     <Button
                       variant={viewMode === "list" ? "default" : "outline"}
                       size="sm"
                       onClick={() => setViewMode("list")}
-                      className="p-2"
+                      className="h-8 w-8 p-0"
                     >
-                      <List className="w-4 h-4" />
+                      <List className="w-3 h-3" />
                     </Button>
                   </div>
                 </div>
               </div>
 
-              {/* Applications Grid */}
-              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-4 border border-white/30 dark:border-gray-700/30 shadow-lg">
+              {/* Applications Grid - more compact spacing */}
+              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-3 border border-white/30 dark:border-gray-700/30 shadow-lg">
                 {filteredApplications.length === 0 ? (
-                  <div className="text-center py-8">
-                    <Search className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                    <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2">
+                  <div className="text-center py-6">
+                    <Search className="w-10 h-10 mx-auto mb-3 text-gray-400" />
+                    <h3 className="text-base font-semibold text-gray-600 dark:text-gray-300 mb-1">
                       Không tìm thấy ứng dụng
                     </h3>
-                    <p className="text-gray-500 dark:text-gray-400">
-                      Thử thay đổi từ khóa tìm kiếm hoặc danh mục
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Thử thay đổi từ khóa tìm kiếm
                     </p>
                   </div>
                 ) : (
-                  <div className={`grid gap-4 ${
+                  <div className={`grid gap-3 ${
                     viewMode === "grid" 
-                      ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5" 
-                      : "grid-cols-1 max-w-4xl mx-auto"
+                      ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8" 
+                      : "grid-cols-1 max-w-2xl mx-auto"
                   }`}>
                     {filteredApplications.map((app) => (
                       <CompactApplicationCard

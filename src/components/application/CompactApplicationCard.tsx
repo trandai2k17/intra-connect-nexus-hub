@@ -5,7 +5,9 @@ import {
   Star, 
   Globe,
   Monitor,
-  Smartphone
+  Smartphone,
+  Play,
+  Eye
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,19 +30,6 @@ export function CompactApplicationCard({
 }: CompactApplicationCardProps) {
   const Icon = app.icon;
 
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case "web":
-        return <Globe className="w-4 h-4" />;
-      case "desktop":
-        return <Monitor className="w-4 h-4" />;
-      case "mobile":
-        return <Smartphone className="w-4 h-4" />;
-      default:
-        return <ExternalLink className="w-4 h-4" />;
-    }
-  };
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case "online":
@@ -57,16 +46,16 @@ export function CompactApplicationCard({
   // Get app icon image based on app name
   const getAppIconImage = (appName: string) => {
     const iconMap: Record<string, string> = {
-      "Unikey": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=64&h=64&fit=crop&crop=center", // Vietnamese keyboard
-      "Zalo Desktop": "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=64&h=64&fit=crop&crop=center", // Chat/communication
-      "Microsoft Teams": "https://images.unsplash.com/photo-1501286353178-1ec881214838?w=64&h=64&fit=crop&crop=center", // Team collaboration
-      "Microsoft Excel": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=64&h=64&fit=crop&crop=center", // Spreadsheet
-      "Microsoft Word": "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=64&h=64&fit=crop&crop=center", // Document
-      "Microsoft PowerPoint": "https://images.unsplash.com/photo-1501286353178-1ec881214838?w=64&h=64&fit=crop&crop=center", // Presentation
-      "YouTube": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=64&h=64&fit=crop&crop=center", // Video platform
-      "Coursera": "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=64&h=64&fit=crop&crop=center", // Education
-      "Udemy": "https://images.unsplash.com/photo-1501286353178-1ec881214838?w=64&h=64&fit=crop&crop=center", // Online learning
-      "Google Chrome": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=64&h=64&fit=crop&crop=center", // Browser
+      "Unikey": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=64&h=64&fit=crop&crop=center",
+      "Zalo Desktop": "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=64&h=64&fit=crop&crop=center",
+      "Microsoft Teams": "https://images.unsplash.com/photo-1501286353178-1ec881214838?w=64&h=64&fit=crop&crop=center",
+      "Microsoft Excel": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=64&h=64&fit=crop&crop=center",
+      "Microsoft Word": "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=64&h=64&fit=crop&crop=center",
+      "Microsoft PowerPoint": "https://images.unsplash.com/photo-1501286353178-1ec881214838?w=64&h=64&fit=crop&crop=center",
+      "YouTube": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=64&h=64&fit=crop&crop=center",
+      "Coursera": "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=64&h=64&fit=crop&crop=center",
+      "Udemy": "https://images.unsplash.com/photo-1501286353178-1ec881214838?w=64&h=64&fit=crop&crop=center",
+      "Google Chrome": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=64&h=64&fit=crop&crop=center",
     };
     return iconMap[appName] || null;
   };
@@ -81,12 +70,12 @@ export function CompactApplicationCard({
   const appIconImage = getAppIconImage(app.name);
 
   return (
-    <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/90 backdrop-blur-sm">
-      <CardContent className="p-4">
-        <div className="flex items-start space-x-3">
-          {/* App Icon with circular design, border and shadow */}
+    <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/95 backdrop-blur-sm h-fit">
+      <CardContent className="p-3">
+        <div className="flex flex-col items-center space-y-2 text-center">
+          {/* App Icon - larger and more prominent */}
           <div className="relative">
-            <Avatar className="w-12 h-12 ring-2 ring-white shadow-lg">
+            <Avatar className="w-14 h-14 ring-2 ring-white shadow-lg group-hover:scale-105 transition-transform duration-200">
               {appIconImage ? (
                 <AvatarImage 
                   src={appIconImage} 
@@ -95,73 +84,59 @@ export function CompactApplicationCard({
                 />
               ) : (
                 <AvatarFallback className={cn(
-                  "bg-gradient-to-br text-white font-semibold",
+                  "bg-gradient-to-br text-white font-semibold text-lg",
                   appStyle.gradient
                 )}>
-                  <Icon className="w-6 h-6" />
+                  <Icon className="w-7 h-7" />
                 </AvatarFallback>
               )}
             </Avatar>
+            
+            {/* Status indicator */}
             <div className={cn(
               "absolute -top-1 -right-1 w-3 h-3 rounded-full ring-2 ring-white",
               getStatusColor(app.status)
             )} />
+            
+            {/* Favorite star */}
+            <button
+              onClick={() => onToggleFavorite(app.id)}
+              className={cn(
+                "absolute -top-1 -left-1 p-1 rounded-full transition-all duration-200 hover:scale-110",
+                isFavorited 
+                  ? "text-yellow-500 bg-white shadow-sm" 
+                  : "text-gray-400 hover:text-yellow-500 hover:bg-white hover:shadow-sm"
+              )}
+            >
+              <Star className={cn("w-3 h-3", isFavorited && "fill-current")} />
+            </button>
           </div>
 
-          {/* App Info */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between mb-1">
-              <h3 className={cn(
-                "font-semibold group-hover:transition-colors duration-200 truncate",
-                `group-hover:${appStyle.iconColor}`,
-                "text-gray-800"
-              )}>
-                {app.name}
-              </h3>
-              <button
-                onClick={() => onToggleFavorite(app.id)}
-                className={cn(
-                  "p-1 rounded-full transition-colors duration-200",
-                  isFavorited 
-                    ? "text-yellow-500 hover:text-yellow-600" 
-                    : "text-gray-400 hover:text-yellow-500"
-                )}
-              >
-                <Star className={cn("w-4 h-4", isFavorited && "fill-current")} />
-              </button>
-            </div>
+          {/* App Name - compact with shadow text */}
+          <div className="w-full">
+            <h3 className={cn(
+              "font-semibold text-sm leading-tight group-hover:transition-colors duration-200 truncate",
+              "text-gray-800 drop-shadow-sm",
+              `group-hover:${appStyle.iconColor}`
+            )}>
+              {app.name}
+            </h3>
             
-            <p className="text-sm text-gray-600 line-clamp-2 mb-2">
-              {app.description}
-            </p>
+            {/* New badge if applicable */}
+            {app.isNew && (
+              <Badge className="bg-blue-100 text-blue-600 text-xs mt-1 px-2 py-0">
+                Mới
+              </Badge>
+            )}
+          </div>
 
-            {/* Metadata */}
-            <div className="flex items-center space-x-2 mb-3">
-              {app.version && (
-                <Badge variant="outline" className="text-xs">
-                  {app.version}
-                </Badge>
-              )}
-              {app.isNew && (
-                <Badge className="bg-blue-100 text-blue-600 text-xs">
-                  Mới
-                </Badge>
-              )}
-              <div className="flex items-center text-xs text-gray-500">
-                {getTypeIcon(app.type || "web")}
-                <span className="ml-1">
-                  {app.type === "web" ? "Web" : app.type === "desktop" ? "Desktop" : "Mobile"}
-                </span>
-              </div>
-            </div>
-
-            {/* Action Button with custom gradient */}
+          {/* Action Buttons - compact */}
+          <div className="flex gap-1 w-full">
             <Button 
               size="sm"
               className={cn(
-                "w-full text-white shadow-sm bg-gradient-to-r hover:shadow-md transition-all duration-200",
-                appStyle.gradient,
-                `hover:${appStyle.gradient.replace('from-', 'from-').replace('to-', 'to-').replace('-500', '-600').replace('-600', '-700')}`
+                "flex-1 text-white shadow-sm bg-gradient-to-r hover:shadow-md transition-all duration-200 text-xs py-1 h-7",
+                appStyle.gradient
               )}
               onClick={() => {
                 if (app.url) {
@@ -169,18 +144,31 @@ export function CompactApplicationCard({
                 }
               }}
             >
-              {getTypeIcon(app.type || "web")}
-              <span className="ml-2">
+              <Play className="w-3 h-3" />
+              <span className="ml-1">
                 {app.type === "web" || !app.type ? "Mở" : "Chạy"}
               </span>
             </Button>
+            
+            {showPreview && (
+              <Button 
+                size="sm"
+                variant="outline"
+                className="h-7 px-2 text-xs"
+                onClick={() => {
+                  // Toggle preview logic here
+                }}
+              >
+                <Eye className="w-3 h-3" />
+              </Button>
+            )}
           </div>
         </div>
 
-        {/* Website Preview */}
+        {/* Website Preview - if enabled */}
         {showPreview && app.type === "web" && app.url && (
           <div className="mt-3 border rounded-lg overflow-hidden bg-gray-50">
-            <div className="h-32 flex items-center justify-center text-gray-500">
+            <div className="h-24 flex items-center justify-center text-gray-500">
               <iframe 
                 src={app.url}
                 className="w-full h-full border-0 pointer-events-none scale-50 origin-top-left"
