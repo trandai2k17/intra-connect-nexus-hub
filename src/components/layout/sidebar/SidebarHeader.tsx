@@ -26,7 +26,7 @@ export function SidebarHeader() {
           </div>
           {!isCollapsed && (
             <div className="transition-opacity duration-300">
-              <h2 className="font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent text-xl">
+              <h2 className="font-bold bg-gradient-to-r from-blue-600 via-blue-500 to-blue-700 bg-clip-text text-transparent text-xl">
                 Digital Age
               </h2>
               <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Dental Laboratories</p>

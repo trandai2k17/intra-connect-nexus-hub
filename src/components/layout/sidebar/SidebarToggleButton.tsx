@@ -13,7 +13,7 @@ export function SidebarToggleButton() {
         className={`
           w-full h-12 rounded-xl flex items-center justify-center 
           transition-all duration-300 group relative overflow-hidden
-          bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700
+          bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700
           text-white font-semibold shadow-lg hover:shadow-xl
           transform hover:scale-105 active:scale-95
           ${isCollapsed ? 'w-12 h-12 rounded-lg' : ''}

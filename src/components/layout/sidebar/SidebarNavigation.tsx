@@ -41,7 +41,7 @@ export function SidebarNavigation() {
   return (
     <SidebarGroup>
       <SidebarGroupLabel className={`
-        text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2
+        text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3
         ${isCollapsed ? 'px-2' : 'px-4'}
         transition-all duration-200
       `}>
@@ -49,7 +49,7 @@ export function SidebarNavigation() {
       </SidebarGroupLabel>
       
       <SidebarGroupContent>
-        <SidebarMenu className="space-y-1 px-2">
+        <SidebarMenu className="space-y-2 px-2">
           {navigationItems.map((item) => (
             <SidebarMenuItem
               key={item.title}

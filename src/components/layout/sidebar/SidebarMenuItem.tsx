@@ -50,12 +50,12 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
       to={item.url}
       onClick={handleClick}
       className={`
-        flex items-center rounded-lg text-base font-medium transition-all duration-200 group relative w-full
+        flex items-center rounded-xl text-base font-medium transition-all duration-200 group relative w-full
         ${isActive || hasActiveSubItem
           ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md' 
-          : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+          : 'text-gray-700 dark:text-gray-200 hover:bg-white hover:shadow-md dark:hover:bg-gray-700'
         }
-        ${isCollapsed ? 'justify-center p-3 h-12 w-12' : 'gap-4 px-4 py-3'}
+        ${isCollapsed ? 'justify-center p-4 h-14 w-14' : 'gap-4 px-4 py-4'}
       `}
     >
       <Icon className={`
@@ -112,10 +112,10 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
                         key={subItem.title}
                         to={subItem.url}
                         className={`
-                          flex items-center gap-3 px-2 py-2 rounded-md text-sm transition-all duration-200 group
+                          flex items-center gap-3 px-3 py-3 rounded-xl text-sm transition-all duration-200 group
                           ${isSubActive
                             ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300' 
-                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
+                            : 'text-gray-600 dark:text-gray-400 hover:bg-white hover:shadow-md dark:hover:bg-gray-700'
                           }
                         `}
                       >
@@ -141,7 +141,7 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
 
       {/* Sub-menu items - only show when expanded and not collapsed */}
       {hasSubItems && isExpanded && !isCollapsed && (
-        <div className="ml-6 mt-1 space-y-1 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
+        <div className="ml-6 mt-2 space-y-2 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
           {item.subItems?.map((subItem) => {
             const SubIcon = subItem.icon;
             const isSubActive = location.pathname === subItem.url;
@@ -151,10 +151,10 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
                 key={subItem.title}
                 to={subItem.url}
                 className={`
-                  flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 group
+                  flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group
                   ${isSubActive
                     ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-l-2 border-blue-500' 
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-white hover:shadow-md dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
                   }
                 `}
               >
