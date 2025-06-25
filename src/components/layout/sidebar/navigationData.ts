@@ -20,7 +20,7 @@ interface SubItem {
 
 interface NavigationItem {
   title: string;
-  url?: string;
+  url: string; // Make this required to fix the TypeScript error
   icon: any;
   iconColor: string;
   subItems?: SubItem[];
@@ -53,6 +53,7 @@ export const navigationItems: NavigationItem[] = [
   },
   {
     title: "Quản lý",
+    url: "#", // Add a placeholder URL
     icon: Settings,
     iconColor: "text-gray-600",
     subItems: [

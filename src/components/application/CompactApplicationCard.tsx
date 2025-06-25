@@ -10,6 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
 interface CompactApplicationCardProps {
@@ -53,6 +54,23 @@ export function CompactApplicationCard({
     }
   };
 
+  // Get app icon image based on app name
+  const getAppIconImage = (appName: string) => {
+    const iconMap: Record<string, string> = {
+      "Unikey": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=64&h=64&fit=crop&crop=center", // Vietnamese keyboard
+      "Zalo Desktop": "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=64&h=64&fit=crop&crop=center", // Chat/communication
+      "Microsoft Teams": "https://images.unsplash.com/photo-1501286353178-1ec881214838?w=64&h=64&fit=crop&crop=center", // Team collaboration
+      "Microsoft Excel": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=64&h=64&fit=crop&crop=center", // Spreadsheet
+      "Microsoft Word": "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=64&h=64&fit=crop&crop=center", // Document
+      "Microsoft PowerPoint": "https://images.unsplash.com/photo-1501286353178-1ec881214838?w=64&h=64&fit=crop&crop=center", // Presentation
+      "YouTube": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=64&h=64&fit=crop&crop=center", // Video platform
+      "Coursera": "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=64&h=64&fit=crop&crop=center", // Education
+      "Udemy": "https://images.unsplash.com/photo-1501286353178-1ec881214838?w=64&h=64&fit=crop&crop=center", // Online learning
+      "Google Chrome": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=64&h=64&fit=crop&crop=center", // Browser
+    };
+    return iconMap[appName] || null;
+  };
+
   // Use custom app styling if available, otherwise fall back to defaults
   const appStyle = app.appStyle || {
     gradient: "from-blue-500 to-blue-600",
@@ -60,20 +78,32 @@ export function CompactApplicationCard({
     iconColor: "text-blue-600"
   };
 
+  const appIconImage = getAppIconImage(app.name);
+
   return (
     <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white/90 backdrop-blur-sm">
       <CardContent className="p-4">
         <div className="flex items-start space-x-3">
-          {/* App Icon with custom styling */}
+          {/* App Icon with circular design, border and shadow */}
           <div className="relative">
+            <Avatar className="w-12 h-12 ring-2 ring-white shadow-lg">
+              {appIconImage ? (
+                <AvatarImage 
+                  src={appIconImage} 
+                  alt={app.name}
+                  className="object-cover"
+                />
+              ) : (
+                <AvatarFallback className={cn(
+                  "bg-gradient-to-br text-white font-semibold",
+                  appStyle.gradient
+                )}>
+                  <Icon className="w-6 h-6" />
+                </AvatarFallback>
+              )}
+            </Avatar>
             <div className={cn(
-              "p-2 rounded-lg group-hover:scale-110 transition-transform duration-200 bg-gradient-to-br",
-              appStyle.iconBg
-            )}>
-              <Icon className={cn("w-6 h-6", appStyle.iconColor)} />
-            </div>
-            <div className={cn(
-              "absolute -top-1 -right-1 w-3 h-3 rounded-full",
+              "absolute -top-1 -right-1 w-3 h-3 rounded-full ring-2 ring-white",
               getStatusColor(app.status)
             )} />
           </div>
