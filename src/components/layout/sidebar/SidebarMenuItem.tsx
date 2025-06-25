@@ -58,13 +58,13 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
         ${isCollapsed ? 'justify-center px-2' : ''}
       `}
     >
-      {/* Icon without background container */}
+      {/* Icon giữ nguyên style */}
       <Icon className={`
         transition-all duration-200
         ${isCollapsed ? 'w-6 h-6' : 'w-5 h-5'}
         ${(isActive || hasActiveSubItem)
           ? 'text-white' 
-          : `${item.iconColor} group-hover:scale-110`
+          : item.iconColor
         }
       `} />
       
@@ -126,7 +126,7 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
                           w-4 h-4 transition-all duration-200
                           ${isSubActive
                             ? 'text-blue-600 dark:text-blue-400' 
-                            : `${subItem.iconColor} group-hover:scale-110`
+                            : subItem.iconColor
                           }
                         `} />
                         <span className="font-medium">{subItem.title}</span>
@@ -161,12 +161,11 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
                   }
                 `}
               >
-                {/* Sub-item icon without background */}
                 <SubIcon className={`
                   w-4 h-4 transition-all duration-200
                   ${isSubActive
                     ? 'text-blue-600 dark:text-blue-400' 
-                    : `${subItem.iconColor} group-hover:scale-110`
+                    : subItem.iconColor
                   }
                 `} />
                 <span className="transition-all duration-200 text-sm font-medium">
