@@ -50,17 +50,16 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
       to={item.url}
       onClick={handleClick}
       className={`
-        flex items-center gap-4 px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 group relative w-full
+        flex items-center rounded-lg text-base font-medium transition-all duration-200 group relative w-full
         ${isActive || hasActiveSubItem
           ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md' 
           : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
         }
-        ${isCollapsed ? 'justify-center px-2' : ''}
+        ${isCollapsed ? 'justify-center p-3 h-12 w-12' : 'gap-4 px-4 py-3'}
       `}
     >
-      {/* Icon giữ nguyên style */}
       <Icon className={`
-        transition-all duration-200
+        transition-all duration-200 flex-shrink-0
         ${isCollapsed ? 'w-6 h-6' : 'w-5 h-5'}
         ${(isActive || hasActiveSubItem)
           ? 'text-white' 
@@ -98,13 +97,11 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
             </HoverCardTrigger>
             <HoverCardContent side="right" align="start" className="w-64 p-3">
               <div className="space-y-2">
-                {/* Main item header */}
                 <div className="flex items-center gap-3 pb-2 border-b border-gray-200 dark:border-gray-600">
                   <Icon className={`w-5 h-5 ${item.iconColor}`} />
                   <span className="font-semibold text-base">{t(item.title)}</span>
                 </div>
                 
-                {/* Sub items */}
                 <div className="space-y-1">
                   {item.subItems?.map((subItem) => {
                     const SubIcon = subItem.icon;
