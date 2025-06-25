@@ -7,7 +7,7 @@ export function SidebarToggleButton() {
   const isCollapsed = state === "collapsed";
 
   return (
-    <div className={`transition-all duration-300 ${isCollapsed ? 'p-2' : 'p-4'} border-t border-white/20`}>
+    <div className={`transition-all duration-300 ${isCollapsed ? 'p-2' : 'p-4'}`}>
       <button
         onClick={toggleSidebar}
         className={`

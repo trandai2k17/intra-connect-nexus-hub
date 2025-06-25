@@ -8,7 +8,7 @@ export function SidebarHeader() {
   const isCollapsed = state === "collapsed";
 
   return (
-    <div className={`border-b border-white/20 bg-gradient-to-r from-white/95 to-white/90 dark:from-gray-800/95 dark:to-gray-700/90 backdrop-blur-xl transition-all duration-300 ${
+    <div className={`bg-gradient-to-r from-white/95 to-white/90 dark:from-gray-800/95 dark:to-gray-700/90 backdrop-blur-xl transition-all duration-300 ${
       isCollapsed ? 'p-2' : 'p-4'
     }`}>
       <div className="flex items-center justify-center">
