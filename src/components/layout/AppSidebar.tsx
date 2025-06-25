@@ -21,7 +21,7 @@ export function AppSidebar() {
     <TooltipProvider delayDuration={300}>
       <Sidebar 
         className={`border-r border-white/20 dark:border-gray-700/20 shadow-2xl z-50 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl transition-all duration-300 ease-in-out ${
-          isCollapsed ? 'w-16' : 'w-72'
+          isCollapsed ? 'w-20' : 'w-72'
         }`}
         collapsible="icon"
       >

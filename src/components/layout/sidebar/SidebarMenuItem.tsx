@@ -55,7 +55,7 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
           ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md' 
           : 'text-gray-700 dark:text-gray-200 hover:bg-white hover:shadow-md dark:hover:bg-gray-700'
         }
-        ${isCollapsed ? 'justify-center p-4 h-14 w-14' : 'gap-4 px-4 py-4'}
+        ${isCollapsed ? 'justify-center p-4 h-16 w-16' : 'gap-4 px-4 py-5'}
       `}
     >
       <Icon className={`
@@ -76,9 +76,9 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
           {hasSubItems && (
             <div className="ml-auto">
               {isExpanded ? (
-                <ChevronDown className="w-4 h-4 transition-transform duration-200" />
+                <ChevronDown className="w-3 h-3 transition-transform duration-200" />
               ) : (
-                <ChevronRight className="w-4 h-4 transition-transform duration-200" />
+                <ChevronRight className="w-3 h-3 transition-transform duration-200" />
               )}
             </div>
           )}
@@ -112,7 +112,7 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
                         key={subItem.title}
                         to={subItem.url}
                         className={`
-                          flex items-center gap-3 px-3 py-3 rounded-xl text-sm transition-all duration-200 group
+                          flex items-center gap-3 px-3 py-4 rounded-xl text-sm transition-all duration-200 group
                           ${isSubActive
                             ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300' 
                             : 'text-gray-600 dark:text-gray-400 hover:bg-white hover:shadow-md dark:hover:bg-gray-700'
@@ -139,9 +139,13 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
         )}
       </SidebarMenuButton>
 
-      {/* Sub-menu items - only show when expanded and not collapsed */}
+      {/* Sub-menu items with smooth animation */}
       {hasSubItems && isExpanded && !isCollapsed && (
-        <div className="ml-6 mt-2 space-y-2 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
+        <div className={`
+          ml-6 mt-3 space-y-3 border-l-2 border-gray-200 dark:border-gray-600 pl-4
+          transition-all duration-300 ease-in-out transform
+          ${isExpanded ? 'opacity-100 translate-y-0 max-h-96' : 'opacity-0 -translate-y-2 max-h-0'}
+        `}>
           {item.subItems?.map((subItem) => {
             const SubIcon = subItem.icon;
             const isSubActive = location.pathname === subItem.url;
@@ -151,7 +155,7 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
                 key={subItem.title}
                 to={subItem.url}
                 className={`
-                  flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group
+                  flex items-center gap-3 px-4 py-4 rounded-xl text-sm font-medium transition-all duration-200 group
                   ${isSubActive
                     ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-l-2 border-blue-500' 
                     : 'text-gray-600 dark:text-gray-400 hover:bg-white hover:shadow-md dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'

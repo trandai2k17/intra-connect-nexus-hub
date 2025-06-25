@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import {
@@ -28,6 +28,21 @@ export function SidebarNavigation() {
     return activeGroups;
   });
 
+  // Auto-expand when route changes and menu item becomes active
+  useEffect(() => {
+    const activeGroups = navigationItems
+      .filter(item => 
+        item.url === location.pathname || 
+        item.subItems?.some(sub => sub.url === location.pathname)
+      )
+      .map(item => item.title);
+    
+    setExpandedItems(prev => {
+      const newExpanded = [...new Set([...prev, ...activeGroups])];
+      return newExpanded;
+    });
+  }, [location.pathname]);
+
   const toggleExpanded = (itemTitle: string) => {
     if (isCollapsed) return;
     
@@ -49,7 +64,7 @@ export function SidebarNavigation() {
       </SidebarGroupLabel>
       
       <SidebarGroupContent>
-        <SidebarMenu className="space-y-2 px-2">
+        <SidebarMenu className="space-y-3 px-2">
           {navigationItems.map((item) => (
             <SidebarMenuItem
               key={item.title}
