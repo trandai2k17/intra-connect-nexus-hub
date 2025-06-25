@@ -1,304 +1,169 @@
 
-// IT Portal - Complete JavaScript with Enhanced Features
+// IT Portal - Complete JavaScript with enhanced features
 class ITPortal {
     constructor() {
-        this.applications = [];
-        this.favorites = [];
-        this.recent = [];
-        this.currentLanguage = 'en';
+        this.currentLanguage = 'vi';
         this.currentTheme = 'light';
-        this.searchTimeout = null;
-        this.currentViewMode = 'grid';
+        this.sidebarCollapsed = false;
+        this.currentTab = 'all';
+        this.currentAppTab = 'software';
+        this.favorites = JSON.parse(localStorage.getItem('favorites') || '[1, 4, 6, 7]');
+        this.viewMode = 'grid';
+        this.searchTerm = '';
         
+        this.translations = {
+            vi: {
+                'sidebar.navigation': 'ĐIỀU HƯỚNG',
+                'sidebar.it': 'Công nghệ thông tin',
+                'sidebar.production': 'Sản xuất',
+                'sidebar.quality': 'Chất lượng',
+                'sidebar.hr': 'Nhân sự',
+                'sidebar.inventory': 'Kho bãi',
+                'sidebar.purchase': 'Mua hàng',
+                'sidebar.copyright': '© 2024 Phòng IT',
+                'header.notifications': 'Thông báo',
+                'nav.all': 'Tất cả',
+                'home.apps.title': 'Ứng dụng & Phần mềm',
+                'home.apps.subtitle': 'Truy cập nhanh các công cụ và hệ thống nội bộ'
+            },
+            en: {
+                'sidebar.navigation': 'NAVIGATION',
+                'sidebar.it': 'Information Technology',
+                'sidebar.production': 'Production',
+                'sidebar.quality': 'Quality',
+                'sidebar.hr': 'Human Resources',
+                'sidebar.inventory': 'Inventory',
+                'sidebar.purchase': 'Purchase',
+                'sidebar.copyright': '© 2024 IT Department',
+                'header.notifications': 'Notifications',
+                'nav.all': 'All',
+                'home.apps.title': 'Applications & Software',
+                'home.apps.subtitle': 'Quick access to internal tools and systems'
+            }
+        };
+
+        this.navigationItems = [
+            {
+                title: 'sidebar.it',
+                url: '/it',
+                icon: 'bi-monitor',
+                iconColor: 'text-blue-500',
+                subItems: [
+                    { title: 'Software', url: '/it/software', icon: 'bi-laptop', iconColor: 'text-blue-500' },
+                    { title: 'Web Page', url: '/it/webpage', icon: 'bi-globe', iconColor: 'text-blue-600' },
+                    { title: 'Document', url: '/it/document', icon: 'bi-file-text', iconColor: 'text-blue-700' }
+                ]
+            },
+            {
+                title: 'sidebar.production',
+                url: '/production',
+                icon: 'bi-building',
+                iconColor: 'text-green-500',
+                subItems: [
+                    { title: 'Manufacturing', url: '/production/manufacturing', icon: 'bi-gear', iconColor: 'text-green-500' },
+                    { title: 'Maintenance', url: '/production/maintenance', icon: 'bi-wrench', iconColor: 'text-green-600' }
+                ]
+            },
+            {
+                title: 'sidebar.quality',
+                url: '/quality',
+                icon: 'bi-bar-chart',
+                iconColor: 'text-purple-500',
+                subItems: [
+                    { title: 'Quality Control', url: '/quality/control', icon: 'bi-check-circle', iconColor: 'text-purple-500' },
+                    { title: 'Reports', url: '/quality/reports', icon: 'bi-graph-up', iconColor: 'text-purple-600' },
+                    { title: 'Analytics', url: '/quality/analytics', icon: 'bi-activity', iconColor: 'text-purple-700' }
+                ]
+            },
+            {
+                title: 'sidebar.hr',
+                url: '/hr',
+                icon: 'bi-people',
+                iconColor: 'text-orange-500',
+                subItems: [
+                    { title: 'Employee Management', url: '/hr/employees', icon: 'bi-person-check', iconColor: 'text-orange-500' },
+                    { title: 'Schedule', url: '/hr/schedule', icon: 'bi-calendar', iconColor: 'text-orange-600' },
+                    { title: 'Payroll', url: '/hr/payroll', icon: 'bi-currency-dollar', iconColor: 'text-orange-700' }
+                ]
+            },
+            {
+                title: 'sidebar.inventory',
+                url: '/inventory',
+                icon: 'bi-box',
+                iconColor: 'text-indigo-500',
+                subItems: [
+                    { title: 'Stock Management', url: '/inventory/stock', icon: 'bi-boxes', iconColor: 'text-indigo-500' },
+                    { title: 'Warehouse', url: '/inventory/warehouse', icon: 'bi-truck', iconColor: 'text-indigo-600' }
+                ]
+            },
+            {
+                title: 'sidebar.purchase',
+                url: '/purchase',
+                icon: 'bi-cart',
+                iconColor: 'text-red-500',
+                subItems: [
+                    { title: 'Purchase Orders', url: '/purchase/orders', icon: 'bi-bag', iconColor: 'text-red-500' },
+                    { title: 'Vendors', url: '/purchase/vendors', icon: 'bi-people', iconColor: 'text-red-600' }
+                ]
+            }
+        ];
+
+        this.departmentTabs = [
+            { id: 'all', labelKey: 'nav.all', icon: 'bi-grid-3x3-gap', count: 42 },
+            { id: 'it', labelKey: 'sidebar.it', icon: 'bi-laptop', count: 12 },
+            { id: 'production', labelKey: 'sidebar.production', icon: 'bi-building', count: 8 },
+            { id: 'quality', labelKey: 'sidebar.quality', icon: 'bi-bar-chart', count: 6 },
+            { id: 'hr', labelKey: 'sidebar.hr', icon: 'bi-people', count: 5 },
+            { id: 'inventory', labelKey: 'sidebar.inventory', icon: 'bi-box', count: 7 },
+            { id: 'purchase', labelKey: 'sidebar.purchase', icon: 'bi-cart', count: 4 }
+        ];
+
+        this.applications = [
+            { id: 1, name: 'ERP System', description: 'Enterprise Resource Planning', icon: 'bi-grid-3x3-gap', iconColor: 'text-blue-500', departments: ['it', 'production'], category: 'software' },
+            { id: 2, name: 'CRM Platform', description: 'Customer Relationship Management', icon: 'bi-people', iconColor: 'text-green-500', departments: ['hr', 'it'], category: 'software' },
+            { id: 3, name: 'QC Mobile', description: 'Quality Control App', icon: 'bi-phone', iconColor: 'text-purple-500', departments: ['quality'], category: 'software' },
+            { id: 4, name: 'Inventory System', description: 'Stock Management', icon: 'bi-box', iconColor: 'text-orange-500', departments: ['inventory'], category: 'software' },
+            { id: 5, name: 'HR Portal', description: 'Human Resources Management', icon: 'bi-person-badge', iconColor: 'text-red-500', departments: ['hr'], category: 'software' },
+            { id: 6, name: 'Purchase Portal', description: 'Procurement System', icon: 'bi-cart', iconColor: 'text-indigo-500', departments: ['purchase'], category: 'software' },
+            { id: 7, name: 'MES System', description: 'Manufacturing Execution', icon: 'bi-gear', iconColor: 'text-cyan-500', departments: ['production'], category: 'software' },
+            { id: 8, name: 'Company Website', description: 'Corporate Portal', icon: 'bi-globe', iconColor: 'text-blue-600', departments: ['it'], category: 'webpage' }
+        ];
+
+        this.announcements = {
+            vi: [
+                "🎉 Hệ thống ERP mới đã được cập nhật với nhiều tính năng hữu ích",
+                "📢 Bảo trì hệ thống dự kiến vào 22:00 - 02:00 đêm nay",
+                "🚀 Ứng dụng mobile QC đã ra mắt trên App Store",
+                "💡 Khóa học Excel nâng cao sẽ bắt đầu vào tuần tới"
+            ],
+            en: [
+                "🎉 New ERP system has been updated with many useful features",
+                "📢 System maintenance scheduled for 22:00 - 02:00 tonight",
+                "🚀 QC mobile app has launched on the App Store",
+                "💡 Advanced Excel course will start next week"
+            ]
+        };
+
         this.init();
     }
 
     init() {
-        this.loadApplications();
-        this.loadSettings();
-        this.setupEventListeners();
-        this.initializeCharts();
         this.hideLoadingScreen();
-        this.setupSidebar();
-    }
-
-    setupSidebar() {
-        // Sidebar toggle functionality
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        
-        if (sidebarToggle) {
-            sidebarToggle.addEventListener('click', () => {
-                if (window.innerWidth >= 992) {
-                    // For desktop, toggle main content margin
-                    const mainContent = document.querySelector('.main-content');
-                    const isCollapsed = mainContent.style.marginLeft === '0px';
-                    
-                    if (isCollapsed) {
-                        mainContent.style.marginLeft = 'var(--sidebar-width)';
-                        sidebarToggle.innerHTML = '<i class="bi bi-arrow-left-circle"></i><span>Collapse</span>';
-                    } else {
-                        mainContent.style.marginLeft = '0';
-                        sidebarToggle.innerHTML = '<i class="bi bi-arrow-right-circle"></i><span>Expand</span>';
-                    }
-                }
-            });
-        }
-
-        // Setup sidebar navigation
-        this.setupSidebarNavigation();
-    }
-
-    setupSidebarNavigation() {
-        // Handle navigation link clicks
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                // Remove active class from all links
-                navLinks.forEach(l => l.classList.remove('active'));
-                
-                // Add active class to clicked link
-                if (!link.classList.contains('dropdown-toggle')) {
-                    link.classList.add('active');
-                }
-                
-                // Handle dropdown toggles
-                if (link.classList.contains('dropdown-toggle')) {
-                    e.preventDefault();
-                    const target = link.getAttribute('data-bs-target');
-                    const submenu = document.querySelector(target);
-                    const chevron = link.querySelector('.bi-chevron-down');
-                    
-                    if (submenu && chevron) {
-                        const isExpanded = link.getAttribute('aria-expanded') === 'true';
-                        link.setAttribute('aria-expanded', !isExpanded);
-                        
-                        if (isExpanded) {
-                            submenu.classList.remove('show');
-                            chevron.style.transform = 'rotate(0deg)';
-                        } else {
-                            submenu.classList.add('show');
-                            chevron.style.transform = 'rotate(180deg)';
-                        }
-                    }
-                }
-            });
-        });
-
-        // Handle submenu link clicks
-        const subLinks = document.querySelectorAll('.nav-link-sub');
-        subLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                // Remove active class from all nav links
-                navLinks.forEach(l => l.classList.remove('active'));
-                subLinks.forEach(l => l.classList.remove('active'));
-                
-                // Add active class to clicked submenu link
-                link.classList.add('active');
-                
-                // Also add active class to parent dropdown
-                const parentDropdown = link.closest('.dropdown-nav').querySelector('.dropdown-toggle');
-                if (parentDropdown) {
-                    parentDropdown.classList.add('active');
-                }
-                
-                this.showToast('Navigation', `Navigated to ${link.textContent.trim()}`, 'info');
-            });
-        });
-    }
-
-    loadApplications() {
-        // Sample application data with categories
-        this.applications = [
-            // IT Applications
-            { id: 1, name: 'Visual Studio Code', description: 'Code editor with debugging support', icon: 'bi-code-slash', color: 'text-blue-500', category: 'productivity', type: 'IT' },
-            { id: 2, name: 'GitHub Desktop', description: 'Git repository management', icon: 'bi-github', color: 'text-purple-500', category: 'productivity', type: 'IT' },
-            { id: 3, name: 'Docker Desktop', description: 'Container platform', icon: 'bi-boxes', color: 'text-blue-500', category: 'productivity', type: 'IT' },
-            { id: 4, name: 'Postman', description: 'API development environment', icon: 'bi-send', color: 'text-orange-500', category: 'productivity', type: 'IT' },
-            
-            // Production Applications  
-            { id: 5, name: 'Production Monitor', description: 'Real-time production monitoring', icon: 'bi-speedometer2', color: 'text-green-500', category: 'productivity', type: 'Production' },
-            { id: 6, name: 'Quality Control', description: 'Quality assurance system', icon: 'bi-check-circle', color: 'text-success', category: 'productivity', type: 'Quality' },
-            { id: 7, name: 'Inventory Manager', description: 'Stock management system', icon: 'bi-box-seam', color: 'text-indigo-500', category: 'productivity', type: 'Inventory' },
-            { id: 8, name: 'HR Portal', description: 'Human resources management', icon: 'bi-people', color: 'text-orange-500', category: 'productivity', type: 'HR' },
-            
-            // Additional Applications
-            { id: 9, name: 'Adobe Photoshop', description: 'Image editing software', icon: 'bi-image', color: 'text-blue-600', category: 'creative', type: 'IT' },
-            { id: 10, name: 'Slack', description: 'Team communication', icon: 'bi-chat-dots', color: 'text-purple-600', category: 'communication', type: 'IT' },
-            { id: 11, name: 'Figma', description: 'Design collaboration tool', icon: 'bi-palette', color: 'text-pink-500', category: 'creative', type: 'IT' },
-            { id: 12, name: 'Microsoft Excel', description: 'Spreadsheet application', icon: 'bi-table', color: 'text-green-600', category: 'productivity', type: 'IT' },
-            { id: 13, name: 'Chrome Browser', description: 'Web browser', icon: 'bi-globe', color: 'text-blue-500', category: 'productivity', type: 'IT' },
-            { id: 14, name: 'Zoom', description: 'Video conferencing', icon: 'bi-camera-video', color: 'text-blue-500', category: 'communication', type: 'IT' },
-            { id: 15, name: 'Notion', description: 'Workspace and note-taking', icon: 'bi-journal-text', color: 'text-gray-600', category: 'productivity', type: 'IT' },
-            { id: 16, name: 'Spotify', description: 'Music streaming', icon: 'bi-music-note-beamed', color: 'text-green-500', category: 'entertainment', type: 'IT' },
-            { id: 17, name: 'Trello', description: 'Project management', icon: 'bi-kanban', color: 'text-blue-600', category: 'productivity', type: 'IT' },
-            { id: 18, name: 'Discord', description: 'Voice and text chat', icon: 'bi-discord', color: 'text-indigo-500', category: 'communication', type: 'IT' },
-            { id: 19, name: 'Calculator', description: 'Basic calculator', icon: 'bi-calculator', color: 'text-gray-600', category: 'utility', type: 'IT' },
-            { id: 20, name: 'Terminal', description: 'Command line interface', icon: 'bi-terminal', color: 'text-dark', category: 'utility', type: 'IT' },
-            { id: 21, name: 'File Manager', description: 'File system explorer', icon: 'bi-folder', color: 'text-yellow-600', category: 'utility', type: 'IT' },
-            { id: 22, name: 'Calendar', description: 'Schedule management', icon: 'bi-calendar', color: 'text-red-500', category: 'productivity', type: 'IT' },
-            { id: 23, name: 'Notes', description: 'Quick note taking', icon: 'bi-sticky', color: 'text-yellow-500', category: 'productivity', type: 'IT' },
-            { id: 24, name: 'Settings', description: 'System preferences', icon: 'bi-gear', color: 'text-gray-500', category: 'utility', type: 'IT' }
-        ];
-
-        // Set some applications as recent
-        this.recent = this.applications.slice(0, 8);
-        
+        this.initializeEventListeners();
+        this.renderSidebarNavigation();
+        this.renderDepartmentTabs();
+        this.renderApplicationTabs();
         this.renderApplications();
-    }
-
-    loadSettings() {
-        // Load theme
-        const savedTheme = localStorage.getItem('itportal-theme') || 'light';
-        this.setTheme(savedTheme);
+        this.startAnnouncementRotation();
+        this.initializeNotifications();
+        this.updateTranslations();
         
-        // Load language
-        const savedLanguage = localStorage.getItem('itportal-language') || 'en';
-        this.setLanguage(savedLanguage);
-        
-        // Load favorites
-        const savedFavorites = localStorage.getItem('itportal-favorites');
-        if (savedFavorites) {
-            this.favorites = JSON.parse(savedFavorites);
-        }
-        
-        // Load view mode
-        const savedViewMode = localStorage.getItem('itportal-viewmode') || 'grid';
-        this.setViewMode(savedViewMode);
-    }
-
-    setupEventListeners() {
-        // Theme toggle
-        const themeToggle = document.getElementById('themeToggle');
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => this.toggleTheme());
-        }
-
-        // Language toggle
-        const languageLinks = document.querySelectorAll('[data-lang]');
-        languageLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.setLanguage(link.getAttribute('data-lang'));
-            });
-        });
-
-        // Search functionality
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => this.handleSearch(e.target.value));
-            searchInput.addEventListener('focus', () => this.showSearchResults());
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.search-container')) {
-                    this.hideSearchResults();
-                }
-            });
-        }
-
-        // Tab switching
-        const tabButtons = document.querySelectorAll('#appTabs button[data-bs-toggle="pill"]');
-        tabButtons.forEach(button => {
-            button.addEventListener('shown.bs.tab', (e) => {
-                this.handleTabSwitch(e.target.getAttribute('data-bs-target').replace('#', ''));
-            });
-        });
-
-        // View mode toggle
-        const viewModeInputs = document.querySelectorAll('input[name="viewMode"]');
-        viewModeInputs.forEach(input => {
-            input.addEventListener('change', (e) => {
-                if (e.target.checked) {
-                    this.setViewMode(e.target.id.replace('View', ''));
-                }
-            });
-        });
-
-        // Hero carousel auto-scroll on hover pause
-        const heroCarousel = document.getElementById('heroCarousel');
-        if (heroCarousel) {
-            heroCarousel.addEventListener('mouseenter', () => {
-                const carousel = bootstrap.Carousel.getInstance(heroCarousel);
-                if (carousel) carousel.pause();
-            });
-            
-            heroCarousel.addEventListener('mouseleave', () => {
-                const carousel = bootstrap.Carousel.getInstance(heroCarousel);
-                if (carousel) carousel.cycle();
-            });
-        }
-    }
-
-    initializeCharts() {
-        // Usage Analytics Chart
-        const usageCtx = document.getElementById('usageChart');
-        if (usageCtx) {
-            new Chart(usageCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    datasets: [{
-                        label: 'Application Usage',
-                        data: [65, 78, 90, 81, 88, 95, 85],
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0,0,0,0.1)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // Performance Chart
-        const performanceCtx = document.getElementById('performanceChart');
-        if (performanceCtx) {
-            new Chart(performanceCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['CPU', 'Memory', 'Storage', 'Network'],
-                    datasets: [{
-                        data: [65, 45, 80, 30],
-                        backgroundColor: [
-                            '#3b82f6',
-                            '#10b981',
-                            '#f59e0b',
-                            '#ef4444'
-                        ],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
+        // Initialize AOS
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                duration: 600,
+                easing: 'ease-out-cubic',
+                once: true
             });
         }
     }
@@ -312,393 +177,429 @@ class ITPortal {
                     loadingScreen.style.display = 'none';
                 }, 500);
             }
-        }, 1500);
+        }, 1000);
+    }
+
+    initializeEventListeners() {
+        // Sidebar toggle
+        document.getElementById('sidebarToggle')?.addEventListener('click', () => {
+            this.toggleSidebar();
+        });
+
+        // Sidebar collapse
+        document.getElementById('sidebarCollapse')?.addEventListener('click', () => {
+            this.toggleSidebarCollapse();
+        });
+
+        // Theme toggle
+        document.getElementById('themeToggle')?.addEventListener('click', () => {
+            this.toggleTheme();
+        });
+
+        // Language toggle
+        document.getElementById('languageToggle')?.addEventListener('click', () => {
+            this.toggleLanguage();
+        });
+
+        // View mode toggle
+        document.getElementById('viewModeToggle')?.addEventListener('click', () => {
+            this.toggleViewMode();
+        });
+
+        // Click outside sidebar to close
+        document.addEventListener('click', (e) => {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            
+            if (sidebar && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                if (window.innerWidth < 992 && !sidebar.classList.contains('hidden')) {
+                    this.closeSidebar();
+                }
+            }
+        });
+
+        // Responsive handling
+        window.addEventListener('resize', () => {
+            this.handleResize();
+        });
+    }
+
+    toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        
+        if (window.innerWidth < 992) {
+            // Mobile behavior
+            sidebar.classList.toggle('show');
+        } else {
+            // Desktop behavior
+            this.toggleSidebarCollapse();
+        }
+    }
+
+    toggleSidebarCollapse() {
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        
+        this.sidebarCollapsed = !this.sidebarCollapsed;
+        
+        if (this.sidebarCollapsed) {
+            sidebar.classList.add('collapsed');
+            mainContent.classList.add('sidebar-collapsed');
+        } else {
+            sidebar.classList.remove('collapsed');
+            mainContent.classList.remove('sidebar-collapsed');
+        }
+        
+        // Update collapse icon
+        const collapseIcon = document.querySelector('#sidebarCollapse i');
+        if (collapseIcon) {
+            collapseIcon.className = this.sidebarCollapsed ? 'bi bi-chevron-right' : 'bi bi-chevron-left';
+        }
+    }
+
+    closeSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.remove('show');
+    }
+
+    handleResize() {
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        
+        if (window.innerWidth >= 992) {
+            sidebar.classList.remove('show');
+            if (this.sidebarCollapsed) {
+                mainContent.classList.add('sidebar-collapsed');
+            } else {
+                mainContent.classList.remove('sidebar-collapsed');
+            }
+        } else {
+            mainContent.classList.remove('sidebar-collapsed');
+        }
     }
 
     toggleTheme() {
-        const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
-        this.setTheme(newTheme);
-    }
-
-    setTheme(theme) {
-        this.currentTheme = theme;
-        document.documentElement.setAttribute('data-bs-theme', theme);
+        this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-bs-theme', this.currentTheme);
         
-        const themeToggle = document.getElementById('themeToggle');
-        if (themeToggle) {
-            const icon = themeToggle.querySelector('i');
-            icon.className = theme === 'light' ? 'bi bi-moon-stars fs-5' : 'bi bi-sun fs-5';
+        const themeIcon = document.getElementById('themeIcon');
+        if (themeIcon) {
+            themeIcon.className = this.currentTheme === 'light' ? 'bi bi-sun-fill fs-5 text-gray-700' : 'bi bi-moon-fill fs-5 text-gray-300';
         }
         
-        localStorage.setItem('itportal-theme', theme);
-        this.showToast('Theme', `Switched to ${theme} mode`, 'info');
+        localStorage.setItem('theme', this.currentTheme);
     }
 
-    setLanguage(lang) {
-        this.currentLanguage = lang;
-        localStorage.setItem('itportal-language', lang);
-        
-        // Update UI text based on language
-        this.updateLanguageTexts();
-        this.showToast('Language', `Language changed to ${lang === 'en' ? 'English' : 'Tiếng Việt'}`, 'info');
+    toggleLanguage() {
+        this.currentLanguage = this.currentLanguage === 'vi' ? 'en' : 'vi';
+        document.getElementById('languageText').textContent = this.currentLanguage.toUpperCase();
+        this.updateTranslations();
+        localStorage.setItem('language', this.currentLanguage);
     }
 
-    updateLanguageTexts() {
-        const translations = {
-            en: {
-                'IT Portal': 'IT Portal',
-                'Management System': 'Management System',
-                'Navigation': 'Navigation',
-                'IT': 'IT',
-                'Production': 'Production',
-                'Quality': 'Quality',
-                'HR': 'HR',
-                'Inventory': 'Inventory',
-                'Purchase': 'Purchase',
-                'Component Library': 'Component Library',
-                'All': 'All',
-                'Favorites': 'Favorites',
-                'Recent': 'Recent',
-                'Productivity': 'Productivity',
-                'Applications': 'Applications'
-            },
-            vi: {
-                'IT Portal': 'Cổng IT',
-                'Management System': 'Hệ thống Quản lý',
-                'Navigation': 'Điều hướng',
-                'IT': 'CNTT',
-                'Production': 'Sản xuất',
-                'Quality': 'Chất lượng',
-                'HR': 'Nhân sự',
-                'Inventory': 'Kho bãi',
-                'Purchase': 'Mua hàng',
-                'Component Library': 'Thư viện Thành phần',
-                'All': 'Tất cả',
-                'Favorites': 'Yêu thích',
-                'Recent': 'Gần đây',
-                'Productivity': 'Năng suất',
-                'Applications': 'Ứng dụng'
-            }
-        };
-
-        const texts = translations[this.currentLanguage];
-        
-        // Update specific elements
-        document.querySelectorAll('[data-translate]').forEach(element => {
-            const key = element.getAttribute('data-translate');
-            if (texts[key]) {
-                element.textContent = texts[key];
-            }
-        });
-    }
-
-    handleSearch(query) {
-        clearTimeout(this.searchTimeout);
-        
-        if (query.length < 2) {
-            this.hideSearchResults();
-            return;
+    toggleViewMode() {
+        this.viewMode = this.viewMode === 'grid' ? 'list' : 'grid';
+        const toggleIcon = document.querySelector('#viewModeToggle i');
+        if (toggleIcon) {
+            toggleIcon.className = this.viewMode === 'grid' ? 'bi bi-grid-3x3-gap' : 'bi bi-list';
         }
-
-        this.searchTimeout = setTimeout(() => {
-            const results = this.applications.filter(app => 
-                app.name.toLowerCase().includes(query.toLowerCase()) ||
-                app.description.toLowerCase().includes(query.toLowerCase())
-            );
-            
-            this.showSearchResults(results);
-        }, 300);
-    }
-
-    showSearchResults(results = []) {
-        const searchResults = document.getElementById('searchResults');
-        if (!searchResults) return;
-
-        if (results.length === 0) {
-            searchResults.innerHTML = '<div class="p-3 text-muted">No results found</div>';
-        } else {
-            searchResults.innerHTML = results.map(app => `
-                <div class="search-result-item" data-app-id="${app.id}">
-                    <div class="d-flex align-items-center gap-3">
-                        <i class="${app.icon} ${app.color}"></i>
-                        <div>
-                            <div class="fw-medium">${app.name}</div>
-                            <small class="text-muted">${app.description}</small>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            
-            // Add click handlers to search results
-            searchResults.querySelectorAll('.search-result-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    const appId = parseInt(item.getAttribute('data-app-id'));
-                    this.launchApplication(appId);
-                    this.hideSearchResults();
-                });
-            });
-        }
-        
-        searchResults.classList.add('show');
-    }
-
-    hideSearchResults() {
-        const searchResults = document.getElementById('searchResults');
-        if (searchResults) {
-            searchResults.classList.remove('show');
-        }
-    }
-
-    handleTabSwitch(tabId) {
-        let appsToShow = [];
-        
-        switch(tabId) {
-            case 'all':
-                appsToShow = this.applications;
-                break;
-            case 'favorites':
-                appsToShow = this.applications.filter(app => this.favorites.includes(app.id));
-                break;
-            case 'recent':
-                appsToShow = this.recent;
-                break;
-            case 'productivity':
-                appsToShow = this.applications.filter(app => app.category === 'productivity');
-                break;
-        }
-        
-        this.renderApplications(appsToShow, tabId);
-    }
-
-    setViewMode(mode) {
-        this.currentViewMode = mode;
-        localStorage.setItem('itportal-viewmode', mode);
-        
-        // Update the radio buttons
-        document.getElementById(mode + 'View').checked = true;
-        
-        // Re-render applications with new view mode
         this.renderApplications();
     }
 
-    renderApplications(apps = this.applications, containerId = 'applicationsGrid') {
-        const container = document.getElementById(containerId === 'all' ? 'applicationsGrid' : containerId + 'Grid');
-        if (!container) return;
+    t(key) {
+        return this.translations[this.currentLanguage][key] || key;
+    }
 
-        if (apps.length === 0) {
-            container.innerHTML = `
-                <div class="col-12 text-center py-5">
-                    <i class="bi bi-inbox display-1 text-muted"></i>
-                    <h4 class="text-muted mt-3">No applications found</h4>
-                    <p class="text-muted">Try adjusting your search or filter criteria</p>
+    updateTranslations() {
+        document.querySelectorAll('[data-translate]').forEach(element => {
+            const key = element.getAttribute('data-translate');
+            element.textContent = this.t(key);
+        });
+        
+        // Re-render components that need translation
+        this.renderSidebarNavigation();
+        this.renderDepartmentTabs();
+    }
+
+    renderSidebarNavigation() {
+        const sidebarNav = document.getElementById('sidebarNav');
+        if (!sidebarNav) return;
+
+        sidebarNav.innerHTML = this.navigationItems.map(item => {
+            const hasSubItems = item.subItems && item.subItems.length > 0;
+            const isExpanded = false; // You can track expanded state if needed
+            
+            return `
+                <div class="nav-item">
+                    <a class="nav-link d-flex align-items-center ${hasSubItems ? 'dropdown-toggle' : ''}" 
+                       href="${item.url}" 
+                       ${hasSubItems ? `data-bs-toggle="collapse" data-bs-target="#submenu-${item.title}" aria-expanded="${isExpanded}"` : ''}>
+                        <i class="${item.icon} ${item.iconColor}"></i>
+                        <span class="nav-text ms-2">${this.t(item.title)}</span>
+                        ${hasSubItems ? `<i class="bi bi-chevron-down ms-auto"></i>` : ''}
+                    </a>
+                    ${hasSubItems ? `
+                        <div class="collapse nav-submenu" id="submenu-${item.title}">
+                            ${item.subItems.map(subItem => `
+                                <a class="nav-link nav-link-sub" href="${subItem.url}">
+                                    <i class="${subItem.icon} ${subItem.iconColor}"></i>
+                                    <span class="nav-text ms-2">${subItem.title}</span>
+                                </a>
+                            `).join('')}
+                        </div>
+                    ` : ''}
                 </div>
             `;
-            return;
-        }
-
-        if (this.currentViewMode === 'grid') {
-            container.innerHTML = apps.map(app => this.createAppCard(app)).join('');
-        } else {
-            container.innerHTML = apps.map(app => this.createAppListItem(app)).join('');
-        }
-
-        // Add event listeners to favorite buttons and app cards
-        this.setupAppInteractions(container);
+        }).join('');
     }
 
-    createAppCard(app) {
-        const isFavorited = this.favorites.includes(app.id);
-        
-        return `
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card glass-card app-card h-100" data-app-id="${app.id}">
-                    <button class="btn favorite-btn ${isFavorited ? 'favorited' : ''}" data-app-id="${app.id}">
-                        <i class="bi ${isFavorited ? 'bi-star-fill' : 'bi-star'}"></i>
+    renderDepartmentTabs() {
+        const tabsContainer = document.getElementById('departmentTabs');
+        if (!tabsContainer) return;
+
+        tabsContainer.innerHTML = this.departmentTabs.map(tab => {
+            const isActive = this.currentTab === tab.id;
+            return `
+                <button class="btn dept-tab ${isActive ? 'active' : ''}" 
+                        data-category="${tab.id}"
+                        onclick="itPortal.setActiveTab('${tab.id}')">
+                    <i class="${tab.icon}"></i>
+                    <span>${this.t(tab.labelKey)}</span>
+                    <span class="badge">${tab.count}</span>
+                </button>
+            `;
+        }).join('');
+    }
+
+    renderApplicationTabs() {
+        const tabsContainer = document.getElementById('applicationTabs');
+        if (!tabsContainer) return;
+
+        const tabs = [
+            { id: 'software', label: 'Phần mềm', icon: 'bi-laptop', count: 6 },
+            { id: 'webpage', label: 'Trang web', icon: 'bi-globe', count: 2 }
+        ];
+
+        tabsContainer.innerHTML = tabs.map(tab => {
+            const isActive = this.currentAppTab === tab.id;
+            return `
+                <li class="nav-item">
+                    <button class="nav-link ${isActive ? 'active' : ''}" 
+                            onclick="itPortal.setActiveAppTab('${tab.id}')">
+                        <i class="${tab.icon}"></i>
+                        <span>${tab.label}</span>
+                        <span class="badge">${tab.count}</span>
                     </button>
-                    <div class="card-body text-center">
-                        <div class="app-icon mx-auto">
-                            <i class="${app.icon} ${app.color}"></i>
-                        </div>
-                        <h6 class="card-title fw-bold">${app.name}</h6>
-                        <p class="card-text text-muted small">${app.description}</p>
-                        <span class="badge bg-primary bg-opacity-10 text-primary">${app.type}</span>
-                    </div>
-                </div>
-            </div>
-        `;
+                </li>
+            `;
+        }).join('');
     }
 
-    createAppListItem(app) {
-        const isFavorited = this.favorites.includes(app.id);
-        
-        return `
-            <div class="col-12 mb-3">
-                <div class="card glass-card app-card-list" data-app-id="${app.id}">
-                    <div class="d-flex align-items-center">
-                        <div class="p-3">
-                            <i class="${app.icon} ${app.color} fs-3"></i>
-                        </div>
-                        <div class="flex-grow-1 p-3">
-                            <h6 class="mb-1 fw-bold">${app.name}</h6>
-                            <p class="mb-1 text-muted small">${app.description}</p>
-                            <span class="badge bg-primary bg-opacity-10 text-primary">${app.type}</span>
-                        </div>
-                        <div class="p-3">
-                            <button class="btn favorite-btn ${isFavorited ? 'favorited' : ''}" data-app-id="${app.id}">
+    renderApplications() {
+        const container = document.getElementById('applicationsGrid');
+        if (!container) return;
+
+        const filteredApps = this.applications.filter(app => {
+            const matchesDept = this.currentTab === 'all' || app.departments.includes(this.currentTab);
+            const matchesAppTab = app.category === this.currentAppTab;
+            const matchesSearch = !this.searchTerm || 
+                app.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                app.description.toLowerCase().includes(this.searchTerm.toLowerCase());
+            
+            return matchesDept && matchesAppTab && matchesSearch;
+        });
+
+        if (this.viewMode === 'grid') {
+            container.innerHTML = filteredApps.map(app => {
+                const isFavorited = this.favorites.includes(app.id);
+                return `
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="card app-card glass-card position-relative">
+                            <button class="favorite-btn ${isFavorited ? 'favorited' : ''}" 
+                                    onclick="itPortal.toggleFavorite(${app.id})">
                                 <i class="bi ${isFavorited ? 'bi-star-fill' : 'bi-star'}"></i>
                             </button>
+                            <div class="card-body text-center">
+                                <div class="app-icon mb-3">
+                                    <i class="${app.icon} ${app.iconColor}"></i>
+                                </div>
+                                <h6 class="card-title">${app.name}</h6>
+                                <p class="card-text small text-muted">${app.description}</p>
+                            </div>
                         </div>
                     </div>
+                `;
+            }).join('');
+        } else {
+            container.innerHTML = `
+                <div class="col-12">
+                    ${filteredApps.map(app => {
+                        const isFavorited = this.favorites.includes(app.id);
+                        return `
+                            <div class="card app-card-list glass-card mb-3">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="app-icon me-3">
+                                        <i class="${app.icon} ${app.iconColor}"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="card-title mb-1">${app.name}</h6>
+                                        <p class="card-text text-muted mb-0">${app.description}</p>
+                                    </div>
+                                    <button class="favorite-btn ${isFavorited ? 'favorited' : ''}" 
+                                            onclick="itPortal.toggleFavorite(${app.id})">
+                                        <i class="bi ${isFavorited ? 'bi-star-fill' : 'bi-star'}"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
                 </div>
-            </div>
-        `;
-    }
-
-    setupAppInteractions(container) {
-        // App card clicks
-        container.querySelectorAll('.app-card, .app-card-list').forEach(card => {
-            card.addEventListener('click', (e) => {
-                if (!e.target.closest('.favorite-btn')) {
-                    const appId = parseInt(card.getAttribute('data-app-id'));
-                    this.launchApplication(appId);
-                }
-            });
-        });
-
-        // Favorite button clicks
-        container.querySelectorAll('.favorite-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const appId = parseInt(btn.getAttribute('data-app-id'));
-                this.toggleFavorite(appId);
-            });
-        });
-    }
-
-    launchApplication(appId) {
-        const app = this.applications.find(a => a.id === appId);
-        if (!app) return;
-
-        // Add to recent if not already there
-        if (!this.recent.find(a => a.id === appId)) {
-            this.recent.unshift(app);
-            this.recent = this.recent.slice(0, 8); // Keep only 8 recent items
+            `;
         }
+    }
 
-        // Show loading toast
-        this.showToast('Launching', `Opening ${app.name}...`, 'info');
-        
-        // Simulate app launch
-        setTimeout(() => {
-            this.showToast('Success', `${app.name} launched successfully!`, 'success');
-        }, 1500);
+    setActiveTab(tabId) {
+        this.currentTab = tabId;
+        this.renderDepartmentTabs();
+        this.renderApplications();
+    }
+
+    setActiveAppTab(tabId) {
+        this.currentAppTab = tabId;
+        this.renderApplicationTabs();
+        this.renderApplications();
     }
 
     toggleFavorite(appId) {
         const index = this.favorites.indexOf(appId);
-        const app = this.applications.find(a => a.id === appId);
-        
-        if (index === -1) {
-            this.favorites.push(appId);
-            this.showToast('Favorite Added', `${app.name} added to favorites`, 'success');
-        } else {
+        if (index > -1) {
             this.favorites.splice(index, 1);
-            this.showToast('Favorite Removed', `${app.name} removed from favorites`, 'info');
+        } else {
+            this.favorites.push(appId);
         }
         
-        localStorage.setItem('itportal-favorites', JSON.stringify(this.favorites));
-        
-        // Update UI
-        this.updateFavoriteButtons();
-        
-        // If currently showing favorites tab, re-render
-        const activeTab = document.querySelector('#appTabs .nav-link.active');
-        if (activeTab && activeTab.id === 'favorites-tab') {
-            this.handleTabSwitch('favorites');
-        }
+        localStorage.setItem('favorites', JSON.stringify(this.favorites));
+        this.renderApplications();
+        this.showToast('Đã cập nhật danh sách yêu thích');
     }
 
-    updateFavoriteButtons() {
-        document.querySelectorAll('.favorite-btn').forEach(btn => {
-            const appId = parseInt(btn.getAttribute('data-app-id'));
-            const isFavorited = this.favorites.includes(appId);
-            const icon = btn.querySelector('i');
+    startAnnouncementRotation() {
+        const announcementText = document.getElementById('announcementText');
+        if (!announcementText) return;
+
+        let currentIndex = 0;
+        const announcements = this.announcements[this.currentLanguage];
+
+        setInterval(() => {
+            announcementText.style.opacity = '0';
             
-            btn.classList.toggle('favorited', isFavorited);
-            icon.className = `bi ${isFavorited ? 'bi-star-fill' : 'bi-star'}`;
-        });
+            setTimeout(() => {
+                currentIndex = (currentIndex + 1) % announcements.length;
+                announcementText.textContent = announcements[currentIndex];
+                announcementText.style.opacity = '1';
+            }, 500);
+        }, 15000);
     }
 
-    showToast(title, message, type = 'info') {
+    initializeNotifications() {
+        const notifications = [
+            {
+                id: 1,
+                title: 'Cập nhật hệ thống ERP',
+                message: 'Hệ thống sẽ bảo trì từ 22:00 - 02:00',
+                time: '2 phút trước',
+                unread: true
+            },
+            {
+                id: 2,
+                title: 'Ứng dụng QC Mobile',
+                message: 'Phiên bản mới đã có sẵn',
+                time: '1 giờ trước',
+                unread: true
+            },
+            {
+                id: 3,
+                title: 'Khóa đào tạo Excel',
+                message: 'Đăng ký mở từ 9:00 ngày mai',
+                time: '3 giờ trước',
+                unread: false
+            }
+        ];
+
+        const notificationList = document.getElementById('notificationList');
+        if (notificationList) {
+            notificationList.innerHTML = notifications.map(notif => `
+                <div class="notification-item ${notif.unread ? 'unread' : ''}" 
+                     onclick="itPortal.markAsRead(${notif.id})">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1 text-gray-800">${notif.title}</h6>
+                            <p class="mb-1 text-muted small">${notif.message}</p>
+                            <small class="text-blue-600">${notif.time}</small>
+                        </div>
+                        ${notif.unread ? '<div class="badge bg-primary rounded-pill ms-2"></div>' : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+
+    markAsRead(notificationId) {
+        // Implementation for marking notification as read
+        this.showToast('Đã đánh dấu là đã đọc');
+    }
+
+    showToast(message, type = 'success') {
         const toastContainer = document.getElementById('toastContainer');
         if (!toastContainer) return;
 
         const toastId = 'toast-' + Date.now();
-        const iconClass = {
-            success: 'bi-check-circle-fill text-success',
-            error: 'bi-exclamation-triangle-fill text-danger',
-            warning: 'bi-exclamation-triangle-fill text-warning',
-            info: 'bi-info-circle-fill text-info'
-        }[type] || 'bi-info-circle-fill text-info';
-
+        const bgClass = type === 'success' ? 'bg-success' : type === 'error' ? 'bg-danger' : 'bg-info';
+        
         const toastHTML = `
-            <div id="${toastId}" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body d-flex align-items-center gap-2">
-                        <i class="${iconClass}"></i>
-                        <div>
-                            <div class="fw-bold">${title}</div>
-                            <div class="text-muted small">${message}</div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            <div id="${toastId}" class="toast" role="alert">
+                <div class="toast-header ${bgClass} text-white">
+                    <i class="bi bi-check-circle me-2"></i>
+                    <strong class="me-auto">Thông báo</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
                 </div>
+                <div class="toast-body">${message}</div>
             </div>
         `;
-
+        
         toastContainer.insertAdjacentHTML('beforeend', toastHTML);
         
-        const toastElement = document.getElementById(toastId);
-        const toast = new bootstrap.Toast(toastElement, {
-            autohide: true,
-            delay: 3000
-        });
-        
+        const toast = new bootstrap.Toast(document.getElementById(toastId));
         toast.show();
         
         // Remove toast element after it's hidden
-        toastElement.addEventListener('hidden.bs.toast', () => {
-            toastElement.remove();
+        document.getElementById(toastId).addEventListener('hidden.bs.toast', function() {
+            this.remove();
         });
     }
 }
 
 // Initialize the portal when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new ITPortal();
+    window.itPortal = new ITPortal();
 });
 
-// Prevent context menu on production
-document.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-});
+// Global utility functions for onclick handlers
+function setActiveTab(tabId) {
+    if (window.itPortal) {
+        window.itPortal.setActiveTab(tabId);
+    }
+}
 
-// Add some keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-    // Ctrl/Cmd + K for search
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.focus();
-        }
+function setActiveAppTab(tabId) {
+    if (window.itPortal) {
+        window.itPortal.setActiveAppTab(tabId);
     }
-    
-    // Escape to close search
-    if (e.key === 'Escape') {
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput && document.activeElement === searchInput) {
-            searchInput.blur();
-        }
+}
+
+function toggleFavorite(appId) {
+    if (window.itPortal) {
+        window.itPortal.toggleFavorite(appId);
     }
-});
+}

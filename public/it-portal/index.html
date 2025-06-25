@@ -1,19 +1,13 @@
+
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
+<html lang="vi" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT Portal - Dashboard</title>
-    
-    <!-- Bootstrap CSS -->
+    <title>IT Portal - Digital Age Dental Laboratories</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Custom CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="geometric-bg">
@@ -24,322 +18,156 @@
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
-            <p class="mt-3 text-muted">Loading IT Portal...</p>
+            <p class="mt-3">Loading IT Portal...</p>
         </div>
     </div>
 
-    <!-- Sidebar -->
-    <div class="offcanvas-lg offcanvas-start glass-sidebar" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
-        <div class="offcanvas-header border-bottom border-light-subtle">
-            <div class="d-flex align-items-center gap-3">
-                <div class="logo-container dental-logo">
-                    <i class="bi bi-heart-pulse"></i>
+    <!-- Header -->
+    <header class="fixed-top glass-nav" style="height: var(--header-height);">
+        <div class="container-fluid h-100 px-4">
+            <div class="row h-100 align-items-center">
+                <!-- Left: Sidebar Toggle -->
+                <div class="col-auto">
+                    <button class="btn p-3 hover-gradient rounded-xl sidebar-toggle" id="sidebarToggle">
+                        <i class="bi bi-list fs-5 text-gray-700"></i>
+                    </button>
                 </div>
-                <div>
-                    <h5 class="mb-0 text-gradient fw-bold">IT Portal</h5>
-                    <small class="text-muted">Management System</small>
+
+                <!-- Center: Running Announcement -->
+                <div class="col d-none d-md-block">
+                    <div class="d-flex justify-content-center">
+                        <div class="announcement-container">
+                            <div class="announcement-text" id="announcementText">
+                                🎉 Hệ thống ERP mới đã được cập nhật với nhiều tính năng hữu ích
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Theme, Language, Notifications -->
+                <div class="col-auto">
+                    <div class="d-flex align-items-center gap-2">
+                        <!-- Theme Toggle -->
+                        <button class="btn p-3 hover-gradient rounded-xl" id="themeToggle">
+                            <i class="bi bi-sun-fill fs-5 text-gray-700" id="themeIcon"></i>
+                        </button>
+
+                        <!-- Language Toggle -->
+                        <button class="btn p-3 hover-gradient rounded-xl" id="languageToggle">
+                            <span class="fw-medium text-gray-700" id="languageText">VI</span>
+                        </button>
+
+                        <!-- Notifications -->
+                        <div class="dropdown">
+                            <button class="btn p-3 hover-gradient rounded-xl position-relative" data-bs-toggle="dropdown" id="notificationBtn">
+                                <i class="bi bi-bell fs-5 text-gray-700"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-gradient-primary notification-badge">3</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end glass-dropdown notification-dropdown mt-2">
+                                <div class="p-4 border-bottom border-gray-200">
+                                    <h6 class="mb-0 text-gray-800 fw-bold fs-5" data-translate="header.notifications">Thông báo</h6>
+                                </div>
+                                <div class="notification-list" id="notificationList">
+                                    <!-- Notifications populated by JS -->
+                                </div>
+                                <div class="p-3 text-center border-top border-gray-200">
+                                    <a href="#" class="btn btn-sm btn-link text-blue-600">Xem tất cả thông báo</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" aria-label="Close"></button>
         </div>
-        
-        <div class="offcanvas-body sidebar-content">
-            <div class="nav-section">
-                <div class="nav-header text-uppercase fw-semibold">Navigation</div>
-                <nav class="nav flex-column">
-                    <!-- IT Section -->
-                    <div class="dropdown-nav">
-                        <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#itSubmenu" aria-expanded="true">
-                            <i class="bi bi-pc-display text-blue-500"></i>
-                            <span>IT</span>
-                            <i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <div class="collapse show nav-submenu" id="itSubmenu">
-                            <a class="nav-link nav-link-sub" href="#software">
-                                <i class="bi bi-laptop"></i>
-                                Software
-                            </a>
-                            <a class="nav-link nav-link-sub" href="#webpage">
-                                <i class="bi bi-globe"></i>
-                                Web Page
-                            </a>
-                            <a class="nav-link nav-link-sub" href="#document">
-                                <i class="bi bi-file-text"></i>
-                                Document
-                            </a>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar glass-sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <!-- Sidebar Header -->
+            <div class="sidebar-header">
+                <div class="d-flex align-items-center justify-center">
+                    <div class="d-flex align-items-center transition-all">
+                        <div class="logo-container">
+                            <div class="dental-logo">
+                                <i class="bi bi-teeth"></i>
+                            </div>
+                        </div>
+                        <div class="sidebar-brand-text ms-3">
+                            <h6 class="mb-0 fw-bold text-gradient">Digital Age</h6>
+                            <small class="text-muted fw-medium">Dental Laboratories</small>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <!-- Production Section -->
-                    <div class="dropdown-nav">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#productionSubmenu" aria-expanded="false">
-                            <i class="bi bi-building text-green-500"></i>
-                            <span>Production</span>
-                            <i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <div class="collapse nav-submenu" id="productionSubmenu">
-                            <a class="nav-link nav-link-sub" href="#manufacturing">
-                                <i class="bi bi-gear"></i>
-                                Manufacturing
-                            </a>
-                            <a class="nav-link nav-link-sub" href="#maintenance">
-                                <i class="bi bi-wrench"></i>
-                                Maintenance
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Quality Section -->
-                    <div class="dropdown-nav">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#qualitySubmenu" aria-expanded="false">
-                            <i class="bi bi-bar-chart text-purple-500"></i>
-                            <span>Quality</span>
-                            <i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <div class="collapse nav-submenu" id="qualitySubmenu">
-                            <a class="nav-link nav-link-sub" href="#quality-control">
-                                <i class="bi bi-check-circle"></i>
-                                Quality Control
-                            </a>
-                            <a class="nav-link nav-link-sub" href="#reports">
-                                <i class="bi bi-graph-up"></i>
-                                Reports
-                            </a>
-                            <a class="nav-link nav-link-sub" href="#analytics">
-                                <i class="bi bi-analytics"></i>
-                                Analytics
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- HR Section -->
-                    <div class="dropdown-nav">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#hrSubmenu" aria-expanded="false">
-                            <i class="bi bi-people text-orange-500"></i>
-                            <span>HR</span>
-                            <i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <div class="collapse nav-submenu" id="hrSubmenu">
-                            <a class="nav-link nav-link-sub" href="#employees">
-                                <i class="bi bi-person-check"></i>
-                                Employee Management
-                            </a>
-                            <a class="nav-link nav-link-sub" href="#schedule">
-                                <i class="bi bi-calendar"></i>
-                                Schedule
-                            </a>
-                            <a class="nav-link nav-link-sub" href="#payroll">
-                                <i class="bi bi-currency-dollar"></i>
-                                Payroll
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Inventory Section -->
-                    <div class="dropdown-nav">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#inventorySubmenu" aria-expanded="false">
-                            <i class="bi bi-box text-indigo-500"></i>
-                            <span>Inventory</span>
-                            <i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <div class="collapse nav-submenu" id="inventorySubmenu">
-                            <a class="nav-link nav-link-sub" href="#stock">
-                                <i class="bi bi-boxes"></i>
-                                Stock Management
-                            </a>
-                            <a class="nav-link nav-link-sub" href="#warehouse">
-                                <i class="bi bi-truck"></i>
-                                Warehouse
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Purchase Section -->
-                    <div class="dropdown-nav">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#purchaseSubmenu" aria-expanded="false">
-                            <i class="bi bi-cart text-red-500"></i>
-                            <span>Purchase</span>
-                            <i class="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <div class="collapse nav-submenu" id="purchaseSubmenu">
-                            <a class="nav-link nav-link-sub" href="#orders">
-                                <i class="bi bi-bag"></i>
-                                Purchase Orders
-                            </a>
-                            <a class="nav-link nav-link-sub" href="#vendors">
-                                <i class="bi bi-shop"></i>
-                                Vendors
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Component Library -->
-                    <a class="nav-link" href="#library">
-                        <i class="bi bi-code-slash text-cyan-500"></i>
-                        <span>Component Library</span>
-                    </a>
-                </nav>
+            <!-- Navigation -->
+            <div class="px-3 py-4">
+                <div class="nav-section">
+                    <div class="nav-header" data-translate="sidebar.navigation">ĐIỀU HƯỚNG</div>
+                    <nav class="nav flex-column" id="sidebarNav">
+                        <!-- Navigation items populated by JS -->
+                    </nav>
+                </div>
             </div>
         </div>
 
         <!-- Sidebar Footer -->
-        <div class="sidebar-footer p-3">
-            <button class="btn btn-link text-muted w-100 d-flex align-items-center gap-2" id="sidebarToggle">
-                <i class="bi bi-arrow-left-circle"></i>
-                <span>Collapse</span>
-            </button>
-            <div class="text-center">
-                <small class="text-muted">© 2024 IT Portal</small>
+        <div class="sidebar-footer">
+            <div class="text-center p-3">
+                <button class="btn btn-outline-secondary btn-sm" id="sidebarCollapse">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <div class="sidebar-copyright mt-2">
+                    <small class="text-muted fw-medium" data-translate="sidebar.copyright">© 2024 IT Department</small>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Main Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top glass-nav">
-        <div class="container-fluid">
-            <!-- Sidebar Toggle -->
-            <button class="btn btn-link text-decoration-none me-3 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
-                <i class="bi bi-list fs-4"></i>
-            </button>
-
-            <!-- Brand -->
-            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-                <div class="logo-container dental-logo">
-                    <i class="bi bi-heart-pulse"></i>
-                </div>
-                <span class="text-gradient fw-bold fs-4">IT Portal</span>
-            </a>
-
-            <!-- Search Bar -->
-            <div class="search-container mx-auto position-relative d-none d-md-block">
-                <input type="text" class="form-control search-input" placeholder="Search applications, documents..." id="searchInput">
-                <i class="bi bi-search position-absolute search-icon"></i>
-                <div class="search-results glass-dropdown" id="searchResults"></div>
-            </div>
-
-            <!-- Right Side Controls -->
-            <div class="d-flex align-items-center gap-3">
-                <!-- Announcement Ticker -->
-                <div class="announcement-container d-none d-lg-block">
-                    <div class="announcement-text" id="announcementText">
-                        Welcome to IT Portal! New updates available for system management tools.
-                    </div>
-                </div>
-
-                <!-- Language Toggle -->
-                <div class="dropdown">
-                    <button class="btn btn-link text-decoration-none" type="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-translate fs-5"></i>
-                    </button>
-                    <ul class="dropdown-menu glass-dropdown">
-                        <li><a class="dropdown-item" href="#" data-lang="en">🇺🇸 English</a></li>
-                        <li><a class="dropdown-item" href="#" data-lang="vi">🇻🇳 Tiếng Việt</a></li>
-                    </ul>
-                </div>
-
-                <!-- Theme Toggle -->
-                <button class="btn btn-link text-decoration-none" type="button" id="themeToggle">
-                    <i class="bi bi-moon-stars fs-5"></i>
-                </button>
-
-                <!-- Notifications -->
-                <div class="dropdown">
-                    <button class="btn btn-link text-decoration-none position-relative" type="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-bell fs-5"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
-                            3
-                        </span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end notification-dropdown glass-dropdown">
-                        <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
-                            <h6 class="mb-0">Notifications</h6>
-                            <button class="btn btn-sm btn-link text-decoration-none">Mark all read</button>
-                        </div>
-                        <div class="notification-list">
-                            <div class="notification-item unread">
-                                <div class="d-flex gap-3">
-                                    <i class="bi bi-info-circle text-primary"></i>
-                                    <div>
-                                        <div class="fw-medium">System Update</div>
-                                        <small class="text-muted">New features available in IT Portal</small>
-                                        <div class="text-muted small">2 hours ago</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="notification-item unread">
-                                <div class="d-flex gap-3">
-                                    <i class="bi bi-exclamation-triangle text-warning"></i>
-                                    <div>
-                                        <div class="fw-medium">Maintenance Scheduled</div>
-                                        <small class="text-muted">Server maintenance tonight at 2 AM</small>
-                                        <div class="text-muted small">5 hours ago</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="notification-item">
-                                <div class="d-flex gap-3">
-                                    <i class="bi bi-check-circle text-success"></i>
-                                    <div>
-                                        <div class="fw-medium">Backup Completed</div>
-                                        <small class="text-muted">Daily backup completed successfully</small>
-                                        <div class="text-muted small">1 day ago</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-center p-2 border-top">
-                            <a href="#" class="btn btn-sm btn-primary">View All</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- User Menu -->
-                <div class="dropdown">
-                    <button class="btn btn-link text-decoration-none d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
-                             alt="User" class="rounded-circle" width="32" height="32">
-                        <span class="d-none d-md-inline">Admin</span>
-                        <i class="bi bi-chevron-down"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end glass-dropdown">
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
-
     <!-- Main Content -->
-    <div class="main-content">
-        <div class="container-fluid py-4">
-            <!-- Hero Section -->
-            <div class="row mb-4">
-                <div class="col-12">
+    <div class="main-content" id="mainContent">
+        <div class="container-fluid p-4">
+            <!-- Hero Banner -->
+            <section class="row mb-4" data-aos="fade-up">
+                <div class="col-lg-8">
                     <div class="card glass-card hero-card">
-                        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+                        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">
-                                <div class="carousel-item active hero-slide bg-gradient-primary">
-                                    <div class="carousel-caption">
-                                        <h3 class="display-5 fw-bold mb-3">Welcome to IT Portal</h3>
-                                        <p class="lead mb-4">Streamline your IT operations with our comprehensive management system</p>
-                                        <button class="btn btn-light btn-lg">Get Started</button>
+                                <div class="carousel-item active">
+                                    <div class="hero-slide bg-gradient-primary">
+                                        <div class="carousel-caption">
+                                            <span class="badge bg-white text-primary mb-2">Sản xuất</span>
+                                            <h3>Triển khai hệ thống MES mới cho nhà máy 2</h3>
+                                            <p>Hệ thống quản lý sản xuất thông minh sẽ được triển khai từ tháng 12/2024</p>
+                                            <button class="btn btn-light">
+                                                Khám phá <i class="bi bi-arrow-right"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="carousel-item hero-slide bg-gradient-success">
-                                    <div class="carousel-caption">
-                                        <h3 class="display-5 fw-bold mb-3">Enhanced Security</h3>
-                                        <p class="lead mb-4">Advanced security features to protect your business data</p>
-                                        <button class="btn btn-light btn-lg">Learn More</button>
+                                <div class="carousel-item">
+                                    <div class="hero-slide bg-gradient-success">
+                                        <div class="carousel-caption">
+                                            <span class="badge bg-white text-success mb-2">Chất lượng</span>
+                                            <h3>Ứng dụng QC Mobile chính thức ra mắt</h3>
+                                            <p>Ứng dụng kiểm tra chất lượng trên thiết bị di động</p>
+                                            <button class="btn btn-light">
+                                                Khám phá <i class="bi bi-arrow-right"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="carousel-item hero-slide bg-gradient-warning">
-                                    <div class="carousel-caption">
-                                        <h3 class="display-5 fw-bold mb-3">Real-time Analytics</h3>
-                                        <p class="lead mb-4">Monitor your systems with powerful analytics and reporting tools</p>
-                                        <button class="btn btn-light btn-lg">View Dashboard</button>
+                                <div class="carousel-item">
+                                    <div class="hero-slide bg-gradient-warning">
+                                        <div class="carousel-caption">
+                                            <span class="badge bg-white text-warning mb-2">Bảo mật</span>
+                                            <h3>Cập nhật chính sách bảo mật IT 2024</h3>
+                                            <p>Các quy định mới về mật khẩu, 2FA và truy cập VPN</p>
+                                            <button class="btn btn-light">
+                                                Khám phá <i class="bi bi-arrow-right"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -352,173 +180,148 @@
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="col-lg-4">
+                    <div class="row g-3 h-100">
+                        <div class="col-6">
+                            <div class="card glass-card mini-card h-100">
+                                <div class="card-body d-flex flex-column">
+                                    <i class="bi bi-exclamation-triangle text-warning mb-2"></i>
+                                    <h6 class="card-title flex-grow-1">Bảo trì hệ thống ERP</h6>
+                                    <p class="card-text small text-muted">22:00 - 02:00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card glass-card mini-card h-100">
+                                <div class="card-body d-flex flex-column">
+                                    <i class="bi bi-shield-exclamation text-danger mb-2"></i>
+                                    <h6 class="card-title flex-grow-1">Cảnh báo Phishing</h6>
+                                    <p class="card-text small text-muted">Email giả mạo</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card glass-card mini-card h-100">
+                                <div class="card-body d-flex flex-column">
+                                    <i class="bi bi-info-circle text-info mb-2"></i>
+                                    <h6 class="card-title flex-grow-1">Đào tạo Office 365</h6>
+                                    <p class="card-text small text-muted">02/12 - 9:00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card glass-card mini-card h-100">
+                                <div class="card-body d-flex flex-column">
+                                    <i class="bi bi-check-circle text-success mb-2"></i>
+                                    <h6 class="card-title flex-grow-1">Server mới</h6>
+                                    <p class="card-text small text-muted">Đã sẵn sàng</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab Navigation Section -->
+            <section class="mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="glass-card p-6" style="border-radius: var(--border-radius-lg);">
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h2 class="text-gradient mb-1">Ứng dụng & Phần mềm</h2>
+                            <p class="text-muted mb-0">Quản lý và truy cập các ứng dụng công ty</p>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <button class="btn btn-outline-secondary btn-sm" id="viewModeToggle">
+                                <i class="bi bi-grid-3x3-gap"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Department Tabs -->
+                    <div class="d-flex align-items-center gap-2 overflow-auto pb-2 scrollbar-brand mb-4" id="departmentTabs">
+                        <!-- Tabs populated by JS -->
+                    </div>
+
+                    <!-- Application Tabs -->
+                    <div class="mb-4">
+                        <ul class="nav nav-pills gap-2" id="applicationTabs">
+                            <!-- App tabs populated by JS -->
+                        </ul>
+                    </div>
+
+                    <!-- Applications Grid -->
+                    <div class="row g-4" id="applicationsGrid">
+                        <!-- Applications populated by JS -->
+                    </div>
+                </div>
+            </section>
 
             <!-- Statistics Cards -->
-            <div class="row mb-4">
-                <div class="col-md-3 mb-3">
-                    <div class="card glass-card mini-card stats-card">
-                        <div class="card-body text-center">
-                            <div class="stats-icon bg-primary mb-3 mx-auto">
-                                <i class="bi bi-laptop"></i>
-                            </div>
-                            <h3 class="fw-bold text-primary">124</h3>
-                            <p class="text-muted mb-0">Active Applications</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card glass-card mini-card stats-card">
-                        <div class="card-body text-center">
-                            <div class="stats-icon bg-success mb-3 mx-auto">
-                                <i class="bi bi-people"></i>
-                            </div>
-                            <h3 class="fw-bold text-success">1,248</h3>
-                            <p class="text-muted mb-0">Active Users</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card glass-card mini-card stats-card">
-                        <div class="card-body text-center">
-                            <div class="stats-icon bg-warning mb-3 mx-auto">
-                                <i class="bi bi-server"></i>
-                            </div>
-                            <h3 class="fw-bold text-warning">18</h3>
-                            <p class="text-muted mb-0">Servers Online</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card glass-card mini-card stats-card">
-                        <div class="card-body text-center">
-                            <div class="stats-icon bg-info mb-3 mx-auto">
-                                <i class="bi bi-shield-check"></i>
-                            </div>
-                            <h3 class="fw-bold text-info">99.9%</h3>
-                            <p class="text-muted mb-0">Uptime</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tab Navigation -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <ul class="nav nav-pills justify-content-center flex-wrap" id="appTabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="all-tab" data-bs-toggle="pill" data-bs-target="#all" type="button" role="tab">
-                                <i class="bi bi-grid"></i>All <span class="badge bg-light text-dark ms-1">24</span>
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="favorites-tab" data-bs-toggle="pill" data-bs-target="#favorites" type="button" role="tab">
-                                <i class="bi bi-star"></i>Favorites <span class="badge bg-light text-dark ms-1">5</span>
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="recent-tab" data-bs-toggle="pill" data-bs-target="#recent" type="button" role="tab">
-                                <i class="bi bi-clock"></i>Recent <span class="badge bg-light text-dark ms-1">8</span>
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="productivity-tab" data-bs-toggle="pill" data-bs-target="#productivity" type="button" role="tab">
-                                <i class="bi bi-briefcase"></i>Productivity <span class="badge bg-light text-dark ms-1">12</span>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- View Mode Toggle -->
-            <div class="row mb-3">
-                <div class="col-12 d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">Applications</h4>
-                    <div class="btn-group" role="group" id="viewModeToggle">
-                        <input type="radio" class="btn-check" name="viewMode" id="gridView" autocomplete="off" checked>
-                        <label class="btn btn-outline-primary" for="gridView">
-                            <i class="bi bi-grid"></i> Grid
-                        </label>
-                        <input type="radio" class="btn-check" name="viewMode" id="listView" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="listView">
-                            <i class="bi bi-list"></i> List
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Applications Content -->
-            <div class="tab-content" id="appTabsContent">
-                <!-- All Applications -->
-                <div class="tab-pane fade show active" id="all" role="tabpanel">
-                    <div class="row" id="applicationsGrid">
-                        <!-- Applications will be loaded here by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Favorites -->
-                <div class="tab-pane fade" id="favorites" role="tabpanel">
-                    <div class="row" id="favoritesGrid">
-                        <div class="col-12 text-center py-5">
-                            <i class="bi bi-star display-1 text-muted"></i>
-                            <h4 class="text-muted mt-3">No favorites yet</h4>
-                            <p class="text-muted">Click the star icon on any application to add it to favorites</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent -->
-                <div class="tab-pane fade" id="recent" role="tabpanel">
-                    <div class="row" id="recentGrid">
-                        <!-- Recent applications will be loaded here -->
-                    </div>
-                </div>
-
-                <!-- Productivity -->
-                <div class="tab-pane fade" id="productivity" role="tabpanel">
-                    <div class="row" id="productivityGrid">
-                        <!-- Productivity applications will be loaded here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Analytics Section -->
-            <div class="row mt-5">
-                <div class="col-md-6 mb-4">
-                    <div class="card glass-card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Usage Analytics</h5>
-                        </div>
+            <section class="row g-4 mb-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="col-md-4">
+                    <div class="card glass-card stats-card h-100">
                         <div class="card-body">
-                            <div class="chart-container">
-                                <canvas id="usageChart"></canvas>
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h6 class="text-muted mb-2">Ứng dụng hoạt động</h6>
+                                    <h2 class="text-blue-500 mb-1">42</h2>
+                                    <small class="text-success">
+                                        <i class="bi bi-arrow-up"></i> +3 tuần này
+                                    </small>
+                                </div>
+                                <div class="stats-icon bg-gradient-primary">
+                                    <i class="bi bi-app"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 mb-4">
-                    <div class="card glass-card">
-                        <div class="card-header">
-                            <h5 class="mb-0">System Performance</h5>
-                        </div>
+                <div class="col-md-4">
+                    <div class="card glass-card stats-card h-100">
                         <div class="card-body">
-                            <div class="chart-container">
-                                <canvas id="performanceChart"></canvas>
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h6 class="text-muted mb-2">Người dùng hoạt động</h6>
+                                    <h2 class="text-green-500 mb-1">1,247</h2>
+                                    <small class="text-success">
+                                        <i class="bi bi-arrow-up"></i> +156 hôm nay
+                                    </small>
+                                </div>
+                                <div class="stats-icon bg-gradient-success">
+                                    <i class="bi bi-people"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
+                <div class="col-md-4">
+                    <div class="card glass-card stats-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h6 class="text-muted mb-2">Uptime hệ thống</h6>
+                                    <h2 class="text-orange-500 mb-1">99.8%</h2>
+                                    <small class="text-muted">30 ngày qua</small>
+                                </div>
+                                <div class="stats-icon bg-gradient-warning">
+                                    <i class="bi bi-speedometer2"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
     <!-- Toast Container -->
     <div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer"></div>
 
-    <!-- Bootstrap JS -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JavaScript -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
