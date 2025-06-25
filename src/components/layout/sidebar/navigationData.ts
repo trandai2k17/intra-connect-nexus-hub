@@ -23,19 +23,32 @@ import {
   ShoppingBag
 } from 'lucide-react';
 
-export const navigationItems = [
+export interface NavigationItem {
+  title: string;
+  url: string;
+  icon: React.ComponentType<{ className?: string }>;
+  iconColor: string;
+  borderColor?: string;
+  subItems?: {
+    title: string;
+    url: string;
+    icon: React.ComponentType<{ className?: string }>;
+    iconColor: string;
+  }[];
+}
+
+export const navigationItems: NavigationItem[] = [
   {
     title: 'sidebar.it',
     url: '/it',
     icon: Monitor,
     iconColor: 'text-blue-500',
-    borderColor: 'border-t-blue-400',
     subItems: [
       {
         title: 'Software',
         url: '/it/software',
         icon: Laptop,
-        iconColor: 'text-blue-400'
+        iconColor: 'text-blue-500'
       },
       {
         title: 'Web Page',
@@ -56,13 +69,12 @@ export const navigationItems = [
     url: '/production',
     icon: Building2,
     iconColor: 'text-green-500',
-    borderColor: 'border-t-green-400',
     subItems: [
       {
         title: 'Manufacturing',
         url: '/production/manufacturing',
         icon: Cog,
-        iconColor: 'text-green-400'
+        iconColor: 'text-green-500'
       },
       {
         title: 'Maintenance',
@@ -77,13 +89,12 @@ export const navigationItems = [
     url: '/quality',
     icon: BarChart3,
     iconColor: 'text-purple-500',
-    borderColor: 'border-t-purple-400',
     subItems: [
       {
         title: 'Quality Control',
         url: '/quality/control',
         icon: CheckCircle,
-        iconColor: 'text-purple-400'
+        iconColor: 'text-purple-500'
       },
       {
         title: 'Reports',
@@ -104,13 +115,12 @@ export const navigationItems = [
     url: '/hr',
     icon: Users,
     iconColor: 'text-orange-500',
-    borderColor: 'border-t-orange-400',
     subItems: [
       {
         title: 'Employee Management',
         url: '/hr/employees',
         icon: UserCheck,
-        iconColor: 'text-orange-400'
+        iconColor: 'text-orange-500'
       },
       {
         title: 'Schedule',
@@ -131,13 +141,12 @@ export const navigationItems = [
     url: '/inventory',
     icon: Package,
     iconColor: 'text-indigo-500',
-    borderColor: 'border-t-indigo-400',
     subItems: [
       {
         title: 'Stock Management',
         url: '/inventory/stock',
         icon: Box,
-        iconColor: 'text-indigo-400'
+        iconColor: 'text-indigo-500'
       },
       {
         title: 'Warehouse',
@@ -152,13 +161,12 @@ export const navigationItems = [
     url: '/purchase',
     icon: ShoppingCart,
     iconColor: 'text-red-500',
-    borderColor: 'border-t-red-400',
     subItems: [
       {
         title: 'Purchase Orders',
         url: '/purchase/orders',
         icon: ShoppingBag,
-        iconColor: 'text-red-400'
+        iconColor: 'text-red-500'
       },
       {
         title: 'Vendors',
@@ -173,6 +181,5 @@ export const navigationItems = [
     url: '/library',
     icon: Code,
     iconColor: 'text-cyan-500',
-    borderColor: 'border-t-cyan-400',
   },
 ];
