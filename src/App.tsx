@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import Index from "./pages/Index";
 import MaterialRequest from "./pages/MaterialRequest";
 import Library from "./pages/Library";
+import SoftwareApplication from "./pages/SoftwareApplication";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/material-request" element={<MaterialRequest />} />
               <Route path="/library" element={<Library />} />
+              <Route path="/software-application" element={<SoftwareApplication />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
