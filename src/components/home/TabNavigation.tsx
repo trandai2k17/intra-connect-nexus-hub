@@ -8,9 +8,16 @@ import {
   BarChart3, 
   Users, 
   Package, 
-  ShoppingCart 
+  ShoppingCart,
+  Search,
+  Grid3X3,
+  List
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ApplicationTabs } from "./ApplicationTabs";
+import { applications, companyWebPages } from "./applicationData";
 
 interface TabItem {
   id: string;
@@ -37,6 +44,10 @@ interface TabNavigationProps {
 export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
   const { t } = useLanguage();
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [favorites, setFavorites] = useState<number[]>([1, 4, 6, 7]);
+  const [activeAppTab, setActiveAppTab] = useState("software");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   
   useEffect(() => {
     const handleScroll = () => {
@@ -47,58 +58,108 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const filteredApps = applications.filter(app => {
+    const matchesSearch = app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         app.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesDept = activeTab === "all" || app.departments.includes(activeTab);
+    return matchesSearch && matchesDept;
+  });
+
+  const filteredWebPages = companyWebPages.filter(page => {
+    return page.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+           page.description.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
+  const toggleFavorite = (appId: number) => {
+    setFavorites(prev => 
+      prev.includes(appId) 
+        ? prev.filter(id => id !== appId)
+        : [...prev, appId]
+    );
+  };
+
   return (
     <div className={cn(
-      "mb-8 transition-all duration-300 relative",
+      "transition-all duration-300 relative",
       scrollPosition > 100 ? "sticky top-20 z-20" : ""
     )}>
       {/* Background with geometric elements */}
       <div className="absolute inset-0 bg-gradient-to-r from-white/90 to-blue-50/90 backdrop-blur-sm rounded-3xl border border-white/40 shadow-lg geometric-bg"></div>
       
-      <div className="relative flex items-center space-x-2 p-4 overflow-x-auto">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          
-          return (
-            <button
-              key={tab.id}
-              onClick={() => onTabChange(tab.id)}
-              className={cn(
-                "flex items-center space-x-3 px-6 py-4 rounded-2xl font-semibold text-sm transition-all duration-300 whitespace-nowrap relative overflow-hidden group",
-                "hover:shadow-lg hover:scale-105 transform",
-                isActive 
-                  ? "bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white shadow-xl shadow-blue-500/25 animate-brand-pulse" 
-                  : "text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 hover:text-blue-600 bg-white/60 backdrop-blur-sm border border-white/30"
-              )}
+      <div className="relative p-6 space-y-6">
+        {/* Header with title and controls */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-1">Ứng dụng & Phần mềm</h2>
+            <p className="text-sm text-gray-600">Quản lý và truy cập các ứng dụng công ty</p>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Tìm kiếm ứng dụng..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm w-64"
+              />
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
+              className="p-2"
             >
-              {/* Geometric decoration for active tab */}
-              {isActive && (
-                <>
-                  <div className="absolute top-1 right-1 w-3 h-3 bg-white/20 rounded transform rotate-45"></div>
-                  <div className="absolute bottom-1 left-1 w-2 h-2 bg-white/15 rounded transform rotate-12"></div>
-                </>
-              )}
-              
-              <Icon className={cn(
-                "w-5 h-5 transition-all duration-300",
-                isActive ? "text-white" : "text-blue-600 group-hover:text-blue-700"
-              )} />
-              <span className="font-medium">{t(tab.labelKey)}</span>
-              <span className={cn(
-                "px-3 py-1 rounded-full text-xs font-bold transition-all duration-300 min-w-[2rem] text-center",
-                isActive 
-                  ? "bg-white/25 text-white shadow-sm" 
-                  : "bg-blue-100 text-blue-700 group-hover:bg-blue-200"
-              )}>
-                {tab.count}
-              </span>
-              
-              {/* Hover effect overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-            </button>
-          );
-        })}
+              {viewMode === "grid" ? <List className="w-4 h-4" /> : <Grid3X3 className="w-4 h-4" />}
+            </Button>
+          </div>
+        </div>
+
+        {/* Department tabs - compact horizontal scrollable */}
+        <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-brand">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            
+            return (
+              <button
+                key={tab.id}
+                onClick={() => onTabChange(tab.id)}
+                className={cn(
+                  "flex items-center space-x-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 whitespace-nowrap border",
+                  isActive 
+                    ? "bg-blue-500 text-white shadow-md border-blue-500" 
+                    : "text-gray-600 hover:bg-blue-50 hover:text-blue-600 bg-white border-gray-200"
+                )}
+              >
+                <Icon className="w-4 h-4" />
+                <span>{t(tab.labelKey)}</span>
+                <Badge 
+                  className={cn(
+                    "text-xs px-2 py-0.5",
+                    isActive 
+                      ? "bg-white/20 text-white border-white/30" 
+                      : "bg-blue-100 text-blue-700 border-blue-200"
+                  )}
+                >
+                  {tab.count}
+                </Badge>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Application Tabs */}
+        <ApplicationTabs
+          activeTab={activeAppTab}
+          onTabChange={setActiveAppTab}
+          filteredApps={filteredApps}
+          companyWebPages={filteredWebPages}
+          favorites={favorites}
+          onToggleFavorite={toggleFavorite}
+          viewMode={viewMode}
+          searchTerm={searchTerm}
+        />
       </div>
     </div>
   );

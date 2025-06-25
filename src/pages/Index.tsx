@@ -5,7 +5,6 @@ import { AppSidebar } from "@/components/layout/AppSidebar";
 import { Header } from "@/components/layout/Header";
 import { HeroBanner } from "@/components/home/HeroBanner";
 import { TabNavigation } from "@/components/home/TabNavigation";
-import { ApplicationGrid } from "@/components/home/ApplicationGrid";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const Index = () => {
@@ -25,31 +24,12 @@ const Index = () => {
                 <HeroBanner />
               </section>
               
-              {/* Tab Navigation */}
+              {/* Tab Navigation with Applications */}
               <section className="rounded-3xl p-6 shadow-lg border border-white/30 dark:border-gray-700/30 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
                 <TabNavigation 
                   activeTab={activeTab} 
                   onTabChange={setActiveTab} 
                 />
-              </section>
-              
-              {/* Applications Section */}
-              <section className="rounded-3xl p-8 shadow-xl border border-white/30 dark:border-gray-700/30 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
-                <div className="flex items-center justify-between mb-8">
-                  <div>
-                    <h2 className="text-3xl font-bold text-gradient-bright dark:text-white">
-                      {t('home.apps.title')}
-                    </h2>
-                    <p className="text-gray-700 dark:text-gray-300 mt-2 text-lg font-medium">
-                      {t('home.apps.subtitle')}
-                    </p>
-                  </div>
-                  <div className="text-sm font-medium text-gray-600 dark:text-gray-400 px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-700/80">
-                    {t('home.updated')}
-                  </div>
-                </div>
-                
-                <ApplicationGrid activeTab={activeTab} />
               </section>
 
               {/* Quick Stats */}
