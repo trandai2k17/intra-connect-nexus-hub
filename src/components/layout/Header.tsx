@@ -75,7 +75,7 @@ export function Header() {
       {/* Spacer div to push content down */}
       <div style={{ height: 'var(--header-height)' }} />
       
-      <header className="fixed top-0 left-0 right-0 z-30 h-20 transition-all duration-300"
+      <header className="fixed top-0 left-0 right-0 z-50 h-20 transition-all duration-300"
         style={{
           background: 'rgba(255, 255, 255, 0.98)',
           backdropFilter: 'blur(20px)',
@@ -88,8 +88,8 @@ export function Header() {
           <div className="flex items-center space-x-6 flex-1">
             <SidebarTrigger className="lg:hidden p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-all duration-200 text-gray-700 dark:text-gray-300" />
             
-            {/* Running announcement */}
-            <div className="hidden md:block flex-1 max-w-2xl">
+            {/* Running announcement - moved to center to avoid sidebar overlap */}
+            <div className="hidden md:block flex-1 max-w-2xl mx-auto">
               <div 
                 className={`overflow-hidden rounded-full px-6 py-3 border border-gray-200 dark:border-gray-700 transition-all duration-1000 ${
                   showAnnouncement ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform -translate-y-4'
@@ -99,7 +99,7 @@ export function Header() {
                   backdropFilter: 'blur(10px)'
                 }}
               >
-                <div className={`whitespace-nowrap transition-transform duration-1000 ${
+                <div className={`whitespace-nowrap transition-transform duration-1000 text-center ${
                   showAnnouncement ? 'animate-running-text' : ''
                 }`}>
                   <span className="text-gray-800 dark:text-gray-200 font-medium text-sm">
@@ -121,7 +121,7 @@ export function Header() {
               <DropdownMenuTrigger asChild>
                 <button className="relative p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-all duration-200 group">
                   <Bell className="w-6 h-6 text-gray-700 dark:text-gray-300 group-hover:text-gray-800 dark:group-hover:text-gray-200" />
-                  <Badge className="absolute -top-1 -right-1 w-6 h-6 p-0 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs flex items-center justify-center border-2 border-white dark:border-gray-800">
+                  <Badge className="absolute -top-1 -right-1 w-6 h-6 p-0 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-xs flex items-center justify-center border-2 border-white dark:border-gray-800">
                     3
                   </Badge>
                 </button>
@@ -148,7 +148,7 @@ export function Header() {
                 <button className="flex items-center space-x-3 p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-all duration-200 group">
                   <Avatar className="w-10 h-10 border-2 border-gray-300 dark:border-gray-600">
                     <AvatarImage src="/api/placeholder/40/40" alt="User" />
-                    <AvatarFallback className="bg-gradient-to-br from-blue-400 to-purple-500 text-white font-bold">
+                    <AvatarFallback className="bg-gradient-to-br from-blue-400 to-cyan-500 text-white font-bold">
                       NV
                     </AvatarFallback>
                   </Avatar>
