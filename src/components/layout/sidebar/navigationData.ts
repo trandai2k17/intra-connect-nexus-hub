@@ -8,7 +8,12 @@ import {
   ShoppingCart,
   Users,
   Settings,
-  BarChart3
+  BarChart3,
+  Database,
+  FolderKanban,
+  GitBranch,
+  MessageSquare,
+  TrendingUp
 } from "lucide-react";
 
 interface SubItem {
@@ -50,6 +55,38 @@ export const navigationItems: NavigationItem[] = [
     url: "/library",
     icon: BookOpen,
     iconColor: "text-purple-600",
+  },
+  {
+    title: "MIS",
+    url: "#",
+    icon: Database,
+    iconColor: "text-cyan-600",
+    subItems: [
+      {
+        title: "Quản lý Project",
+        url: "/mis/project-management",
+        icon: FolderKanban,
+        iconColor: "text-blue-600",
+      },
+      {
+        title: "Backlog & Stories",
+        url: "/mis/backlog",
+        icon: GitBranch,
+        iconColor: "text-green-600",
+      },
+      {
+        title: "Feedback & Comments",
+        url: "/mis/feedback",
+        icon: MessageSquare,
+        iconColor: "text-orange-600",
+      },
+      {
+        title: "Báo cáo Project",
+        url: "/mis/reports",
+        icon: TrendingUp,
+        iconColor: "text-purple-600",
+      },
+    ],
   },
   {
     title: "Quản lý",

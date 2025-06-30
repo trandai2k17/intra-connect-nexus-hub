@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import MaterialRequest from "./pages/MaterialRequest";
 import Library from "./pages/Library";
 import SoftwareApplication from "./pages/SoftwareApplication";
+import ProjectManagement from "./pages/ProjectManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
               <Route path="/material-request" element={<MaterialRequest />} />
               <Route path="/library" element={<Library />} />
               <Route path="/software-application" element={<SoftwareApplication />} />
+              <Route path="/mis/project-management" element={<ProjectManagement />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
