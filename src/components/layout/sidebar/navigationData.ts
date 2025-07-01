@@ -13,7 +13,9 @@ import {
   FolderKanban,
   GitBranch,
   MessageSquare,
-  TrendingUp
+  TrendingUp,
+  Book,
+  PlusCircle
 } from "lucide-react";
 
 interface SubItem {
@@ -49,6 +51,26 @@ export const navigationItems: NavigationItem[] = [
     url: "/material-request", 
     icon: FileText,
     iconColor: "text-orange-600",
+  },
+  {
+    title: "Từ điển",
+    url: "#",
+    icon: Book,
+    iconColor: "text-indigo-600",
+    subItems: [
+      {
+        title: "Xem từ vựng",
+        url: "/dictionary",
+        icon: BookOpen,
+        iconColor: "text-blue-600",
+      },
+      {
+        title: "Quản lý từ vựng",
+        url: "/dictionary-management",
+        icon: PlusCircle,
+        iconColor: "text-green-600",
+      },
+    ],
   },
   {
     title: "Thư viện",
