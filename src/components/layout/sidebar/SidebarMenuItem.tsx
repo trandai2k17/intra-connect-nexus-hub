@@ -55,7 +55,7 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
           ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md' 
           : 'text-gray-700 dark:text-gray-200 hover:bg-white hover:shadow-md dark:hover:bg-gray-700'
         }
-        ${isCollapsed ? 'justify-center p-4 h-16 w-16 border border-gray-300 dark:border-gray-600' : 'gap-4 px-4 py-5'}
+        ${isCollapsed ? 'justify-center h-16 w-16 border border-gray-300 dark:border-gray-600' : 'gap-4 px-4 py-5'}
       `}
     >
       <Icon className={`
@@ -120,7 +120,7 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
                         `}
                       >
                         <SubIcon className={`
-                          w-4 h-4 transition-all duration-200
+                          w-4 h-4 transition-all duration-200 flex-shrink-0
                           ${isSubActive
                             ? 'text-blue-600 dark:text-blue-400' 
                             : subItem.iconColor
@@ -163,7 +163,7 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
                 `}
               >
                 <SubIcon className={`
-                  w-4 h-4 transition-all duration-200
+                  w-4 h-4 transition-all duration-200 flex-shrink-0
                   ${isSubActive
                     ? 'text-blue-600 dark:text-blue-400' 
                     : subItem.iconColor
