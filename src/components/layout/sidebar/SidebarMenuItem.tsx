@@ -55,7 +55,7 @@ export function SidebarMenuItem({ item, isExpanded, onToggleExpanded }: SidebarM
           ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md' 
           : 'text-gray-700 dark:text-gray-200 hover:bg-white hover:shadow-md dark:hover:bg-gray-700'
         }
-        ${isCollapsed ? 'justify-center h-16 w-16 border border-gray-300 dark:border-gray-600' : 'gap-4 px-4 py-5'}
+        ${isCollapsed ? 'justify-center h-16 w-16 border border-gray-300 dark:border-gray-600 p-4' : 'gap-4 px-4 py-5'}
       `}
     >
       <Icon className={`
