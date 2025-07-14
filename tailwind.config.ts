@@ -63,6 +63,8 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
+				'glass-bg': 'var(--glass-bg)',
+				'glass-border': 'var(--glass-border)',
 				// Custom colors for the intranet portal
 				'intranet': {
 					'primary': '#3B82F6',
@@ -129,6 +131,10 @@ export default {
 				'rotateY': {
 					'0%': { transform: 'perspective(1000px) rotateY(0deg)' },
 					'100%': { transform: 'perspective(1000px) rotateY(12deg)' }
+				},
+				'breathe': {
+					'0%, 100%': { transform: 'scale(1)' },
+					'50%': { transform: 'scale(1.05)' }
 				}
 			},
 			animation: {
@@ -139,7 +145,8 @@ export default {
 				'fade-in': 'fade-in 0.6s ease-out',
 				'scroll-up': 'scroll-up 20s linear infinite',
 				'scale-in': 'scale-in 0.2s ease-out',
-				'rotate-y-12': 'rotateY 0.3s ease-out'
+				'rotate-y-12': 'rotateY 0.3s ease-out',
+				'breathe': 'breathe 4s ease-in-out infinite'
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
