@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import Index from "./pages/Index";
+import Login from "./pages/Login";
 import MaterialRequest from "./pages/MaterialRequest";
 import Library from "./pages/Library";
 import SoftwareApplication from "./pages/SoftwareApplication";
@@ -27,6 +28,7 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/material-request" element={<MaterialRequest />} />
               <Route path="/library" element={<Library />} />
               <Route path="/software-application" element={<SoftwareApplication />} />
