@@ -121,6 +121,14 @@ export default {
 				'scroll-up': {
 					'0%': { transform: 'translateY(100%)' },
 					'100%': { transform: 'translateY(-100%)' }
+				},
+				'scale-in': {
+					'0%': { transform: 'scale(0.95)', opacity: '0' },
+					'100%': { transform: 'scale(1)', opacity: '1' }
+				},
+				'rotateY': {
+					'0%': { transform: 'perspective(1000px) rotateY(0deg)' },
+					'100%': { transform: 'perspective(1000px) rotateY(12deg)' }
 				}
 			},
 			animation: {
@@ -129,7 +137,9 @@ export default {
 				'slide-right': 'slide-right 0.8s ease-out',
 				'slide-up': 'slide-up 0.6s ease-out',
 				'fade-in': 'fade-in 0.6s ease-out',
-				'scroll-up': 'scroll-up 20s linear infinite'
+				'scroll-up': 'scroll-up 20s linear infinite',
+				'scale-in': 'scale-in 0.2s ease-out',
+				'rotate-y-12': 'rotateY 0.3s ease-out'
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -137,7 +147,11 @@ export default {
 				'glass': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2))'
 			},
 			backdropBlur: {
-				'xs': '2px'
+				'xs': '2px',
+				'xl': '24px'
+			},
+			perspective: {
+				'1000': '1000px'
 			}
 		}
 	},
