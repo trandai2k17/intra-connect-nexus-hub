@@ -40,7 +40,7 @@ export default function Login() {
 
       {/* Main Content */}
       <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
-        <Card className="w-full max-w-md backdrop-blur-xl bg-glass-bg border border-glass-border shadow-glass rounded-2xl overflow-hidden group transition-all duration-700 ease-out hover:backdrop-blur-2xl hover:bg-glass-bg/70 hover:shadow-[0_25px_50px_-12px_rgba(0,87,179,0.25)] hover:scale-[1.03] hover:border-primary/40 hover:-translate-y-3 hover:rotate-[0.5deg]">
+        <Card className="w-full max-w-md backdrop-blur-xl bg-glass-bg border border-glass-border shadow-glass rounded-2xl overflow-hidden group transition-all duration-700 ease-out hover:backdrop-blur-2xl hover:bg-glass-bg/70 hover:shadow-[0_20px_40px_-8px_rgba(0,87,179,0.4),0_8px_16px_-8px_rgba(0,123,255,0.3)] hover:scale-[1.03] hover:border-primary/40 hover:-translate-y-3 hover:rotate-[0.5deg]">
           {/* Glass effect overlay */}
           <div className="absolute inset-0 bg-gradient-glass rounded-2xl"></div>
           
