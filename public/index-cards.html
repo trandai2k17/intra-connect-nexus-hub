@@ -167,26 +167,32 @@
                         <button class="btn btn-card" onclick="handleCardClick('onedrive')">
                             <div class="icon-container">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="var(--icon-color)" viewBox="0 0 24 24">
-                                    <!-- Main OneDrive cloud -->
-                                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" fill="var(--icon-color)"/>
+                                    <!-- Main OneDrive cloud with better shape -->
+                                    <path d="M6.5 16a3.5 3.5 0 0 1 0-7c.3-1.8 1.9-3 3.5-3s3.2 1.2 3.5 3a2.5 2.5 0 0 1 2.5 2.5c0 .6-.2 1.1-.5 1.5h2.5a3 3 0 0 0 0-6 4 4 0 0 0-7-2.4 5 5 0 0 0-9 3.4 4 4 0 0 0 4 6.5h0.5z" fill="var(--icon-color)" opacity="0.9"/>
                                     
-                                    <!-- Microsoft 365 logo -->
-                                    <rect x="4" y="4" width="2.5" height="2.5" fill="#fff"/>
-                                    <rect x="7" y="4" width="2.5" height="2.5" fill="#fff" opacity="0.8"/>
-                                    <rect x="4" y="7" width="2.5" height="2.5" fill="#fff" opacity="0.8"/>
-                                    <rect x="7" y="7" width="2.5" height="2.5" fill="#fff" opacity="0.6"/>
+                                    <!-- Cloud base -->
+                                    <ellipse cx="12" cy="18" rx="10" ry="2" fill="var(--icon-color)" opacity="0.3"/>
                                     
-                                    <!-- Cloud sync arrows -->
-                                    <circle cx="14" cy="13" r="2.5" fill="none" stroke="#fff" stroke-width="0.8" opacity="0.7"/>
-                                    <path d="M12.5 12l1.5-1.5 1.5 1.5" stroke="#fff" stroke-width="0.8" fill="none"/>
-                                    <path d="M15.5 14l-1.5 1.5-1.5-1.5" stroke="#fff" stroke-width="0.8" fill="none"/>
+                                    <!-- Microsoft 365 logo redesigned -->
+                                    <g transform="translate(3, 6)">
+                                        <rect x="0" y="0" width="3" height="3" fill="#fff" rx="0.3"/>
+                                        <rect x="3.5" y="0" width="3" height="3" fill="#fff" rx="0.3" opacity="0.9"/>
+                                        <rect x="0" y="3.5" width="3" height="3" fill="#fff" rx="0.3" opacity="0.9"/>
+                                        <rect x="3.5" y="3.5" width="3" height="3" fill="#fff" rx="0.3" opacity="0.8"/>
+                                    </g>
                                     
-                                    <!-- File icons -->
-                                    <rect x="16" y="15" width="1.5" height="2" rx="0.2" fill="#fff" opacity="0.8"/>
-                                    <rect x="18" y="14" width="1.5" height="3" rx="0.2" fill="#fff" opacity="0.6"/>
+                                    <!-- OneDrive text/branding -->
+                                    <text x="15" y="12" font-size="2" fill="#fff" font-weight="bold" opacity="0.8">1</text>
+                                    <circle cx="17" cy="11" r="0.8" fill="#fff" opacity="0.6"/>
                                     
-                                    <!-- OneDrive text -->
-                                    <text x="10" y="18" font-size="1.2" fill="#fff" opacity="0.9">1</text>
+                                    <!-- Cloud sync indicators -->
+                                    <circle cx="15" cy="15" r="1.5" fill="none" stroke="#fff" stroke-width="0.5" opacity="0.6"/>
+                                    <path d="M14.2 14.2l0.8-0.8 0.8 0.8" stroke="#fff" stroke-width="0.5" fill="none" opacity="0.6"/>
+                                    <path d="M15.8 15.8l-0.8 0.8-0.8-0.8" stroke="#fff" stroke-width="0.5" fill="none" opacity="0.6"/>
+                                    
+                                    <!-- File storage icons -->
+                                    <rect x="18" y="13" width="1.5" height="2" rx="0.2" fill="#fff" opacity="0.7"/>
+                                    <rect x="19.8" y="12" width="1.5" height="3" rx="0.2" fill="#fff" opacity="0.5"/>
                                 </svg>
                             </div>
                         </button>
