@@ -535,13 +535,11 @@
             switch(stage) {
                 case 'created':
                     return caseData.createdDateTime ? 'completed' : 'empty';
-                case 'translate':
-                    return caseData.translateRequest ? 'completed' : 'pending';
-                case 'assigned':
-                    return caseData.designerAssigned ? 'completed' : 'pending';
                 case 'design':
                     if (caseData.threeShapeStatus === 'Error') return 'error';
                     return caseData.finished ? 'completed' : 'pending';
+                case 'sent':
+                    return caseData.transDate ? 'completed' : 'pending';
                 case 'transfer':
                     return caseData.transDate ? 'completed' : 'pending';
                 case 'shipping':
@@ -583,11 +581,10 @@
 
         function renderTimeline(caseData) {
             const stages = [
-                { key: 'created', label: 'Created', icon: 'plus' },
-                { key: 'translate', label: 'Translate', icon: 'language' },
-                { key: 'assigned', label: 'Assigned', icon: 'user-check' },
+                { key: 'created', label: 'Create', icon: 'plus' },
                 { key: 'design', label: 'Design', icon: 'drafting-compass' },
-                { key: 'transfer', label: 'Transfer', icon: 'share' },
+                { key: 'sent', label: 'Sent', icon: 'paper-plane' },
+                { key: 'transfer', label: 'Transfer', icon: 'exchange-alt' },
                 { key: 'shipping', label: 'Shipping', icon: 'shipping-fast' }
             ];
 
