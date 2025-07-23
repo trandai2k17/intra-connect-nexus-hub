@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Design Tracker - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --success-color: #198754;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #0dcaf0;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--primary-color), #0056b3);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .stats-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stage-indicator {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            margin-right: 8px;
+        }
+
+        .stage-pending { background-color: var(--warning-color); }
+        .stage-completed { background-color: var(--success-color); }
+        .stage-error { background-color: var(--danger-color); }
+        .stage-empty { background-color: #6c757d; }
+
+        .case-row {
+            border-left: 4px solid #dee2e6;
+            margin-bottom: 1rem;
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .case-row.priority-high { border-left-color: var(--danger-color); }
+        .case-row.priority-medium { border-left-color: var(--warning-color); }
+        .case-row.priority-normal { border-left-color: var(--success-color); }
+
+        .timeline-progress {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+        }
+
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .timeline-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background-color: #dee2e6;
+            z-index: 1;
+        }
+
+        .timeline-step.completed::after {
+            background-color: var(--success-color);
+        }
+
+        .alert-badge {
+            font-size: 11px;
+            padding: 2px 6px;
+        }
+
+        .filter-section {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .case-id {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .elapsed-time {
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .elapsed-warning { color: var(--danger-color); }
+        .elapsed-normal { color: var(--success-color); }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-2"><i class="fas fa-tachometer-alt me-3"></i>Case Design Tracker</h1>
+                    <p class="mb-0">Theo dõi luồng xử lý thiết kế nha khoa - Lab Dashboard</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn btn-light me-2" onclick="refreshData()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <span class="badge bg-light text-dark fs-6">
+                        <i class="fas fa-clock"></i> <span id="lastUpdate">--:--</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-2">
+                <div class="card stats-card border-primary">
+                    <div class="card-body text-center">
+                        <i class="fas fa-plus-circle fa-2x text-primary mb-2"></i>
+                        <h4 class="mb-1" id="totalCases">24</h4>
+                        <small class="text-muted">Tổng Cases</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card stats-card border-warning">
+                    <div class="card-body text-center">
+                        <i class="fas fa-clock fa-2x text-warning mb-2"></i>
+                        <h4 class="mb-1" id="pendingCases">8</h4>
+                        <small class="text-muted">Đang chờ</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card stats-card border-info">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-cog fa-2x text-info mb-2"></i>
+                        <h4 class="mb-1" id="inProgressCases">12</h4>
+                        <small class="text-muted">Đang xử lý</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card stats-card border-success">
+                    <div class="card-body text-center">
+                        <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                        <h4 class="mb-1" id="completedCases">3</h4>
+                        <small class="text-muted">Hoàn thành</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card stats-card border-danger">
+                    <div class="card-body text-center">
+                        <i class="fas fa-exclamation-triangle fa-2x text-danger mb-2"></i>
+                        <h4 class="mb-1" id="errorCases">1</h4>
+                        <small class="text-muted">Lỗi</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card stats-card border-secondary">
+                    <div class="card-body text-center">
+                        <i class="fas fa-shipping-fast fa-2x text-secondary mb-2"></i>
+                        <h4 class="mb-1" id="shippedCases">15</h4>
+                        <small class="text-muted">Đã giao</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-section">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <label class="form-label">Lọc theo ngày:</label>
+                    <input type="date" class="form-control" id="dateFilter" onchange="filterCases()">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Sales ID:</label>
+                    <select class="form-select" id="salesFilter" onchange="filterCases()">
+                        <option value="">Tất cả</option>
+                        <option value="SALE001">SALE001</option>
+                        <option value="SALE002">SALE002</option>
+                        <option value="SALE003">SALE003</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Trạng thái:</label>
+                    <select class="form-select" id="statusFilter" onchange="filterCases()">
+                        <option value="">Tất cả</option>
+                        <option value="pending">Đang chờ</option>
+                        <option value="progress">Đang xử lý</option>
+                        <option value="completed">Hoàn thành</option>
+                        <option value="error">Lỗi</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Designer:</label>
+                    <select class="form-select" id="designerFilter" onchange="filterCases()">
+                        <option value="">Tất cả</option>
+                        <option value="TECH001">Nguyễn Văn A</option>
+                        <option value="TECH002">Trần Thị B</option>
+                        <option value="TECH003">Lê Văn C</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cases List -->
+        <div id="casesList">
+            <!-- Cases will be populated here -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mock data for demonstration
+        const mockCases = [
+            {
+                id: "CASE001",
+                salesId: "SALE001",
+                patientName: "Nguyễn Văn X",
+                createdDateTime: "2024-01-23 08:30:00",
+                translateRequest: "2024-01-23 08:45:00",
+                designerAssigned: "TECH001",
+                scanTime: "2024-01-23 09:15:00",
+                threeShapeStatus: "Completed",
+                finished: true,
+                printed: true,
+                transDate: "2024-01-23 15:30:00",
+                shippingDate: "2024-01-23 17:00:00",
+                remarks: "Normal case"
+            },
+            {
+                id: "CASE002",
+                salesId: "SALE002",
+                patientName: "Trần Thị Y",
+                createdDateTime: "2024-01-23 09:00:00",
+                translateRequest: "2024-01-23 09:20:00",
+                designerAssigned: "TECH002",
+                scanTime: "2024-01-23 11:30:00",
+                threeShapeStatus: "In Progress",
+                finished: false,
+                printed: false,
+                transDate: null,
+                shippingDate: null,
+                remarks: ""
+            },
+            {
+                id: "CASE003",
+                salesId: "SALE001",
+                patientName: "Lê Văn Z",
+                createdDateTime: "2024-01-23 10:15:00",
+                translateRequest: null,
+                designerAssigned: null,
+                scanTime: null,
+                threeShapeStatus: null,
+                finished: false,
+                printed: false,
+                transDate: null,
+                shippingDate: null,
+                remarks: ""
+            }
+        ];
+
+        function getElapsedTime(startTime, endTime = null) {
+            const start = new Date(startTime);
+            const end = endTime ? new Date(endTime) : new Date();
+            const diffMs = end - start;
+            const diffHours = diffMs / (1000 * 60 * 60);
+            return diffHours;
+        }
+
+        function formatElapsedTime(hours) {
+            if (hours < 1) {
+                return `${Math.round(hours * 60)}m`;
+            }
+            return `${Math.round(hours * 10) / 10}h`;
+        }
+
+        function getStageStatus(caseData, stage) {
+            switch(stage) {
+                case 'created':
+                    return caseData.createdDateTime ? 'completed' : 'empty';
+                case 'translate':
+                    return caseData.translateRequest ? 'completed' : 'pending';
+                case 'assigned':
+                    return caseData.designerAssigned ? 'completed' : 'pending';
+                case 'design':
+                    if (caseData.threeShapeStatus === 'Error') return 'error';
+                    return caseData.finished ? 'completed' : 'pending';
+                case 'transfer':
+                    return caseData.transDate ? 'completed' : 'pending';
+                case 'shipping':
+                    return caseData.shippingDate ? 'completed' : 'pending';
+                default:
+                    return 'empty';
+            }
+        }
+
+        function getCasePriority(caseData) {
+            const elapsedHours = getElapsedTime(caseData.createdDateTime);
+            if (elapsedHours > 8) return 'high';
+            if (elapsedHours > 4) return 'medium';
+            return 'normal';
+        }
+
+        function getAlerts(caseData) {
+            const alerts = [];
+            const elapsedHours = getElapsedTime(caseData.createdDateTime, caseData.scanTime);
+            
+            if (elapsedHours > 2 && !caseData.designerAssigned) {
+                alerts.push({ type: 'warning', text: '⏳ Quá 2h chưa assign', icon: 'clock' });
+            }
+            
+            if (!caseData.designerAssigned && caseData.translateRequest) {
+                alerts.push({ type: 'danger', text: '⚠️ Chưa có designer', icon: 'user-times' });
+            }
+            
+            if (caseData.finished && !caseData.printed) {
+                alerts.push({ type: 'warning', text: '📤 Thiếu bước in', icon: 'print' });
+            }
+            
+            if (caseData.threeShapeStatus === 'Error') {
+                alerts.push({ type: 'danger', text: '🚫 Lỗi ThreeShape', icon: 'exclamation-triangle' });
+            }
+            
+            return alerts;
+        }
+
+        function renderTimeline(caseData) {
+            const stages = [
+                { key: 'created', label: 'Created', icon: 'plus' },
+                { key: 'translate', label: 'Translate', icon: 'language' },
+                { key: 'assigned', label: 'Assigned', icon: 'user-check' },
+                { key: 'design', label: 'Design', icon: 'drafting-compass' },
+                { key: 'transfer', label: 'Transfer', icon: 'share' },
+                { key: 'shipping', label: 'Shipping', icon: 'shipping-fast' }
+            ];
+
+            return stages.map(stage => {
+                const status = getStageStatus(caseData, stage.key);
+                return `
+                    <div class="timeline-step ${status}">
+                        <div class="stage-indicator stage-${status}">
+                            <i class="fas fa-${stage.icon}"></i>
+                        </div>
+                        <small class="text-muted">${stage.label}</small>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCase(caseData) {
+            const priority = getCasePriority(caseData);
+            const alerts = getAlerts(caseData);
+            const elapsedHours = getElapsedTime(caseData.createdDateTime);
+            const elapsedClass = elapsedHours > 2 ? 'elapsed-warning' : 'elapsed-normal';
+
+            return `
+                <div class="case-row priority-${priority}">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <span class="case-id">${caseData.id}</span>
+                                    <span class="mx-2">|</span>
+                                    <span class="fw-medium">${caseData.patientName}</span>
+                                    <span class="mx-2">|</span>
+                                    <span class="text-muted">${caseData.salesId}</span>
+                                </div>
+                                <div class="text-end">
+                                    <span class="elapsed-time ${elapsedClass}">
+                                        <i class="fas fa-clock"></i> ${formatElapsedTime(elapsedHours)}
+                                    </span>
+                                    ${caseData.designerAssigned ? 
+                                        `<span class="badge bg-info ms-2">${caseData.designerAssigned}</span>` : 
+                                        '<span class="badge bg-secondary ms-2">Chưa assign</span>'
+                                    }
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-progress">
+                                ${renderTimeline(caseData)}
+                            </div>
+                            
+                            <div class="d-flex gap-2 flex-wrap">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar"></i> ${new Date(caseData.createdDateTime).toLocaleString('vi-VN')}
+                                </small>
+                                ${caseData.shippingDate ? 
+                                    `<small class="text-success">
+                                        <i class="fas fa-check"></i> Shipped: ${new Date(caseData.shippingDate).toLocaleString('vi-VN')}
+                                    </small>` : ''
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            ${alerts.length > 0 ? `
+                                <div class="mb-2">
+                                    ${alerts.map(alert => `
+                                        <span class="badge bg-${alert.type} alert-badge me-1">
+                                            <i class="fas fa-${alert.icon}"></i> ${alert.text}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                            
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <small class="text-muted d-block">ThreeShape</small>
+                                    <span class="badge ${caseData.threeShapeStatus === 'Error' ? 'bg-danger' : 
+                                                      caseData.threeShapeStatus === 'Completed' ? 'bg-success' : 
+                                                      caseData.threeShapeStatus ? 'bg-warning' : 'bg-secondary'}">
+                                        ${caseData.threeShapeStatus || 'Chưa bắt đầu'}
+                                    </span>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted d-block">Finished</small>
+                                    <span class="badge ${caseData.finished ? 'bg-success' : 'bg-secondary'}">
+                                        ${caseData.finished ? 'Yes' : 'No'}
+                                    </span>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted d-block">Printed</small>
+                                    <span class="badge ${caseData.printed ? 'bg-success' : 'bg-secondary'}">
+                                        ${caseData.printed ? 'Yes' : 'No'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCases() {
+            const container = document.getElementById('casesList');
+            container.innerHTML = mockCases.map(renderCase).join('');
+        }
+
+        function filterCases() {
+            // Implementation for filtering
+            renderCases();
+        }
+
+        function refreshData() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString('vi-VN');
+            renderCases();
+        }
+
+        function updateStats() {
+            // Update stats based on current data
+            document.getElementById('totalCases').textContent = mockCases.length;
+            
+            const pending = mockCases.filter(c => !c.designerAssigned).length;
+            const inProgress = mockCases.filter(c => c.designerAssigned && !c.finished).length;
+            const completed = mockCases.filter(c => c.finished && !c.shippingDate).length;
+            const shipped = mockCases.filter(c => c.shippingDate).length;
+            const errors = mockCases.filter(c => c.threeShapeStatus === 'Error').length;
+            
+            document.getElementById('pendingCases').textContent = pending;
+            document.getElementById('inProgressCases').textContent = inProgress;
+            document.getElementById('completedCases').textContent = completed;
+            document.getElementById('shippedCases').textContent = shipped;
+            document.getElementById('errorCases').textContent = errors;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('dateFilter').value = new Date().toISOString().split('T')[0];
+            renderCases();
+            updateStats();
+            refreshData();
+            
+            // Auto refresh every 30 seconds
+            setInterval(refreshData, 30000);
+        });
+    </script>
+</body>
+</html>
