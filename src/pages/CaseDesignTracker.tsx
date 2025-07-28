@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Calendar, Clock, User, Package, Truck, CheckCircle, AlertCircle, XCircle, Timer, Mail, AlertTriangle } from 'lucide-react';
 
 interface CaseData {
@@ -175,17 +176,34 @@ export default function CaseDesignTracker() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedCases = filteredCases.slice(startIndex, startIndex + itemsPerPage);
 
+  // Chart data
+  const statusData = [
+    { name: 'Completed', value: cases.filter(c => c.status === 'completed').length, color: '#22c55e' },
+    { name: 'Pending', value: cases.filter(c => c.status === 'pending').length, color: '#eab308' },
+    { name: 'Error', value: cases.filter(c => c.status === 'error').length, color: '#ef4444' }
+  ];
+
+  const performanceData = [
+    { name: 'Mon', completed: 120, pending: 80, error: 10 },
+    { name: 'Tue', completed: 140, pending: 60, error: 15 },
+    { name: 'Wed', completed: 110, pending: 90, error: 8 },
+    { name: 'Thu', completed: 160, pending: 70, error: 12 },
+    { name: 'Fri', completed: 130, pending: 85, error: 18 },
+    { name: 'Sat', completed: 90, pending: 40, error: 5 },
+    { name: 'Sun', completed: 70, pending: 30, error: 3 }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
       {/* Header */}
       <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-12 px-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="container-fluid mx-auto">
           <h1 className="text-4xl font-bold mb-4">Case Design Tracker</h1>
           <p className="text-xl opacity-90">Monitor and track your dental case progress</p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="container-fluid mx-auto px-6 py-8">
         {/* Main Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200">
@@ -355,6 +373,79 @@ export default function CaseDesignTracker() {
                     </tbody>
                   </table>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Charts Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Pie Chart - Status Distribution */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Case Status Distribution</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={statusData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, value, percent }) => `${name}: ${value} (${(percent * 100).toFixed(0)}%)`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {statusData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Line Chart - Weekly Performance */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Weekly Performance Trend</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={performanceData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Line 
+                      type="monotone" 
+                      dataKey="completed" 
+                      stroke="#22c55e" 
+                      strokeWidth={2}
+                      name="Completed"
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="pending" 
+                      stroke="#eab308" 
+                      strokeWidth={2}
+                      name="Pending"
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="error" 
+                      stroke="#ef4444" 
+                      strokeWidth={2}
+                      name="Error"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
               </div>
             </CardContent>
           </Card>
