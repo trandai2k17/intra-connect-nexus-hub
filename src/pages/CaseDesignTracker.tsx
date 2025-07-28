@@ -114,6 +114,52 @@ export default function CaseDesignTracker() {
     );
   };
 
+  const renderCompactTimeline = (caseData: CaseData) => {
+    const stages = [
+      { key: 'created', label: 'Create', icon: User },
+      { key: 'design', label: 'Design', icon: Package },
+      { key: 'sent', label: 'Sent', icon: Calendar },
+      { key: 'transfer', label: 'Transfer', icon: Package },
+      { key: 'shipping', label: 'Shipping', icon: Truck }
+    ];
+
+    return (
+      <div className="flex items-center justify-between w-full mt-3">
+        {stages.map((stage, index) => {
+          const status = getStageStatus(stage.key, caseData);
+          const Icon = stage.icon;
+          
+          return (
+            <div key={stage.key} className="flex items-center">
+              <div className="flex flex-col items-center">
+                <div className={`
+                  w-6 h-6 rounded-full flex items-center justify-center border transition-all duration-300
+                  ${status === 'completed' ? 'bg-green-500 border-green-500 text-white' :
+                    status === 'error' ? 'bg-red-500 border-red-500 text-white' :
+                    status === 'pending' ? 'bg-yellow-500 border-yellow-500 text-white' :
+                    'bg-gray-200 border-gray-300 text-gray-400'}
+                `}>
+                  <Icon className="h-3 w-3" />
+                </div>
+                <span className="text-xs font-medium mt-1 text-center">
+                  {stage.label}
+                </span>
+              </div>
+              
+              {index < stages.length - 1 && (
+                <div className={`
+                  flex-1 h-0.5 mx-2 transition-all duration-300
+                  ${getStageStatus(stages[index + 1].key, caseData) !== 'empty' ? 
+                    'bg-green-500' : 'bg-gray-300'}
+                `} />
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   const renderTimeline = (caseData: CaseData) => {
     const stages = [
       { key: 'created', label: 'Create', icon: User },
@@ -195,67 +241,59 @@ export default function CaseDesignTracker() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-12 px-6">
-        <div className="container-fluid mx-auto">
-          <h1 className="text-4xl font-bold mb-4">Case Design Tracker</h1>
-          <p className="text-xl opacity-90">Monitor and track your dental case progress</p>
-        </div>
-      </div>
-
-      <div className="container-fluid mx-auto px-6 py-8">
-        {/* Main Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="container-fluid mx-auto px-4 py-6">
+        {/* Compact Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200">
-            <CardContent className="p-6">
+            <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-blue-600 dark:text-blue-400">Total Cases</p>
-                  <p className="text-3xl font-bold text-blue-700 dark:text-blue-300">{cases.length}</p>
+                  <p className="text-xs font-medium text-blue-600 dark:text-blue-400">Total Cases</p>
+                  <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{cases.length}</p>
                 </div>
-                <Calendar className="h-8 w-8 text-blue-500" />
+                <Calendar className="h-6 w-6 text-blue-500" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-200">
-            <CardContent className="p-6">
+            <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-green-600 dark:text-green-400">Completed</p>
-                  <p className="text-3xl font-bold text-green-700 dark:text-green-300">
+                  <p className="text-xs font-medium text-green-600 dark:text-green-400">Completed</p>
+                  <p className="text-2xl font-bold text-green-700 dark:text-green-300">
                     {cases.filter(c => c.status === 'completed').length}
                   </p>
                 </div>
-                <CheckCircle className="h-8 w-8 text-green-500" />
+                <CheckCircle className="h-6 w-6 text-green-500" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border-yellow-200">
-            <CardContent className="p-6">
+            <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-yellow-600 dark:text-yellow-400">Pending</p>
-                  <p className="text-3xl font-bold text-yellow-700 dark:text-yellow-300">
+                  <p className="text-xs font-medium text-yellow-600 dark:text-yellow-400">Pending</p>
+                  <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">
                     {cases.filter(c => c.status === 'pending').length}
                   </p>
                 </div>
-                <Clock className="h-8 w-8 text-yellow-500" />
+                <Clock className="h-6 w-6 text-yellow-500" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border-red-200">
-            <CardContent className="p-6">
+            <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-red-600 dark:text-red-400">Errors</p>
-                  <p className="text-3xl font-bold text-red-700 dark:text-red-300">
+                  <p className="text-xs font-medium text-red-600 dark:text-red-400">Errors</p>
+                  <p className="text-2xl font-bold text-red-700 dark:text-red-300">
                     {cases.filter(c => c.status === 'error').length}
                   </p>
                 </div>
-                <AlertCircle className="h-8 w-8 text-red-500" />
+                <AlertCircle className="h-6 w-6 text-red-500" />
               </div>
             </CardContent>
           </Card>
@@ -493,11 +531,10 @@ export default function CaseDesignTracker() {
           <CardContent>
             <div className="space-y-4">
               {paginatedCases.map((caseItem) => (
-                <Card key={caseItem.id} className="p-4 hover:shadow-md transition-shadow cursor-pointer"
-                      onClick={() => setSelectedCase(caseItem)}>
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-4 mb-2">
+                <Card key={caseItem.id} className="p-3 hover:shadow-md transition-shadow">
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
                         <h3 className="font-semibold text-lg">{caseItem.id}</h3>
                         {getStatusBadge(caseItem.status)}
                         {(caseItem.turnaroundTime || 0) > 12 && (
@@ -516,25 +553,44 @@ export default function CaseDesignTracker() {
                           </Badge>
                         )}
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        <p className="text-muted-foreground">Patient: {caseItem.patientName}</p>
-                        <p className="text-muted-foreground">Doctor: {caseItem.doctorName}</p>
-                        <p className="text-muted-foreground">3Shape: {caseItem.threeShapeStatus}</p>
-                        <p className="text-muted-foreground">
-                          Translation: {caseItem.translated ? 'Done' : 'Pending'}
-                        </p>
-                      </div>
-                      {caseItem.createdDateTime && (
-                        <p className="text-sm text-muted-foreground mt-2">
-                          Created: {new Date(caseItem.createdDateTime).toLocaleDateString()} 
-                          {caseItem.transDate && ` • Transferred: ${new Date(caseItem.transDate).toLocaleDateString()}`}
-                          {caseItem.shipDate && ` • Shipped: ${new Date(caseItem.shipDate).toLocaleDateString()}`}
-                        </p>
-                      )}
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => setSelectedCase(caseItem)}
+                      >
+                        Details
+                      </Button>
                     </div>
-                    <Button variant="outline" size="sm">
-                      View Details
-                    </Button>
+                    
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                      <div>
+                        <span className="text-muted-foreground">Patient:</span>
+                        <p className="font-medium">{caseItem.patientName}</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Doctor:</span>
+                        <p className="font-medium">{caseItem.doctorName}</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">3Shape:</span>
+                        <p className="font-medium">{caseItem.threeShapeStatus}</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Translation:</span>
+                        <p className="font-medium">{caseItem.translated ? 'Done' : 'Pending'}</p>
+                      </div>
+                    </div>
+                    
+                    {caseItem.createdDateTime && (
+                      <div className="text-xs text-muted-foreground">
+                        Created: {new Date(caseItem.createdDateTime).toLocaleDateString()} 
+                        {caseItem.transDate && ` • Transferred: ${new Date(caseItem.transDate).toLocaleDateString()}`}
+                        {caseItem.shipDate && ` • Shipped: ${new Date(caseItem.shipDate).toLocaleDateString()}`}
+                      </div>
+                    )}
+                    
+                    {/* Compact Timeline */}
+                    {renderCompactTimeline(caseItem)}
                   </div>
                 </Card>
               ))}
