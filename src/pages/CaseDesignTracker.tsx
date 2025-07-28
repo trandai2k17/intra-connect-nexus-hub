@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar, Clock, User, Package, Truck, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
+import { Calendar, Clock, User, Package, Truck, CheckCircle, AlertCircle, XCircle, Timer, Mail, AlertTriangle } from 'lucide-react';
 
 interface CaseData {
   id: string;
@@ -17,39 +17,45 @@ interface CaseData {
   transDate?: string;
   shipDate?: string;
   status: 'pending' | 'completed' | 'error';
+  turnaroundTime?: number; // in hours
+  translated?: boolean;
+  pendingEmail?: boolean;
+  urgentDeadline?: boolean; // 2h left to complete
 }
 
-const mockCases: CaseData[] = [
-  {
-    id: "CASE001",
-    patientName: "Nguyễn Văn A",
-    doctorName: "Dr. Trần Thị B",
-    createdDateTime: "2024-01-15",
-    finished: true,
-    threeShapeStatus: "Completed",
-    transDate: "2024-01-20",
-    shipDate: "2024-01-22",
-    status: "completed"
-  },
-  {
-    id: "CASE002",
-    patientName: "Lê Thị C",
-    doctorName: "Dr. Phạm Văn D",
-    createdDateTime: "2024-01-16",
-    finished: false,
-    threeShapeStatus: "In Progress",
-    status: "pending"
-  },
-  {
-    id: "CASE003",
-    patientName: "Hoàng Minh E",
-    doctorName: "Dr. Ngô Thị F",
-    createdDateTime: "2024-01-17",
-    finished: false,
-    threeShapeStatus: "Error",
-    status: "error"
+// Generate more realistic mock data for high-volume tracking
+const generateMockCases = (): CaseData[] => {
+  const cases: CaseData[] = [];
+  const patients = ["Nguyễn Văn A", "Lê Thị B", "Trần Minh C", "Phạm Thu D", "Hoàng Văn E", "Đỗ Thị F", "Bùi Minh G", "Vũ Thu H"];
+  const doctors = ["Dr. Trần Thị B", "Dr. Phạm Văn D", "Dr. Ngô Thị F", "Dr. Lê Minh H", "Dr. Hoàng Thu I"];
+  
+  for (let i = 1; i <= 50; i++) {
+    const turnaroundTime = Math.floor(Math.random() * 24) + 1;
+    const isLate = turnaroundTime > 12;
+    const isUrgent = turnaroundTime > 10 && Math.random() > 0.7;
+    const needsTranslation = Math.random() > 0.6;
+    const pendingEmail = Math.random() > 0.8;
+    
+    cases.push({
+      id: `CASE${String(i).padStart(3, '0')}`,
+      patientName: patients[Math.floor(Math.random() * patients.length)],
+      doctorName: doctors[Math.floor(Math.random() * doctors.length)],
+      createdDateTime: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      finished: Math.random() > 0.4,
+      threeShapeStatus: ["Completed", "In Progress", "Error", "Pending"][Math.floor(Math.random() * 4)],
+      transDate: Math.random() > 0.5 ? new Date().toISOString().split('T')[0] : undefined,
+      shipDate: Math.random() > 0.7 ? new Date().toISOString().split('T')[0] : undefined,
+      status: Math.random() > 0.7 ? 'completed' : Math.random() > 0.8 ? 'error' : 'pending',
+      turnaroundTime,
+      translated: !needsTranslation,
+      pendingEmail,
+      urgentDeadline: isUrgent
+    });
   }
-];
+  return cases;
+};
+
+const mockCases: CaseData[] = generateMockCases();
 
 export default function CaseDesignTracker() {
   const { t } = useLanguage();
@@ -173,7 +179,7 @@ export default function CaseDesignTracker() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Stats Cards */}
+        {/* Main Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200">
             <CardContent className="p-6">
@@ -225,6 +231,90 @@ export default function CaseDesignTracker() {
                   </p>
                 </div>
                 <AlertCircle className="h-8 w-8 text-red-500" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Critical Metrics Mini Tables */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* Late Cases (>12h) */}
+          <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border-orange-200">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Timer className="h-5 w-5 text-orange-500" />
+                Late Cases (&gt;12h)
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-2xl font-bold text-orange-700 dark:text-orange-300">
+                    {cases.filter(c => (c.turnaroundTime || 0) > 12).length}
+                  </span>
+                  <span className="text-sm text-orange-600 dark:text-orange-400">cases</span>
+                </div>
+                <div className="max-h-24 overflow-y-auto space-y-1">
+                  {cases.filter(c => (c.turnaroundTime || 0) > 12).slice(0, 3).map(c => (
+                    <div key={c.id} className="text-xs bg-orange-100 dark:bg-orange-900/30 p-2 rounded">
+                      {c.id} - {c.turnaroundTime}h
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Urgent Cases (2h left) */}
+          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border-purple-200">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5 text-purple-500" />
+                Urgent (2h left)
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-2xl font-bold text-purple-700 dark:text-purple-300">
+                    {cases.filter(c => c.urgentDeadline && !c.translated).length}
+                  </span>
+                  <span className="text-sm text-purple-600 dark:text-purple-400">cases</span>
+                </div>
+                <div className="max-h-24 overflow-y-auto space-y-1">
+                  {cases.filter(c => c.urgentDeadline && !c.translated).slice(0, 3).map(c => (
+                    <div key={c.id} className="text-xs bg-purple-100 dark:bg-purple-900/30 p-2 rounded">
+                      {c.id} - Not translated
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Pending Email */}
+          <Card className="bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20 border-indigo-200">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Mail className="h-5 w-5 text-indigo-500" />
+                Pending Email
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-2xl font-bold text-indigo-700 dark:text-indigo-300">
+                    {cases.filter(c => c.pendingEmail).length}
+                  </span>
+                  <span className="text-sm text-indigo-600 dark:text-indigo-400">cases</span>
+                </div>
+                <div className="max-h-24 overflow-y-auto space-y-1">
+                  {cases.filter(c => c.pendingEmail).slice(0, 3).map(c => (
+                    <div key={c.id} className="text-xs bg-indigo-100 dark:bg-indigo-900/30 p-2 rounded">
+                      {c.id} - Awaiting response
+                    </div>
+                  ))}
+                </div>
               </div>
             </CardContent>
           </Card>
