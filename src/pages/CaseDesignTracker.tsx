@@ -61,12 +61,11 @@ const mockCases: CaseData[] = generateMockCases();
 export default function CaseDesignTracker() {
   const { t } = useLanguage();
   const [cases, setCases] = useState<CaseData[]>(mockCases);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedCase, setSelectedCase] = useState<CaseData | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
+  const [chartIndex, setChartIndex] = useState(0);
   const itemsPerPage = 20;
 
   const getStageStatus = (stage: string, caseData: CaseData) => {
@@ -209,14 +208,14 @@ export default function CaseDesignTracker() {
   };
 
   const filteredCases = cases.filter(caseItem => {
-    const matchesSearch = 
-      caseItem.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      caseItem.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      caseItem.doctorName.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = statusFilter === 'all' || caseItem.status === statusFilter;
-    
-    return matchesSearch && matchesStatus;
+    // Apply date filter if dates are selected
+    if (dateFrom && caseItem.createdDateTime) {
+      if (new Date(caseItem.createdDateTime) < new Date(dateFrom)) return false;
+    }
+    if (dateTo && caseItem.createdDateTime) {
+      if (new Date(caseItem.createdDateTime) > new Date(dateTo)) return false;
+    }
+    return true;
   });
 
   // Pagination logic
@@ -240,6 +239,14 @@ export default function CaseDesignTracker() {
     { name: 'Sat', completed: 90, pending: 40, error: 5 },
     { name: 'Sun', completed: 70, pending: 30, error: 3 }
   ];
+
+  // Auto-rotate chart every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setChartIndex(prev => prev === 0 ? 1 : 0);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
@@ -400,59 +407,102 @@ export default function CaseDesignTracker() {
             </CardContent>
           </Card>
 
-          {/* Compact Charts */}
-          <Card className="lg:col-span-2">
+          {/* Chart Carousel with Flip Animation */}
+          <Card className="lg:col-span-2 relative overflow-hidden">
             <CardContent className="p-3">
-              <div className="h-40">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={statusData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      outerRadius={50}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {statusData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
+              <div className="h-40 relative">
+                {/* Chart transition container */}
+                <div className="absolute inset-0 transition-transform duration-700 ease-in-out"
+                     style={{ 
+                       transform: chartIndex === 0 ? 'rotateY(0deg)' : 'rotateY(180deg)',
+                       transformStyle: 'preserve-3d'
+                     }}>
+                  {/* Front side - Pie Chart */}
+                  <div className="absolute inset-0 backface-hidden"
+                       style={{ backfaceVisibility: 'hidden' }}>
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-sm font-medium">Status Distribution</h3>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => setChartIndex(1)}
+                        className="h-6 w-6 p-0"
+                      >
+                        ↻
+                      </Button>
+                    </div>
+                    <ResponsiveContainer width="100%" height="85%">
+                      <PieChart>
+                        <Pie
+                          data={statusData}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          outerRadius={45}
+                          fill="#8884d8"
+                          dataKey="value"
+                        >
+                          {statusData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                  
+                  {/* Back side - Line Chart */}
+                  <div className="absolute inset-0 backface-hidden"
+                       style={{ 
+                         backfaceVisibility: 'hidden',
+                         transform: 'rotateY(180deg)'
+                       }}>
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-sm font-medium">Weekly Trend</h3>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => setChartIndex(0)}
+                        className="h-6 w-6 p-0"
+                      >
+                        ↻
+                      </Button>
+                    </div>
+                    <ResponsiveContainer width="100%" height="85%">
+                      <LineChart data={performanceData}>
+                        <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                        <XAxis dataKey="name" fontSize={10} />
+                        <YAxis fontSize={10} />
+                        <Tooltip />
+                        <Line 
+                          type="monotone" 
+                          dataKey="completed" 
+                          stroke="#22c55e" 
+                          strokeWidth={1.5}
+                          name="Completed"
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="pending" 
+                          stroke="#eab308" 
+                          strokeWidth={1.5}
+                          name="Pending"
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="error" 
+                          stroke="#ef4444" 
+                          strokeWidth={1.5}
+                          name="Error"
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
         </div>
-
-        {/* Compact Filters */}
-        <Card className="mb-4">
-          <CardContent className="p-3">
-            <div className="flex flex-col md:flex-row gap-2">
-              <div className="flex-1">
-                <Input
-                  placeholder="Search by case ID, patient name, or doctor..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="h-8 text-sm"
-                />
-              </div>
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-full md:w-40 h-8 text-sm">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="error">Error</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
 
         {/* Cases Table */}
         <Card>
