@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Calendar, Clock, User, Package, Truck, CheckCircle, AlertCircle, XCircle, Timer, Mail, AlertTriangle } from 'lucide-react';
+import { Calendar, Clock, User, Package, Truck, CheckCircle, AlertCircle, XCircle, Timer, Mail, AlertTriangle, CalendarDays } from 'lucide-react';
 
 interface CaseData {
   id: string;
@@ -65,6 +65,8 @@ export default function CaseDesignTracker() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedCase, setSelectedCase] = useState<CaseData | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
   const itemsPerPage = 20;
 
   const getStageStatus = (stage: string, caseData: CaseData) => {
@@ -242,189 +244,166 @@ export default function CaseDesignTracker() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
       <div className="container-fluid mx-auto px-4 py-6">
-        {/* Compact Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
+        {/* Compact Top Row: Stats + Date Filter */}
+        <div className="grid grid-cols-1 xl:grid-cols-6 gap-4 mb-4">
+          {/* Main Stats - Compressed to 2 columns on large screens */}
+          <Card className="xl:col-span-1 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200">
+            <CardContent className="p-3">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-blue-500" />
                 <div>
-                  <p className="text-xs font-medium text-blue-600 dark:text-blue-400">Total Cases</p>
-                  <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{cases.length}</p>
+                  <p className="text-xs font-medium text-blue-600 dark:text-blue-400">Total</p>
+                  <p className="text-xl font-bold text-blue-700 dark:text-blue-300">{cases.length}</p>
                 </div>
-                <Calendar className="h-6 w-6 text-blue-500" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-200">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
+          <Card className="xl:col-span-1 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-200">
+            <CardContent className="p-3">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500" />
                 <div>
-                  <p className="text-xs font-medium text-green-600 dark:text-green-400">Completed</p>
-                  <p className="text-2xl font-bold text-green-700 dark:text-green-300">
+                  <p className="text-xs font-medium text-green-600 dark:text-green-400">Done</p>
+                  <p className="text-xl font-bold text-green-700 dark:text-green-300">
                     {cases.filter(c => c.status === 'completed').length}
                   </p>
                 </div>
-                <CheckCircle className="h-6 w-6 text-green-500" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border-yellow-200">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
+          <Card className="xl:col-span-1 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border-yellow-200">
+            <CardContent className="p-3">
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-yellow-500" />
                 <div>
                   <p className="text-xs font-medium text-yellow-600 dark:text-yellow-400">Pending</p>
-                  <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">
+                  <p className="text-xl font-bold text-yellow-700 dark:text-yellow-300">
                     {cases.filter(c => c.status === 'pending').length}
                   </p>
                 </div>
-                <Clock className="h-6 w-6 text-yellow-500" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border-red-200">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
+          <Card className="xl:col-span-1 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border-red-200">
+            <CardContent className="p-3">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 text-red-500" />
                 <div>
                   <p className="text-xs font-medium text-red-600 dark:text-red-400">Errors</p>
-                  <p className="text-2xl font-bold text-red-700 dark:text-red-300">
+                  <p className="text-xl font-bold text-red-700 dark:text-red-300">
                     {cases.filter(c => c.status === 'error').length}
                   </p>
                 </div>
-                <AlertCircle className="h-6 w-6 text-red-500" />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Date Filter Section */}
+          <Card className="xl:col-span-2">
+            <CardContent className="p-3">
+              <div className="flex items-center gap-2">
+                <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                <div className="flex items-center gap-2 flex-1">
+                  <Input
+                    type="date"
+                    placeholder="From"
+                    value={dateFrom}
+                    onChange={(e) => setDateFrom(e.target.value)}
+                    className="text-xs h-8"
+                  />
+                  <span className="text-xs text-muted-foreground">to</span>
+                  <Input
+                    type="date"
+                    placeholder="To"
+                    value={dateTo}
+                    onChange={(e) => setDateTo(e.target.value)}
+                    className="text-xs h-8"
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Critical Metrics Mini Tables */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          {/* Late Cases (>12h) */}
+        {/* Compact Critical Metrics + Charts in one row */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
+          {/* Compact Mini Tables */}
           <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border-orange-200">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Timer className="h-5 w-5 text-orange-500" />
-                Late Cases (&gt;12h)
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center mb-3">
-                  <span className="text-2xl font-bold text-orange-700 dark:text-orange-300">
+            <CardContent className="p-3">
+              <div className="flex items-center gap-2 mb-2">
+                <Timer className="h-4 w-4 text-orange-500" />
+                <div>
+                  <p className="text-xs font-medium text-orange-600 dark:text-orange-400">Late (&gt;12h)</p>
+                  <p className="text-lg font-bold text-orange-700 dark:text-orange-300">
                     {cases.filter(c => (c.turnaroundTime || 0) > 12).length}
-                  </span>
-                  <span className="text-sm text-orange-600 dark:text-orange-400">cases</span>
+                  </p>
                 </div>
-                <div className="max-h-32 overflow-y-auto">
-                  <table className="w-full text-xs">
-                    <thead>
-                      <tr className="border-b border-orange-200 dark:border-orange-800">
-                        <th className="text-left py-1 text-orange-600 dark:text-orange-400">Case ID</th>
-                        <th className="text-left py-1 text-orange-600 dark:text-orange-400">Time</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {cases.filter(c => (c.turnaroundTime || 0) > 12).slice(0, 5).map(c => (
-                        <tr key={c.id} className="hover:bg-orange-50 dark:hover:bg-orange-900/20">
-                          <td className="py-1">{c.id}</td>
-                          <td className="py-1">{c.turnaroundTime}h</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+              </div>
+              <div className="max-h-16 overflow-y-auto">
+                <div className="space-y-1">
+                  {cases.filter(c => (c.turnaroundTime || 0) > 12).slice(0, 2).map(c => (
+                    <div key={c.id} className="text-xs bg-orange-100 dark:bg-orange-900/30 p-1 rounded">
+                      {c.id}: {c.turnaroundTime}h
+                    </div>
+                  ))}
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Urgent Cases (2h left) */}
           <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border-purple-200">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-purple-500" />
-                Urgent (2h left)
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center mb-3">
-                  <span className="text-2xl font-bold text-purple-700 dark:text-purple-300">
+            <CardContent className="p-3">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertTriangle className="h-4 w-4 text-purple-500" />
+                <div>
+                  <p className="text-xs font-medium text-purple-600 dark:text-purple-400">Urgent</p>
+                  <p className="text-lg font-bold text-purple-700 dark:text-purple-300">
                     {cases.filter(c => c.urgentDeadline && !c.translated).length}
-                  </span>
-                  <span className="text-sm text-purple-600 dark:text-purple-400">cases</span>
+                  </p>
                 </div>
-                <div className="max-h-32 overflow-y-auto">
-                  <table className="w-full text-xs">
-                    <thead>
-                      <tr className="border-b border-purple-200 dark:border-purple-800">
-                        <th className="text-left py-1 text-purple-600 dark:text-purple-400">Case ID</th>
-                        <th className="text-left py-1 text-purple-600 dark:text-purple-400">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {cases.filter(c => c.urgentDeadline && !c.translated).slice(0, 5).map(c => (
-                        <tr key={c.id} className="hover:bg-purple-50 dark:hover:bg-purple-900/20">
-                          <td className="py-1">{c.id}</td>
-                          <td className="py-1">Not translated</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+              </div>
+              <div className="max-h-16 overflow-y-auto">
+                <div className="space-y-1">
+                  {cases.filter(c => c.urgentDeadline && !c.translated).slice(0, 2).map(c => (
+                    <div key={c.id} className="text-xs bg-purple-100 dark:bg-purple-900/30 p-1 rounded">
+                      {c.id}: Not translated
+                    </div>
+                  ))}
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Pending Email */}
           <Card className="bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20 border-indigo-200">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Mail className="h-5 w-5 text-indigo-500" />
-                Pending Email
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center mb-3">
-                  <span className="text-2xl font-bold text-indigo-700 dark:text-indigo-300">
+            <CardContent className="p-3">
+              <div className="flex items-center gap-2 mb-2">
+                <Mail className="h-4 w-4 text-indigo-500" />
+                <div>
+                  <p className="text-xs font-medium text-indigo-600 dark:text-indigo-400">Email</p>
+                  <p className="text-lg font-bold text-indigo-700 dark:text-indigo-300">
                     {cases.filter(c => c.pendingEmail).length}
-                  </span>
-                  <span className="text-sm text-indigo-600 dark:text-indigo-400">cases</span>
+                  </p>
                 </div>
-                <div className="max-h-32 overflow-y-auto">
-                  <table className="w-full text-xs">
-                    <thead>
-                      <tr className="border-b border-indigo-200 dark:border-indigo-800">
-                        <th className="text-left py-1 text-indigo-600 dark:text-indigo-400">Case ID</th>
-                        <th className="text-left py-1 text-indigo-600 dark:text-indigo-400">DateTime</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {cases.filter(c => c.pendingEmail).slice(0, 5).map(c => (
-                        <tr key={c.id} className="hover:bg-indigo-50 dark:hover:bg-indigo-900/20">
-                          <td className="py-1">{c.id}</td>
-                          <td className="py-1">{c.createdDateTime}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+              </div>
+              <div className="max-h-16 overflow-y-auto">
+                <div className="space-y-1">
+                  {cases.filter(c => c.pendingEmail).slice(0, 2).map(c => (
+                    <div key={c.id} className="text-xs bg-indigo-100 dark:bg-indigo-900/30 p-1 rounded">
+                      {c.id}: {c.createdDateTime}
+                    </div>
+                  ))}
                 </div>
               </div>
             </CardContent>
           </Card>
-        </div>
 
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Pie Chart - Status Distribution */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Case Status Distribution</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-80">
+          {/* Compact Charts */}
+          <Card className="lg:col-span-2">
+            <CardContent className="p-3">
+              <div className="h-40">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -432,8 +411,7 @@ export default function CaseDesignTracker() {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, value, percent }) => `${name}: ${value} (${(percent * 100).toFixed(0)}%)`}
-                      outerRadius={80}
+                      outerRadius={50}
                       fill="#8884d8"
                       dataKey="value"
                     >
@@ -447,65 +425,23 @@ export default function CaseDesignTracker() {
               </div>
             </CardContent>
           </Card>
-
-          {/* Line Chart - Weekly Performance */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Weekly Performance Trend</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={performanceData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Line 
-                      type="monotone" 
-                      dataKey="completed" 
-                      stroke="#22c55e" 
-                      strokeWidth={2}
-                      name="Completed"
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="pending" 
-                      stroke="#eab308" 
-                      strokeWidth={2}
-                      name="Pending"
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="error" 
-                      stroke="#ef4444" 
-                      strokeWidth={2}
-                      name="Error"
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
-        {/* Filters */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Filters</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col md:flex-row gap-4">
+        {/* Compact Filters */}
+        <Card className="mb-4">
+          <CardContent className="p-3">
+            <div className="flex flex-col md:flex-row gap-2">
               <div className="flex-1">
                 <Input
                   placeholder="Search by case ID, patient name, or doctor..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
+                  className="h-8 text-sm"
                 />
               </div>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-full md:w-48">
-                  <SelectValue placeholder="Filter by status" />
+                <SelectTrigger className="w-full md:w-40 h-8 text-sm">
+                  <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Status</SelectItem>
