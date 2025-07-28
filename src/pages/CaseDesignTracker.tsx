@@ -29,7 +29,7 @@ const generateMockCases = (): CaseData[] => {
   const patients = ["Nguyễn Văn A", "Lê Thị B", "Trần Minh C", "Phạm Thu D", "Hoàng Văn E", "Đỗ Thị F", "Bùi Minh G", "Vũ Thu H"];
   const doctors = ["Dr. Trần Thị B", "Dr. Phạm Văn D", "Dr. Ngô Thị F", "Dr. Lê Minh H", "Dr. Hoàng Thu I"];
   
-  for (let i = 1; i <= 50; i++) {
+  for (let i = 1; i <= 1000; i++) {
     const turnaroundTime = Math.floor(Math.random() * 24) + 1;
     const isLate = turnaroundTime > 12;
     const isUrgent = turnaroundTime > 10 && Math.random() > 0.7;
@@ -63,6 +63,8 @@ export default function CaseDesignTracker() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedCase, setSelectedCase] = useState<CaseData | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
 
   const getStageStatus = (stage: string, caseData: CaseData) => {
     switch(stage) {
@@ -168,6 +170,11 @@ export default function CaseDesignTracker() {
     return matchesSearch && matchesStatus;
   });
 
+  // Pagination logic
+  const totalPages = Math.ceil(filteredCases.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedCases = filteredCases.slice(startIndex, startIndex + itemsPerPage);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
       {/* Header */}
@@ -248,18 +255,29 @@ export default function CaseDesignTracker() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mb-3">
                   <span className="text-2xl font-bold text-orange-700 dark:text-orange-300">
                     {cases.filter(c => (c.turnaroundTime || 0) > 12).length}
                   </span>
                   <span className="text-sm text-orange-600 dark:text-orange-400">cases</span>
                 </div>
-                <div className="max-h-24 overflow-y-auto space-y-1">
-                  {cases.filter(c => (c.turnaroundTime || 0) > 12).slice(0, 3).map(c => (
-                    <div key={c.id} className="text-xs bg-orange-100 dark:bg-orange-900/30 p-2 rounded">
-                      {c.id} - {c.turnaroundTime}h
-                    </div>
-                  ))}
+                <div className="max-h-32 overflow-y-auto">
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="border-b border-orange-200 dark:border-orange-800">
+                        <th className="text-left py-1 text-orange-600 dark:text-orange-400">Case ID</th>
+                        <th className="text-left py-1 text-orange-600 dark:text-orange-400">Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cases.filter(c => (c.turnaroundTime || 0) > 12).slice(0, 5).map(c => (
+                        <tr key={c.id} className="hover:bg-orange-50 dark:hover:bg-orange-900/20">
+                          <td className="py-1">{c.id}</td>
+                          <td className="py-1">{c.turnaroundTime}h</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </CardContent>
@@ -275,18 +293,29 @@ export default function CaseDesignTracker() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mb-3">
                   <span className="text-2xl font-bold text-purple-700 dark:text-purple-300">
                     {cases.filter(c => c.urgentDeadline && !c.translated).length}
                   </span>
                   <span className="text-sm text-purple-600 dark:text-purple-400">cases</span>
                 </div>
-                <div className="max-h-24 overflow-y-auto space-y-1">
-                  {cases.filter(c => c.urgentDeadline && !c.translated).slice(0, 3).map(c => (
-                    <div key={c.id} className="text-xs bg-purple-100 dark:bg-purple-900/30 p-2 rounded">
-                      {c.id} - Not translated
-                    </div>
-                  ))}
+                <div className="max-h-32 overflow-y-auto">
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="border-b border-purple-200 dark:border-purple-800">
+                        <th className="text-left py-1 text-purple-600 dark:text-purple-400">Case ID</th>
+                        <th className="text-left py-1 text-purple-600 dark:text-purple-400">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cases.filter(c => c.urgentDeadline && !c.translated).slice(0, 5).map(c => (
+                        <tr key={c.id} className="hover:bg-purple-50 dark:hover:bg-purple-900/20">
+                          <td className="py-1">{c.id}</td>
+                          <td className="py-1">Not translated</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </CardContent>
@@ -302,18 +331,29 @@ export default function CaseDesignTracker() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mb-3">
                   <span className="text-2xl font-bold text-indigo-700 dark:text-indigo-300">
                     {cases.filter(c => c.pendingEmail).length}
                   </span>
                   <span className="text-sm text-indigo-600 dark:text-indigo-400">cases</span>
                 </div>
-                <div className="max-h-24 overflow-y-auto space-y-1">
-                  {cases.filter(c => c.pendingEmail).slice(0, 3).map(c => (
-                    <div key={c.id} className="text-xs bg-indigo-100 dark:bg-indigo-900/30 p-2 rounded">
-                      {c.id} - Awaiting response
-                    </div>
-                  ))}
+                <div className="max-h-32 overflow-y-auto">
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="border-b border-indigo-200 dark:border-indigo-800">
+                        <th className="text-left py-1 text-indigo-600 dark:text-indigo-400">Case ID</th>
+                        <th className="text-left py-1 text-indigo-600 dark:text-indigo-400">DateTime</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cases.filter(c => c.pendingEmail).slice(0, 5).map(c => (
+                        <tr key={c.id} className="hover:bg-indigo-50 dark:hover:bg-indigo-900/20">
+                          <td className="py-1">{c.id}</td>
+                          <td className="py-1">{c.createdDateTime}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </CardContent>
@@ -352,11 +392,16 @@ export default function CaseDesignTracker() {
         {/* Cases Table */}
         <Card>
           <CardHeader>
-            <CardTitle>Cases Overview</CardTitle>
+            <div className="flex justify-between items-center">
+              <CardTitle>Cases Overview ({filteredCases.length} cases)</CardTitle>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                Page {currentPage} of {totalPages}
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {filteredCases.map((caseItem) => (
+              {paginatedCases.map((caseItem) => (
                 <Card key={caseItem.id} className="p-4 hover:shadow-md transition-shadow cursor-pointer"
                       onClick={() => setSelectedCase(caseItem)}>
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -364,12 +409,35 @@ export default function CaseDesignTracker() {
                       <div className="flex items-center gap-4 mb-2">
                         <h3 className="font-semibold text-lg">{caseItem.id}</h3>
                         {getStatusBadge(caseItem.status)}
+                        {(caseItem.turnaroundTime || 0) > 12 && (
+                          <Badge variant="destructive" className="text-xs">
+                            Late ({caseItem.turnaroundTime}h)
+                          </Badge>
+                        )}
+                        {caseItem.urgentDeadline && (
+                          <Badge variant="outline" className="text-xs border-purple-500 text-purple-600">
+                            Urgent
+                          </Badge>
+                        )}
+                        {caseItem.pendingEmail && (
+                          <Badge variant="outline" className="text-xs border-indigo-500 text-indigo-600">
+                            Email
+                          </Badge>
+                        )}
                       </div>
-                      <p className="text-muted-foreground">Patient: {caseItem.patientName}</p>
-                      <p className="text-muted-foreground">Doctor: {caseItem.doctorName}</p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <p className="text-muted-foreground">Patient: {caseItem.patientName}</p>
+                        <p className="text-muted-foreground">Doctor: {caseItem.doctorName}</p>
+                        <p className="text-muted-foreground">3Shape: {caseItem.threeShapeStatus}</p>
+                        <p className="text-muted-foreground">
+                          Translation: {caseItem.translated ? 'Done' : 'Pending'}
+                        </p>
+                      </div>
                       {caseItem.createdDateTime && (
-                        <p className="text-sm text-muted-foreground">
-                          Created: {new Date(caseItem.createdDateTime).toLocaleDateString()}
+                        <p className="text-sm text-muted-foreground mt-2">
+                          Created: {new Date(caseItem.createdDateTime).toLocaleDateString()} 
+                          {caseItem.transDate && ` • Transferred: ${new Date(caseItem.transDate).toLocaleDateString()}`}
+                          {caseItem.shipDate && ` • Shipped: ${new Date(caseItem.shipDate).toLocaleDateString()}`}
                         </p>
                       )}
                     </div>
@@ -380,6 +448,57 @@ export default function CaseDesignTracker() {
                 </Card>
               ))}
             </div>
+            
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-6">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                >
+                  Previous
+                </Button>
+                
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    const page = i + 1;
+                    return (
+                      <Button
+                        key={page}
+                        variant={currentPage === page ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setCurrentPage(page)}
+                      >
+                        {page}
+                      </Button>
+                    );
+                  })}
+                  {totalPages > 5 && (
+                    <>
+                      <span className="px-2">...</span>
+                      <Button
+                        variant={currentPage === totalPages ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setCurrentPage(totalPages)}
+                      >
+                        {totalPages}
+                      </Button>
+                    </>
+                  )}
+                </div>
+                
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                  Next
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
 
