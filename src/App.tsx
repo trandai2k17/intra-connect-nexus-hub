@@ -14,6 +14,7 @@ import SoftwareApplication from "./pages/SoftwareApplication";
 import ProjectManagement from "./pages/ProjectManagement";
 import Dictionary from "./pages/Dictionary";
 import DictionaryManagement from "./pages/DictionaryManagement";
+import CaseDesignTracker from "./pages/CaseDesignTracker";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
               <Route path="/software-application" element={<SoftwareApplication />} />
               <Route path="/dictionary" element={<Dictionary />} />
               <Route path="/dictionary-management" element={<DictionaryManagement />} />
+              <Route path="/case-design-tracker" element={<CaseDesignTracker />} />
               <Route path="/mis/project-management" element={<ProjectManagement />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
