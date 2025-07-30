@@ -250,29 +250,29 @@ export default function CaseDesignTracker() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
-      <div className="container-fluid mx-auto px-4 py-6">
+      <div className="container-fluid mx-auto px-2 sm:px-4 py-4 sm:py-6">
         {/* Compact Top Row: Stats + Date Filter */}
-        <div className="grid grid-cols-1 xl:grid-cols-6 gap-4 mb-4">
-          {/* Main Stats - Compressed to 2 columns on large screens */}
-          <Card className="xl:col-span-1 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200">
-            <CardContent className="p-3">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-blue-500" />
+        <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-6 gap-2 sm:gap-4 mb-4">
+          {/* Main Stats - Mobile 2x2 grid, then responsive */}
+          <Card className="col-span-1 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200">
+            <CardContent className="p-2 sm:p-3">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-blue-500" />
                 <div>
                   <p className="text-xs font-medium text-blue-600 dark:text-blue-400">Total</p>
-                  <p className="text-xl font-bold text-blue-700 dark:text-blue-300">{cases.length}</p>
+                  <p className="text-lg sm:text-xl font-bold text-blue-700 dark:text-blue-300">{cases.length}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="xl:col-span-1 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-200">
-            <CardContent className="p-3">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+          <Card className="col-span-1 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-200">
+            <CardContent className="p-2 sm:p-3">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-500" />
                 <div>
                   <p className="text-xs font-medium text-green-600 dark:text-green-400">Done</p>
-                  <p className="text-xl font-bold text-green-700 dark:text-green-300">
+                  <p className="text-lg sm:text-xl font-bold text-green-700 dark:text-green-300">
                     {cases.filter(c => c.status === 'completed').length}
                   </p>
                 </div>
@@ -280,13 +280,13 @@ export default function CaseDesignTracker() {
             </CardContent>
           </Card>
 
-          <Card className="xl:col-span-1 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border-yellow-200">
-            <CardContent className="p-3">
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-yellow-500" />
+          <Card className="col-span-1 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border-yellow-200">
+            <CardContent className="p-2 sm:p-3">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-500" />
                 <div>
                   <p className="text-xs font-medium text-yellow-600 dark:text-yellow-400">Pending</p>
-                  <p className="text-xl font-bold text-yellow-700 dark:text-yellow-300">
+                  <p className="text-lg sm:text-xl font-bold text-yellow-700 dark:text-yellow-300">
                     {cases.filter(c => c.status === 'pending').length}
                   </p>
                 </div>
@@ -294,13 +294,13 @@ export default function CaseDesignTracker() {
             </CardContent>
           </Card>
 
-          <Card className="xl:col-span-1 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border-red-200">
-            <CardContent className="p-3">
-              <div className="flex items-center gap-2">
-                <AlertCircle className="h-4 w-4 text-red-500" />
+          <Card className="col-span-1 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border-red-200">
+            <CardContent className="p-2 sm:p-3">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <AlertCircle className="h-3 w-3 sm:h-4 sm:w-4 text-red-500" />
                 <div>
                   <p className="text-xs font-medium text-red-600 dark:text-red-400">Errors</p>
-                  <p className="text-xl font-bold text-red-700 dark:text-red-300">
+                  <p className="text-lg sm:text-xl font-bold text-red-700 dark:text-red-300">
                     {cases.filter(c => c.status === 'error').length}
                   </p>
                 </div>
@@ -308,18 +308,18 @@ export default function CaseDesignTracker() {
             </CardContent>
           </Card>
 
-          {/* Date Filter Section */}
-          <Card className="xl:col-span-2">
-            <CardContent className="p-3">
-              <div className="flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 text-muted-foreground" />
-                <div className="flex items-center gap-2 flex-1">
+          {/* Date Filter Section - Full width on mobile */}
+          <Card className="col-span-2 xl:col-span-2">
+            <CardContent className="p-2 sm:p-3">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                <CalendarDays className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
+                <div className="flex items-center gap-2 flex-1 w-full">
                   <Input
                     type="date"
                     placeholder="From"
                     value={dateFrom}
                     onChange={(e) => setDateFrom(e.target.value)}
-                    className="text-xs h-8"
+                    className="text-xs h-8 flex-1"
                   />
                   <span className="text-xs text-muted-foreground">to</span>
                   <Input
@@ -327,7 +327,7 @@ export default function CaseDesignTracker() {
                     placeholder="To"
                     value={dateTo}
                     onChange={(e) => setDateTo(e.target.value)}
-                    className="text-xs h-8"
+                    className="text-xs h-8 flex-1"
                   />
                 </div>
               </div>
@@ -335,21 +335,21 @@ export default function CaseDesignTracker() {
           </Card>
         </div>
 
-        {/* Compact Critical Metrics + Charts in one row */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
+        {/* Compact Critical Metrics + Charts in responsive grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-4 mb-4">
           {/* Compact Mini Tables */}
           <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border-orange-200">
-            <CardContent className="p-3">
-              <div className="flex items-center gap-2 mb-2">
-                <Timer className="h-4 w-4 text-orange-500" />
+            <CardContent className="p-2 sm:p-3">
+              <div className="flex items-center gap-1 sm:gap-2 mb-2">
+                <Timer className="h-3 w-3 sm:h-4 sm:w-4 text-orange-500" />
                 <div>
                   <p className="text-xs font-medium text-orange-600 dark:text-orange-400">Late (&gt;12h)</p>
-                  <p className="text-lg font-bold text-orange-700 dark:text-orange-300">
+                  <p className="text-sm sm:text-lg font-bold text-orange-700 dark:text-orange-300">
                     {cases.filter(c => (c.turnaroundTime || 0) > 12).length}
                   </p>
                 </div>
               </div>
-              <div className="max-h-16 overflow-y-auto">
+              <div className="max-h-12 sm:max-h-16 overflow-y-auto">
                 <div className="space-y-1">
                   {cases.filter(c => (c.turnaroundTime || 0) > 12).slice(0, 2).map(c => (
                     <div key={c.id} className="text-xs bg-orange-100 dark:bg-orange-900/30 p-1 rounded">
@@ -362,17 +362,17 @@ export default function CaseDesignTracker() {
           </Card>
 
           <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border-purple-200">
-            <CardContent className="p-3">
-              <div className="flex items-center gap-2 mb-2">
-                <AlertTriangle className="h-4 w-4 text-purple-500" />
+            <CardContent className="p-2 sm:p-3">
+              <div className="flex items-center gap-1 sm:gap-2 mb-2">
+                <AlertTriangle className="h-3 w-3 sm:h-4 sm:w-4 text-purple-500" />
                 <div>
                   <p className="text-xs font-medium text-purple-600 dark:text-purple-400">Urgent</p>
-                  <p className="text-lg font-bold text-purple-700 dark:text-purple-300">
+                  <p className="text-sm sm:text-lg font-bold text-purple-700 dark:text-purple-300">
                     {cases.filter(c => c.urgentDeadline && !c.translated).length}
                   </p>
                 </div>
               </div>
-              <div className="max-h-16 overflow-y-auto">
+              <div className="max-h-12 sm:max-h-16 overflow-y-auto">
                 <div className="space-y-1">
                   {cases.filter(c => c.urgentDeadline && !c.translated).slice(0, 2).map(c => (
                     <div key={c.id} className="text-xs bg-purple-100 dark:bg-purple-900/30 p-1 rounded">
@@ -385,17 +385,17 @@ export default function CaseDesignTracker() {
           </Card>
 
           <Card className="bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20 border-indigo-200">
-            <CardContent className="p-3">
-              <div className="flex items-center gap-2 mb-2">
-                <Mail className="h-4 w-4 text-indigo-500" />
+            <CardContent className="p-2 sm:p-3">
+              <div className="flex items-center gap-1 sm:gap-2 mb-2">
+                <Mail className="h-3 w-3 sm:h-4 sm:w-4 text-indigo-500" />
                 <div>
                   <p className="text-xs font-medium text-indigo-600 dark:text-indigo-400">Email</p>
-                  <p className="text-lg font-bold text-indigo-700 dark:text-indigo-300">
+                  <p className="text-sm sm:text-lg font-bold text-indigo-700 dark:text-indigo-300">
                     {cases.filter(c => c.pendingEmail).length}
                   </p>
                 </div>
               </div>
-              <div className="max-h-16 overflow-y-auto">
+              <div className="max-h-12 sm:max-h-16 overflow-y-auto">
                 <div className="space-y-1">
                   {cases.filter(c => c.pendingEmail).slice(0, 2).map(c => (
                     <div key={c.id} className="text-xs bg-indigo-100 dark:bg-indigo-900/30 p-1 rounded">
@@ -408,9 +408,9 @@ export default function CaseDesignTracker() {
           </Card>
 
           {/* Chart Carousel with Flip Animation */}
-          <Card className="lg:col-span-2 relative overflow-hidden">
-            <CardContent className="p-3">
-              <div className="h-40 relative">
+          <Card className="sm:col-span-2 lg:col-span-2 relative overflow-hidden">
+            <CardContent className="p-2 sm:p-3">
+              <div className="h-32 sm:h-40 relative">
                 {/* Chart transition container */}
                 <div className="absolute inset-0 transition-transform duration-700 ease-in-out"
                      style={{ 
@@ -421,12 +421,12 @@ export default function CaseDesignTracker() {
                   <div className="absolute inset-0 backface-hidden"
                        style={{ backfaceVisibility: 'hidden' }}>
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-sm font-medium">Status Distribution</h3>
+                      <h3 className="text-xs sm:text-sm font-medium">Status Distribution</h3>
                       <Button 
                         variant="ghost" 
                         size="sm" 
                         onClick={() => setChartIndex(1)}
-                        className="h-6 w-6 p-0"
+                        className="h-5 w-5 sm:h-6 sm:w-6 p-0 text-xs"
                       >
                         ↻
                       </Button>
@@ -438,7 +438,7 @@ export default function CaseDesignTracker() {
                           cx="50%"
                           cy="50%"
                           labelLine={false}
-                          outerRadius={45}
+                          outerRadius={window.innerWidth < 640 ? 30 : 45}
                           fill="#8884d8"
                           dataKey="value"
                         >
@@ -458,12 +458,12 @@ export default function CaseDesignTracker() {
                          transform: 'rotateY(180deg)'
                        }}>
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-sm font-medium">Weekly Trend</h3>
+                      <h3 className="text-xs sm:text-sm font-medium">Weekly Trend</h3>
                       <Button 
                         variant="ghost" 
                         size="sm" 
                         onClick={() => setChartIndex(0)}
-                        className="h-6 w-6 p-0"
+                        className="h-5 w-5 sm:h-6 sm:w-6 p-0 text-xs"
                       >
                         ↻
                       </Button>
@@ -471,8 +471,8 @@ export default function CaseDesignTracker() {
                     <ResponsiveContainer width="100%" height="85%">
                       <LineChart data={performanceData}>
                         <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                        <XAxis dataKey="name" fontSize={10} />
-                        <YAxis fontSize={10} />
+                        <XAxis dataKey="name" fontSize={8} />
+                        <YAxis fontSize={8} />
                         <Tooltip />
                         <Line 
                           type="monotone" 
@@ -506,22 +506,22 @@ export default function CaseDesignTracker() {
 
         {/* Cases Table */}
         <Card>
-          <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle>Cases Overview ({filteredCases.length} cases)</CardTitle>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <CardHeader className="pb-3">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+              <CardTitle className="text-base sm:text-lg">Cases Overview ({filteredCases.length})</CardTitle>
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                 Page {currentPage} of {totalPages}
               </div>
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+          <CardContent className="px-2 sm:px-6">
+            <div className="space-y-2 sm:space-y-4">
               {paginatedCases.map((caseItem) => (
-                <Card key={caseItem.id} className="p-3 hover:shadow-md transition-shadow">
-                  <div className="flex flex-col gap-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <h3 className="font-semibold text-lg">{caseItem.id}</h3>
+                <Card key={caseItem.id} className="p-2 sm:p-3 hover:shadow-md transition-shadow">
+                  <div className="flex flex-col gap-2 sm:gap-3">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                      <div className="flex flex-wrap items-center gap-1 sm:gap-3">
+                        <h3 className="font-semibold text-base sm:text-lg">{caseItem.id}</h3>
                         {getStatusBadge(caseItem.status)}
                         {(caseItem.turnaroundTime || 0) > 12 && (
                           <Badge variant="destructive" className="text-xs">
@@ -543,19 +543,20 @@ export default function CaseDesignTracker() {
                         variant="outline" 
                         size="sm"
                         onClick={() => setSelectedCase(caseItem)}
+                        className="text-xs h-7 sm:h-8"
                       >
                         Details
                       </Button>
                     </div>
                     
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs sm:text-sm">
                       <div>
                         <span className="text-muted-foreground">Patient:</span>
-                        <p className="font-medium">{caseItem.patientName}</p>
+                        <p className="font-medium truncate">{caseItem.patientName}</p>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Doctor:</span>
-                        <p className="font-medium">{caseItem.doctorName}</p>
+                        <p className="font-medium truncate">{caseItem.doctorName}</p>
                       </div>
                       <div>
                         <span className="text-muted-foreground">3Shape:</span>
@@ -570,13 +571,15 @@ export default function CaseDesignTracker() {
                     {caseItem.createdDateTime && (
                       <div className="text-xs text-muted-foreground">
                         Created: {new Date(caseItem.createdDateTime).toLocaleDateString()} 
-                        {caseItem.transDate && ` • Transferred: ${new Date(caseItem.transDate).toLocaleDateString()}`}
-                        {caseItem.shipDate && ` • Shipped: ${new Date(caseItem.shipDate).toLocaleDateString()}`}
+                        {caseItem.transDate && ` • Trans: ${new Date(caseItem.transDate).toLocaleDateString()}`}
+                        {caseItem.shipDate && ` • Ship: ${new Date(caseItem.shipDate).toLocaleDateString()}`}
                       </div>
                     )}
                     
-                    {/* Compact Timeline */}
-                    {renderCompactTimeline(caseItem)}
+                    {/* Compact Timeline - smaller on mobile */}
+                    <div className="mt-2">
+                      {renderCompactTimeline(caseItem)}
+                    </div>
                   </div>
                 </Card>
               ))}
