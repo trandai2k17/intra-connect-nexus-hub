@@ -337,72 +337,78 @@ export default function CaseDesignTracker() {
 
         {/* Compact Critical Metrics + Charts in responsive grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-4 mb-4">
-          {/* Compact Mini Tables */}
-          <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border-orange-200">
-            <CardContent className="p-2 sm:p-3">
-              <div className="flex items-center gap-1 sm:gap-2 mb-2">
-                <Timer className="h-3 w-3 sm:h-4 sm:w-4 text-orange-500" />
+          {/* Priority Action Items - Large and Prominent */}
+          
+          {/* URGENT - Critical Cases Need Translation */}
+          <Card className="lg:col-span-2 bg-gradient-to-br from-red-50 via-red-100 to-red-200 dark:from-red-900/30 dark:to-red-800/30 border-2 border-red-400 shadow-xl ring-2 ring-red-300/50">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <AlertTriangle className="h-6 w-6 sm:h-8 sm:w-8 text-red-600 animate-pulse" />
                 <div>
-                  <p className="text-xs font-medium text-orange-600 dark:text-orange-400">Late (&gt;12h)</p>
-                  <p className="text-sm sm:text-lg font-bold text-orange-700 dark:text-orange-300">
-                    {cases.filter(c => (c.turnaroundTime || 0) > 12).length}
-                  </p>
-                </div>
-              </div>
-              <div className="max-h-12 sm:max-h-16 overflow-y-auto">
-                <div className="space-y-1">
-                  {cases.filter(c => (c.turnaroundTime || 0) > 12).slice(0, 2).map(c => (
-                    <div key={c.id} className="text-xs bg-orange-100 dark:bg-orange-900/30 p-1 rounded">
-                      {c.id}: {c.turnaroundTime}h
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border-purple-200">
-            <CardContent className="p-2 sm:p-3">
-              <div className="flex items-center gap-1 sm:gap-2 mb-2">
-                <AlertTriangle className="h-3 w-3 sm:h-4 sm:w-4 text-purple-500" />
-                <div>
-                  <p className="text-xs font-medium text-purple-600 dark:text-purple-400">Urgent</p>
-                  <p className="text-sm sm:text-lg font-bold text-purple-700 dark:text-purple-300">
+                  <p className="text-sm sm:text-lg font-black text-red-800 dark:text-red-200 tracking-wide">URGENT TRANSLATION</p>
+                  <p className="text-2xl sm:text-4xl font-black text-red-900 dark:text-red-100">
                     {cases.filter(c => c.urgentDeadline && !c.translated).length}
                   </p>
                 </div>
               </div>
-              <div className="max-h-12 sm:max-h-16 overflow-y-auto">
-                <div className="space-y-1">
-                  {cases.filter(c => c.urgentDeadline && !c.translated).slice(0, 2).map(c => (
-                    <div key={c.id} className="text-xs bg-purple-100 dark:bg-purple-900/30 p-1 rounded">
-                      {c.id}: Not translated
+              <div className="max-h-24 sm:max-h-32 overflow-y-auto space-y-2">
+                {cases.filter(c => c.urgentDeadline && !c.translated).slice(0, 5).map(c => (
+                  <div key={c.id} className="bg-red-200 dark:bg-red-900/60 p-3 rounded-lg border-l-4 border-red-600 shadow-sm">
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-red-900 dark:text-red-100">{c.id}</span>
+                      <span className="text-red-700 dark:text-red-300 font-semibold">{c.turnaroundTime}h</span>
                     </div>
-                  ))}
-                </div>
+                    <div className="text-sm text-red-800 dark:text-red-200">{c.patientName}</div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20 border-indigo-200">
-            <CardContent className="p-2 sm:p-3">
-              <div className="flex items-center gap-1 sm:gap-2 mb-2">
-                <Mail className="h-3 w-3 sm:h-4 sm:w-4 text-indigo-500" />
+          {/* LATE CASES - High Priority */}
+          <Card className="lg:col-span-2 bg-gradient-to-br from-orange-50 via-orange-100 to-orange-200 dark:from-orange-900/30 dark:to-orange-800/30 border-2 border-orange-400 shadow-xl ring-2 ring-orange-300/50">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <Timer className="h-6 w-6 sm:h-8 sm:w-8 text-orange-600" />
                 <div>
-                  <p className="text-xs font-medium text-indigo-600 dark:text-indigo-400">Email</p>
-                  <p className="text-sm sm:text-lg font-bold text-indigo-700 dark:text-indigo-300">
+                  <p className="text-sm sm:text-lg font-black text-orange-800 dark:text-orange-200 tracking-wide">OVERDUE (&gt;12H)</p>
+                  <p className="text-2xl sm:text-4xl font-black text-orange-900 dark:text-orange-100">
+                    {cases.filter(c => (c.turnaroundTime || 0) > 12).length}
+                  </p>
+                </div>
+              </div>
+              <div className="max-h-24 sm:max-h-32 overflow-y-auto space-y-2">
+                {cases.filter(c => (c.turnaroundTime || 0) > 12).slice(0, 5).map(c => (
+                  <div key={c.id} className="bg-orange-200 dark:bg-orange-900/60 p-3 rounded-lg border-l-4 border-orange-600 shadow-sm">
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-orange-900 dark:text-orange-100">{c.id}</span>
+                      <span className="text-orange-700 dark:text-orange-300 font-semibold">{c.turnaroundTime}h</span>
+                    </div>
+                    <div className="text-sm text-orange-800 dark:text-orange-200">{c.patientName}</div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Email Follow-ups */}
+          <Card className="bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 border-amber-300 shadow-lg">
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Mail className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600" />
+                <div>
+                  <p className="text-sm font-bold text-amber-800 dark:text-amber-200">EMAIL PENDING</p>
+                  <p className="text-xl sm:text-2xl font-bold text-amber-900 dark:text-amber-100">
                     {cases.filter(c => c.pendingEmail).length}
                   </p>
                 </div>
               </div>
-              <div className="max-h-12 sm:max-h-16 overflow-y-auto">
-                <div className="space-y-1">
-                  {cases.filter(c => c.pendingEmail).slice(0, 2).map(c => (
-                    <div key={c.id} className="text-xs bg-indigo-100 dark:bg-indigo-900/30 p-1 rounded">
-                      {c.id}: {c.createdDateTime}
-                    </div>
-                  ))}
-                </div>
+              <div className="max-h-16 sm:max-h-20 overflow-y-auto space-y-1">
+                {cases.filter(c => c.pendingEmail).slice(0, 4).map(c => (
+                  <div key={c.id} className="bg-amber-200 dark:bg-amber-900/50 p-2 rounded border border-amber-400 text-sm font-medium">
+                    <span className="font-bold text-amber-900 dark:text-amber-100">{c.id}</span>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
