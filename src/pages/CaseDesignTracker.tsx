@@ -337,28 +337,30 @@ export default function CaseDesignTracker() {
 
         {/* Compact Critical Metrics + Charts in responsive grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-4 mb-4">
-          {/* Priority Action Items - Large and Prominent */}
+          {/* Priority Action Items - Elegant and Prominent */}
           
           {/* URGENT - Critical Cases Need Translation */}
-          <Card className="lg:col-span-2 bg-gradient-to-br from-red-50 via-red-100 to-red-200 dark:from-red-900/30 dark:to-red-800/30 border-2 border-red-400 shadow-xl ring-2 ring-red-300/50">
-            <CardContent className="p-4 sm:p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <AlertTriangle className="h-6 w-6 sm:h-8 sm:w-8 text-red-600 animate-pulse" />
+          <Card className="lg:col-span-2 bg-gradient-to-br from-red-50/80 to-rose-50/80 dark:from-red-900/10 dark:to-rose-900/10 border border-red-200/60 dark:border-red-800/30 shadow-md hover:shadow-lg transition-shadow">
+            <CardContent className="p-4 sm:p-5">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2 rounded-lg bg-red-100 dark:bg-red-900/20">
+                  <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
+                </div>
                 <div>
-                  <p className="text-sm sm:text-lg font-black text-red-800 dark:text-red-200 tracking-wide">URGENT TRANSLATION</p>
-                  <p className="text-2xl sm:text-4xl font-black text-red-900 dark:text-red-100">
+                  <p className="text-sm font-semibold text-red-700 dark:text-red-300 uppercase tracking-wide">Urgent Translation</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-red-800 dark:text-red-200">
                     {cases.filter(c => c.urgentDeadline && !c.translated).length}
                   </p>
                 </div>
               </div>
-              <div className="max-h-24 sm:max-h-32 overflow-y-auto space-y-2">
-                {cases.filter(c => c.urgentDeadline && !c.translated).slice(0, 5).map(c => (
-                  <div key={c.id} className="bg-red-200 dark:bg-red-900/60 p-3 rounded-lg border-l-4 border-red-600 shadow-sm">
+              <div className="max-h-20 sm:max-h-24 overflow-y-auto space-y-2">
+                {cases.filter(c => c.urgentDeadline && !c.translated).slice(0, 4).map(c => (
+                  <div key={c.id} className="bg-white/70 dark:bg-red-950/20 p-2.5 rounded-md border-l-3 border-red-400 hover:bg-red-50/50 dark:hover:bg-red-900/10 transition-colors">
                     <div className="flex justify-between items-center">
-                      <span className="font-bold text-red-900 dark:text-red-100">{c.id}</span>
-                      <span className="text-red-700 dark:text-red-300 font-semibold">{c.turnaroundTime}h</span>
+                      <span className="font-medium text-red-900 dark:text-red-100">{c.id}</span>
+                      <span className="text-red-600 dark:text-red-400 text-sm font-medium">{c.turnaroundTime}h</span>
                     </div>
-                    <div className="text-sm text-red-800 dark:text-red-200">{c.patientName}</div>
+                    <div className="text-sm text-red-700 dark:text-red-300 mt-0.5">{c.patientName}</div>
                   </div>
                 ))}
               </div>
@@ -366,25 +368,27 @@ export default function CaseDesignTracker() {
           </Card>
 
           {/* LATE CASES - High Priority */}
-          <Card className="lg:col-span-2 bg-gradient-to-br from-orange-50 via-orange-100 to-orange-200 dark:from-orange-900/30 dark:to-orange-800/30 border-2 border-orange-400 shadow-xl ring-2 ring-orange-300/50">
-            <CardContent className="p-4 sm:p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <Timer className="h-6 w-6 sm:h-8 sm:w-8 text-orange-600" />
+          <Card className="lg:col-span-2 bg-gradient-to-br from-orange-50/80 to-amber-50/80 dark:from-orange-900/10 dark:to-amber-900/10 border border-orange-200/60 dark:border-orange-800/30 shadow-md hover:shadow-lg transition-shadow">
+            <CardContent className="p-4 sm:p-5">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2 rounded-lg bg-orange-100 dark:bg-orange-900/20">
+                  <Timer className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+                </div>
                 <div>
-                  <p className="text-sm sm:text-lg font-black text-orange-800 dark:text-orange-200 tracking-wide">OVERDUE (&gt;12H)</p>
-                  <p className="text-2xl sm:text-4xl font-black text-orange-900 dark:text-orange-100">
+                  <p className="text-sm font-semibold text-orange-700 dark:text-orange-300 uppercase tracking-wide">Overdue Cases</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-orange-800 dark:text-orange-200">
                     {cases.filter(c => (c.turnaroundTime || 0) > 12).length}
                   </p>
                 </div>
               </div>
-              <div className="max-h-24 sm:max-h-32 overflow-y-auto space-y-2">
-                {cases.filter(c => (c.turnaroundTime || 0) > 12).slice(0, 5).map(c => (
-                  <div key={c.id} className="bg-orange-200 dark:bg-orange-900/60 p-3 rounded-lg border-l-4 border-orange-600 shadow-sm">
+              <div className="max-h-20 sm:max-h-24 overflow-y-auto space-y-2">
+                {cases.filter(c => (c.turnaroundTime || 0) > 12).slice(0, 4).map(c => (
+                  <div key={c.id} className="bg-white/70 dark:bg-orange-950/20 p-2.5 rounded-md border-l-3 border-orange-400 hover:bg-orange-50/50 dark:hover:bg-orange-900/10 transition-colors">
                     <div className="flex justify-between items-center">
-                      <span className="font-bold text-orange-900 dark:text-orange-100">{c.id}</span>
-                      <span className="text-orange-700 dark:text-orange-300 font-semibold">{c.turnaroundTime}h</span>
+                      <span className="font-medium text-orange-900 dark:text-orange-100">{c.id}</span>
+                      <span className="text-orange-600 dark:text-orange-400 text-sm font-medium">{c.turnaroundTime}h</span>
                     </div>
-                    <div className="text-sm text-orange-800 dark:text-orange-200">{c.patientName}</div>
+                    <div className="text-sm text-orange-700 dark:text-orange-300 mt-0.5">{c.patientName}</div>
                   </div>
                 ))}
               </div>
@@ -392,21 +396,23 @@ export default function CaseDesignTracker() {
           </Card>
 
           {/* Email Follow-ups */}
-          <Card className="bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 border-amber-300 shadow-lg">
+          <Card className="bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-blue-900/10 dark:to-indigo-900/10 border border-blue-200/60 dark:border-blue-800/30 shadow-sm hover:shadow-md transition-shadow">
             <CardContent className="p-3 sm:p-4">
               <div className="flex items-center gap-2 mb-3">
-                <Mail className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600" />
+                <div className="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/20">
+                  <Mail className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                </div>
                 <div>
-                  <p className="text-sm font-bold text-amber-800 dark:text-amber-200">EMAIL PENDING</p>
-                  <p className="text-xl sm:text-2xl font-bold text-amber-900 dark:text-amber-100">
+                  <p className="text-sm font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wide">Email Pending</p>
+                  <p className="text-xl font-bold text-blue-800 dark:text-blue-200">
                     {cases.filter(c => c.pendingEmail).length}
                   </p>
                 </div>
               </div>
               <div className="max-h-16 sm:max-h-20 overflow-y-auto space-y-1">
-                {cases.filter(c => c.pendingEmail).slice(0, 4).map(c => (
-                  <div key={c.id} className="bg-amber-200 dark:bg-amber-900/50 p-2 rounded border border-amber-400 text-sm font-medium">
-                    <span className="font-bold text-amber-900 dark:text-amber-100">{c.id}</span>
+                {cases.filter(c => c.pendingEmail).slice(0, 3).map(c => (
+                  <div key={c.id} className="bg-white/70 dark:bg-blue-950/20 p-2 rounded border-l-2 border-blue-300 text-sm hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors">
+                    <span className="font-medium text-blue-900 dark:text-blue-100">{c.id}</span>
                   </div>
                 ))}
               </div>
