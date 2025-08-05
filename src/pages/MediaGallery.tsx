@@ -167,7 +167,6 @@ const MediaGallery = () => {
   const [selectedFolder, setSelectedFolder] = useState<MediaFolder | null>(null);
   const [viewerOpen, setViewerOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
-  const [folderViewOpen, setFolderViewOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -177,47 +176,85 @@ const MediaGallery = () => {
     setFilteredFolders(mediaFolders);
   }, [mediaFolders]);
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, folderId?: string) => {
     const files = Array.from(e.target.files || []);
     
     if (files.length > 0) {
-      // Create a new folder for uploaded images
-      const newFolder: MediaFolder = {
-        id: Date.now().toString(),
-        name: `Upload ${new Date().toLocaleDateString()}`,
-        createdDate: new Date(),
-        images: []
-      };
+      if (folderId) {
+        // Add to existing folder
+        const updatedFolders = mediaFolders.map(folder => {
+          if (folder.id === folderId) {
+            const newImages: MediaItem[] = [];
+            files.forEach((file) => {
+              if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                  const newMediaItem: MediaItem = {
+                    id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                    name: file.name,
+                    file: file,
+                    url: event.target?.result as string,
+                    type: 'image',
+                    size: file.size,
+                    uploadDate: new Date()
+                  };
+                  
+                  newImages.push(newMediaItem);
+                  folder.images.push(newMediaItem);
+                  
+                  if (newImages.length === files.filter(f => f.type.startsWith('image/')).length) {
+                    setMediaFolders([...updatedFolders]);
+                    setFilteredFolders([...updatedFolders]);
+                    if (selectedFolder?.id === folderId) {
+                      setSelectedFolder({...folder});
+                    }
+                  }
+                };
+                reader.readAsDataURL(file);
+              }
+            });
+          }
+          return folder;
+        });
+      } else {
+        // Create a new folder for uploaded images
+        const newFolder: MediaFolder = {
+          id: Date.now().toString(),
+          name: `Upload ${new Date().toLocaleDateString()}`,
+          createdDate: new Date(),
+          images: []
+        };
 
-      files.forEach((file) => {
-        if (file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            const newMediaItem: MediaItem = {
-              id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-              name: file.name,
-              file: file,
-              url: event.target?.result as string,
-              type: 'image',
-              size: file.size,
-              uploadDate: new Date()
+        files.forEach((file) => {
+          if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              const newMediaItem: MediaItem = {
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                name: file.name,
+                file: file,
+                url: event.target?.result as string,
+                type: 'image',
+                size: file.size,
+                uploadDate: new Date()
+              };
+              
+              newFolder.images.push(newMediaItem);
+              
+              // Update folder after all images are processed
+              if (newFolder.images.length === files.filter(f => f.type.startsWith('image/')).length) {
+                setMediaFolders(prev => [newFolder, ...prev]);
+                setFilteredFolders(prev => [newFolder, ...prev]);
+              }
             };
-            
-            newFolder.images.push(newMediaItem);
-            
-            // Update folder after all images are processed
-            if (newFolder.images.length === files.filter(f => f.type.startsWith('image/')).length) {
-              setMediaFolders(prev => [newFolder, ...prev]);
-              setFilteredFolders(prev => [newFolder, ...prev]);
-            }
-          };
-          reader.readAsDataURL(file);
-        }
-      });
+            reader.readAsDataURL(file);
+          }
+        });
+      }
 
       toast({
         title: "Upload thành công",
-        description: `Đã tạo folder mới với ${files.length} ảnh`,
+        description: folderId ? `Đã thêm ${files.length} ảnh vào folder` : `Đã tạo folder mới với ${files.length} ảnh`,
       });
     }
 
@@ -248,7 +285,6 @@ const MediaGallery = () => {
 
   const handleFolderClick = (folder: MediaFolder) => {
     setSelectedFolder(folder);
-    setFolderViewOpen(true);
   };
 
   const handleMediaClick = (media: MediaItem) => {
@@ -280,62 +316,26 @@ const MediaGallery = () => {
         <p className="text-muted-foreground">Upload and manage your media files</p>
       </div>
 
-      {/* Search & Upload Row */}
-      <div className="grid grid-cols-12 gap-6">
-        {/* Search - 8 columns */}
-        <div className="col-span-8">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Search className="h-5 w-5" />
-                Search Folders
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search folders or images..."
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                  className="pl-10"
-                />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Upload - 4 columns */}
-        <div className="col-span-4">
-          <Card className="border-dashed border-2 hover:border-primary/50 transition-colors h-full">
-            <CardContent className="p-4">
-              <div 
-                className="flex flex-col items-center justify-center py-6 cursor-pointer text-center h-full"
-                onClick={handleUploadClick}
-              >
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-                  <Upload className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="text-sm font-semibold mb-1">Upload Images</h3>
-                <p className="text-xs text-muted-foreground mb-3">
-                  Click to select files
-                </p>
-                <Button variant="outline" size="sm">
-                  Choose Files
-                </Button>
-              </div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handleFileUpload}
-                className="hidden"
-              />
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+      {/* Search */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Search className="h-5 w-5" />
+            Search Folders
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search folders or images..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="pl-10"
+            />
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Folders Gallery */}
       <Card>
@@ -363,68 +363,132 @@ const MediaGallery = () => {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredFolders.map((folder) => (
+            <div className="flex gap-6 overflow-x-auto pb-4">
+              {/* Add Folder Card */}
+              <div className="flex-shrink-0 w-64">
                 <Card 
-                  key={folder.id} 
-                  className="cursor-pointer hover:shadow-lg transition-shadow"
-                  onClick={() => handleFolderClick(folder)}
+                  className="border-dashed border-2 hover:border-primary/50 transition-colors cursor-pointer h-full"
+                  onClick={handleUploadClick}
                 >
                   <CardContent className="p-4">
-                    <div className="space-y-3">
-                      {/* Preview Images Grid */}
-                      <div className="grid grid-cols-3 gap-1 h-24">
-                        {getFolderPreviewImages(folder).map((img, index) => (
-                          <div key={img.id} className="relative rounded overflow-hidden bg-muted">
-                            <img
-                              src={img.url}
-                              alt={img.name}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        ))}
-                        {/* Fill empty slots if less than 3 images */}
-                        {Array.from({ length: 3 - getFolderPreviewImages(folder).length }).map((_, index) => (
-                          <div key={`empty-${index}`} className="bg-muted rounded flex items-center justify-center">
-                            <Image className="h-4 w-4 text-muted-foreground/50" />
-                          </div>
-                        ))}
-                      </div>
-                      
-                      {/* Folder Info */}
-                      <div>
-                        <h3 className="font-semibold text-sm truncate">{folder.name}</h3>
-                        <p className="text-xs text-muted-foreground">
-                          {getTotalImages(folder)} images
+                    <div className="space-y-3 h-full flex flex-col justify-center">
+                      <div className="flex flex-col items-center text-center py-8">
+                        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                          <Upload className="h-8 w-8 text-primary" />
+                        </div>
+                        <h3 className="font-semibold text-sm mb-2">Create New Folder</h3>
+                        <p className="text-xs text-muted-foreground mb-4">
+                          Upload images to create a new folder
                         </p>
-                        <p className="text-xs text-muted-foreground">
-                          {folder.createdDate.toLocaleDateString()}
-                        </p>
+                        <Button variant="outline" size="sm">
+                          Upload Images
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
+              </div>
+
+              {/* Existing Folders */}
+              {filteredFolders.map((folder) => (
+                <div key={folder.id} className="flex-shrink-0 w-64">
+                  <Card 
+                    className={`cursor-pointer hover:shadow-lg transition-all ${
+                      selectedFolder?.id === folder.id ? 'ring-2 ring-primary' : ''
+                    }`}
+                    onClick={() => handleFolderClick(folder)}
+                  >
+                    <CardContent className="p-4">
+                      <div className="space-y-3">
+                        {/* Preview Images Grid */}
+                        <div className="grid grid-cols-3 gap-1 h-24">
+                          {getFolderPreviewImages(folder).map((img, index) => (
+                            <div key={img.id} className="relative rounded overflow-hidden bg-muted">
+                              <img
+                                src={img.url}
+                                alt={img.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ))}
+                          {/* Fill empty slots if less than 3 images */}
+                          {Array.from({ length: 3 - getFolderPreviewImages(folder).length }).map((_, index) => (
+                            <div key={`empty-${index}`} className="bg-muted rounded flex items-center justify-center">
+                              <Image className="h-4 w-4 text-muted-foreground/50" />
+                            </div>
+                          ))}
+                        </div>
+                        
+                        {/* Folder Info */}
+                        <div>
+                          <h3 className="font-semibold text-sm truncate">{folder.name}</h3>
+                          <p className="text-xs text-muted-foreground">
+                            {getTotalImages(folder)} images
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {folder.createdDate.toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
               ))}
             </div>
           )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={(e) => handleFileUpload(e)}
+            className="hidden"
+          />
         </CardContent>
       </Card>
 
-      {/* Folder View Dialog */}
-      <Dialog open={folderViewOpen} onOpenChange={setFolderViewOpen}>
-        <DialogContent className="max-w-6xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center justify-between">
-              <span>{selectedFolder?.name}</span>
-              {selectedFolder && (
-                <span className="text-sm text-muted-foreground font-normal">
-                  {getTotalImages(selectedFolder)} images
-                </span>
-              )}
-            </DialogTitle>
-          </DialogHeader>
-          {selectedFolder && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      {/* Selected Folder Images */}
+      {selectedFolder && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Image className="h-5 w-5" />
+              {selectedFolder.name}
+              <span className="text-sm text-muted-foreground font-normal">
+                ({getTotalImages(selectedFolder)} images)
+              </span>
+            </CardTitle>
+            <CardDescription>
+              Manage images in this folder
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {/* Upload to Folder Card */}
+              <div className="aspect-square">
+                <Card 
+                  className="border-dashed border-2 hover:border-primary/50 transition-colors cursor-pointer h-full"
+                  onClick={() => {
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.multiple = true;
+                    input.accept = 'image/*';
+                    input.onchange = (e) => handleFileUpload(e as any, selectedFolder.id);
+                    input.click();
+                  }}
+                >
+                  <CardContent className="p-2 h-full flex flex-col items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+                      <Upload className="h-4 w-4 text-primary" />
+                    </div>
+                    <p className="text-xs text-center text-muted-foreground">
+                      Add Images
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Existing Images */}
               {selectedFolder.images.map((media) => (
                 <div
                   key={media.id}
@@ -452,9 +516,9 @@ const MediaGallery = () => {
                 </div>
               ))}
             </div>
-          )}
-        </DialogContent>
-      </Dialog>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Media Viewer Dialog */}
       <Dialog open={viewerOpen} onOpenChange={setViewerOpen}>
