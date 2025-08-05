@@ -273,10 +273,27 @@ const MediaGallery = () => {
     setSearchTerm(term);
     
     if (term) {
-      const filtered = mediaFolders.filter(folder => 
-        folder.name.toLowerCase().includes(term.toLowerCase()) ||
-        folder.images.some(img => img.name.toLowerCase().includes(term.toLowerCase()))
-      );
+      // Search with priority: folder name first, then image names
+      const filtered = mediaFolders.filter(folder => {
+        // Priority 1: Folder name matches
+        const folderNameMatch = folder.name.toLowerCase().includes(term.toLowerCase());
+        
+        // Priority 2: Any image name in folder matches
+        const imageNameMatch = folder.images.some(img => 
+          img.name.toLowerCase().includes(term.toLowerCase())
+        );
+        
+        return folderNameMatch || imageNameMatch;
+      }).sort((a, b) => {
+        // Sort by relevance: folder name matches first
+        const aFolderMatch = a.name.toLowerCase().includes(term.toLowerCase());
+        const bFolderMatch = b.name.toLowerCase().includes(term.toLowerCase());
+        
+        if (aFolderMatch && !bFolderMatch) return -1;
+        if (!aFolderMatch && bFolderMatch) return 1;
+        return 0; // Keep original order for same priority
+      });
+      
       setFilteredFolders(filtered);
     } else {
       setFilteredFolders(mediaFolders);
@@ -363,21 +380,22 @@ const MediaGallery = () => {
               </p>
             </div>
           ) : (
-            <div className="flex gap-6 overflow-x-auto pb-4">
+            <div className="flex gap-4 overflow-x-auto pb-4">
               {/* Add Folder Card */}
-              <div className="flex-shrink-0 w-64">
+              <div className="flex-shrink-0 w-72">
                 <Card 
-                  className="border-dashed border-2 hover:border-primary/50 transition-colors cursor-pointer h-full"
+                  className="border-dashed border-2 hover:border-primary/50 transition-colors cursor-pointer"
+                  style={{ height: '200px' }}
                   onClick={handleUploadClick}
                 >
-                  <CardContent className="p-4">
-                    <div className="space-y-3 h-full flex flex-col justify-center">
-                      <div className="flex flex-col items-center text-center py-8">
-                        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                          <Upload className="h-8 w-8 text-primary" />
+                  <CardContent className="p-4 h-full">
+                    <div className="h-full flex flex-col justify-center">
+                      <div className="flex flex-col items-center text-center">
+                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+                          <Upload className="h-6 w-6 text-primary" />
                         </div>
                         <h3 className="font-semibold text-sm mb-2">Create New Folder</h3>
-                        <p className="text-xs text-muted-foreground mb-4">
+                        <p className="text-xs text-muted-foreground mb-3">
                           Upload images to create a new folder
                         </p>
                         <Button variant="outline" size="sm">
@@ -391,19 +409,20 @@ const MediaGallery = () => {
 
               {/* Existing Folders */}
               {filteredFolders.map((folder) => (
-                <div key={folder.id} className="flex-shrink-0 w-64">
+                <div key={folder.id} className="flex-shrink-0 w-72">
                   <Card 
                     className={`cursor-pointer hover:shadow-lg transition-all ${
                       selectedFolder?.id === folder.id ? 'ring-2 ring-primary' : ''
                     }`}
+                    style={{ height: '200px' }}
                     onClick={() => handleFolderClick(folder)}
                   >
-                    <CardContent className="p-4">
-                      <div className="space-y-3">
-                        {/* Preview Images Grid */}
-                        <div className="grid grid-cols-3 gap-1 h-24">
+                    <CardContent className="p-4 h-full">
+                      <div className="h-full flex flex-col">
+                        {/* Preview Images Grid - Fixed height */}
+                        <div className="grid grid-cols-3 gap-2 h-20 mb-3">
                           {getFolderPreviewImages(folder).map((img, index) => (
-                            <div key={img.id} className="relative rounded overflow-hidden bg-muted">
+                            <div key={img.id} className="relative rounded-md overflow-hidden bg-muted">
                               <img
                                 src={img.url}
                                 alt={img.name}
@@ -413,19 +432,21 @@ const MediaGallery = () => {
                           ))}
                           {/* Fill empty slots if less than 3 images */}
                           {Array.from({ length: 3 - getFolderPreviewImages(folder).length }).map((_, index) => (
-                            <div key={`empty-${index}`} className="bg-muted rounded flex items-center justify-center">
-                              <Image className="h-4 w-4 text-muted-foreground/50" />
+                            <div key={`empty-${index}`} className="bg-muted rounded-md flex items-center justify-center">
+                              <Image className="h-3 w-3 text-muted-foreground/50" />
                             </div>
                           ))}
                         </div>
                         
-                        {/* Folder Info */}
-                        <div>
-                          <h3 className="font-semibold text-sm truncate">{folder.name}</h3>
-                          <p className="text-xs text-muted-foreground">
-                            {getTotalImages(folder)} images
-                          </p>
-                          <p className="text-xs text-muted-foreground">
+                        {/* Folder Info - Flexible height */}
+                        <div className="flex-1 flex flex-col justify-between">
+                          <div>
+                            <h3 className="font-semibold text-sm truncate mb-1">{folder.name}</h3>
+                            <p className="text-xs text-muted-foreground">
+                              {getTotalImages(folder)} images
+                            </p>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-2">
                             {folder.createdDate.toLocaleDateString()}
                           </p>
                         </div>
