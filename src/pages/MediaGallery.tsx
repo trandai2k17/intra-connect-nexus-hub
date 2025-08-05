@@ -280,55 +280,62 @@ const MediaGallery = () => {
         <p className="text-muted-foreground">Upload and manage your media files</p>
       </div>
 
-      {/* Upload Card */}
-      <Card className="border-dashed border-2 hover:border-primary/50 transition-colors">
-        <CardContent className="p-6">
-          <div 
-            className="flex flex-col items-center justify-center py-12 cursor-pointer text-center"
-            onClick={handleUploadClick}
-          >
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-              <Upload className="h-8 w-8 text-primary" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Upload Images</h3>
-            <p className="text-muted-foreground mb-4">
-              Click to select images or drag and drop
-            </p>
-            <Button variant="outline">
-              Choose Files
-            </Button>
-          </div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={handleFileUpload}
-            className="hidden"
-          />
-        </CardContent>
-      </Card>
+      {/* Search & Upload Row */}
+      <div className="grid grid-cols-12 gap-6">
+        {/* Search - 8 columns */}
+        <div className="col-span-8">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Search className="h-5 w-5" />
+                Search Folders
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search folders or images..."
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  className="pl-10"
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-      {/* Search */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Search className="h-5 w-5" />
-            Search Folders
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search folders or images..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              className="pl-10"
-            />
-          </div>
-        </CardContent>
-      </Card>
+        {/* Upload - 4 columns */}
+        <div className="col-span-4">
+          <Card className="border-dashed border-2 hover:border-primary/50 transition-colors h-full">
+            <CardContent className="p-4">
+              <div 
+                className="flex flex-col items-center justify-center py-6 cursor-pointer text-center h-full"
+                onClick={handleUploadClick}
+              >
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+                  <Upload className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-sm font-semibold mb-1">Upload Images</h3>
+                <p className="text-xs text-muted-foreground mb-3">
+                  Click to select files
+                </p>
+                <Button variant="outline" size="sm">
+                  Choose Files
+                </Button>
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+            </CardContent>
+          </Card>
+        </div>
+      </div>
 
       {/* Folders Gallery */}
       <Card>
