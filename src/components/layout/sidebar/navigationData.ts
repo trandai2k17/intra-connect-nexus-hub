@@ -15,7 +15,8 @@ import {
   MessageSquare,
   TrendingUp,
   Book,
-  PlusCircle
+  PlusCircle,
+  Image
 } from "lucide-react";
 
 interface SubItem {
@@ -77,6 +78,12 @@ export const navigationItems: NavigationItem[] = [
     url: "/library",
     icon: BookOpen,
     iconColor: "text-purple-600",
+  },
+  {
+    title: "Media Gallery",
+    url: "/media-gallery",
+    icon: Image,
+    iconColor: "text-pink-600",
   },
   {
     title: "MIS",
