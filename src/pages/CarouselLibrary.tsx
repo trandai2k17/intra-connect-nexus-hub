@@ -12,21 +12,286 @@ import dentalServices from '@/assets/dental-services.jpg';
 
 export default function CarouselLibrary() {
   useEffect(() => {
-    // Load Bootstrap CSS and JS only for this page
-    const bootstrapCSS = document.createElement('link');
-    bootstrapCSS.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
-    bootstrapCSS.rel = 'stylesheet';
-    bootstrapCSS.id = 'bootstrap-css';
-    document.head.appendChild(bootstrapCSS);
+    // Create scoped Bootstrap CSS to prevent conflicts
+    const scopedBootstrapCSS = `
+      .bootstrap-scope {
+        /* Bootstrap Carousel Styles - Scoped */
+        position: relative;
+      }
+      
+      .bootstrap-scope .carousel {
+        position: relative;
+      }
+      
+      .bootstrap-scope .carousel.pointer-event {
+        touch-action: pan-y;
+      }
+      
+      .bootstrap-scope .carousel-inner {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+      }
+      
+      .bootstrap-scope .carousel-inner::after {
+        display: block;
+        clear: both;
+        content: "";
+      }
+      
+      .bootstrap-scope .carousel-item {
+        position: relative;
+        display: none;
+        float: left;
+        width: 100%;
+        margin-right: -100%;
+        backface-visibility: hidden;
+        transition: transform 0.6s ease-in-out;
+      }
+      
+      .bootstrap-scope .carousel-item.active,
+      .bootstrap-scope .carousel-item-next,
+      .bootstrap-scope .carousel-item-prev {
+        display: block;
+      }
+      
+      .bootstrap-scope .carousel-item-next:not(.carousel-item-start),
+      .bootstrap-scope .active.carousel-item-end {
+        transform: translateX(100%);
+      }
+      
+      .bootstrap-scope .carousel-item-prev:not(.carousel-item-end),
+      .bootstrap-scope .active.carousel-item-start {
+        transform: translateX(-100%);
+      }
+      
+      .bootstrap-scope .carousel-fade .carousel-item {
+        opacity: 0;
+        transition-property: opacity;
+        transform: none;
+      }
+      
+      .bootstrap-scope .carousel-fade .carousel-item.active,
+      .bootstrap-scope .carousel-fade .carousel-item-next.carousel-item-start,
+      .bootstrap-scope .carousel-fade .carousel-item-prev.carousel-item-end {
+        z-index: 1;
+        opacity: 1;
+      }
+      
+      .bootstrap-scope .carousel-fade .active.carousel-item-start,
+      .bootstrap-scope .carousel-fade .active.carousel-item-end {
+        z-index: 0;
+        opacity: 0;
+        transition: opacity 0s 0.6s;
+      }
+      
+      .bootstrap-scope .carousel-control-prev,
+      .bootstrap-scope .carousel-control-next {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 15%;
+        padding: 0;
+        color: #fff;
+        text-align: center;
+        background: none;
+        border: 0;
+        opacity: 0.5;
+        transition: opacity 0.15s ease;
+      }
+      
+      .bootstrap-scope .carousel-control-prev:hover,
+      .bootstrap-scope .carousel-control-prev:focus,
+      .bootstrap-scope .carousel-control-next:hover,
+      .bootstrap-scope .carousel-control-next:focus {
+        color: #fff;
+        text-decoration: none;
+        outline: 0;
+        opacity: 0.9;
+      }
+      
+      .bootstrap-scope .carousel-control-prev {
+        left: 0;
+      }
+      
+      .bootstrap-scope .carousel-control-next {
+        right: 0;
+      }
+      
+      .bootstrap-scope .carousel-control-prev-icon,
+      .bootstrap-scope .carousel-control-next-icon {
+        display: inline-block;
+        width: 2rem;
+        height: 2rem;
+        background-repeat: no-repeat;
+        background-position: 50%;
+        background-size: 100% 100%;
+      }
+      
+      .bootstrap-scope .carousel-control-prev-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='m11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3e%3c/svg%3e");
+      }
+      
+      .bootstrap-scope .carousel-control-next-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='m4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+      }
+      
+      .bootstrap-scope .carousel-indicators {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        padding: 0;
+        margin-right: 15%;
+        margin-bottom: 1rem;
+        margin-left: 15%;
+        list-style: none;
+      }
+      
+      .bootstrap-scope .carousel-indicators [data-bs-target] {
+        box-sizing: content-box;
+        flex: 0 1 auto;
+        width: 30px;
+        height: 3px;
+        padding: 0;
+        margin-right: 3px;
+        margin-left: 3px;
+        text-indent: -999px;
+        cursor: pointer;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        opacity: 0.5;
+        transition: opacity 0.6s ease;
+      }
+      
+      .bootstrap-scope .carousel-indicators .active {
+        opacity: 1;
+      }
+      
+      .bootstrap-scope .carousel-caption {
+        position: absolute;
+        right: 15%;
+        bottom: 1.25rem;
+        left: 15%;
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
+        color: #fff;
+        text-align: center;
+      }
+      
+      .bootstrap-scope .carousel-dark .carousel-control-prev-icon,
+      .bootstrap-scope .carousel-dark .carousel-control-next-icon {
+        filter: invert(1) grayscale(100);
+      }
+      
+      .bootstrap-scope .carousel-dark .carousel-indicators [data-bs-target] {
+        background-color: #000;
+      }
+      
+      .bootstrap-scope .carousel-dark .carousel-caption {
+        color: #000;
+      }
+      
+      /* Bootstrap utility classes used in carousels */
+      .bootstrap-scope .d-block {
+        display: block !important;
+      }
+      
+      .bootstrap-scope .w-100 {
+        width: 100% !important;
+      }
+      
+      .bootstrap-scope .h-100 {
+        height: 100% !important;
+      }
+      
+      .bootstrap-scope .text-center {
+        text-align: center !important;
+      }
+      
+      .bootstrap-scope .text-white {
+        color: #fff !important;
+      }
+      
+      .bootstrap-scope .bg-dark {
+        background-color: #212529 !important;
+      }
+      
+      .bootstrap-scope .p-5 {
+        padding: 3rem !important;
+      }
+      
+      .bootstrap-scope .mb-3 {
+        margin-bottom: 1rem !important;
+      }
+      
+      .bootstrap-scope .btn {
+        display: inline-block;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        text-align: center;
+        text-decoration: none;
+        vertical-align: middle;
+        cursor: pointer;
+        user-select: none;
+        background-color: transparent;
+        border: 1px solid transparent;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        border-radius: 0.375rem;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      }
+      
+      .bootstrap-scope .btn-primary {
+        color: #fff;
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+      }
+      
+      .bootstrap-scope .btn-primary:hover {
+        color: #fff;
+        background-color: #0b5ed7;
+        border-color: #0a58ca;
+      }
+      
+      .bootstrap-scope .btn-outline-light {
+        color: #f8f9fa;
+        border-color: #f8f9fa;
+      }
+      
+      .bootstrap-scope .btn-outline-light:hover {
+        color: #000;
+        background-color: #f8f9fa;
+        border-color: #f8f9fa;
+      }
+    `;
 
+    // Create and inject scoped CSS
+    const styleElement = document.createElement('style');
+    styleElement.id = 'scoped-bootstrap-css';
+    styleElement.textContent = scopedBootstrapCSS;
+    document.head.appendChild(styleElement);
+
+    // Load only Bootstrap JS for carousel functionality
     const bootstrapJS = document.createElement('script');
     bootstrapJS.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js';
     bootstrapJS.id = 'bootstrap-js';
     document.head.appendChild(bootstrapJS);
 
-    // Cleanup function to remove Bootstrap when leaving the page
+    // Cleanup function
     return () => {
-      const cssElement = document.getElementById('bootstrap-css');
+      const cssElement = document.getElementById('scoped-bootstrap-css');
       const jsElement = document.getElementById('bootstrap-js');
       if (cssElement) document.head.removeChild(cssElement);
       if (jsElement) document.head.removeChild(jsElement);
@@ -485,7 +750,7 @@ export default function CarouselLibrary() {
                       <div className="bg-muted/30 p-4 rounded-lg border">
                         <h4 className="font-semibold mb-3 text-foreground">Preview:</h4>
                         <div 
-                          className="bg-white rounded border"
+                          className="bootstrap-scope bg-white rounded border"
                           dangerouslySetInnerHTML={{ __html: example.html }}
                         />
                       </div>
