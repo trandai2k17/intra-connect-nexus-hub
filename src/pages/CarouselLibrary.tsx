@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AppSidebar } from '@/components/layout/AppSidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Header } from '@/components/layout/Header';
@@ -11,6 +11,28 @@ import dentistPhoto from '@/assets/dentist-1.jpg';
 import dentalServices from '@/assets/dental-services.jpg';
 
 export default function CarouselLibrary() {
+  useEffect(() => {
+    // Load Bootstrap CSS and JS only for this page
+    const bootstrapCSS = document.createElement('link');
+    bootstrapCSS.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
+    bootstrapCSS.rel = 'stylesheet';
+    bootstrapCSS.id = 'bootstrap-css';
+    document.head.appendChild(bootstrapCSS);
+
+    const bootstrapJS = document.createElement('script');
+    bootstrapJS.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js';
+    bootstrapJS.id = 'bootstrap-js';
+    document.head.appendChild(bootstrapJS);
+
+    // Cleanup function to remove Bootstrap when leaving the page
+    return () => {
+      const cssElement = document.getElementById('bootstrap-css');
+      const jsElement = document.getElementById('bootstrap-js');
+      if (cssElement) document.head.removeChild(cssElement);
+      if (jsElement) document.head.removeChild(jsElement);
+    };
+  }, []);
+
   const carouselExamples = [
     {
       title: "Basic Carousel",
