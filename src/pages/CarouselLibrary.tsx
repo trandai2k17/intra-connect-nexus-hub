@@ -5,6 +5,10 @@ import { Header } from '@/components/layout/Header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CodeBlock } from '@/components/library/CodeBlock';
+import dentalClinic1 from '@/assets/dental-carousel-1.jpg';
+import dentalPatient from '@/assets/dental-carousel-2.jpg';
+import dentistPhoto from '@/assets/dentist-1.jpg';
+import dentalServices from '@/assets/dental-services.jpg';
 
 export default function CarouselLibrary() {
   const carouselExamples = [
@@ -15,13 +19,13 @@ export default function CarouselLibrary() {
 <div id="basicCarousel" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="https://via.placeholder.com/800x400/007bff/ffffff?text=Slide+1" class="d-block w-100" alt="Slide 1">
+      <img src="${dentalClinic1}" class="d-block w-100" alt="Modern Dental Clinic">
     </div>
     <div class="carousel-item">
-      <img src="https://via.placeholder.com/800x400/28a745/ffffff?text=Slide+2" class="d-block w-100" alt="Slide 2">
+      <img src="${dentalPatient}" class="d-block w-100" alt="Happy Patient">
     </div>
     <div class="carousel-item">
-      <img src="https://via.placeholder.com/800x400/dc3545/ffffff?text=Slide+3" class="d-block w-100" alt="Slide 3">
+      <img src="${dentalServices}" class="d-block w-100" alt="Dental Services">
     </div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#basicCarousel" data-bs-slide="prev">
@@ -39,27 +43,27 @@ export default function CarouselLibrary() {
 <div id="captionCarousel" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="https://via.placeholder.com/800x400/6f42c1/ffffff?text=Hero+Image+1" class="d-block w-100" alt="Hero 1">
+      <img src="${dentalClinic1}" class="d-block w-100" alt="Modern Dental Clinic">
       <div class="carousel-caption d-none d-md-block">
-        <h5>First slide label</h5>
-        <p>Some representative placeholder content for the first slide.</p>
-        <button class="btn btn-primary">Learn More</button>
+        <h5>State-of-the-Art Dental Care</h5>
+        <p>Experience modern dentistry with our advanced equipment and professional team.</p>
+        <button class="btn btn-primary">Book Appointment</button>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="https://via.placeholder.com/800x400/fd7e14/ffffff?text=Hero+Image+2" class="d-block w-100" alt="Hero 2">
+      <img src="${dentalPatient}" class="d-block w-100" alt="Happy Patient">
       <div class="carousel-caption d-none d-md-block">
-        <h5>Second slide label</h5>
-        <p>Some representative placeholder content for the second slide.</p>
-        <button class="btn btn-success">Get Started</button>
+        <h5>Comfortable Patient Experience</h5>
+        <p>We prioritize your comfort and satisfaction throughout your dental journey.</p>
+        <button class="btn btn-success">Learn More</button>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="https://via.placeholder.com/800x400/e83e8c/ffffff?text=Hero+Image+3" class="d-block w-100" alt="Hero 3">
+      <img src="${dentalServices}" class="d-block w-100" alt="Dental Services">
       <div class="carousel-caption d-none d-md-block">
-        <h5>Third slide label</h5>
-        <p>Some representative placeholder content for the third slide.</p>
-        <button class="btn btn-warning">Contact Us</button>
+        <h5>Comprehensive Dental Services</h5>
+        <p>From routine cleanings to advanced procedures, we've got you covered.</p>
+        <button class="btn btn-warning">View Services</button>
       </div>
     </div>
   </div>
@@ -245,11 +249,11 @@ export default function CarouselLibrary() {
   <div class="carousel-inner">
     <div class="carousel-item active">
       <div class="text-center p-5">
-        <img src="https://via.placeholder.com/100x100/20c997/ffffff?text=👤" class="rounded-circle mb-3" alt="Customer">
+        <img src="${dentistPhoto}" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;" alt="Dr. Smith">
         <blockquote class="blockquote">
-          <p class="mb-4">"Excellent service and outstanding results. The team exceeded our expectations in every way."</p>
+          <p class="mb-4">"Outstanding dental care with the latest technology. The staff is professional and caring."</p>
           <footer class="blockquote-footer">
-            <cite title="Source Title">John Smith, CEO at TechCorp</cite>
+            <cite title="Source Title">Maria Rodriguez, Satisfied Patient</cite>
           </footer>
         </blockquote>
         <div class="mt-3">
@@ -295,6 +299,137 @@ export default function CarouselLibrary() {
     <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2"></button>
   </div>
 </div>`
+    },
+    {
+      title: "Detailed Information Carousel",
+      description: "Rich content carousel with comprehensive information, pricing, and multiple CTAs",
+      html: `<!-- Detailed Information Carousel -->
+<div id="detailedCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#detailedCarousel" data-bs-slide-to="0" class="active"></button>
+    <button type="button" data-bs-target="#detailedCarousel" data-bs-slide-to="1"></button>
+    <button type="button" data-bs-target="#detailedCarousel" data-bs-slide-to="2"></button>
+  </div>
+  
+  <div class="carousel-inner">
+    <!-- Slide 1: Dental Implants -->
+    <div class="carousel-item active">
+      <div class="row g-0 min-vh-50">
+        <div class="col-md-6">
+          <img src="${dentalServices}" class="img-fluid h-100 object-fit-cover" alt="Dental Implants">
+        </div>
+        <div class="col-md-6 d-flex align-items-center">
+          <div class="p-5">
+            <div class="badge bg-primary mb-3">Premium Service</div>
+            <h2 class="mb-3">Dental Implants</h2>
+            <h4 class="text-primary mb-3">Starting from $2,500</h4>
+            <p class="lead mb-3">Restore your smile with our state-of-the-art dental implant procedures.</p>
+            <ul class="list-unstyled mb-4">
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Lifetime warranty</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Same day procedure available</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>99% success rate</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Free consultation</li>
+            </ul>
+            <div class="d-flex gap-3 flex-wrap">
+              <button class="btn btn-primary btn-lg">Book Consultation</button>
+              <button class="btn btn-outline-primary">View Gallery</button>
+              <button class="btn btn-outline-secondary">Download Brochure</button>
+            </div>
+            <div class="mt-4">
+              <small class="text-muted">
+                <i class="bi bi-star-fill text-warning me-1"></i>
+                4.9/5 rating from 250+ patients
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Orthodontics -->
+    <div class="carousel-item">
+      <div class="row g-0 min-vh-50">
+        <div class="col-md-6">
+          <img src="${dentalClinic1}" class="img-fluid h-100 object-fit-cover" alt="Orthodontics">
+        </div>
+        <div class="col-md-6 d-flex align-items-center">
+          <div class="p-5">
+            <div class="badge bg-success mb-3">Most Popular</div>
+            <h2 class="mb-3">Invisalign & Braces</h2>
+            <h4 class="text-success mb-3">$3,200 - $6,800</h4>
+            <p class="lead mb-3">Straighten your teeth with invisible aligners or traditional braces.</p>
+            <ul class="list-unstyled mb-4">
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Invisible treatment option</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>18-24 month average treatment</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Monthly progress monitoring</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Payment plans available</li>
+            </ul>
+            <div class="d-flex gap-3 flex-wrap">
+              <button class="btn btn-success btn-lg">Start Treatment</button>
+              <button class="btn btn-outline-success">Free Assessment</button>
+              <button class="btn btn-outline-secondary">Before/After Photos</button>
+            </div>
+            <div class="mt-4">
+              <small class="text-muted">
+                <i class="bi bi-people-fill text-info me-1"></i>
+                Over 1,000 successful treatments
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Cosmetic Dentistry -->
+    <div class="carousel-item">
+      <div class="row g-0 min-vh-50">
+        <div class="col-md-6">
+          <img src="${dentalPatient}" class="img-fluid h-100 object-fit-cover" alt="Cosmetic Dentistry">
+        </div>
+        <div class="col-md-6 d-flex align-items-center">
+          <div class="p-5">
+            <div class="badge bg-warning mb-3">Transform Your Smile</div>
+            <h2 class="mb-3">Cosmetic Dentistry</h2>
+            <h4 class="text-warning mb-3">$500 - $1,800 per tooth</h4>
+            <p class="lead mb-3">Enhance your smile with veneers, whitening, and cosmetic procedures.</p>
+            <ul class="list-unstyled mb-4">
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Porcelain veneers</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Professional whitening</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Smile makeover packages</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Digital smile preview</li>
+            </ul>
+            <div class="d-flex gap-3 flex-wrap">
+              <button class="btn btn-warning btn-lg">Schedule Makeover</button>
+              <button class="btn btn-outline-warning">Virtual Consultation</button>
+              <button class="btn btn-outline-secondary">View Transformations</button>
+            </div>
+            <div class="mt-4">
+              <small class="text-muted">
+                <i class="bi bi-award-fill text-primary me-1"></i>
+                Award-winning cosmetic dentist
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Controls -->
+  <button class="carousel-control-prev" type="button" data-bs-target="#detailedCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#detailedCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<style>
+.min-vh-50 { min-height: 50vh; }
+.object-fit-cover { object-fit: cover; }
+</style>`
     }
   ];
 
