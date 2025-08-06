@@ -1,0 +1,404 @@
+/* =============================================================================
+   Main CSS File
+   Entry point for the comprehensive CSS architecture
+   ============================================================================= */
+
+/* Import Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Design System */
+@import './variables.css';
+@import './base.css';
+@import './components.css';
+@import './utilities.css';
+@import './animations.css';
+
+/* =============================================================================
+   Layer Management
+   Following the CSS cascade and Tailwind's layer system
+   ============================================================================= */
+
+@layer base {
+  /* Base layer styles are imported from base.css */
+}
+
+@layer components {
+  /* Component layer styles are imported from components.css */
+  
+  /* Additional component customizations can go here */
+  .intranet-layout {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: 
+      "sidebar header"
+      "sidebar main";
+    min-height: 100vh;
+    transition: grid-template-columns var(--transition-base);
+  }
+  
+  .intranet-layout--collapsed {
+    grid-template-columns: var(--sidebar-width-collapsed) 1fr;
+  }
+  
+  .intranet-sidebar {
+    grid-area: sidebar;
+  }
+  
+  .intranet-header {
+    grid-area: header;
+    height: var(--header-height);
+    background: var(--glass-background-strong);
+    backdrop-filter: var(--glass-backdrop-strong);
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-6);
+    z-index: var(--z-sticky);
+    position: sticky;
+    top: 0;
+  }
+  
+  .intranet-main {
+    grid-area: main;
+    padding: var(--space-6);
+    overflow-y: auto;
+    background-color: var(--background);
+  }
+  
+  .intranet-container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+  }
+  
+  .intranet-content {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+  }
+}
+
+@layer utilities {
+  /* Utility layer styles are imported from utilities.css */
+  
+  /* Project-specific utility overrides can go here */
+  .intranet-glass {
+    background: var(--glass-background-strong);
+    backdrop-filter: var(--glass-backdrop-strong);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-glass);
+  }
+  
+  .intranet-gradient {
+    background: linear-gradient(135deg, var(--color-primary-500), var(--color-secondary-500));
+  }
+  
+  .intranet-text-gradient {
+    background: linear-gradient(135deg, var(--color-primary-500), var(--color-secondary-500));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* =============================================================================
+   Responsive Design System
+   Mobile-first approach with consistent breakpoints
+   ============================================================================= */
+
+/* Mobile First (default styles are mobile) */
+@media (max-width: 639px) {
+  .intranet-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas: 
+      "header"
+      "sidebar"
+      "main";
+  }
+  
+  .intranet-layout--collapsed {
+    grid-template-columns: 1fr;
+  }
+  
+  .intranet-sidebar {
+    transform: translateX(-100%);
+    transition: transform var(--transition-base);
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: var(--sidebar-width);
+    height: calc(100vh - var(--header-height));
+    z-index: var(--z-modal);
+  }
+  
+  .intranet-sidebar--open {
+    transform: translateX(0);
+  }
+  
+  .intranet-header {
+    grid-area: header;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-fixed);
+  }
+  
+  .intranet-main {
+    margin-top: var(--header-height);
+    padding: var(--space-4);
+  }
+}
+
+/* Tablet */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .intranet-main {
+    padding: var(--space-5);
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .intranet-main {
+    padding: var(--space-8);
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1280px) {
+  .intranet-container {
+    max-width: 1200px;
+  }
+}
+
+/* Ultra Wide */
+@media (min-width: 1536px) {
+  .intranet-container {
+    max-width: 1400px;
+  }
+}
+
+/* =============================================================================
+   Dark Mode Enhancements
+   Additional dark mode styles beyond the base theme
+   ============================================================================= */
+
+.dark {
+  /* Enhanced dark mode component styles */
+  .card {
+    background-color: var(--surface);
+    border-color: var(--border-primary);
+  }
+  
+  .btn--ghost:hover {
+    background-color: var(--color-neutral-800);
+  }
+  
+  .input {
+    background-color: var(--surface);
+    border-color: var(--border-primary);
+    color: var(--text-primary);
+  }
+  
+  .nav__link:hover {
+    background-color: var(--color-neutral-800);
+  }
+  
+  .loading-skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--color-neutral-700) 25%,
+      var(--color-neutral-600) 50%,
+      var(--color-neutral-700) 75%
+    );
+  }
+}
+
+/* =============================================================================
+   Print Styles
+   Optimized styles for printing
+   ============================================================================= */
+
+@media print {
+  .intranet-layout {
+    display: block;
+  }
+  
+  .intranet-sidebar,
+  .intranet-header {
+    display: none;
+  }
+  
+  .intranet-main {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .card {
+    border: 1px solid #000;
+    box-shadow: none;
+    break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+  
+  .btn {
+    border: 1px solid #000;
+    background: transparent;
+    color: #000;
+  }
+}
+
+/* =============================================================================
+   Accessibility Enhancements
+   Additional accessibility features
+   ============================================================================= */
+
+/* Focus Management */
+.focus-trap {
+  position: relative;
+}
+
+.focus-trap:focus {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* Screen Reader Only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .card {
+    border-width: 2px;
+  }
+  
+  .btn {
+    border-width: 2px;
+  }
+  
+  .input {
+    border-width: 2px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .intranet-layout {
+    transition: none;
+  }
+  
+  .intranet-sidebar {
+    transition: none;
+  }
+}
+
+/* =============================================================================
+   Performance Optimizations
+   GPU acceleration and will-change hints
+   ============================================================================= */
+
+.intranet-sidebar,
+.intranet-header,
+.modal,
+.toast {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.app-card:hover,
+.btn:hover,
+.nav__link:hover {
+  will-change: transform;
+}
+
+/* =============================================================================
+   Legacy Browser Support
+   Fallbacks for older browsers
+   ============================================================================= */
+
+/* Flexbox Fallbacks */
+.u-flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.u-flex-col {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.u-items-center {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.u-justify-center {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+/* Grid Fallbacks */
+@supports not (display: grid) {
+  .intranet-layout {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .intranet-sidebar {
+    flex: 0 0 var(--sidebar-width);
+  }
+  
+  .intranet-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .intranet-header {
+    flex: 0 0 var(--header-height);
+  }
+}
+
+/* Custom Properties Fallbacks */
+@supports not (color: var(--color-primary-500)) {
+  .btn--primary {
+    background-color: #2563eb;
+    color: #ffffff;
+  }
+  
+  .card {
+    background-color: #ffffff;
+    border-color: #e5e7eb;
+  }
+  
+  .input {
+    border-color: #d1d5db;
+  }
+}
