@@ -75,9 +75,23 @@ export const navigationItems: NavigationItem[] = [
   },
   {
     title: "Thư viện",
-    url: "/library",
+    url: "#",
     icon: BookOpen,
     iconColor: "text-purple-600",
+    subItems: [
+      {
+        title: "Components",
+        url: "/library",
+        icon: BookOpen,
+        iconColor: "text-blue-600",
+      },
+      {
+        title: "Bootstrap Carousel",
+        url: "/library/carousel",
+        icon: Image,
+        iconColor: "text-green-600",
+      },
+    ],
   },
   {
     title: "Media Gallery",

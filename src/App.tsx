@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import MaterialRequest from "./pages/MaterialRequest";
 import Library from "./pages/Library";
+import CarouselLibrary from "./pages/CarouselLibrary";
 import SoftwareApplication from "./pages/SoftwareApplication";
 import ProjectManagement from "./pages/ProjectManagement";
 import Dictionary from "./pages/Dictionary";
@@ -33,6 +34,7 @@ const App = () => (
               <Route path="/login" element={<Login />} />
               <Route path="/material-request" element={<MaterialRequest />} />
               <Route path="/library" element={<Library />} />
+              <Route path="/library/carousel" element={<CarouselLibrary />} />
               <Route path="/software-application" element={<SoftwareApplication />} />
               <Route path="/dictionary" element={<Dictionary />} />
               <Route path="/dictionary-management" element={<DictionaryManagement />} />
