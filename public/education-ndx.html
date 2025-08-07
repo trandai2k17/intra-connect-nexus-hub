@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDX Education Platform</title>
+    <link rel="stylesheet" href="education-ndx.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="education-container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-content">
+                <div class="hero-header">
+                    <svg class="award-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="8" r="6"/>
+                        <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                    </svg>
+                    <h1 class="hero-title">NDX Education Platform</h1>
+                </div>
+                <p class="hero-description">
+                    Phát triển thực hành nha khoa thông qua giáo dục chuyên nghiệp. 
+                    Truy cập các khóa học đẳng cấp thế giới và học hỏi từ những chuyên gia hàng đầu trong ngành.
+                </p>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="btn btn-home" onclick="window.location.href='/'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9,22 9,12 15,12 15,22"/>
+                </svg>
+                Về Trang Chủ
+            </button>
+            <a href="https://education.nationaldentex.com/home" target="_blank" rel="noopener noreferrer" class="btn btn-external">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                    <polyline points="15,3 21,3 21,9"/>
+                    <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+                Truy Cập NDX Education
+            </a>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="main-content">
+            <!-- PDF Guide Section -->
+            <div class="pdf-section">
+                <div class="card pdf-card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                            </svg>
+                            Hướng Dẫn Sử Dụng Chính
+                        </h2>
+                        <p class="card-description">
+                            Tài liệu hướng dẫn chi tiết cách sử dụng nền tảng NDX Education
+                        </p>
+                    </div>
+                    <div class="card-content">
+                        <!-- PDF Embed -->
+                        <div class="pdf-container">
+                            <iframe
+                                src="/lovable-uploads/sample-guide.pdf"
+                                class="pdf-iframe"
+                                title="NDX Education User Guide">
+                                <div class="pdf-fallback">
+                                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                                    </svg>
+                                    <p>Trình duyệt không hỗ trợ hiển thị PDF</p>
+                                    <a href="/lovable-uploads/sample-guide.pdf" class="pdf-download-link">
+                                        Tải xuống để xem tài liệu
+                                    </a>
+                                </div>
+                            </iframe>
+                        </div>
+                        
+                        <!-- Download Button -->
+                        <div class="download-section">
+                            <a href="/lovable-uploads/sample-guide.pdf" download class="btn btn-download">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7,10 12,15 17,10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Tải Xuống Hướng Dẫn PDF
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side Panel -->
+            <div class="side-panel">
+                <!-- Platform Features -->
+                <div class="card features-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                <line x1="12" y1="17" x2="12" y2="21"/>
+                            </svg>
+                            Tính Năng Nền Tảng
+                        </h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="features-list">
+                            <div class="feature-item feature-blue">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                                <div>
+                                    <div class="feature-title">Webinar Trực Tuyến</div>
+                                    <div class="feature-description">Học tập tương tác với chuyên gia</div>
+                                </div>
+                            </div>
+
+                            <div class="feature-item feature-green">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="8" r="6"/>
+                                    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                                </svg>
+                                <div>
+                                    <div class="feature-title">Khóa Học Trực Tiếp</div>
+                                    <div class="feature-description">Thực hành với chuyên gia hàng đầu</div>
+                                </div>
+                            </div>
+
+                            <div class="feature-item feature-purple">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12,6 12,12 16,14"/>
+                                </svg>
+                                <div>
+                                    <div class="feature-title">Học Theo Nhu Cầu</div>
+                                    <div class="feature-description">Khóa học trực tuyến 24/7</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- External Links -->
+                <div class="card links-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                <polyline points="15,3 21,3 21,9"/>
+                                <line x1="10" y1="14" x2="21" y2="3"/>
+                            </svg>
+                            Liên Kết Hữu Ích
+                        </h3>
+                    </div>
+                    <div class="card-content">
+                        <a href="https://education.nationaldentex.com/courses" target="_blank" rel="noopener noreferrer" class="link-button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                            </svg>
+                            <div>
+                                <div class="link-title">Khóa Học NDX</div>
+                                <div class="link-description">Danh sách khóa học</div>
+                            </div>
+                        </a>
+
+                        <a href="https://education.nationaldentex.com/courses-webinars" target="_blank" rel="noopener noreferrer" class="link-button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            <div>
+                                <div class="link-title">Webinar</div>
+                                <div class="link-description">Học trực tuyến tương tác</div>
+                            </div>
+                        </a>
+
+                        <a href="https://education.nationaldentex.com/courses-in-person" target="_blank" rel="noopener noreferrer" class="link-button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="8" r="6"/>
+                                <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                            </svg>
+                            <div>
+                                <div class="link-title">Khóa Trực Tiếp</div>
+                                <div class="link-description">Học thực hành trực tiếp</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="cta-section">
+            <div class="cta-card">
+                <div class="cta-content">
+                    <h2 class="cta-title">Bắt Đầu Hành Trình Học Tập Của Bạn</h2>
+                    <p class="cta-description">
+                        Tham gia NDX Education để nâng cao kỹ năng chuyên môn và phát triển thực hành nha khoa của bạn
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="https://education.nationaldentex.com/home" target="_blank" rel="noopener noreferrer" class="btn btn-cta-primary">
+                            Đăng Ký Ngay
+                        </a>
+                        <a href="https://education.nationaldentex.com/courses" target="_blank" rel="noopener noreferrer" class="btn btn-cta-secondary">
+                            Xem Khóa Học
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
