@@ -350,7 +350,8 @@ body {
     margin-top: 0.25rem;
 }
 
-/* Mobile Guide Card */
+/* Mobile Guide Card - COMMENTED OUT */
+/*
 .mobile-guide-card {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -440,6 +441,7 @@ body {
 .app-link svg {
     flex-shrink: 0;
 }
+*/
 
 /* Call to Action */
 .cta-section {
