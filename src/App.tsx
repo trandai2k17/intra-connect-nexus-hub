@@ -18,6 +18,7 @@ import CaseDesignTracker from "./pages/CaseDesignTracker";
 import MediaGallery from "./pages/MediaGallery";
 import NotFound from "./pages/NotFound";
 import Education from "./pages/Education";
+import EducationNdx from "./pages/EducationNdx";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
               <Route path="/login" element={<Login />} />
               <Route path="/material-request" element={<MaterialRequest />} />
               <Route path="/education" element={<Education />} />
+              <Route path="/education-ndx" element={<EducationNdx />} />
               <Route path="/library" element={<Library />} />
               <Route path="/library/carousel" element={<CarouselLibrary />} />
               <Route path="/software-application" element={<SoftwareApplication />} />

@@ -55,9 +55,23 @@ export const navigationItems: NavigationItem[] = [
   },
   {
     title: "Đào tạo",
-    url: "/education",
+    url: "#",
     icon: BookOpen,
     iconColor: "text-purple-600",
+    subItems: [
+      {
+        title: "Tài Liệu Hướng Dẫn",
+        url: "/education",
+        icon: BookOpen,
+        iconColor: "text-blue-600",
+      },
+      {
+        title: "NDX Education",
+        url: "/education-ndx",
+        icon: BookOpen,
+        iconColor: "text-purple-600",
+      },
+    ],
   },
   {
     title: "Từ điển",
