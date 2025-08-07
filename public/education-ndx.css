@@ -360,11 +360,10 @@ body {
     margin-top: 0.25rem;
 }
 
-/* Mobile Guide Card - COMMENTED OUT */
-/*
+/* Mobile Guide Card */
 .mobile-guide-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 40, 85, 0.15);
+    border: 1px solid rgba(0, 40, 85, 0.3);
     backdrop-filter: blur(10px);
 }
 
@@ -379,15 +378,15 @@ body {
     align-items: flex-start;
     gap: 12px;
     padding: 12px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 40, 85, 0.1);
+    border: 1px solid rgba(0, 40, 85, 0.2);
     border-radius: 8px;
     transition: all 0.3s ease;
 }
 
 .step-item:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(138, 43, 226, 0.3);
+    background: rgba(0, 40, 85, 0.2);
+    border-color: rgba(0, 40, 85, 0.4);
     transform: translateY(-1px);
 }
 
@@ -397,7 +396,7 @@ body {
     justify-content: center;
     width: 24px;
     height: 24px;
-    background: linear-gradient(135deg, #8A2BE2, #4169E1);
+    background: linear-gradient(135deg, #002855, #0047AB);
     border-radius: 50%;
     color: white;
     font-size: 12px;
@@ -424,7 +423,7 @@ body {
 .app-store-links {
     margin-top: 16px;
     padding-top: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(0, 40, 85, 0.3);
 }
 
 .app-link {
@@ -432,10 +431,10 @@ body {
     align-items: center;
     gap: 8px;
     padding: 10px 12px;
-    background: rgba(138, 43, 226, 0.1);
-    border: 1px solid rgba(138, 43, 226, 0.3);
+    background: rgba(0, 40, 85, 0.15);
+    border: 1px solid rgba(0, 40, 85, 0.3);
     border-radius: 6px;
-    color: #8A2BE2;
+    color: #0047AB;
     text-decoration: none;
     font-size: 13px;
     font-weight: 500;
@@ -443,15 +442,10 @@ body {
 }
 
 .app-link:hover {
-    background: rgba(138, 43, 226, 0.2);
-    border-color: rgba(138, 43, 226, 0.5);
+    background: rgba(0, 40, 85, 0.25);
+    border-color: rgba(0, 40, 85, 0.5);
     transform: translateY(-1px);
 }
-
-.app-link svg {
-    flex-shrink: 0;
-}
-*/
 
 /* Call to Action */
 .cta-section {
