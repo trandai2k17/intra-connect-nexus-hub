@@ -54,6 +54,12 @@ export const navigationItems: NavigationItem[] = [
     iconColor: "text-orange-600",
   },
   {
+    title: "Đào tạo",
+    url: "/education",
+    icon: BookOpen,
+    iconColor: "text-purple-600",
+  },
+  {
     title: "Từ điển",
     url: "#",
     icon: Book,

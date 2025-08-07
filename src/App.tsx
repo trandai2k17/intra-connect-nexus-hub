@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,6 +17,7 @@ import DictionaryManagement from "./pages/DictionaryManagement";
 import CaseDesignTracker from "./pages/CaseDesignTracker";
 import MediaGallery from "./pages/MediaGallery";
 import NotFound from "./pages/NotFound";
+import Education from "./pages/Education";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +33,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
               <Route path="/material-request" element={<MaterialRequest />} />
+              <Route path="/education" element={<Education />} />
               <Route path="/library" element={<Library />} />
               <Route path="/library/carousel" element={<CarouselLibrary />} />
               <Route path="/software-application" element={<SoftwareApplication />} />
