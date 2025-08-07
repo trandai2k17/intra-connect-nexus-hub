@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, ExternalLink, BookOpen, Download, Users, Award, Clock, Monitor } from 'lucide-react';
+import { Home, ExternalLink, BookOpen, Download, Users, Award, Clock, Monitor, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AppSidebar } from '@/components/layout/AppSidebar';
@@ -16,82 +16,83 @@ const EducationNdx = () => {
 
   return (
     <SidebarProvider>
-      <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700">
+      <div className="flex h-screen">
         <AppSidebar />
         <SidebarInset className="flex-1">
           <Header />
           
-          <main className="flex-1 overflow-auto p-6">
-            <div className="max-w-6xl mx-auto space-y-8">
+          <main className="flex-1 overflow-auto">
+            {/* Use CSS file styles */}
+            <link rel="stylesheet" href="/education-ndx.css" />
+            
+            <div className="education-container">
               {/* Hero Section */}
-              <div className="text-center space-y-6">
-                <div className="flex items-center justify-center gap-3">
-                  <Award className="w-10 h-10 text-blue-600" />
-                  <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    NDX Education Platform
-                  </h1>
+              <div className="hero-section">
+                <div className="hero-content">
+                  <div className="hero-header">
+                    <svg className="award-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="8" r="6"/>
+                      <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                    </svg>
+                    <h1 className="hero-title">NDX Education Platform</h1>
+                  </div>
+                  <p className="hero-description">
+                    Phát triển thực hành nha khoa thông qua giáo dục chuyên nghiệp. 
+                    Truy cập các khóa học đẳng cấp thế giới và học hỏi từ những chuyên gia hàng đầu trong ngành.
+                  </p>
                 </div>
-                <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-                  Phát triển thực hành nha khoa thông qua giáo dục chuyên nghiệp. 
-                  Truy cập các khóa học đẳng cấp thế giới và học hỏi từ những chuyên gia hàng đầu trong ngành.
-                </p>
               </div>
 
               {/* Quick Actions */}
-              <div className="flex justify-center gap-4 mb-8">
-                <Button 
-                  onClick={handleHomeClick}
-                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
-                >
-                  <Home className="w-4 h-4" />
+              <div className="quick-actions">
+                <button className="btn btn-home" onClick={handleHomeClick}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9,22 9,12 15,12 15,22"/>
+                  </svg>
                   Về Trang Chủ
-                </Button>
-                <Button 
-                  asChild
-                  className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
-                >
-                  <a 
-                    href="https://education.nationaldentex.com/home" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    Truy Cập NDX Education
-                  </a>
-                </Button>
+                </button>
+                <a href="https://education.nationaldentex.com/home" target="_blank" rel="noopener noreferrer" className="btn btn-external">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                    <polyline points="15,3 21,3 21,9"/>
+                    <line x1="10" y1="14" x2="21" y2="3"/>
+                  </svg>
+                  Truy Cập NDX Education
+                </a>
               </div>
 
               {/* Main Content Grid */}
-              <div className="grid lg:grid-cols-3 gap-8">
-                {/* PDF Guide - Takes 2 columns */}
-                <div className="lg:col-span-2">
-                  <Card className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-0 shadow-2xl h-full">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-2xl">
-                        <BookOpen className="w-6 h-6 text-blue-600" />
+              <div className="main-content">
+                {/* PDF Guide Section */}
+                <div className="pdf-section">
+                  <div className="card pdf-card">
+                    <div className="card-header">
+                      <h2 className="card-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                        </svg>
                         Hướng Dẫn Sử Dụng Chính
-                      </CardTitle>
-                      <CardDescription className="text-lg">
+                      </h2>
+                      <p className="card-description">
                         Tài liệu hướng dẫn chi tiết cách sử dụng nền tảng NDX Education
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
+                      </p>
+                    </div>
+                    <div className="card-content">
                       {/* PDF Embed */}
-                      <div className="border-2 border-dashed border-blue-200 dark:border-blue-800 rounded-xl overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 h-[500px]">
+                      <div className="pdf-container">
                         <iframe
                           src="/lovable-uploads/sample-guide.pdf"
-                          className="w-full h-full"
-                          title="NDX Education User Guide"
-                        >
-                          <div className="flex flex-col items-center justify-center h-full text-center p-8">
-                            <BookOpen className="w-16 h-16 text-blue-400 mb-4" />
-                            <p className="text-gray-600 dark:text-gray-400 text-lg mb-4">
-                              Trình duyệt không hỗ trợ hiển thị PDF
-                            </p>
-                            <a 
-                              href="/lovable-uploads/sample-guide.pdf" 
-                              className="text-blue-600 hover:underline font-medium"
-                            >
+                          className="pdf-iframe"
+                          title="NDX Education User Guide">
+                          <div className="pdf-fallback">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                            </svg>
+                            <p>Trình duyệt không hỗ trợ hiển thị PDF</p>
+                            <a href="/lovable-uploads/sample-guide.pdf" className="pdf-download-link">
                               Tải xuống để xem tài liệu
                             </a>
                           </div>
@@ -99,159 +100,204 @@ const EducationNdx = () => {
                       </div>
                       
                       {/* Download Button */}
-                      <div className="flex justify-center">
-                        <Button variant="outline" asChild className="text-lg px-8 py-6">
-                          <a 
-                            href="/lovable-uploads/sample-guide.pdf" 
-                            download
-                            className="flex items-center gap-3"
-                          >
-                            <Download className="w-5 h-5" />
-                            Tải Xuống Hướng Dẫn PDF
-                          </a>
-                        </Button>
+                      <div className="download-section">
+                        <a href="/lovable-uploads/sample-guide.pdf" download className="btn btn-download">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7,10 12,15 17,10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                          </svg>
+                          Tải Xuống Hướng Dẫn PDF
+                        </a>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Platform Features - Takes 1 column */}
-                <div className="space-y-6">
-                  {/* Platform Overview */}
-                  <Card className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-0 shadow-xl">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Monitor className="w-5 h-5 text-purple-600" />
+                {/* Side Panel */}
+                <div className="side-panel">
+                  {/* Platform Features */}
+                  <div className="card features-card">
+                    <div className="card-header">
+                      <h3 className="card-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                          <line x1="8" y1="21" x2="16" y2="21"/>
+                          <line x1="12" y1="17" x2="12" y2="21"/>
+                        </svg>
                         Tính Năng Nền Tảng
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="space-y-4">
-                        <div className="flex items-start gap-3 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20">
-                          <Users className="w-5 h-5 text-blue-600 mt-0.5" />
+                      </h3>
+                    </div>
+                    <div className="card-content">
+                      <div className="features-list">
+                        <div className="feature-item feature-blue">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                          </svg>
                           <div>
-                            <div className="font-medium text-blue-900 dark:text-blue-100">Webinar Trực Tuyến</div>
-                            <div className="text-sm text-blue-700 dark:text-blue-300">Học tập tương tác với chuyên gia</div>
+                            <div className="feature-title">Webinar Trực Tuyến</div>
+                            <div className="feature-description">Học tập tương tác với chuyên gia</div>
                           </div>
                         </div>
 
-                        <div className="flex items-start gap-3 p-3 rounded-lg bg-green-50 dark:bg-green-900/20">
-                          <Award className="w-5 h-5 text-green-600 mt-0.5" />
+                        <div className="feature-item feature-green">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="12" cy="8" r="6"/>
+                            <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                          </svg>
                           <div>
-                            <div className="font-medium text-green-900 dark:text-green-100">Khóa Học Trực Tiếp</div>
-                            <div className="text-sm text-green-700 dark:text-green-300">Thực hành với chuyên gia hàng đầu</div>
+                            <div className="feature-title">Khóa Học Trực Tiếp</div>
+                            <div className="feature-description">Thực hành với chuyên gia hàng đầu</div>
                           </div>
                         </div>
 
-                        <div className="flex items-start gap-3 p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20">
-                          <Clock className="w-5 h-5 text-purple-600 mt-0.5" />
+                        <div className="feature-item feature-purple">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12,6 12,12 16,14"/>
+                          </svg>
                           <div>
-                            <div className="font-medium text-purple-900 dark:text-purple-100">Học Theo Nhu Cầu</div>
-                            <div className="text-sm text-purple-700 dark:text-purple-300">Khóa học trực tuyến 24/7</div>
+                            <div className="feature-title">Học Theo Nhu Cầu</div>
+                            <div className="feature-description">Khóa học trực tuyến 24/7</div>
                           </div>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
 
                   {/* External Links */}
-                  <Card className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-0 shadow-xl">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <ExternalLink className="w-5 h-5 text-green-600" />
+                  <div className="card links-card">
+                    <div className="card-header">
+                      <h3 className="card-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                          <polyline points="15,3 21,3 21,9"/>
+                          <line x1="10" y1="14" x2="21" y2="3"/>
+                        </svg>
                         Liên Kết Hữu Ích
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <Button variant="ghost" asChild className="w-full justify-start h-auto p-4">
-                        <a 
-                          href="https://education.nationaldentex.com/courses" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-3"
-                        >
-                          <BookOpen className="w-4 h-4 text-blue-600" />
-                          <div className="text-left">
-                            <div className="font-medium">Khóa Học NDX</div>
-                            <div className="text-sm text-gray-500">Danh sách khóa học</div>
-                          </div>
-                        </a>
-                      </Button>
+                      </h3>
+                    </div>
+                    <div className="card-content">
+                      <a href="https://education.nationaldentex.com/courses" target="_blank" rel="noopener noreferrer" className="link-button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                        </svg>
+                        <div>
+                          <div className="link-title">Khóa Học NDX</div>
+                          <div className="link-description">Danh sách khóa học</div>
+                        </div>
+                      </a>
 
-                      <Button variant="ghost" asChild className="w-full justify-start h-auto p-4">
-                        <a 
-                          href="https://education.nationaldentex.com/courses-webinars" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-3"
-                        >
-                          <Users className="w-4 h-4 text-purple-600" />
-                          <div className="text-left">
-                            <div className="font-medium">Webinar</div>
-                            <div className="text-sm text-gray-500">Học trực tuyến tương tác</div>
-                          </div>
-                        </a>
-                      </Button>
+                      <a href="https://education.nationaldentex.com/courses-webinars" target="_blank" rel="noopener noreferrer" className="link-button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                          <circle cx="9" cy="7" r="4"/>
+                          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        <div>
+                          <div className="link-title">Webinar</div>
+                          <div className="link-description">Học trực tuyến tương tác</div>
+                        </div>
+                      </a>
 
-                      <Button variant="ghost" asChild className="w-full justify-start h-auto p-4">
-                        <a 
-                          href="https://education.nationaldentex.com/courses-in-person" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-3"
-                        >
-                          <Award className="w-4 h-4 text-green-600" />
-                          <div className="text-left">
-                            <div className="font-medium">Khóa Trực Tiếp</div>
-                            <div className="text-sm text-gray-500">Học thực hành trực tiếp</div>
+                      <a href="https://education.nationaldentex.com/courses-in-person" target="_blank" rel="noopener noreferrer" className="link-button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <circle cx="12" cy="8" r="6"/>
+                          <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                        </svg>
+                        <div>
+                          <div className="link-title">Khóa Trực Tiếp</div>
+                          <div className="link-description">Học thực hành trực tiếp</div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Mobile App Guide */}
+                  <div className="card mobile-guide-card">
+                    <div className="card-header">
+                      <h3 className="card-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                          <line x1="12" y1="18" x2="12.01" y2="18"/>
+                        </svg>
+                        Hướng Dẫn Tải App Mobile
+                      </h3>
+                    </div>
+                    <div className="card-content">
+                      <div className="mobile-steps">
+                        <div className="step-item">
+                          <span className="step-number">1</span>
+                          <div className="step-content">
+                            <div className="step-title">Tải Ứng Dụng</div>
+                            <div className="step-description">Google Play Store hoặc Apple App Store</div>
                           </div>
+                        </div>
+
+                        <div className="step-item">
+                          <span className="step-number">2</span>
+                          <div className="step-content">
+                            <div className="step-title">Chọn NDX Education</div>
+                            <div className="step-description">Tìm và mở ứng dụng</div>
+                          </div>
+                        </div>
+
+                        <div className="step-item">
+                          <span className="step-number">3</span>
+                          <div className="step-content">
+                            <div className="step-title">Đăng Nhập</div>
+                            <div className="step-description">Sử dụng email đã đăng ký</div>
+                          </div>
+                        </div>
+
+                        <div className="step-item">
+                          <span className="step-number">4</span>
+                          <div className="step-content">
+                            <div className="step-title">Đăng Ký Mới</div>
+                            <div className="step-description">Truy cập education.nationaldentex.com</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="app-store-links">
+                        <a href="https://education.nationaldentex.com" target="_blank" rel="noopener noreferrer" className="app-link">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                            <polyline points="15,3 21,3 21,9"/>
+                            <line x1="10" y1="14" x2="21" y2="3"/>
+                          </svg>
+                          <span>Tham Gia Cộng Đồng Học Tập</span>
                         </a>
-                      </Button>
-                    </CardContent>
-                  </Card>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               {/* Call to Action */}
-              <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 shadow-2xl">
-                <CardContent className="text-center py-12">
-                  <h2 className="text-3xl font-bold mb-4">
-                    Bắt Đầu Hành Trình Học Tập Của Bạn
-                  </h2>
-                  <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                    Tham gia NDX Education để nâng cao kỹ năng chuyên môn và phát triển thực hành nha khoa của bạn
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button 
-                      size="lg" 
-                      className="bg-white text-blue-600 hover:bg-blue-50 text-lg px-8"
-                      asChild
-                    >
-                      <a 
-                        href="https://education.nationaldentex.com/home" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                      >
+              <div className="cta-section">
+                <div className="cta-card">
+                  <div className="cta-content">
+                    <h2 className="cta-title">Bắt Đầu Hành Trình Học Tập Của Bạn</h2>
+                    <p className="cta-description">
+                      Tham gia NDX Education để nâng cao kỹ năng chuyên môn và phát triển thực hành nha khoa của bạn
+                    </p>
+                    <div className="cta-buttons">
+                      <a href="https://education.nationaldentex.com/home" target="_blank" rel="noopener noreferrer" className="btn btn-cta-primary">
                         Đăng Ký Ngay
                       </a>
-                    </Button>
-                    <Button 
-                      size="lg" 
-                      variant="outline" 
-                      className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8"
-                      asChild
-                    >
-                      <a 
-                        href="https://education.nationaldentex.com/courses" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                      >
+                      <a href="https://education.nationaldentex.com/courses" target="_blank" rel="noopener noreferrer" className="btn btn-cta-secondary">
                         Xem Khóa Học
                       </a>
-                    </Button>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
           </main>
         </SidebarInset>
