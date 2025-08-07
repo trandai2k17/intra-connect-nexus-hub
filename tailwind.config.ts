@@ -65,25 +65,25 @@ export default {
 				},
 				'glass-bg': 'var(--glass-bg)',
 				'glass-border': 'var(--glass-border)',
-				// Custom colors for the intranet portal
+				// Custom design system colors using HSL
 				'intranet': {
-					'primary': '#3B82F6',
-					'primary-light': '#60A5FA',
-					'secondary': '#8B5CF6',
-					'accent': '#06B6D4',
-					'success': '#10B981',
-					'warning': '#F59E0B',
-					'danger': '#EF4444',
-					'gray-50': '#F9FAFB',
-					'gray-100': '#F3F4F6',
-					'gray-200': '#E5E7EB',
-					'gray-300': '#D1D5DB',
-					'gray-400': '#9CA3AF',
-					'gray-500': '#6B7280',
-					'gray-600': '#4B5563',
-					'gray-700': '#374151',
-					'gray-800': '#1F2937',
-					'gray-900': '#111827'
+					'primary': 'hsl(214, 77%, 53%)',
+					'primary-light': 'hsl(214, 100%, 70%)',
+					'secondary': 'hsl(200, 100%, 47%)',
+					'accent': 'hsl(188, 89%, 48%)',
+					'success': 'hsl(142, 76%, 36%)',
+					'warning': 'hsl(38, 92%, 50%)',
+					'danger': 'hsl(0, 84%, 60%)',
+					'gray-50': 'hsl(210, 40%, 98%)',
+					'gray-100': 'hsl(210, 40%, 96%)',
+					'gray-200': 'hsl(214, 32%, 91%)',
+					'gray-300': 'hsl(214, 32%, 86%)',
+					'gray-400': 'hsl(214, 32%, 75%)',
+					'gray-500': 'hsl(214, 16%, 47%)',
+					'gray-600': 'hsl(214, 16%, 35%)',
+					'gray-700': 'hsl(214, 16%, 25%)',
+					'gray-800': 'hsl(214, 32%, 15%)',
+					'gray-900': 'hsl(222, 84%, 5%)'
 				}
 			},
 			borderRadius: {

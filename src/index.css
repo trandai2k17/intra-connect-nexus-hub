@@ -1,8 +1,10 @@
 
-/* =============================================================================
-   Main CSS Entry Point
-   Comprehensive CSS architecture with BEM methodology
-   ============================================================================= */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Import the new comprehensive CSS system */
 @import './styles/main.css';
+
+/* Import specific page styles */
+@import './styles/education-ndx.css';
