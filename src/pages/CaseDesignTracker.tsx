@@ -527,72 +527,182 @@ export default function CaseDesignTracker() {
             </div>
           </CardHeader>
           <CardContent className="px-2 sm:px-6">
-            <div className="space-y-2 sm:space-y-4">
+            <div className="space-y-3">
               {paginatedCases.map((caseItem) => (
-                <Card key={caseItem.id} className="p-2 sm:p-3 hover:shadow-md transition-shadow">
-                  <div className="flex flex-col gap-2 sm:gap-3">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-                      <div className="flex flex-wrap items-center gap-1 sm:gap-3">
-                        <h3 className="font-semibold text-base sm:text-lg">{caseItem.id}</h3>
+                <Card key={caseItem.id} className="overflow-hidden border hover:shadow-lg transition-all duration-200 bg-card/80 backdrop-blur-sm">
+                  <CardContent className="p-4">
+                    {/* Header Row: Case ID + Status Badges */}
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg font-bold text-primary">{caseItem.id}</span>
+                          {caseItem.urgentDeadline && (
+                            <Badge variant="destructive" className="animate-pulse">
+                              <AlertTriangle className="h-3 w-3 mr-1" />
+                              URGENT
+                            </Badge>
+                          )}
+                        </div>
+                        
+                        {/* Status Badges Row */}
+                        <div className="flex items-center gap-2">
+                          {/* Doctor Status */}
+                          <Badge variant={caseItem.doctorName ? "default" : "secondary"} className="text-xs">
+                            <User className="h-3 w-3 mr-1" />
+                            Doctor
+                          </Badge>
+                          
+                          {/* 3Shape Status */}
+                          <Badge 
+                            variant={
+                              caseItem.threeShapeStatus === 'Completed' ? "default" : 
+                              caseItem.threeShapeStatus === 'Error' ? "destructive" : 
+                              caseItem.threeShapeStatus === 'In Progress' ? "secondary" : "outline"
+                            }
+                            className="text-xs"
+                          >
+                            <Package className="h-3 w-3 mr-1" />
+                            3Shape
+                          </Badge>
+                          
+                          {/* Translate Status */}
+                          <Badge 
+                            variant={caseItem.translated ? "default" : "secondary"}
+                            className="text-xs"
+                          >
+                            <Mail className="h-3 w-3 mr-1" />
+                            Translate
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      {/* Right side: Main Status + Time */}
+                      <div className="flex items-center gap-3">
+                        <div className="text-right">
+                          <p className="text-sm text-muted-foreground">Turnaround</p>
+                          <p className={`text-lg font-bold ${
+                            (caseItem.turnaroundTime || 0) > 12 ? 'text-red-500' : 
+                            (caseItem.turnaroundTime || 0) > 8 ? 'text-yellow-500' : 'text-green-500'
+                          }`}>
+                            {caseItem.turnaroundTime}h
+                          </p>
+                        </div>
                         {getStatusBadge(caseItem.status)}
-                        {(caseItem.turnaroundTime || 0) > 12 && (
-                          <Badge variant="destructive" className="text-xs">
-                            Late ({caseItem.turnaroundTime}h)
-                          </Badge>
-                        )}
-                        {caseItem.urgentDeadline && (
-                          <Badge variant="outline" className="text-xs border-purple-500 text-purple-600">
-                            Urgent
-                          </Badge>
-                        )}
+                      </div>
+                    </div>
+
+                    {/* Patient & Doctor Info */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Patient</p>
+                        <p className="font-medium">{caseItem.patientName}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Doctor</p>
+                        <p className="font-medium">{caseItem.doctorName}</p>
+                      </div>
+                    </div>
+
+                    {/* Horizontal Timeline + Created Date Row */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                      {/* Timeline takes majority of space */}
+                      <div className="lg:col-span-9">
+                        <div className="flex items-center justify-between w-full">
+                          {[
+                            { key: 'created', label: 'Created', icon: Calendar, date: caseItem.createdDateTime },
+                            { key: 'design', label: 'Design', icon: Package, status: caseItem.threeShapeStatus },
+                            { key: 'translate', label: 'Translate', icon: Mail, completed: caseItem.translated },
+                            { key: 'sent', label: 'Sent', icon: Truck, date: caseItem.transDate },
+                            { key: 'shipping', label: 'Ship', icon: CheckCircle, date: caseItem.shipDate }
+                          ].map((stage, index) => {
+                            const Icon = stage.icon;
+                            let status = 'pending';
+                            
+                            // Determine status based on stage type
+                            if (stage.key === 'created' && stage.date) status = 'completed';
+                            else if (stage.key === 'design') {
+                              if (stage.status === 'Completed') status = 'completed';
+                              else if (stage.status === 'Error') status = 'error';
+                              else if (stage.status === 'In Progress') status = 'pending';
+                            }
+                            else if (stage.key === 'translate') {
+                              status = stage.completed ? 'completed' : 'pending';
+                            }
+                            else if ((stage.key === 'sent' || stage.key === 'shipping') && stage.date) {
+                              status = 'completed';
+                            }
+                            
+                            return (
+                              <div key={stage.key} className="flex items-center">
+                                <div className="flex flex-col items-center">
+                                  <div className={`
+                                    w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300
+                                    ${status === 'completed' ? 'bg-green-500 border-green-500 text-white shadow-green-200 shadow-lg' :
+                                      status === 'error' ? 'bg-red-500 border-red-500 text-white shadow-red-200 shadow-lg' :
+                                      status === 'pending' ? 'bg-yellow-400 border-yellow-400 text-white shadow-yellow-200 shadow-md' :
+                                      'bg-gray-200 border-gray-300 text-gray-400'}
+                                  `}>
+                                    <Icon className="h-4 w-4" />
+                                  </div>
+                                  <span className="text-xs font-medium mt-1 text-center">
+                                    {stage.label}
+                                  </span>
+                                </div>
+                                
+                                {index < 4 && (
+                                  <div className={`
+                                    w-12 h-0.5 mx-2 transition-all duration-300
+                                    ${index < 3 && status === 'completed' ? 'bg-green-400' : 'bg-gray-300'}
+                                  `} />
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      
+                      {/* Created Date Column */}
+                      <div className="lg:col-span-3 lg:text-right">
+                        <p className="text-sm text-muted-foreground">Created</p>
+                        <p className="font-medium text-primary">
+                          {caseItem.createdDateTime ? new Date(caseItem.createdDateTime).toLocaleDateString() : 'N/A'}
+                        </p>
                         {caseItem.pendingEmail && (
-                          <Badge variant="outline" className="text-xs border-indigo-500 text-indigo-600">
-                            Email
+                          <Badge variant="outline" className="mt-1 text-xs">
+                            <Mail className="h-3 w-3 mr-1" />
+                            Pending Email
                           </Badge>
                         )}
                       </div>
+                    </div>
+
+                    {/* Quick Action Buttons */}
+                    <div className="flex items-center justify-between mt-4 pt-3 border-t">
+                      <div className="flex items-center gap-2">
+                        {!caseItem.translated && (
+                          <Button size="sm" variant="outline" className="text-xs">
+                            <Mail className="h-3 w-3 mr-1" />
+                            Send for Translation
+                          </Button>
+                        )}
+                        {caseItem.threeShapeStatus === 'Error' && (
+                          <Button size="sm" variant="destructive" className="text-xs">
+                            <AlertCircle className="h-3 w-3 mr-1" />
+                            Fix Error
+                          </Button>
+                        )}
+                      </div>
+                      
                       <Button 
-                        variant="outline" 
-                        size="sm"
+                        size="sm" 
+                        variant="ghost" 
                         onClick={() => setSelectedCase(caseItem)}
-                        className="text-xs h-7 sm:h-8"
+                        className="text-xs"
                       >
-                        Details
+                        View Details
                       </Button>
                     </div>
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs sm:text-sm">
-                      <div>
-                        <span className="text-muted-foreground">Patient:</span>
-                        <p className="font-medium truncate">{caseItem.patientName}</p>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Doctor:</span>
-                        <p className="font-medium truncate">{caseItem.doctorName}</p>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">3Shape:</span>
-                        <p className="font-medium">{caseItem.threeShapeStatus}</p>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Translation:</span>
-                        <p className="font-medium">{caseItem.translated ? 'Done' : 'Pending'}</p>
-                      </div>
-                    </div>
-                    
-                    {caseItem.createdDateTime && (
-                      <div className="text-xs text-muted-foreground">
-                        Created: {new Date(caseItem.createdDateTime).toLocaleDateString()} 
-                        {caseItem.transDate && ` • Trans: ${new Date(caseItem.transDate).toLocaleDateString()}`}
-                        {caseItem.shipDate && ` • Ship: ${new Date(caseItem.shipDate).toLocaleDateString()}`}
-                      </div>
-                    )}
-                    
-                    {/* Compact Timeline - smaller on mobile */}
-                    <div className="mt-2">
-                      {renderCompactTimeline(caseItem)}
-                    </div>
-                  </div>
+                  </CardContent>
                 </Card>
               ))}
             </div>
