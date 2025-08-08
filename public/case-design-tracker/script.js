@@ -41,11 +41,9 @@ const itemsPerPage = 20;
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     updateStats();
-    populateUrgentCases();
-    populateOverdueCases();
+    populatePriorityCards();
     renderCases();
     setupEventListeners();
-    initChart();
 });
 
 // Update statistics
@@ -60,34 +58,72 @@ function updateStats() {
     document.getElementById('errorCases').textContent = error;
 }
 
-// Populate urgent cases
-function populateUrgentCases() {
-    const urgentCases = allCases.filter(c => c.urgentDeadline && !c.translated).slice(0, 4);
-    const urgentList = document.getElementById('urgentList');
+// Populate all priority cards (Section 2)
+function populatePriorityCards() {
+    populateUrgentTranslation();
+    populateLateCase();
+    populateEmailPending();
+}
+
+// Populate urgent translation cases
+function populateUrgentTranslation() {
+    const urgentCases = allCases.filter(c => c.urgentDeadline && !c.translated).slice(0, 5);
+    const urgentList = document.getElementById('urgentTranslationList');
     
     urgentList.innerHTML = urgentCases.map(caseItem => `
-        <div class="alert-item" onclick="openCaseModal('${caseItem.id}')">
-            <div class="alert-item-header">
-                <span class="alert-item-id">${caseItem.id}</span>
-                <span class="alert-item-time">${caseItem.turnaroundTime}h</span>
+        <div class="priority-item" onclick="openCaseModal('${caseItem.id}')">
+            <div class="priority-item-header">
+                <span class="priority-item-id">${caseItem.id}</span>
+                <span class="priority-item-status ${caseItem.status}">${caseItem.status}</span>
             </div>
-            <div class="alert-item-patient">${caseItem.patientName}</div>
+            <div class="priority-item-footer">
+                <span class="priority-item-time ${(caseItem.turnaroundTime || 0) <= 8 ? 'normal' : 'danger'}">
+                    ${caseItem.turnaroundTime || 0}h
+                </span>
+                <span class="priority-item-date">${caseItem.createdDateTime || 'N/A'}</span>
+            </div>
         </div>
     `).join('');
 }
 
-// Populate overdue cases
-function populateOverdueCases() {
-    const overdueCases = allCases.filter(c => c.turnaroundTime > 12).slice(0, 4);
-    const overdueList = document.getElementById('overdueList');
+// Populate late cases
+function populateLateCase() {
+    const lateCases = allCases.filter(c => (c.turnaroundTime || 0) > 8).slice(0, 5);
+    const lateList = document.getElementById('lateCaseList');
     
-    overdueList.innerHTML = overdueCases.map(caseItem => `
-        <div class="alert-item" onclick="openCaseModal('${caseItem.id}')">
-            <div class="alert-item-header">
-                <span class="alert-item-id">${caseItem.id}</span>
-                <span class="alert-item-time">${caseItem.turnaroundTime}h</span>
+    lateList.innerHTML = lateCases.map(caseItem => `
+        <div class="priority-item" onclick="openCaseModal('${caseItem.id}')">
+            <div class="priority-item-header">
+                <span class="priority-item-id">${caseItem.id}</span>
+                <span class="priority-item-status ${caseItem.status}">${caseItem.status}</span>
             </div>
-            <div class="alert-item-patient">${caseItem.patientName}</div>
+            <div class="priority-item-footer">
+                <span class="priority-item-time ${(caseItem.turnaroundTime || 0) <= 8 ? 'normal' : 'danger'}">
+                    ${caseItem.turnaroundTime || 0}h
+                </span>
+                <span class="priority-item-date">${caseItem.createdDateTime || 'N/A'}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Populate email pending cases
+function populateEmailPending() {
+    const emailPendingCases = allCases.filter(c => c.status === 'pending' && c.pendingEmail).slice(0, 5);
+    const emailList = document.getElementById('emailPendingList');
+    
+    emailList.innerHTML = emailPendingCases.map(caseItem => `
+        <div class="priority-item" onclick="openCaseModal('${caseItem.id}')">
+            <div class="priority-item-header">
+                <span class="priority-item-id">${caseItem.id}</span>
+                <span class="priority-item-status ${caseItem.status}">${caseItem.status}</span>
+            </div>
+            <div class="priority-item-footer">
+                <span class="priority-item-time ${(caseItem.turnaroundTime || 0) <= 8 ? 'normal' : 'danger'}">
+                    ${caseItem.turnaroundTime || 0}h
+                </span>
+                <span class="priority-item-date">${caseItem.createdDateTime || 'N/A'}</span>
+            </div>
         </div>
     `).join('');
 }
@@ -304,6 +340,7 @@ function filterCases() {
     
     currentPage = 1;
     renderCases();
+    populatePriorityCards(); // Update priority cards when filtering
 }
 
 // Setup event listeners
@@ -355,61 +392,3 @@ function closeModal() {
     const modal = document.getElementById('modalOverlay');
     modal.classList.remove('active');
 }
-
-// Initialize chart (placeholder)
-function initChart() {
-    const canvas = document.getElementById('performanceChart');
-    const ctx = canvas.getContext('2d');
-    
-    // Simple chart drawing (you can replace with Chart.js or similar)
-    const data = [
-        { label: 'Mon', completed: 120, pending: 80, error: 10 },
-        { label: 'Tue', completed: 140, pending: 60, error: 15 },
-        { label: 'Wed', completed: 110, pending: 90, error: 8 },
-        { label: 'Thu', completed: 160, pending: 70, error: 12 },
-        { label: 'Fri', completed: 130, pending: 85, error: 18 },
-        { label: 'Sat', completed: 90, pending: 40, error: 5 },
-        { label: 'Sun', completed: 70, pending: 30, error: 3 }
-    ];
-    
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Set canvas size
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-    
-    // Draw simple bar chart
-    const barWidth = canvas.width / data.length;
-    const maxValue = Math.max(...data.map(d => d.completed + d.pending + d.error));
-    
-    data.forEach((item, index) => {
-        const x = index * barWidth;
-        const completedHeight = (item.completed / maxValue) * (canvas.height - 40);
-        const pendingHeight = (item.pending / maxValue) * (canvas.height - 40);
-        const errorHeight = (item.error / maxValue) * (canvas.height - 40);
-        
-        // Draw completed
-        ctx.fillStyle = '#10b981';
-        ctx.fillRect(x + 10, canvas.height - completedHeight - 20, barWidth - 20, completedHeight);
-        
-        // Draw pending
-        ctx.fillStyle = '#f59e0b';
-        ctx.fillRect(x + 10, canvas.height - completedHeight - pendingHeight - 20, barWidth - 20, pendingHeight);
-        
-        // Draw error
-        ctx.fillStyle = '#ef4444';
-        ctx.fillRect(x + 10, canvas.height - completedHeight - pendingHeight - errorHeight - 20, barWidth - 20, errorHeight);
-        
-        // Draw label
-        ctx.fillStyle = '#374151';
-        ctx.font = '12px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(item.label, x + barWidth/2, canvas.height - 5);
-    });
-}
-
-// Handle window resize
-window.addEventListener('resize', () => {
-    setTimeout(initChart, 100);
-});
