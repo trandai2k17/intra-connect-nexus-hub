@@ -34,8 +34,7 @@ const SidebarProvider = React.forwardRef<
     open?: boolean
     onOpenChange?: (open: boolean) => void
   }
->(
-  (
+>(function SidebarProvider(
     {
       defaultOpen = true,
       open: openProp,
@@ -46,7 +45,7 @@ const SidebarProvider = React.forwardRef<
       ...props
     },
     ref
-  ) => {
+  ) {
     const isMobile = useIsMobile()
     const [openMobile, setOpenMobile] = React.useState(false)
 
@@ -149,8 +148,7 @@ const SidebarProvider = React.forwardRef<
         </div>
       </SidebarContext.Provider>
     )
-  }
-)
+  })
 SidebarProvider.displayName = "SidebarProvider"
 
 export { SidebarContext, SidebarProvider, useSidebar }
