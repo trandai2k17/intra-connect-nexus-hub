@@ -335,6 +335,46 @@ export default function CaseDesignTracker() {
           </Card>
         </div>
 
+        {/* Simple Cases Grid - Section 2 Style */}
+        <div className="case-cards-grid mb-6">
+          {paginatedCases.slice(0, 12).map(caseItem => (
+            <div key={caseItem.id} className="simple-case-card">
+              <div className="case-header-simple">
+                <h3 className="case-id-simple">{caseItem.id}</h3>
+                <span className={`case-status-simple ${caseItem.status}`}>
+                  {caseItem.status}
+                </span>
+              </div>
+              
+              <div className="case-info-simple">
+                <div className="case-info-row-simple">
+                  <span className="info-label-simple">Patient</span>
+                  <span className="info-value-simple">{caseItem.patientName}</span>
+                </div>
+                
+                <div className="case-info-row-simple">
+                  <span className="info-label-simple">Status</span>
+                  <span className="info-value-simple">{caseItem.threeShapeStatus || 'Pending'}</span>
+                </div>
+                
+                <div className="case-info-row-simple">
+                  <span className="info-label-simple">Elapsed Time</span>
+                  <span className={`info-value-simple elapsed-time-simple ${(caseItem.turnaroundTime || 0) <= 8 ? 'normal' : ''}`}>
+                    {caseItem.turnaroundTime || 0}h
+                  </span>
+                </div>
+                
+                <div className="case-info-row-simple">
+                  <span className="info-label-simple">Date Created</span>
+                  <span className="info-value-simple">
+                    {caseItem.createdDateTime || 'N/A'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
         {/* Compact Critical Metrics + Charts in responsive grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-4 mb-4">
           {/* Priority Action Items - Elegant and Prominent */}
