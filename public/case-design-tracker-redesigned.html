@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Design Tracker</title>
+    <link rel="stylesheet" href="case-design-tracker-redesigned.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="tracker-container">
+        <!-- Header Stats Row -->
+        <div class="stats-grid">
+            <div class="stat-card stat-total">
+                <div class="stat-content">
+                    <i class="fas fa-calendar stat-icon"></i>
+                    <div class="stat-info">
+                        <p class="stat-label">Total</p>
+                        <p class="stat-value" id="totalCases">1000</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-completed">
+                <div class="stat-content">
+                    <i class="fas fa-check-circle stat-icon"></i>
+                    <div class="stat-info">
+                        <p class="stat-label">Done</p>
+                        <p class="stat-value" id="completedCases">450</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-pending">
+                <div class="stat-content">
+                    <i class="fas fa-clock stat-icon"></i>
+                    <div class="stat-info">
+                        <p class="stat-label">Pending</p>
+                        <p class="stat-value" id="pendingCases">480</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-error">
+                <div class="stat-content">
+                    <i class="fas fa-exclamation-circle stat-icon"></i>
+                    <div class="stat-info">
+                        <p class="stat-label">Errors</p>
+                        <p class="stat-value" id="errorCases">70</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date Filter -->
+            <div class="date-filter-card">
+                <div class="date-filter-content">
+                    <i class="fas fa-calendar-days filter-icon"></i>
+                    <div class="date-inputs">
+                        <input type="date" class="date-input" id="dateFrom" placeholder="From">
+                        <span class="date-separator">to</span>
+                        <input type="date" class="date-input" id="dateTo" placeholder="To">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Priority Alerts Row -->
+        <div class="alerts-grid">
+            <!-- Urgent Translation Alert -->
+            <div class="alert-card alert-urgent">
+                <div class="alert-content">
+                    <div class="alert-header">
+                        <div class="alert-icon-container">
+                            <i class="fas fa-exclamation-triangle alert-icon"></i>
+                        </div>
+                        <div class="alert-info">
+                            <p class="alert-title">URGENT TRANSLATION</p>
+                            <p class="alert-count">15</p>
+                        </div>
+                    </div>
+                    <div class="alert-list" id="urgentList">
+                        <!-- Urgent cases will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overdue Cases Alert -->
+            <div class="alert-card alert-overdue">
+                <div class="alert-content">
+                    <div class="alert-header">
+                        <div class="alert-icon-container">
+                            <i class="fas fa-timer alert-icon"></i>
+                        </div>
+                        <div class="alert-info">
+                            <p class="alert-title">OVERDUE CASES</p>
+                            <p class="alert-count">28</p>
+                        </div>
+                    </div>
+                    <div class="alert-list" id="overdueList">
+                        <!-- Overdue cases will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Performance Overview</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="performanceChart" class="chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cases Table -->
+        <div class="cases-table-card">
+            <div class="table-header">
+                <h3 class="table-title">Cases Overview (<span id="casesCount">1000</span>)</h3>
+                <div class="pagination-info">
+                    Page <span id="currentPage">1</span> of <span id="totalPages">50</span>
+                </div>
+            </div>
+            
+            <div class="cases-container" id="casesContainer">
+                <!-- Cases will be populated here -->
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="pagination-btn" id="prevBtn" onclick="changePage(-1)">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span class="pagination-pages" id="paginationPages"></span>
+                <button class="pagination-btn" id="nextBtn" onclick="changePage(1)">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case Details Modal -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Case Details</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Case details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="case-design-tracker-redesigned.js"></script>
+</body>
+</html>
