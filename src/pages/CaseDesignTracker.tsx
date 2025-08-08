@@ -591,17 +591,70 @@ export default function CaseDesignTracker() {
                       </div>
                     </div>
 
-                    {/* Patient & Doctor Info */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                      <div>
-                        <p className="text-sm text-muted-foreground">Patient</p>
-                        <p className="font-medium">{caseItem.patientName}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Doctor</p>
-                        <p className="font-medium">{caseItem.doctorName}</p>
-                      </div>
-                    </div>
+                     {/* Patient Name + Doctor + Timeline Row */}
+                     <div className="flex items-center gap-4 mb-4">
+                       {/* Patient Name */}
+                       <div className="flex items-center gap-2 min-w-0 flex-1">
+                         <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                         <div>
+                           <p className="text-sm text-muted-foreground">Patient</p>
+                           <p className="font-medium truncate">{caseItem.patientName}</p>
+                         </div>
+                       </div>
+                       
+                       {/* Doctor Column - Compact */}
+                       <div className="min-w-0 flex-shrink-0 w-32">
+                         <p className="text-xs text-muted-foreground">Doctor</p>
+                         <p className="text-sm font-medium truncate">{caseItem.doctorName}</p>
+                       </div>
+                       
+                       {/* Compact Timeline with datetime tooltips */}
+                       <div className="flex items-center gap-1 flex-shrink-0">
+                         {[
+                           { key: 'created', icon: Calendar, date: caseItem.createdDateTime, label: 'Created' },
+                           { key: 'design', icon: Package, date: caseItem.finished ? caseItem.createdDateTime : null, label: 'Design' },
+                           { key: 'translate', icon: Mail, date: caseItem.translated ? caseItem.transDate : null, label: 'Translate' },
+                           { key: 'sent', icon: Truck, date: caseItem.transDate, label: 'Sent' },
+                           { key: 'shipping', icon: CheckCircle, date: caseItem.shipDate, label: 'Ship' }
+                         ].map((stage, index) => {
+                           const Icon = stage.icon;
+                           let status = 'pending';
+                           
+                           if (stage.key === 'created') status = stage.date ? 'completed' : 'empty';
+                           else if (stage.key === 'design') status = caseItem.threeShapeStatus === 'Error' ? 'error' : (caseItem.finished ? 'completed' : 'pending');
+                           else if (stage.key === 'translate') status = caseItem.translated ? 'completed' : 'pending';
+                           else status = stage.date ? 'completed' : 'pending';
+                           
+                           return (
+                             <div key={stage.key} className="flex items-center">
+                               <div className="group relative">
+                                 <div className={`
+                                   w-5 h-5 rounded-full flex items-center justify-center transition-all duration-300 border
+                                   ${status === 'completed' ? 'bg-green-500 border-green-500 text-white' :
+                                     status === 'error' ? 'bg-red-500 border-red-500 text-white' :
+                                     status === 'pending' ? 'bg-yellow-500 border-yellow-500 text-white' :
+                                     'bg-gray-200 border-gray-300 text-gray-400'}
+                                 `}>
+                                   <Icon className="h-2.5 w-2.5" />
+                                 </div>
+                                 {/* Tooltip with datetime */}
+                                 <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
+                                   <div className="font-medium">{stage.label}</div>
+                                   {stage.date && <div>{stage.date}</div>}
+                                 </div>
+                               </div>
+                               
+                               {index < 4 && (
+                                 <div className={`
+                                   w-3 h-0.5 transition-all duration-300
+                                   ${status === 'completed' ? 'bg-green-500' : 'bg-gray-300'}
+                                 `} />
+                               )}
+                             </div>
+                           );
+                         })}
+                       </div>
+                     </div>
 
                     {/* Horizontal Timeline + Created Date Row */}
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
