@@ -335,44 +335,124 @@ export default function CaseDesignTracker() {
           </Card>
         </div>
 
-        {/* Simple Cases Grid - Section 2 Style */}
-        <div className="case-cards-grid mb-6">
-          {paginatedCases.slice(0, 12).map(caseItem => (
-            <div key={caseItem.id} className="simple-case-card">
-              <div className="case-header-simple">
-                <h3 className="case-id-simple">{caseItem.id}</h3>
-                <span className={`case-status-simple ${caseItem.status}`}>
-                  {caseItem.status}
-                </span>
+        {/* Section 2 - Three Priority Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+          {/* Urgent Translation */}
+          <Card className="bg-gradient-to-br from-red-50/80 to-rose-50/80 dark:from-red-900/10 dark:to-rose-900/10 border border-red-200/60 dark:border-red-800/30">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <AlertTriangle className="h-5 w-5 text-red-600" />
+                <h3 className="font-semibold text-red-700 dark:text-red-300">Urgent Translation</h3>
               </div>
-              
-              <div className="case-info-simple">
-                <div className="case-info-row-simple">
-                  <span className="info-label-simple">Patient</span>
-                  <span className="info-value-simple">{caseItem.patientName}</span>
-                </div>
-                
-                <div className="case-info-row-simple">
-                  <span className="info-label-simple">Status</span>
-                  <span className="info-value-simple">{caseItem.threeShapeStatus || 'Pending'}</span>
-                </div>
-                
-                <div className="case-info-row-simple">
-                  <span className="info-label-simple">Elapsed Time</span>
-                  <span className={`info-value-simple elapsed-time-simple ${(caseItem.turnaroundTime || 0) <= 8 ? 'normal' : ''}`}>
-                    {caseItem.turnaroundTime || 0}h
-                  </span>
-                </div>
-                
-                <div className="case-info-row-simple">
-                  <span className="info-label-simple">Date Created</span>
-                  <span className="info-value-simple">
-                    {caseItem.createdDateTime || 'N/A'}
-                  </span>
-                </div>
+              <div className="space-y-2 max-h-40 overflow-y-auto">
+                {cases.filter(c => c.urgentDeadline && !c.translated).slice(0, 5).map(caseItem => (
+                  <div key={caseItem.id} className="bg-white/70 dark:bg-red-950/20 p-2 rounded-md">
+                    <div className="flex justify-between items-start mb-1">
+                      <span className="font-medium text-sm">{caseItem.id}</span>
+                      <span className={`text-xs px-2 py-1 rounded-full ${
+                        caseItem.status === 'completed' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                        caseItem.status === 'pending' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                        'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                      }`}>
+                        {caseItem.status}
+                      </span>
+                    </div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">
+                      {caseItem.patientName}
+                    </div>
+                    <div className="flex justify-between items-center text-xs">
+                      <span className={`font-medium ${
+                        (caseItem.turnaroundTime || 0) <= 8 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                      }`}>
+                        {caseItem.turnaroundTime || 0}h
+                      </span>
+                      <span className="text-gray-500 dark:text-gray-400">
+                        {caseItem.createdDateTime || 'N/A'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          ))}
+            </CardContent>
+          </Card>
+
+          {/* Late Case */}
+          <Card className="bg-gradient-to-br from-orange-50/80 to-amber-50/80 dark:from-orange-900/10 dark:to-amber-900/10 border border-orange-200/60 dark:border-orange-800/30">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Clock className="h-5 w-5 text-orange-600" />
+                <h3 className="font-semibold text-orange-700 dark:text-orange-300">LateCase</h3>
+              </div>
+              <div className="space-y-2 max-h-40 overflow-y-auto">
+                {cases.filter(c => (c.turnaroundTime || 0) > 8).slice(0, 5).map(caseItem => (
+                  <div key={caseItem.id} className="bg-white/70 dark:bg-orange-950/20 p-2 rounded-md">
+                    <div className="flex justify-between items-start mb-1">
+                      <span className="font-medium text-sm">{caseItem.id}</span>
+                      <span className={`text-xs px-2 py-1 rounded-full ${
+                        caseItem.status === 'completed' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                        caseItem.status === 'pending' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                        'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                      }`}>
+                        {caseItem.status}
+                      </span>
+                    </div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">
+                      {caseItem.patientName}
+                    </div>
+                    <div className="flex justify-between items-center text-xs">
+                      <span className={`font-medium ${
+                        (caseItem.turnaroundTime || 0) <= 8 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                      }`}>
+                        {caseItem.turnaroundTime || 0}h
+                      </span>
+                      <span className="text-gray-500 dark:text-gray-400">
+                        {caseItem.createdDateTime || 'N/A'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Email Pending */}
+          <Card className="bg-gradient-to-br from-blue-50/80 to-cyan-50/80 dark:from-blue-900/10 dark:to-cyan-900/10 border border-blue-200/60 dark:border-blue-800/30">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Mail className="h-5 w-5 text-blue-600" />
+                <h3 className="font-semibold text-blue-700 dark:text-blue-300">Email Pending</h3>
+              </div>
+              <div className="space-y-2 max-h-40 overflow-y-auto">
+                {cases.filter(c => c.status === 'pending' && c.pendingEmail).slice(0, 5).map(caseItem => (
+                  <div key={caseItem.id} className="bg-white/70 dark:bg-blue-950/20 p-2 rounded-md">
+                    <div className="flex justify-between items-start mb-1">
+                      <span className="font-medium text-sm">{caseItem.id}</span>
+                      <span className={`text-xs px-2 py-1 rounded-full ${
+                        caseItem.status === 'completed' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                        caseItem.status === 'pending' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                        'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                      }`}>
+                        {caseItem.status}
+                      </span>
+                    </div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">
+                      {caseItem.patientName}
+                    </div>
+                    <div className="flex justify-between items-center text-xs">
+                      <span className={`font-medium ${
+                        (caseItem.turnaroundTime || 0) <= 8 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                      }`}>
+                        {caseItem.turnaroundTime || 0}h
+                      </span>
+                      <span className="text-gray-500 dark:text-gray-400">
+                        {caseItem.createdDateTime || 'N/A'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Compact Critical Metrics + Charts in responsive grid */}
