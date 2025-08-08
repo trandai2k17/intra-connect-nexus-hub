@@ -576,158 +576,103 @@ export default function CaseDesignTracker() {
                         </div>
                       </div>
                       
-                      {/* Right side: Main Status + Time */}
-                      <div className="flex items-center gap-3">
-                        <div className="text-right">
-                          <p className="text-sm text-muted-foreground">Turnaround</p>
-                          <p className={`text-lg font-bold ${
-                            (caseItem.turnaroundTime || 0) > 12 ? 'text-red-500' : 
-                            (caseItem.turnaroundTime || 0) > 8 ? 'text-yellow-500' : 'text-green-500'
-                          }`}>
-                            {caseItem.turnaroundTime}h
-                          </p>
-                        </div>
-                        {getStatusBadge(caseItem.status)}
-                      </div>
+                       {/* Right side: Created + Turnaround + Final Status */}
+                       <div className="flex items-center gap-6">
+                         {/* Created DateTime */}
+                         <div className="text-right">
+                           <p className="text-xs text-muted-foreground">Created</p>
+                           <p className="text-sm font-medium">{caseItem.createdDateTime || 'N/A'}</p>
+                         </div>
+                         
+                         {/* Turnaround Time */}
+                         <div className="text-right">
+                           <p className="text-xs text-muted-foreground">Turnaround</p>
+                           <p className={`text-sm font-bold ${
+                             (caseItem.turnaroundTime || 0) > 12 ? 'text-red-500' : 
+                             (caseItem.turnaroundTime || 0) > 8 ? 'text-yellow-500' : 'text-green-500'
+                           }`}>
+                             {caseItem.turnaroundTime}h
+                           </p>
+                         </div>
+                         
+                         {/* Final Status */}
+                         {getStatusBadge(caseItem.status)}
+                       </div>
                     </div>
 
-                     {/* Patient Name + Doctor + Timeline Row */}
-                     <div className="flex items-center gap-4 mb-4">
-                       {/* Patient Name */}
-                       <div className="flex items-center gap-2 min-w-0 flex-1">
-                         <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                         <div>
-                           <p className="text-sm text-muted-foreground">Patient</p>
-                           <p className="font-medium truncate">{caseItem.patientName}</p>
+                     {/* Row 2: Patient (col-2) + Doctor (col-2) + Timeline (col-8) */}
+                     <div className="grid grid-cols-12 gap-4 items-center">
+                       {/* Patient - col-2 */}
+                       <div className="col-span-2">
+                         <div className="flex items-center gap-2">
+                           <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                           <div className="min-w-0">
+                             <p className="text-xs text-muted-foreground">Patient</p>
+                             <p className="text-sm font-medium truncate">{caseItem.patientName}</p>
+                           </div>
                          </div>
                        </div>
                        
-                       {/* Doctor Column - Compact */}
-                       <div className="min-w-0 flex-shrink-0 w-32">
-                         <p className="text-xs text-muted-foreground">Doctor</p>
-                         <p className="text-sm font-medium truncate">{caseItem.doctorName}</p>
+                       {/* Doctor - col-2 */}
+                       <div className="col-span-2">
+                         <div className="min-w-0">
+                           <p className="text-xs text-muted-foreground">Doctor</p>
+                           <p className="text-sm font-medium truncate">{caseItem.doctorName}</p>
+                         </div>
                        </div>
                        
-                       {/* Compact Timeline with datetime tooltips */}
-                       <div className="flex items-center gap-1 flex-shrink-0">
-                         {[
-                           { key: 'created', icon: Calendar, date: caseItem.createdDateTime, label: 'Created' },
-                           { key: 'design', icon: Package, date: caseItem.finished ? caseItem.createdDateTime : null, label: 'Design' },
-                           { key: 'translate', icon: Mail, date: caseItem.translated ? caseItem.transDate : null, label: 'Translate' },
-                           { key: 'sent', icon: Truck, date: caseItem.transDate, label: 'Sent' },
-                           { key: 'shipping', icon: CheckCircle, date: caseItem.shipDate, label: 'Ship' }
-                         ].map((stage, index) => {
-                           const Icon = stage.icon;
-                           let status = 'pending';
-                           
-                           if (stage.key === 'created') status = stage.date ? 'completed' : 'empty';
-                           else if (stage.key === 'design') status = caseItem.threeShapeStatus === 'Error' ? 'error' : (caseItem.finished ? 'completed' : 'pending');
-                           else if (stage.key === 'translate') status = caseItem.translated ? 'completed' : 'pending';
-                           else status = stage.date ? 'completed' : 'pending';
-                           
-                           return (
-                             <div key={stage.key} className="flex items-center">
-                               <div className="group relative">
-                                 <div className={`
-                                   w-5 h-5 rounded-full flex items-center justify-center transition-all duration-300 border
-                                   ${status === 'completed' ? 'bg-green-500 border-green-500 text-white' :
-                                     status === 'error' ? 'bg-red-500 border-red-500 text-white' :
-                                     status === 'pending' ? 'bg-yellow-500 border-yellow-500 text-white' :
-                                     'bg-gray-200 border-gray-300 text-gray-400'}
-                                 `}>
-                                   <Icon className="h-2.5 w-2.5" />
+                       {/* Timeline - col-8 */}
+                       <div className="col-span-8">
+                         <div className="flex items-center justify-between w-full">
+                           {[
+                             { key: 'created', label: 'Created', icon: Calendar, date: caseItem.createdDateTime },
+                             { key: 'design', label: 'Design', icon: Package, date: caseItem.finished ? caseItem.createdDateTime : null },
+                             { key: 'translate', label: 'Translate', icon: Mail, date: caseItem.translated ? caseItem.transDate : null },
+                             { key: 'sent', label: 'Sent', icon: Truck, date: caseItem.transDate },
+                             { key: 'shipping', label: 'Ship', icon: CheckCircle, date: caseItem.shipDate }
+                           ].map((stage, index) => {
+                             const Icon = stage.icon;
+                             let status = 'pending';
+                             
+                             if (stage.key === 'created') status = stage.date ? 'completed' : 'empty';
+                             else if (stage.key === 'design') status = caseItem.threeShapeStatus === 'Error' ? 'error' : (caseItem.finished ? 'completed' : 'pending');
+                             else if (stage.key === 'translate') status = caseItem.translated ? 'completed' : 'pending';
+                             else status = stage.date ? 'completed' : 'pending';
+                             
+                             return (
+                               <div key={stage.key} className="flex items-center flex-1">
+                                 <div className="group relative flex flex-col items-center">
+                                   <div className={`
+                                     w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 border
+                                     ${status === 'completed' ? 'bg-green-500 border-green-500 text-white' :
+                                       status === 'error' ? 'bg-red-500 border-red-500 text-white' :
+                                       status === 'pending' ? 'bg-yellow-500 border-yellow-500 text-white' :
+                                       'bg-gray-200 border-gray-300 text-gray-400'}
+                                   `}>
+                                     <Icon className="h-3 w-3" />
+                                   </div>
+                                   <span className="text-xs font-medium mt-1 text-center">{stage.label}</span>
+                                   
+                                   {/* Tooltip with datetime */}
+                                   {stage.date && (
+                                     <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
+                                       {stage.date}
+                                     </div>
+                                   )}
                                  </div>
-                                 {/* Tooltip with datetime */}
-                                 <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
-                                   <div className="font-medium">{stage.label}</div>
-                                   {stage.date && <div>{stage.date}</div>}
-                                 </div>
+                                 
+                                 {index < 4 && (
+                                   <div className={`
+                                     flex-1 h-0.5 mx-2 transition-all duration-300
+                                     ${status === 'completed' ? 'bg-green-500' : 'bg-gray-300'}
+                                   `} />
+                                 )}
                                </div>
-                               
-                               {index < 4 && (
-                                 <div className={`
-                                   w-3 h-0.5 transition-all duration-300
-                                   ${status === 'completed' ? 'bg-green-500' : 'bg-gray-300'}
-                                 `} />
-                               )}
-                             </div>
-                           );
-                         })}
+                             );
+                           })}
+                         </div>
                        </div>
                      </div>
-
-                    {/* Horizontal Timeline + Created Date Row */}
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
-                      {/* Timeline takes majority of space */}
-                      <div className="lg:col-span-9">
-                        <div className="flex items-center justify-between w-full">
-                          {[
-                            { key: 'created', label: 'Created', icon: Calendar, date: caseItem.createdDateTime },
-                            { key: 'design', label: 'Design', icon: Package, status: caseItem.threeShapeStatus },
-                            { key: 'translate', label: 'Translate', icon: Mail, completed: caseItem.translated },
-                            { key: 'sent', label: 'Sent', icon: Truck, date: caseItem.transDate },
-                            { key: 'shipping', label: 'Ship', icon: CheckCircle, date: caseItem.shipDate }
-                          ].map((stage, index) => {
-                            const Icon = stage.icon;
-                            let status = 'pending';
-                            
-                            // Determine status based on stage type
-                            if (stage.key === 'created' && stage.date) status = 'completed';
-                            else if (stage.key === 'design') {
-                              if (stage.status === 'Completed') status = 'completed';
-                              else if (stage.status === 'Error') status = 'error';
-                              else if (stage.status === 'In Progress') status = 'pending';
-                            }
-                            else if (stage.key === 'translate') {
-                              status = stage.completed ? 'completed' : 'pending';
-                            }
-                            else if ((stage.key === 'sent' || stage.key === 'shipping') && stage.date) {
-                              status = 'completed';
-                            }
-                            
-                            return (
-                              <div key={stage.key} className="flex items-center">
-                                <div className="flex flex-col items-center">
-                                  <div className={`
-                                    w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300
-                                    ${status === 'completed' ? 'bg-green-500 border-green-500 text-white shadow-green-200 shadow-lg' :
-                                      status === 'error' ? 'bg-red-500 border-red-500 text-white shadow-red-200 shadow-lg' :
-                                      status === 'pending' ? 'bg-yellow-400 border-yellow-400 text-white shadow-yellow-200 shadow-md' :
-                                      'bg-gray-200 border-gray-300 text-gray-400'}
-                                  `}>
-                                    <Icon className="h-4 w-4" />
-                                  </div>
-                                  <span className="text-xs font-medium mt-1 text-center">
-                                    {stage.label}
-                                  </span>
-                                </div>
-                                
-                                {index < 4 && (
-                                  <div className={`
-                                    w-12 h-0.5 mx-2 transition-all duration-300
-                                    ${index < 3 && status === 'completed' ? 'bg-green-400' : 'bg-gray-300'}
-                                  `} />
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                      
-                      {/* Created Date Column */}
-                      <div className="lg:col-span-3 lg:text-right">
-                        <p className="text-sm text-muted-foreground">Created</p>
-                        <p className="font-medium text-primary">
-                          {caseItem.createdDateTime ? new Date(caseItem.createdDateTime).toLocaleDateString() : 'N/A'}
-                        </p>
-                        {caseItem.pendingEmail && (
-                          <Badge variant="outline" className="mt-1 text-xs">
-                            <Mail className="h-3 w-3 mr-1" />
-                            Pending Email
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
 
                     {/* Quick Action Buttons */}
                     <div className="flex items-center justify-between mt-4 pt-3 border-t">
