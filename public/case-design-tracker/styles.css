@@ -1,4 +1,9 @@
-/* Case Design Tracker CSS */
+/* ===================================================================
+   SECTION 1: BASE STYLES AND LAYOUT (Global styles, container, reset)
+   Copy this section for basic page structure and global styling
+   =================================================================== */
+
+/* Global Reset and Base Styles */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -18,6 +23,11 @@ body {
     max-width: 100%;
     margin: 0 auto;
 }
+
+/* ===================================================================
+   SECTION 2: DASHBOARD COMPONENTS (Stats, alerts, charts, filters)
+   Copy this section for dashboard cards, statistics, and charts
+   =================================================================== */
 
 /* Stats Grid */
 .stats-grid {
@@ -267,6 +277,11 @@ body {
     width: 100%;
     height: 100%;
 }
+
+/* ===================================================================
+   SECTION 3: CASE TABLE AND ITEMS (Table, cards, timeline, pagination)
+   Copy this section for case listings and interactive components
+   =================================================================== */
 
 /* Cases Table */
 .cases-table-card {
