@@ -29,7 +29,106 @@ body {
    Copy this section for dashboard cards, statistics, and charts
    =================================================================== */
 
-/* Stats Grid */
+/* Simple Case Cards - Redesigned for Section 2 */
+.case-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.simple-case-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.25rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+    font-size: 14px; /* Normal font size */
+}
+
+.simple-case-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-color: #cbd5e0;
+}
+
+.case-header-simple {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.case-id-simple {
+    font-weight: 600;
+    font-size: 16px;
+    color: #2d3748;
+    margin: 0;
+}
+
+.case-status-simple {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.case-status-simple.completed {
+    background-color: #c6f6d5;
+    color: #22543d;
+}
+
+.case-status-simple.pending {
+    background-color: #fef5e7;
+    color: #c05621;
+}
+
+.case-status-simple.error {
+    background-color: #fed7d7;
+    color: #c53030;
+}
+
+.case-info-simple {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.case-info-row-simple {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid #f7fafc;
+}
+
+.case-info-row-simple:last-child {
+    border-bottom: none;
+}
+
+.info-label-simple {
+    font-weight: 500;
+    color: #4a5568;
+    font-size: 13px;
+}
+
+.info-value-simple {
+    color: #2d3748;
+    font-size: 13px;
+    text-align: right;
+}
+
+.elapsed-time-simple {
+    font-weight: 600;
+    color: #e53e3e;
+}
+
+.elapsed-time-simple.normal {
+    color: #38a169;
+}
+
+/* Stats Cards - Keep original but simplified */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -39,16 +138,16 @@ body {
 
 .stat-card {
     background: white;
-    border-radius: 12px;
+    border-radius: 8px;
     padding: 1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     border: 1px solid #e2e8f0;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .stat-content {
@@ -69,7 +168,7 @@ body {
 .stat-error .stat-icon { color: #ef4444; background: #fee2e2; }
 
 .stat-label {
-    font-size: 0.75rem;
+    font-size: 14px;
     color: #64748b;
     font-weight: 500;
     text-transform: uppercase;
