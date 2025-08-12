@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { TimeWeatherWidget } from "@/components/portal/TimeWeatherWidget";
 
 const announcements = {
   vi: [
@@ -115,12 +116,15 @@ export function Header() {
             </div>
           </div>
 
-          {/* Right side - Only Theme, Language toggles and Notifications */}
-          <div className="flex items-center space-x-4">
+          {/* Right side - Toggles, Time/Weather, Notifications */}
+          <div className="flex items-center gap-4">
             {/* Theme and Language toggles */}
             <ThemeToggle />
             <LanguageToggle />
-
+            {/* Time & Weather */}
+            <div className="max-w-xl">
+              <TimeWeatherWidget />
+            </div>
             {/* Notifications */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
