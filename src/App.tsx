@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import Index from "./pages/Index";
+import PortalHome from "./pages/PortalHome";
 import Login from "./pages/Login";
 import MaterialRequest from "./pages/MaterialRequest";
 import Library from "./pages/Library";
@@ -32,6 +33,7 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/portal" element={<PortalHome />} />
               <Route path="/login" element={<Login />} />
               <Route path="/material-request" element={<MaterialRequest />} />
               <Route path="/education" element={<Education />} />

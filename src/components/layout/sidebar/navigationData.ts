@@ -16,7 +16,8 @@ import {
   TrendingUp,
   Book,
   PlusCircle,
-  Image
+  Image,
+  Grid3X3
 } from "lucide-react";
 
 interface SubItem {
@@ -40,6 +41,12 @@ export const navigationItems: NavigationItem[] = [
     url: "/",
     icon: Home,
     iconColor: "text-blue-600",
+  },
+  {
+    title: "Portal Chính",
+    url: "/portal",
+    icon: Grid3X3,
+    iconColor: "text-emerald-600",
   },
   {
     title: "Ứng dụng",
