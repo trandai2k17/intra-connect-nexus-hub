@@ -1,8 +1,4 @@
 import { useState } from "react";
-import { Search, Bell, Filter } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/AppSidebar";
@@ -14,19 +10,11 @@ import { MyTasks } from "@/components/portal/MyTasks";
 import { QuickActions } from "@/components/portal/QuickActions";
 import { TopDocuments } from "@/components/portal/TopDocuments";
 import { EventsCalendar } from "@/components/portal/EventsCalendar";
+import { TimeWeatherWidget } from "@/components/portal/TimeWeatherWidget";
 
 const PortalHome = () => {
-  const [searchQuery, setSearchQuery] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
   const { t } = useLanguage();
-
-  const departments = [
-    { value: "all", label: "Tất cả phòng ban" },
-    { value: "it", label: "IT" },
-    { value: "hr", label: "Nhân sự" },
-    { value: "finance", label: "Tài chính" },
-    { value: "operations", label: "Vận hành" }
-  ];
 
   return (
     <SidebarProvider>
@@ -35,29 +23,21 @@ const PortalHome = () => {
         <div className="flex-1 flex flex-col">
           <Header />
           <main className="flex-1 gradient-bg dark:bg-gray-900">
-            {/* Header with Search */}
-            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-b border-border/40 sticky top-16 z-40">
+            {/* Portal Header with Time/Weather Widget */}
+            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-b border-border/40 sticky top-20 z-40">
               <div className="container mx-auto px-6 py-4">
-                <div className="flex items-center gap-4">
-                  <div className="flex-1 relative max-w-2xl">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                    <Input
-                      placeholder="Tìm kiếm tài liệu, thông báo, biểu mẫu..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 bg-background/50 border-border/60"
-                    />
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                      Portal Chính
+                    </h1>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Trung tâm thông tin và dịch vụ nội bộ
+                    </p>
                   </div>
-                  <Button variant="outline" size="sm" className="gap-2">
-                    <Filter className="h-4 w-4" />
-                    {departments.find(d => d.value === selectedDepartment)?.label}
-                  </Button>
-                  <Button variant="ghost" size="sm" className="relative">
-                    <Bell className="h-4 w-4" />
-                    <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 p-0 text-xs">
-                      3
-                    </Badge>
-                  </Button>
+                  <div className="w-80">
+                    <TimeWeatherWidget />
+                  </div>
                 </div>
               </div>
             </div>
