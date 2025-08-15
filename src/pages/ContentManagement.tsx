@@ -6,10 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Edit, Trash2, Plus, Eye } from 'lucide-react';
+import { Edit, Trash2, Plus, Eye, Save, X, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface ContentItem {
@@ -22,6 +21,7 @@ interface ContentItem {
   ImageUrl: string;
   LinkUrl: string;
   IsActive: boolean;
+  IsApplied: boolean;
   StartDate: string;
   EndDate: string;
   CreatedBy: string;
@@ -39,6 +39,7 @@ const mockContentData: ContentItem[] = [
     ImageUrl: '/assets/banner1.jpg',
     LinkUrl: '/portal',
     IsActive: true,
+    IsApplied: false,
     StartDate: '2024-01-01',
     EndDate: '2024-12-31',
     CreatedBy: 'Admin',
@@ -54,6 +55,7 @@ const mockContentData: ContentItem[] = [
     ImageUrl: '',
     LinkUrl: '',
     IsActive: true,
+    IsApplied: true,
     StartDate: '2024-01-20',
     EndDate: '2024-01-25',
     CreatedBy: 'IT Admin',
@@ -69,6 +71,7 @@ const mockContentData: ContentItem[] = [
     ImageUrl: '/assets/event1.jpg',
     LinkUrl: '/events/tech-seminar',
     IsActive: false,
+    IsApplied: false,
     StartDate: '2024-02-15',
     EndDate: '2024-02-16',
     CreatedBy: 'Event Manager',
@@ -78,32 +81,33 @@ const mockContentData: ContentItem[] = [
 
 export default function ContentManagement() {
   const [contentData, setContentData] = useState<ContentItem[]>(mockContentData);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<ContentItem | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState<Partial<ContentItem>>({});
   const { toast } = useToast();
 
   const contentTypes = ['Banner', 'Announcement', 'Event', 'News', 'Promotion', 'Document'];
 
   const handleEdit = (item: ContentItem) => {
-    setEditingItem(item);
+    setEditingId(item.RecID);
     setFormData(item);
-    setIsDialogOpen(true);
+    setIsAdding(false);
   };
 
   const handleAdd = () => {
-    setEditingItem(null);
+    setIsAdding(true);
+    setEditingId(null);
     setFormData({
       TransDate: new Date().toISOString().split('T')[0],
       OrderDisplay: contentData.length + 1,
       ContentType: 'Banner',
       IsActive: true,
+      IsApplied: false,
       StartDate: new Date().toISOString().split('T')[0],
       EndDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       CreatedBy: 'Current User',
       CreatedDate: new Date().toISOString().split('T')[0]
     });
-    setIsDialogOpen(true);
   };
 
   const handleSave = () => {
@@ -116,9 +120,9 @@ export default function ContentManagement() {
       return;
     }
 
-    if (editingItem) {
+    if (editingId) {
       setContentData(prev => prev.map(item => 
-        item.RecID === editingItem.RecID 
+        item.RecID === editingId 
           ? { ...item, ...formData }
           : item
       ));
@@ -126,7 +130,8 @@ export default function ContentManagement() {
         title: "Thành công",
         description: "Đã cập nhật nội dung"
       });
-    } else {
+      setEditingId(null);
+    } else if (isAdding) {
       const newItem: ContentItem = {
         RecID: Math.max(...contentData.map(item => item.RecID)) + 1,
         ...formData as ContentItem
@@ -136,9 +141,15 @@ export default function ContentManagement() {
         title: "Thành công", 
         description: "Đã thêm nội dung mới"
       });
+      setIsAdding(false);
     }
 
-    setIsDialogOpen(false);
+    setFormData({});
+  };
+
+  const handleCancel = () => {
+    setIsAdding(false);
+    setEditingId(null);
     setFormData({});
   };
 
@@ -158,13 +169,162 @@ export default function ContentManagement() {
     ));
   };
 
+  const handleApply = (id: number) => {
+    setContentData(prev => prev.map(item =>
+      item.RecID === id 
+        ? { ...item, IsApplied: !item.IsApplied }
+        : item
+    ));
+    
+    const item = contentData.find(item => item.RecID === id);
+    toast({
+      title: "Thành công",
+      description: item?.IsApplied ? "Đã bỏ áp dụng content" : "Đã áp dụng content ra dashboard"
+    });
+  };
+
+  const appliedCount = contentData.filter(item => item.IsApplied).length;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-accent/5">
       <div className="container mx-auto p-6 space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Quản lý Content</h1>
-          <p className="text-muted-foreground">Quản lý nội dung hiển thị trên website</p>
+          <p className="text-muted-foreground">
+            Quản lý nội dung hiển thị trên website • Đã áp dụng: {appliedCount} content
+          </p>
         </div>
+
+        {/* Add Content Form */}
+        {isAdding && (
+          <Card className="backdrop-blur-sm bg-card/90 border-border/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Plus className="w-5 h-5" />
+                Thêm Content mới
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <Label htmlFor="contentType">Loại Content</Label>
+                    <Select 
+                      value={formData.ContentType} 
+                      onValueChange={(value) => setFormData({...formData, ContentType: value})}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn loại content" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {contentTypes.map(type => (
+                          <SelectItem key={type} value={type}>{type}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="orderDisplay">Thứ tự hiển thị</Label>
+                    <Input
+                      id="orderDisplay"
+                      type="number"
+                      value={formData.OrderDisplay || ''}
+                      onChange={(e) => setFormData({...formData, OrderDisplay: parseInt(e.target.value)})}
+                    />
+                  </div>
+
+                  <div className="flex items-end">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="isActive"
+                        checked={formData.IsActive || false}
+                        onCheckedChange={(checked) => setFormData({...formData, IsActive: checked})}
+                      />
+                      <Label htmlFor="isActive">Kích hoạt</Label>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="textContent">Nội dung chính *</Label>
+                    <Input
+                      id="textContent"
+                      value={formData.TextContent || ''}
+                      onChange={(e) => setFormData({...formData, TextContent: e.target.value})}
+                      placeholder="Nhập tiêu đề hoặc nội dung chính"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="imageUrl">URL Hình ảnh</Label>
+                    <Input
+                      id="imageUrl"
+                      value={formData.ImageUrl || ''}
+                      onChange={(e) => setFormData({...formData, ImageUrl: e.target.value})}
+                      placeholder="https://example.com/image.jpg"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="subContent">Nội dung phụ</Label>
+                  <Textarea
+                    id="subContent"
+                    value={formData.SubContent || ''}
+                    onChange={(e) => setFormData({...formData, SubContent: e.target.value})}
+                    placeholder="Nhập mô tả chi tiết"
+                    rows={3}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <Label htmlFor="linkUrl">URL Liên kết</Label>
+                    <Input
+                      id="linkUrl"
+                      value={formData.LinkUrl || ''}
+                      onChange={(e) => setFormData({...formData, LinkUrl: e.target.value})}
+                      placeholder="/page-url hoặc https://external-link.com"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="startDate">Ngày bắt đầu</Label>
+                    <Input
+                      id="startDate"
+                      type="date"
+                      value={formData.StartDate || ''}
+                      onChange={(e) => setFormData({...formData, StartDate: e.target.value})}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="endDate">Ngày kết thúc</Label>
+                    <Input
+                      id="endDate"
+                      type="date"
+                      value={formData.EndDate || ''}
+                      onChange={(e) => setFormData({...formData, EndDate: e.target.value})}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end space-x-2 pt-4">
+                  <Button variant="outline" onClick={handleCancel}>
+                    <X className="w-4 h-4 mr-2" />
+                    Hủy
+                  </Button>
+                  <Button onClick={handleSave}>
+                    <Save className="w-4 h-4 mr-2" />
+                    Lưu
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         <Card className="backdrop-blur-sm bg-card/90 border-border/50">
           <CardHeader>
@@ -174,133 +334,12 @@ export default function ContentManagement() {
                 Danh sách Content
               </CardTitle>
               
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button onClick={handleAdd} className="bg-primary hover:bg-primary/90">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Thêm Content
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                  <DialogHeader>
-                    <DialogTitle>
-                      {editingItem ? 'Chỉnh sửa Content' : 'Thêm Content mới'}
-                    </DialogTitle>
-                  </DialogHeader>
-                  
-                  <div className="grid gap-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="contentType">Loại Content</Label>
-                        <Select 
-                          value={formData.ContentType} 
-                          onValueChange={(value) => setFormData({...formData, ContentType: value})}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Chọn loại content" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {contentTypes.map(type => (
-                              <SelectItem key={type} value={type}>{type}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      
-                      <div>
-                        <Label htmlFor="orderDisplay">Thứ tự hiển thị</Label>
-                        <Input
-                          id="orderDisplay"
-                          type="number"
-                          value={formData.OrderDisplay || ''}
-                          onChange={(e) => setFormData({...formData, OrderDisplay: parseInt(e.target.value)})}
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="textContent">Nội dung chính *</Label>
-                      <Input
-                        id="textContent"
-                        value={formData.TextContent || ''}
-                        onChange={(e) => setFormData({...formData, TextContent: e.target.value})}
-                        placeholder="Nhập tiêu đề hoặc nội dung chính"
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="subContent">Nội dung phụ</Label>
-                      <Textarea
-                        id="subContent"
-                        value={formData.SubContent || ''}
-                        onChange={(e) => setFormData({...formData, SubContent: e.target.value})}
-                        placeholder="Nhập mô tả chi tiết"
-                        rows={3}
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="imageUrl">URL Hình ảnh</Label>
-                      <Input
-                        id="imageUrl"
-                        value={formData.ImageUrl || ''}
-                        onChange={(e) => setFormData({...formData, ImageUrl: e.target.value})}
-                        placeholder="https://example.com/image.jpg"
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="linkUrl">URL Liên kết</Label>
-                      <Input
-                        id="linkUrl"
-                        value={formData.LinkUrl || ''}
-                        onChange={(e) => setFormData({...formData, LinkUrl: e.target.value})}
-                        placeholder="/page-url hoặc https://external-link.com"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="startDate">Ngày bắt đầu</Label>
-                        <Input
-                          id="startDate"
-                          type="date"
-                          value={formData.StartDate || ''}
-                          onChange={(e) => setFormData({...formData, StartDate: e.target.value})}
-                        />
-                      </div>
-                      
-                      <div>
-                        <Label htmlFor="endDate">Ngày kết thúc</Label>
-                        <Input
-                          id="endDate"
-                          type="date"
-                          value={formData.EndDate || ''}
-                          onChange={(e) => setFormData({...formData, EndDate: e.target.value})}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        id="isActive"
-                        checked={formData.IsActive || false}
-                        onCheckedChange={(checked) => setFormData({...formData, IsActive: checked})}
-                      />
-                      <Label htmlFor="isActive">Kích hoạt hiển thị</Label>
-                    </div>
-
-                    <div className="flex justify-end space-x-2 pt-4">
-                      <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                        Hủy
-                      </Button>
-                      <Button onClick={handleSave}>
-                        {editingItem ? 'Cập nhật' : 'Thêm mới'}
-                      </Button>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
+              {!isAdding && (
+                <Button onClick={handleAdd} className="bg-primary hover:bg-primary/90">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Thêm Content
+                </Button>
+              )}
             </div>
           </CardHeader>
           <CardContent>
@@ -313,63 +352,202 @@ export default function ContentManagement() {
                     <TableHead>Nội dung</TableHead>
                     <TableHead>Thứ tự</TableHead>
                     <TableHead>Trạng thái</TableHead>
-                    <TableHead>Ngày bắt đầu</TableHead>
-                    <TableHead>Ngày kết thúc</TableHead>
+                    <TableHead>Áp dụng</TableHead>
+                    <TableHead>Ngày</TableHead>
                     <TableHead>Tạo bởi</TableHead>
                     <TableHead>Thao tác</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {contentData.map((item) => (
-                    <TableRow key={item.RecID}>
-                      <TableCell>{item.RecID}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{item.ContentType}</Badge>
-                      </TableCell>
-                      <TableCell className="max-w-xs truncate">
-                        <div>
-                          <div className="font-medium">{item.TextContent}</div>
-                          {item.SubContent && (
-                            <div className="text-sm text-muted-foreground truncate">
-                              {item.SubContent}
+                    <React.Fragment key={item.RecID}>
+                      <TableRow>
+                        <TableCell>{item.RecID}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline">{item.ContentType}</Badge>
+                        </TableCell>
+                        <TableCell className="max-w-xs truncate">
+                          <div>
+                            <div className="font-medium">{item.TextContent}</div>
+                            {item.SubContent && (
+                              <div className="text-sm text-muted-foreground truncate">
+                                {item.SubContent}
+                              </div>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell>{item.OrderDisplay}</TableCell>
+                        <TableCell>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => toggleActive(item.RecID)}
+                          >
+                            <Badge variant={item.IsActive ? "default" : "secondary"}>
+                              {item.IsActive ? 'Hiển thị' : 'Ẩn'}
+                            </Badge>
+                          </Button>
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleApply(item.RecID)}
+                          >
+                            <Badge variant={item.IsApplied ? "default" : "outline"}>
+                              {item.IsApplied ? (
+                                <>
+                                  <CheckCircle className="w-3 h-3 mr-1" />
+                                  Đã áp dụng
+                                </>
+                              ) : (
+                                'Chưa áp dụng'
+                              )}
+                            </Badge>
+                          </Button>
+                        </TableCell>
+                        <TableCell>
+                          <div className="text-sm">
+                            <div>{item.StartDate}</div>
+                            <div className="text-muted-foreground">đến {item.EndDate}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell>{item.CreatedBy}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleEdit(item)}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDelete(item.RecID)}
+                            >
+                              <Trash2 className="w-4 h-4 text-destructive" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                      
+                      {/* Inline Edit Form */}
+                      {editingId === item.RecID && (
+                        <TableRow className="bg-muted/50">
+                          <TableCell colSpan={9} className="p-4">
+                            <div className="space-y-4">
+                              <h4 className="font-medium">Chỉnh sửa Content #{item.RecID}</h4>
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                  <Label>Loại Content</Label>
+                                  <Select 
+                                    value={formData.ContentType} 
+                                    onValueChange={(value) => setFormData({...formData, ContentType: value})}
+                                  >
+                                    <SelectTrigger>
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {contentTypes.map(type => (
+                                        <SelectItem key={type} value={type}>{type}</SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                
+                                <div>
+                                  <Label>Thứ tự hiển thị</Label>
+                                  <Input
+                                    type="number"
+                                    value={formData.OrderDisplay || ''}
+                                    onChange={(e) => setFormData({...formData, OrderDisplay: parseInt(e.target.value)})}
+                                  />
+                                </div>
+
+                                <div className="flex items-end">
+                                  <div className="flex items-center space-x-2">
+                                    <Switch
+                                      checked={formData.IsActive || false}
+                                      onCheckedChange={(checked) => setFormData({...formData, IsActive: checked})}
+                                    />
+                                    <Label>Kích hoạt</Label>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <Label>Nội dung chính *</Label>
+                                  <Input
+                                    value={formData.TextContent || ''}
+                                    onChange={(e) => setFormData({...formData, TextContent: e.target.value})}
+                                  />
+                                </div>
+
+                                <div>
+                                  <Label>URL Hình ảnh</Label>
+                                  <Input
+                                    value={formData.ImageUrl || ''}
+                                    onChange={(e) => setFormData({...formData, ImageUrl: e.target.value})}
+                                  />
+                                </div>
+                              </div>
+
+                              <div>
+                                <Label>Nội dung phụ</Label>
+                                <Textarea
+                                  value={formData.SubContent || ''}
+                                  onChange={(e) => setFormData({...formData, SubContent: e.target.value})}
+                                  rows={2}
+                                />
+                              </div>
+
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                  <Label>URL Liên kết</Label>
+                                  <Input
+                                    value={formData.LinkUrl || ''}
+                                    onChange={(e) => setFormData({...formData, LinkUrl: e.target.value})}
+                                  />
+                                </div>
+
+                                <div>
+                                  <Label>Ngày bắt đầu</Label>
+                                  <Input
+                                    type="date"
+                                    value={formData.StartDate || ''}
+                                    onChange={(e) => setFormData({...formData, StartDate: e.target.value})}
+                                  />
+                                </div>
+                                
+                                <div>
+                                  <Label>Ngày kết thúc</Label>
+                                  <Input
+                                    type="date"
+                                    value={formData.EndDate || ''}
+                                    onChange={(e) => setFormData({...formData, EndDate: e.target.value})}
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="flex justify-end space-x-2">
+                                <Button variant="outline" size="sm" onClick={handleCancel}>
+                                  <X className="w-4 h-4 mr-2" />
+                                  Hủy
+                                </Button>
+                                <Button size="sm" onClick={handleSave}>
+                                  <Save className="w-4 h-4 mr-2" />
+                                  Cập nhật
+                                </Button>
+                              </div>
                             </div>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>{item.OrderDisplay}</TableCell>
-                      <TableCell>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => toggleActive(item.RecID)}
-                        >
-                          <Badge variant={item.IsActive ? "default" : "secondary"}>
-                            {item.IsActive ? 'Hiển thị' : 'Ẩn'}
-                          </Badge>
-                        </Button>
-                      </TableCell>
-                      <TableCell>{item.StartDate}</TableCell>
-                      <TableCell>{item.EndDate}</TableCell>
-                      <TableCell>{item.CreatedBy}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleEdit(item)}
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDelete(item.RecID)}
-                          >
-                            <Trash2 className="w-4 h-4 text-destructive" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </React.Fragment>
                   ))}
                 </TableBody>
               </Table>
