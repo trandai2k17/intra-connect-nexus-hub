@@ -161,148 +161,147 @@ export default function ContentManagement() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-accent/5">
       <div className="container mx-auto p-6 space-y-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">Quản lý Content</h1>
-            <p className="text-muted-foreground">Quản lý nội dung hiển thị trên website</p>
-          </div>
-          
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button onClick={handleAdd} className="bg-primary hover:bg-primary/90">
-                <Plus className="w-4 h-4 mr-2" />
-                Thêm Content
-              </Button>
-            </DialogTrigger>
-            
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>
-                  {editingItem ? 'Chỉnh sửa Content' : 'Thêm Content mới'}
-                </DialogTitle>
-              </DialogHeader>
-              
-              <div className="grid gap-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="contentType">Loại Content</Label>
-                    <Select 
-                      value={formData.ContentType} 
-                      onValueChange={(value) => setFormData({...formData, ContentType: value})}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Chọn loại content" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {contentTypes.map(type => (
-                          <SelectItem key={type} value={type}>{type}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  <div>
-                    <Label htmlFor="orderDisplay">Thứ tự hiển thị</Label>
-                    <Input
-                      id="orderDisplay"
-                      type="number"
-                      value={formData.OrderDisplay || ''}
-                      onChange={(e) => setFormData({...formData, OrderDisplay: parseInt(e.target.value)})}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="textContent">Nội dung chính *</Label>
-                  <Input
-                    id="textContent"
-                    value={formData.TextContent || ''}
-                    onChange={(e) => setFormData({...formData, TextContent: e.target.value})}
-                    placeholder="Nhập tiêu đề hoặc nội dung chính"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="subContent">Nội dung phụ</Label>
-                  <Textarea
-                    id="subContent"
-                    value={formData.SubContent || ''}
-                    onChange={(e) => setFormData({...formData, SubContent: e.target.value})}
-                    placeholder="Nhập mô tả chi tiết"
-                    rows={3}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="imageUrl">URL Hình ảnh</Label>
-                  <Input
-                    id="imageUrl"
-                    value={formData.ImageUrl || ''}
-                    onChange={(e) => setFormData({...formData, ImageUrl: e.target.value})}
-                    placeholder="https://example.com/image.jpg"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="linkUrl">URL Liên kết</Label>
-                  <Input
-                    id="linkUrl"
-                    value={formData.LinkUrl || ''}
-                    onChange={(e) => setFormData({...formData, LinkUrl: e.target.value})}
-                    placeholder="/page-url hoặc https://external-link.com"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="startDate">Ngày bắt đầu</Label>
-                    <Input
-                      id="startDate"
-                      type="date"
-                      value={formData.StartDate || ''}
-                      onChange={(e) => setFormData({...formData, StartDate: e.target.value})}
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label htmlFor="endDate">Ngày kết thúc</Label>
-                    <Input
-                      id="endDate"
-                      type="date"
-                      value={formData.EndDate || ''}
-                      onChange={(e) => setFormData({...formData, EndDate: e.target.value})}
-                    />
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="isActive"
-                    checked={formData.IsActive || false}
-                    onCheckedChange={(checked) => setFormData({...formData, IsActive: checked})}
-                  />
-                  <Label htmlFor="isActive">Kích hoạt hiển thị</Label>
-                </div>
-
-                <div className="flex justify-end space-x-2 pt-4">
-                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                    Hủy
-                  </Button>
-                  <Button onClick={handleSave}>
-                    {editingItem ? 'Cập nhật' : 'Thêm mới'}
-                  </Button>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Quản lý Content</h1>
+          <p className="text-muted-foreground">Quản lý nội dung hiển thị trên website</p>
         </div>
 
         <Card className="backdrop-blur-sm bg-card/90 border-border/50">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Eye className="w-5 h-5" />
-              Danh sách Content
-            </CardTitle>
+            <div className="flex justify-between items-center">
+              <CardTitle className="flex items-center gap-2">
+                <Eye className="w-5 h-5" />
+                Danh sách Content
+              </CardTitle>
+              
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button onClick={handleAdd} className="bg-primary hover:bg-primary/90">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Thêm Content
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>
+                      {editingItem ? 'Chỉnh sửa Content' : 'Thêm Content mới'}
+                    </DialogTitle>
+                  </DialogHeader>
+                  
+                  <div className="grid gap-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="contentType">Loại Content</Label>
+                        <Select 
+                          value={formData.ContentType} 
+                          onValueChange={(value) => setFormData({...formData, ContentType: value})}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Chọn loại content" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {contentTypes.map(type => (
+                              <SelectItem key={type} value={type}>{type}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="orderDisplay">Thứ tự hiển thị</Label>
+                        <Input
+                          id="orderDisplay"
+                          type="number"
+                          value={formData.OrderDisplay || ''}
+                          onChange={(e) => setFormData({...formData, OrderDisplay: parseInt(e.target.value)})}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="textContent">Nội dung chính *</Label>
+                      <Input
+                        id="textContent"
+                        value={formData.TextContent || ''}
+                        onChange={(e) => setFormData({...formData, TextContent: e.target.value})}
+                        placeholder="Nhập tiêu đề hoặc nội dung chính"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="subContent">Nội dung phụ</Label>
+                      <Textarea
+                        id="subContent"
+                        value={formData.SubContent || ''}
+                        onChange={(e) => setFormData({...formData, SubContent: e.target.value})}
+                        placeholder="Nhập mô tả chi tiết"
+                        rows={3}
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="imageUrl">URL Hình ảnh</Label>
+                      <Input
+                        id="imageUrl"
+                        value={formData.ImageUrl || ''}
+                        onChange={(e) => setFormData({...formData, ImageUrl: e.target.value})}
+                        placeholder="https://example.com/image.jpg"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="linkUrl">URL Liên kết</Label>
+                      <Input
+                        id="linkUrl"
+                        value={formData.LinkUrl || ''}
+                        onChange={(e) => setFormData({...formData, LinkUrl: e.target.value})}
+                        placeholder="/page-url hoặc https://external-link.com"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="startDate">Ngày bắt đầu</Label>
+                        <Input
+                          id="startDate"
+                          type="date"
+                          value={formData.StartDate || ''}
+                          onChange={(e) => setFormData({...formData, StartDate: e.target.value})}
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="endDate">Ngày kết thúc</Label>
+                        <Input
+                          id="endDate"
+                          type="date"
+                          value={formData.EndDate || ''}
+                          onChange={(e) => setFormData({...formData, EndDate: e.target.value})}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="isActive"
+                        checked={formData.IsActive || false}
+                        onCheckedChange={(checked) => setFormData({...formData, IsActive: checked})}
+                      />
+                      <Label htmlFor="isActive">Kích hoạt hiển thị</Label>
+                    </div>
+
+                    <div className="flex justify-end space-x-2 pt-4">
+                      <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                        Hủy
+                      </Button>
+                      <Button onClick={handleSave}>
+                        {editingItem ? 'Cập nhật' : 'Thêm mới'}
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
