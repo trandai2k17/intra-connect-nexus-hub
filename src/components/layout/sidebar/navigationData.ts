@@ -188,6 +188,18 @@ export const navigationItems: NavigationItem[] = [
         icon: BarChart3,
         iconColor: "text-red-600",
       },
+      {
+        title: "Quản lý Content",
+        url: "/content-management",
+        icon: FileText,
+        iconColor: "text-blue-600",
+      },
+      {
+        title: "Phân quyền User",
+        url: "/user-permissions",
+        icon: Users,
+        iconColor: "text-purple-600",
+      },
     ],
   },
 ];

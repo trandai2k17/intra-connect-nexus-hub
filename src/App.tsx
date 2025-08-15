@@ -20,6 +20,8 @@ import MediaGallery from "./pages/MediaGallery";
 import NotFound from "./pages/NotFound";
 import Education from "./pages/Education";
 import EducationNdx from "./pages/EducationNdx";
+import ContentManagement from "./pages/ContentManagement";
+import UserPermissions from "./pages/UserPermissions";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +48,8 @@ const App = () => (
               <Route path="/case-design-tracker" element={<CaseDesignTracker />} />
               <Route path="/media-gallery" element={<MediaGallery />} />
               <Route path="/mis/project-management" element={<ProjectManagement />} />
+              <Route path="/content-management" element={<ContentManagement />} />
+              <Route path="/user-permissions" element={<UserPermissions />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
