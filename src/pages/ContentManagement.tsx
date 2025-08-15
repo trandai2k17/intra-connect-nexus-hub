@@ -81,9 +81,19 @@ const mockContentData: ContentItem[] = [
 
 export default function ContentManagement() {
   const [contentData, setContentData] = useState<ContentItem[]>(mockContentData);
-  const [isAdding, setIsAdding] = useState(false);
+  const [isAdding, setIsAdding] = useState(true);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [formData, setFormData] = useState<Partial<ContentItem>>({});
+  const [formData, setFormData] = useState<Partial<ContentItem>>({
+    TransDate: new Date().toISOString().split('T')[0],
+    OrderDisplay: mockContentData.length + 1,
+    ContentType: 'Banner',
+    IsActive: true,
+    IsApplied: false,
+    StartDate: new Date().toISOString().split('T')[0],
+    EndDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    CreatedBy: 'Current User',
+    CreatedDate: new Date().toISOString().split('T')[0]
+  });
   const { toast } = useToast();
 
   const contentTypes = ['Banner', 'Announcement', 'Event', 'News', 'Promotion', 'Document'];
@@ -94,7 +104,7 @@ export default function ContentManagement() {
     setIsAdding(false);
   };
 
-  const handleAdd = () => {
+  const resetAddForm = () => {
     setIsAdding(true);
     setEditingId(null);
     setFormData({
@@ -130,7 +140,7 @@ export default function ContentManagement() {
         title: "Thành công",
         description: "Đã cập nhật nội dung"
       });
-      setEditingId(null);
+      resetAddForm();
     } else if (isAdding) {
       const newItem: ContentItem = {
         RecID: Math.max(...contentData.map(item => item.RecID)) + 1,
@@ -141,16 +151,12 @@ export default function ContentManagement() {
         title: "Thành công", 
         description: "Đã thêm nội dung mới"
       });
-      setIsAdding(false);
+      resetAddForm();
     }
-
-    setFormData({});
   };
 
   const handleCancel = () => {
-    setIsAdding(false);
-    setEditingId(null);
-    setFormData({});
+    resetAddForm();
   };
 
   const handleDelete = (id: number) => {
@@ -195,15 +201,14 @@ export default function ContentManagement() {
           </p>
         </div>
 
-        {/* Add Content Form */}
-        {isAdding && (
-          <Card className="backdrop-blur-sm bg-card/90 border-border/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Plus className="w-5 h-5" />
-                Thêm Content mới
-              </CardTitle>
-            </CardHeader>
+        {/* Add Content Form - Always visible */}
+        <Card className="backdrop-blur-sm bg-card/90 border-border/50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Plus className="w-5 h-5" />
+              Thêm Content mới
+            </CardTitle>
+          </CardHeader>
             <CardContent>
               <div className="grid gap-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -323,8 +328,7 @@ export default function ContentManagement() {
                 </div>
               </div>
             </CardContent>
-          </Card>
-        )}
+        </Card>
 
         <Card className="backdrop-blur-sm bg-card/90 border-border/50">
           <CardHeader>
@@ -334,12 +338,6 @@ export default function ContentManagement() {
                 Danh sách Content
               </CardTitle>
               
-              {!isAdding && (
-                <Button onClick={handleAdd} className="bg-primary hover:bg-primary/90">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Thêm Content
-                </Button>
-              )}
             </div>
           </CardHeader>
           <CardContent>
