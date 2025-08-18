@@ -118,118 +118,135 @@ export default function TVBonusSummary() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-2">
-      {/* Compact Header */}
-      <header className="bg-white shadow-sm rounded-lg mb-3 p-3">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-8">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold text-gray-800">
-                {currentTime.toLocaleTimeString('en-US', { 
-                  hour: '2-digit', 
-                  minute: '2-digit',
-                  hour12: false 
-                })}
-              </h1>
-              <Badge className="text-lg px-3 py-1 bg-blue-500">
-                {currentShift}
-              </Badge>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-2">
+      {/* Compact Smart Header - All in one row */}
+      <div className="bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl mb-2 p-4 border border-white/20">
+        <div className="grid grid-cols-12 gap-6 items-center">
+          {/* Time & Shift - 2 cols */}
+          <div className="col-span-2 text-center">
+            <div className="text-3xl font-bold text-gray-800">
+              {currentTime.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false 
+              })}
             </div>
-            
-            {/* Modern Late Cases Card */}
-            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl shadow-xl p-6 border border-red-200/50 backdrop-blur-sm">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
-                  LATE CASES
-                </h3>
-                <div className="bg-gradient-to-r from-red-500 to-red-600 text-white text-2xl px-4 py-2 font-bold rounded-xl shadow-lg">
-                  {lateCaseData.totalCount}
-                </div>
-              </div>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl p-4 text-center shadow-md hover:shadow-lg transition-all">
-                  <div className="text-3xl font-bold text-orange-600">{lateCaseData.oneDayCount}</div>
-                  <div className="text-sm text-orange-500 font-semibold tracking-wide">1 DAY</div>
-                </div>
-                <div className="bg-gradient-to-br from-red-100 to-red-200 rounded-xl p-4 text-center shadow-md hover:shadow-lg transition-all">
-                  <div className="text-3xl font-bold text-red-600">{lateCaseData.twoDaysCount}</div>
-                  <div className="text-sm text-red-500 font-semibold tracking-wide">2 DAYS</div>
-                </div>
-                <div className="bg-gradient-to-br from-red-200 to-red-300 rounded-xl p-4 text-center shadow-md hover:shadow-lg transition-all">
-                  <div className="text-3xl font-bold text-red-700">{lateCaseData.threeDaysCount + lateCaseData.moreThanThreeDaysCount}</div>
-                  <div className="text-sm text-red-700 font-semibold tracking-wide">3+ DAYS</div>
-                </div>
-              </div>
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm px-3 py-1 rounded-lg font-bold mt-1">
+              {currentShift}
             </div>
-              
-            {/* Enhanced Prodline Display */}
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl shadow-xl p-6 border border-blue-200/50 backdrop-blur-sm">
-              <div className="text-center">
-                <h3 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent mb-4">
-                  PRODLINE
-                </h3>
-                <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-4 shadow-lg">
-                  <p className="text-4xl font-bold text-white animate-fade-in tracking-wider drop-shadow-lg">
-                    {prodlineItems[currentProdline]}
-                  </p>
+          </div>
+
+          {/* Late Cases - Horizontal Layout - 6 cols */}
+          <div className="col-span-6">
+            <div className="bg-gradient-to-r from-red-50 to-red-100 rounded-xl p-3 border border-red-200/50">
+              <div className="flex items-center justify-between">
+                <div className="text-lg font-bold text-red-700">LATE CASES</div>
+                <div className="flex items-center space-x-4">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-red-600">{lateCaseData.totalCount}</div>
+                    <div className="text-xs text-red-500 font-medium">TOTAL</div>
+                  </div>
+                  <div className="h-8 w-px bg-red-300"></div>
+                  <div className="flex space-x-3">
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-orange-600">{lateCaseData.oneDayCount}</div>
+                      <div className="text-xs text-orange-500">1D</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-red-600">{lateCaseData.twoDaysCount}</div>
+                      <div className="text-xs text-red-500">2D</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-red-700">{lateCaseData.threeDaysCount + lateCaseData.moreThanThreeDaysCount}</div>
+                      <div className="text-xs text-red-700">3D+</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="text-right">
-            <p className="text-lg text-gray-600">{currentTime.toLocaleDateString('vi-VN')}</p>
+
+          {/* Prodline - 2 cols */}
+          <div className="col-span-2">
+            <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-3 text-center border border-blue-200/50">
+              <div className="text-sm font-bold text-blue-700 mb-1">PRODLINE</div>
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-2">
+                <div className="text-2xl font-bold text-white animate-fade-in tracking-wider">
+                  {prodlineItems[currentProdline]}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Date - 2 cols */}
+          <div className="col-span-2 text-right">
+            <div className="text-lg text-gray-600">{currentTime.toLocaleDateString('vi-VN')}</div>
           </div>
         </div>
-      </header>
+      </div>
 
-      {/* Main Bonus Summary Table - Modern Design */}
-      <Card className="shadow-2xl rounded-2xl overflow-hidden border-0">
-        <CardHeader className="bg-gradient-to-r from-green-500 to-green-600 text-white py-4">
-          <h2 className="text-5xl font-bold text-center tracking-wide drop-shadow-lg">BONUS SUMMARY</h2>
-        </CardHeader>
-        <CardContent className="p-6 bg-gradient-to-b from-gray-50 to-white">
-          <div className="overflow-x-auto">
-            <table className="w-full text-2xl">
-              <thead>
-                <tr className="border-b-4 border-gray-300">
-                  <th className="text-left py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200 first:rounded-l-xl">TECH NAME</th>
-                  <th className="text-center py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200">SKILL</th>
-                  <th className="text-center py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200">TARGET</th>
-                  <th className="text-center py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200">CURRENT</th>
-                  <th className="text-center py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200">DOWNTIME</th>
-                  <th className="text-center py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200">CORRECTION</th>
-                  <th className="text-center py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200">PERFORMANCE</th>
-                  <th className="text-center py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200 last:rounded-r-xl">POSITION</th>
-                </tr>
-              </thead>
-              <tbody>
-                {bonusData.map((row, index) => (
-                  <tr key={index} className="border-b border-gray-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 group">
-                    <td className="py-10 px-6 font-bold text-3xl bg-gradient-to-r from-blue-900 to-blue-700 bg-clip-text text-transparent">{row.tech}</td>
-                    <td className="py-10 px-6 text-center">
-                      <div className="inline-block bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 text-xl px-6 py-3 font-semibold rounded-xl shadow-md border border-gray-300">
-                        {row.skillLevel}
-                      </div>
-                    </td>
-                    <td className="text-center py-10 px-6 font-bold text-3xl text-gray-700">{row.target}</td>
-                    <td className="text-center py-10 px-6 font-bold text-3xl text-green-600">{row.curTarget}</td>
-                    <td className="text-center py-10 px-6 font-bold text-3xl text-red-500">{row.downtime}</td>
-                    <td className="text-center py-10 px-6 font-bold text-3xl text-orange-500">{row.correction}</td>
-                    <td className="text-center py-10 px-6">
-                      <div className={`inline-block text-3xl px-8 py-4 text-white font-bold rounded-xl shadow-lg ${getPerformanceBadge(row.performance)} bg-gradient-to-r`}>
-                        {row.performance}%
-                      </div>
-                    </td>
-                    <td className="text-center py-10 px-6 font-bold text-3xl bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+      {/* Smart Bonus Table - No Header, Direct Content */}
+      <div className="bg-white/80 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden border border-white/20">
+        {/* Title Bar Only */}
+        <div className="bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-6">
+          <h2 className="text-4xl font-bold text-center tracking-wide drop-shadow-lg">BONUS SUMMARY</h2>
+        </div>
+        
+        {/* Direct Table Content - No redundant headers */}
+        <div className="p-4">
+          <div className="space-y-3">
+            {bonusData.map((row, index) => (
+              <div key={index} className="bg-gradient-to-r from-gray-50 to-white rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200/50">
+                <div className="grid grid-cols-12 gap-4 items-center">
+                  {/* Tech Name - 3 cols */}
+                  <div className="col-span-3">
+                    <div className="text-2xl font-bold bg-gradient-to-r from-blue-900 to-blue-700 bg-clip-text text-transparent">
+                      {row.tech}
+                    </div>
+                    <div className="text-sm bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 px-3 py-1 rounded-lg font-medium inline-block mt-1">
+                      {row.skillLevel}
+                    </div>
+                  </div>
+                  
+                  {/* Metrics Grid - 6 cols */}
+                  <div className="col-span-6 grid grid-cols-4 gap-3">
+                    <div className="text-center">
+                      <div className="text-xs text-gray-500 mb-1">TARGET</div>
+                      <div className="text-xl font-bold text-gray-700">{row.target}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xs text-gray-500 mb-1">CURRENT</div>
+                      <div className="text-xl font-bold text-green-600">{row.curTarget}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xs text-gray-500 mb-1">DOWNTIME</div>
+                      <div className="text-xl font-bold text-red-500">{row.downtime}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xs text-gray-500 mb-1">CORRECTION</div>
+                      <div className="text-xl font-bold text-orange-500">{row.correction}</div>
+                    </div>
+                  </div>
+
+                  {/* Performance - 2 cols */}
+                  <div className="col-span-2 text-center">
+                    <div className={`inline-block text-2xl px-6 py-3 text-white font-bold rounded-xl shadow-lg bg-gradient-to-r ${getPerformanceBadge(row.performance)}`}>
+                      {row.performance}%
+                    </div>
+                  </div>
+
+                  {/* Position - 1 col */}
+                  <div className="col-span-1 text-center">
+                    <div className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
                       #{index + 1}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Running Text Footer - Two Rows */}
       <footer className="fixed bottom-0 left-0 right-0 shadow-lg">
