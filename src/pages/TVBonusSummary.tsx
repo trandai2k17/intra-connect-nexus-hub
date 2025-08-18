@@ -136,14 +136,34 @@ export default function TVBonusSummary() {
               </Badge>
             </div>
             {/* Compact Late Case */}
-            <div className="flex space-x-6">
+            <div className="flex space-x-8">
+              {/* Late Cases with detailed breakdown */}
               <div className="text-center">
-                <p className="text-sm text-gray-600">Late Cases</p>
-                <p className="text-2xl font-bold text-red-500">{lateCaseData.totalCount}</p>
+                <p className="text-sm text-gray-600 mb-2">Late Cases</p>
+                <div className="flex space-x-4">
+                  <div className="text-center">
+                    <p className="text-xs text-gray-500">Total</p>
+                    <p className="text-3xl font-bold text-red-600">{lateCaseData.totalCount}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-orange-500">1D</p>
+                    <p className="text-xl font-bold text-orange-500">{lateCaseData.oneDayCount}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-red-500">2D</p>
+                    <p className="text-xl font-bold text-red-500">{lateCaseData.twoDaysCount}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-red-700">3D+</p>
+                    <p className="text-xl font-bold text-red-700">{lateCaseData.threeDaysCount + lateCaseData.moreThanThreeDaysCount}</p>
+                  </div>
+                </div>
               </div>
+              
+              {/* Prodline with larger text */}
               <div className="text-center">
                 <p className="text-sm text-gray-600">Prodline</p>
-                <p className="text-2xl font-bold text-blue-600 animate-fade-in">
+                <p className="text-4xl font-bold text-blue-600 animate-fade-in">
                   {prodlineItems[currentProdline]}
                 </p>
               </div>
@@ -204,15 +224,26 @@ export default function TVBonusSummary() {
         </CardContent>
       </Card>
 
-      {/* Running Text Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t shadow-lg">
-        <div className="py-4 overflow-hidden">
-          <div className="animate-marquee whitespace-nowrap text-2xl font-bold text-red-600">
+      {/* Running Text Footer - Two Rows */}
+      <footer className="fixed bottom-0 left-0 right-0 shadow-lg">
+        {/* Cutoff Time Row */}
+        <div className="bg-red-500/20 border-t border-red-300 py-2 overflow-hidden">
+          <div className="animate-marquee whitespace-nowrap text-2xl font-bold text-red-700">
             <span className="mx-8">
-              Cutoff Time/ Giờ cắt hàng - 13:30 &nbsp;&nbsp;&nbsp; 
-              Impression arrival/ Dấu răng về - 22:30 &nbsp;&nbsp;&nbsp;
-              Current Shift: {currentShift} &nbsp;&nbsp;&nbsp;
-              Live Update: {currentTime.toLocaleString('vi-VN')}
+              Cutoff Time / Giờ cắt hàng - 13:30 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              Cutoff Time / Giờ cắt hàng - 13:30 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              Cutoff Time / Giờ cắt hàng - 13:30 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+          </div>
+        </div>
+        
+        {/* Impression Arrival Row */}
+        <div className="bg-blue-500/20 border-t border-blue-300 py-2 overflow-hidden">
+          <div className="animate-marquee whitespace-nowrap text-2xl font-bold text-blue-700">
+            <span className="mx-8">
+              Impression arrival / Dấu răng về - 22:30 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              Impression arrival / Dấu răng về - 22:30 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              Impression arrival / Dấu răng về - 22:30 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </span>
           </div>
         </div>
