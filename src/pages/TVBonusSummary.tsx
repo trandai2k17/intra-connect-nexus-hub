@@ -112,9 +112,9 @@ export default function TVBonusSummary() {
   };
 
   const getPerformanceBadge = (performance: number) => {
-    if (performance >= 100) return "bg-green-500";
-    if (performance >= 90) return "bg-yellow-500";
-    return "bg-red-500";
+    if (performance >= 100) return "from-green-500 to-green-600";
+    if (performance >= 90) return "from-yellow-500 to-yellow-600";
+    return "from-red-500 to-red-600";
   };
 
   return (
@@ -137,41 +137,39 @@ export default function TVBonusSummary() {
             </div>
             
             {/* Modern Late Cases Card */}
-            <div className="bg-white rounded-xl shadow-lg p-4 border-l-4 border-red-500">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-lg font-bold text-gray-800 flex items-center">
-                  <span className="text-red-500 mr-2">🚨</span>
+            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl shadow-xl p-6 border border-red-200/50 backdrop-blur-sm">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
                   LATE CASES
                 </h3>
-                <Badge className="bg-red-500 text-white text-xl px-3 py-1 font-bold">
+                <div className="bg-gradient-to-r from-red-500 to-red-600 text-white text-2xl px-4 py-2 font-bold rounded-xl shadow-lg">
                   {lateCaseData.totalCount}
-                </Badge>
+                </div>
               </div>
-              <div className="grid grid-cols-3 gap-3">
-                <div className="bg-orange-50 rounded-lg p-3 text-center border border-orange-200">
-                  <div className="text-2xl font-bold text-orange-600">{lateCaseData.oneDayCount}</div>
-                  <div className="text-sm text-orange-500 font-medium">1 DAY</div>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl p-4 text-center shadow-md hover:shadow-lg transition-all">
+                  <div className="text-3xl font-bold text-orange-600">{lateCaseData.oneDayCount}</div>
+                  <div className="text-sm text-orange-500 font-semibold tracking-wide">1 DAY</div>
                 </div>
-                <div className="bg-red-50 rounded-lg p-3 text-center border border-red-200">
-                  <div className="text-2xl font-bold text-red-600">{lateCaseData.twoDaysCount}</div>
-                  <div className="text-sm text-red-500 font-medium">2 DAYS</div>
+                <div className="bg-gradient-to-br from-red-100 to-red-200 rounded-xl p-4 text-center shadow-md hover:shadow-lg transition-all">
+                  <div className="text-3xl font-bold text-red-600">{lateCaseData.twoDaysCount}</div>
+                  <div className="text-sm text-red-500 font-semibold tracking-wide">2 DAYS</div>
                 </div>
-                <div className="bg-red-100 rounded-lg p-3 text-center border border-red-300">
-                  <div className="text-2xl font-bold text-red-700">{lateCaseData.threeDaysCount + lateCaseData.moreThanThreeDaysCount}</div>
-                  <div className="text-sm text-red-700 font-medium">3+ DAYS</div>
+                <div className="bg-gradient-to-br from-red-200 to-red-300 rounded-xl p-4 text-center shadow-md hover:shadow-lg transition-all">
+                  <div className="text-3xl font-bold text-red-700">{lateCaseData.threeDaysCount + lateCaseData.moreThanThreeDaysCount}</div>
+                  <div className="text-sm text-red-700 font-semibold tracking-wide">3+ DAYS</div>
                 </div>
               </div>
             </div>
               
             {/* Enhanced Prodline Display */}
-            <div className="bg-white rounded-xl shadow-lg p-4 border-l-4 border-blue-500">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl shadow-xl p-6 border border-blue-200/50 backdrop-blur-sm">
               <div className="text-center">
-                <h3 className="text-lg font-bold text-gray-800 mb-2 flex items-center justify-center">
-                  <span className="text-blue-500 mr-2">🏭</span>
+                <h3 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent mb-4">
                   PRODLINE
                 </h3>
-                <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
-                  <p className="text-4xl font-bold text-blue-600 animate-fade-in tracking-wider">
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-4 shadow-lg">
+                  <p className="text-4xl font-bold text-white animate-fade-in tracking-wider drop-shadow-lg">
                     {prodlineItems[currentProdline]}
                   </p>
                 </div>
@@ -184,45 +182,45 @@ export default function TVBonusSummary() {
         </div>
       </header>
 
-      {/* Main Bonus Summary Table - Full Focus */}
-      <Card className="shadow-lg">
-        <CardHeader className="bg-green-500 text-white py-3">
-          <h2 className="text-4xl font-bold text-center">BONUS SUMMARY</h2>
+      {/* Main Bonus Summary Table - Modern Design */}
+      <Card className="shadow-2xl rounded-2xl overflow-hidden border-0">
+        <CardHeader className="bg-gradient-to-r from-green-500 to-green-600 text-white py-4">
+          <h2 className="text-5xl font-bold text-center tracking-wide drop-shadow-lg">BONUS SUMMARY</h2>
         </CardHeader>
-        <CardContent className="p-4">
+        <CardContent className="p-6 bg-gradient-to-b from-gray-50 to-white">
           <div className="overflow-x-auto">
             <table className="w-full text-2xl">
               <thead>
-                <tr className="border-b-3 border-gray-400 bg-gray-50">
-                  <th className="text-left py-6 px-4 font-bold text-gray-800">TECH NAME</th>
-                  <th className="text-center py-6 px-4 font-bold text-gray-800">SKILL</th>
-                  <th className="text-center py-6 px-4 font-bold text-gray-800">TARGET</th>
-                  <th className="text-center py-6 px-4 font-bold text-gray-800">CURRENT</th>
-                  <th className="text-center py-6 px-4 font-bold text-gray-800">DOWNTIME</th>
-                  <th className="text-center py-6 px-4 font-bold text-gray-800">CORRECTION</th>
-                  <th className="text-center py-6 px-4 font-bold text-gray-800">PERFORMANCE</th>
-                  <th className="text-center py-6 px-4 font-bold text-gray-800">POSITION</th>
+                <tr className="border-b-4 border-gray-300">
+                  <th className="text-left py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200 first:rounded-l-xl">TECH NAME</th>
+                  <th className="text-center py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200">SKILL</th>
+                  <th className="text-center py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200">TARGET</th>
+                  <th className="text-center py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200">CURRENT</th>
+                  <th className="text-center py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200">DOWNTIME</th>
+                  <th className="text-center py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200">CORRECTION</th>
+                  <th className="text-center py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200">PERFORMANCE</th>
+                  <th className="text-center py-8 px-6 font-bold text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200 last:rounded-r-xl">POSITION</th>
                 </tr>
               </thead>
               <tbody>
                 {bonusData.map((row, index) => (
-                  <tr key={index} className="border-b border-gray-200 hover:bg-blue-50 transition-colors">
-                    <td className="py-8 px-4 font-bold text-3xl text-blue-900">{row.tech}</td>
-                    <td className="py-8 px-4 text-center">
-                      <Badge variant="outline" className="text-xl px-4 py-2 font-semibold">
+                  <tr key={index} className="border-b border-gray-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 group">
+                    <td className="py-10 px-6 font-bold text-3xl bg-gradient-to-r from-blue-900 to-blue-700 bg-clip-text text-transparent">{row.tech}</td>
+                    <td className="py-10 px-6 text-center">
+                      <div className="inline-block bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 text-xl px-6 py-3 font-semibold rounded-xl shadow-md border border-gray-300">
                         {row.skillLevel}
-                      </Badge>
+                      </div>
                     </td>
-                    <td className="text-center py-8 px-4 font-bold text-3xl text-gray-700">{row.target}</td>
-                    <td className="text-center py-8 px-4 font-bold text-3xl text-green-600">{row.curTarget}</td>
-                    <td className="text-center py-8 px-4 font-bold text-3xl text-red-500">{row.downtime}</td>
-                    <td className="text-center py-8 px-4 font-bold text-3xl text-orange-500">{row.correction}</td>
-                    <td className="text-center py-8 px-4">
-                      <Badge className={`text-3xl px-6 py-3 text-white font-bold ${getPerformanceBadge(row.performance)}`}>
+                    <td className="text-center py-10 px-6 font-bold text-3xl text-gray-700">{row.target}</td>
+                    <td className="text-center py-10 px-6 font-bold text-3xl text-green-600">{row.curTarget}</td>
+                    <td className="text-center py-10 px-6 font-bold text-3xl text-red-500">{row.downtime}</td>
+                    <td className="text-center py-10 px-6 font-bold text-3xl text-orange-500">{row.correction}</td>
+                    <td className="text-center py-10 px-6">
+                      <div className={`inline-block text-3xl px-8 py-4 text-white font-bold rounded-xl shadow-lg ${getPerformanceBadge(row.performance)} bg-gradient-to-r`}>
                         {row.performance}%
-                      </Badge>
+                      </div>
                     </td>
-                    <td className="text-center py-8 px-4 font-bold text-2xl text-purple-600">
+                    <td className="text-center py-10 px-6 font-bold text-3xl bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
                       #{index + 1}
                     </td>
                   </tr>
