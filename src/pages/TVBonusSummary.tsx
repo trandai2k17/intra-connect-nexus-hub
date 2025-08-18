@@ -118,112 +118,83 @@ export default function TVBonusSummary() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      {/* Header */}
-      <header className="bg-white shadow-sm rounded-lg mb-6 p-4">
-        <div className="flex justify-center items-center">
-          <div className="text-center">
-            <h1 className="text-6xl font-bold text-gray-800 mb-2">
-              {currentTime.toLocaleTimeString('en-US', { 
-                hour: '2-digit', 
-                minute: '2-digit',
-                hour12: false 
-              })}
-            </h1>
-            <Badge className="text-2xl px-4 py-2 bg-blue-500">
-              {currentShift}
-            </Badge>
+    <div className="min-h-screen bg-gray-100 p-2">
+      {/* Compact Header */}
+      <header className="bg-white shadow-sm rounded-lg mb-3 p-3">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center space-x-8">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-gray-800">
+                {currentTime.toLocaleTimeString('en-US', { 
+                  hour: '2-digit', 
+                  minute: '2-digit',
+                  hour12: false 
+                })}
+              </h1>
+              <Badge className="text-lg px-3 py-1 bg-blue-500">
+                {currentShift}
+              </Badge>
+            </div>
+            {/* Compact Late Case */}
+            <div className="flex space-x-6">
+              <div className="text-center">
+                <p className="text-sm text-gray-600">Late Cases</p>
+                <p className="text-2xl font-bold text-red-500">{lateCaseData.totalCount}</p>
+              </div>
+              <div className="text-center">
+                <p className="text-sm text-gray-600">Prodline</p>
+                <p className="text-2xl font-bold text-blue-600 animate-fade-in">
+                  {prodlineItems[currentProdline]}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-lg text-gray-600">{currentTime.toLocaleDateString('vi-VN')}</p>
           </div>
         </div>
       </header>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        {/* Late Case Summary */}
-        <Card className="shadow-lg">
-          <CardHeader className="bg-red-500 text-white text-center">
-            <h2 className="text-3xl font-bold">Late Case</h2>
-          </CardHeader>
-          <CardContent className="p-8">
-            <div className="grid grid-cols-5 gap-4 text-center">
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-gray-600">1 DAY</h3>
-                <p className="text-6xl font-bold text-red-500">{lateCaseData.oneDayCount}</p>
-              </div>
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-gray-600">2 DAYS</h3>
-                <p className="text-6xl font-bold text-red-500">{lateCaseData.twoDaysCount}</p>
-              </div>
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-gray-600">3 DAYS</h3>
-                <p className="text-6xl font-bold text-red-500">{lateCaseData.threeDaysCount}</p>
-              </div>
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-gray-600">&gt;3 DAYS</h3>
-                <p className="text-6xl font-bold text-red-500">{lateCaseData.moreThanThreeDaysCount}</p>
-              </div>
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-gray-600">ALL</h3>
-                <p className="text-6xl font-bold text-red-600">{lateCaseData.totalCount}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Prodline Summary */}
-        <Card className="shadow-lg">
-          <CardHeader className="bg-blue-500 text-white text-center">
-            <h2 className="text-3xl font-bold">Prodline Summary</h2>
-          </CardHeader>
-          <CardContent className="p-8 text-center">
-            <h1 className="text-8xl font-bold text-blue-600 mb-8">CB</h1>
-            <div className="transition-all duration-1000 ease-in-out">
-              <h2 className="text-4xl font-bold text-red-500 animate-fade-in">
-                {prodlineItems[currentProdline]}
-              </h2>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Bonus Summary Table */}
+      {/* Main Bonus Summary Table - Full Focus */}
       <Card className="shadow-lg">
-        <CardHeader className="bg-green-500 text-white">
-          <h2 className="text-3xl font-bold text-center">Bonus Summary</h2>
+        <CardHeader className="bg-green-500 text-white py-3">
+          <h2 className="text-4xl font-bold text-center">BONUS SUMMARY</h2>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-4">
           <div className="overflow-x-auto">
-            <table className="w-full text-xl">
+            <table className="w-full text-2xl">
               <thead>
-                <tr className="border-b-2 border-gray-300">
-                  <th className="text-left py-4 px-6 font-bold">Tech</th>
-                  <th className="text-left py-4 px-6 font-bold">Skill Level</th>
-                  <th className="text-center py-4 px-6 font-bold">Target</th>
-                  <th className="text-center py-4 px-6 font-bold">Unit</th>
-                  <th className="text-center py-4 px-6 font-bold">Cur Target</th>
-                  <th className="text-center py-4 px-6 font-bold">Downtime</th>
-                  <th className="text-center py-4 px-6 font-bold">Correction/Redo</th>
-                  <th className="text-center py-4 px-6 font-bold">Performance</th>
+                <tr className="border-b-3 border-gray-400 bg-gray-50">
+                  <th className="text-left py-6 px-4 font-bold text-gray-800">TECH NAME</th>
+                  <th className="text-center py-6 px-4 font-bold text-gray-800">SKILL</th>
+                  <th className="text-center py-6 px-4 font-bold text-gray-800">TARGET</th>
+                  <th className="text-center py-6 px-4 font-bold text-gray-800">CURRENT</th>
+                  <th className="text-center py-6 px-4 font-bold text-gray-800">DOWNTIME</th>
+                  <th className="text-center py-6 px-4 font-bold text-gray-800">CORRECTION</th>
+                  <th className="text-center py-6 px-4 font-bold text-gray-800">PERFORMANCE</th>
+                  <th className="text-center py-6 px-4 font-bold text-gray-800">POSITION</th>
                 </tr>
               </thead>
               <tbody>
                 {bonusData.map((row, index) => (
-                  <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
-                    <td className="py-6 px-6 font-semibold">{row.tech}</td>
-                    <td className="py-6 px-6">
-                      <Badge variant="outline" className="text-lg px-3 py-1">
+                  <tr key={index} className="border-b border-gray-200 hover:bg-blue-50 transition-colors">
+                    <td className="py-8 px-4 font-bold text-3xl text-blue-900">{row.tech}</td>
+                    <td className="py-8 px-4 text-center">
+                      <Badge variant="outline" className="text-xl px-4 py-2 font-semibold">
                         {row.skillLevel}
                       </Badge>
                     </td>
-                    <td className="text-center py-6 px-6 font-bold text-2xl">{row.target}</td>
-                    <td className="text-center py-6 px-6">{row.unit}</td>
-                    <td className="text-center py-6 px-6 font-bold text-2xl">{row.curTarget}</td>
-                    <td className="text-center py-6 px-6 font-bold text-2xl text-red-500">{row.downtime}</td>
-                    <td className="text-center py-6 px-6 font-bold text-2xl text-orange-500">{row.correction}</td>
-                    <td className="text-center py-6 px-6">
-                      <Badge className={`text-2xl px-4 py-2 text-white ${getPerformanceBadge(row.performance)}`}>
+                    <td className="text-center py-8 px-4 font-bold text-3xl text-gray-700">{row.target}</td>
+                    <td className="text-center py-8 px-4 font-bold text-3xl text-green-600">{row.curTarget}</td>
+                    <td className="text-center py-8 px-4 font-bold text-3xl text-red-500">{row.downtime}</td>
+                    <td className="text-center py-8 px-4 font-bold text-3xl text-orange-500">{row.correction}</td>
+                    <td className="text-center py-8 px-4">
+                      <Badge className={`text-3xl px-6 py-3 text-white font-bold ${getPerformanceBadge(row.performance)}`}>
                         {row.performance}%
                       </Badge>
+                    </td>
+                    <td className="text-center py-8 px-4 font-bold text-2xl text-purple-600">
+                      #{index + 1}
                     </td>
                   </tr>
                 ))}
