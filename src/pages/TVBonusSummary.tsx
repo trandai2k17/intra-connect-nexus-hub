@@ -135,37 +135,46 @@ export default function TVBonusSummary() {
                 {currentShift}
               </Badge>
             </div>
-            {/* Compact Late Case */}
-            <div className="flex space-x-8">
-              {/* Late Cases with detailed breakdown */}
-              <div className="text-center">
-                <p className="text-sm text-gray-600 mb-2">Late Cases</p>
-                <div className="flex space-x-4">
-                  <div className="text-center">
-                    <p className="text-xs text-gray-500">Total</p>
-                    <p className="text-3xl font-bold text-red-600">{lateCaseData.totalCount}</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-xs text-orange-500">1D</p>
-                    <p className="text-xl font-bold text-orange-500">{lateCaseData.oneDayCount}</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-xs text-red-500">2D</p>
-                    <p className="text-xl font-bold text-red-500">{lateCaseData.twoDaysCount}</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-xs text-red-700">3D+</p>
-                    <p className="text-xl font-bold text-red-700">{lateCaseData.threeDaysCount + lateCaseData.moreThanThreeDaysCount}</p>
-                  </div>
+            
+            {/* Modern Late Cases Card */}
+            <div className="bg-white rounded-xl shadow-lg p-4 border-l-4 border-red-500">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-lg font-bold text-gray-800 flex items-center">
+                  <span className="text-red-500 mr-2">🚨</span>
+                  LATE CASES
+                </h3>
+                <Badge className="bg-red-500 text-white text-xl px-3 py-1 font-bold">
+                  {lateCaseData.totalCount}
+                </Badge>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-orange-50 rounded-lg p-3 text-center border border-orange-200">
+                  <div className="text-2xl font-bold text-orange-600">{lateCaseData.oneDayCount}</div>
+                  <div className="text-sm text-orange-500 font-medium">1 DAY</div>
+                </div>
+                <div className="bg-red-50 rounded-lg p-3 text-center border border-red-200">
+                  <div className="text-2xl font-bold text-red-600">{lateCaseData.twoDaysCount}</div>
+                  <div className="text-sm text-red-500 font-medium">2 DAYS</div>
+                </div>
+                <div className="bg-red-100 rounded-lg p-3 text-center border border-red-300">
+                  <div className="text-2xl font-bold text-red-700">{lateCaseData.threeDaysCount + lateCaseData.moreThanThreeDaysCount}</div>
+                  <div className="text-sm text-red-700 font-medium">3+ DAYS</div>
                 </div>
               </div>
+            </div>
               
-              {/* Prodline with larger text */}
+            {/* Enhanced Prodline Display */}
+            <div className="bg-white rounded-xl shadow-lg p-4 border-l-4 border-blue-500">
               <div className="text-center">
-                <p className="text-sm text-gray-600">Prodline</p>
-                <p className="text-4xl font-bold text-blue-600 animate-fade-in">
-                  {prodlineItems[currentProdline]}
-                </p>
+                <h3 className="text-lg font-bold text-gray-800 mb-2 flex items-center justify-center">
+                  <span className="text-blue-500 mr-2">🏭</span>
+                  PRODLINE
+                </h3>
+                <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                  <p className="text-4xl font-bold text-blue-600 animate-fade-in tracking-wider">
+                    {prodlineItems[currentProdline]}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
