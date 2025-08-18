@@ -275,6 +275,15 @@
   }
 }
 
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 /* =============================================================================
    Animation Classes
    ============================================================================= */
@@ -376,6 +385,10 @@
 
 .animate-gradient-shift {
   animation: gradient-shift 12s ease-in-out infinite;
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
 }
 
 /* Delayed Animations */
