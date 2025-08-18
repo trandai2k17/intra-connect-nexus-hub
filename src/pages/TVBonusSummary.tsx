@@ -227,23 +227,25 @@ export default function TVBonusSummary() {
       {/* Running Text Footer - Two Rows */}
       <footer className="fixed bottom-0 left-0 right-0 shadow-lg">
         {/* Cutoff Time Row */}
-        <div className="bg-red-500/20 border-t border-red-300 py-2 overflow-hidden">
-          <div className="animate-marquee whitespace-nowrap text-2xl font-bold text-red-700">
-            <span className="mx-8">
-              Cutoff Time / Giờ cắt hàng - 13:30 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              Cutoff Time / Giờ cắt hàng - 13:30 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              Cutoff Time / Giờ cắt hàng - 13:30 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div className="bg-red-500/30 border-t border-red-400 h-12 overflow-hidden flex items-center">
+          <div className="animate-marquee whitespace-nowrap text-2xl font-bold text-red-800">
+            <span className="inline-block">
+              🚨 Cutoff Time / Giờ cắt hàng - 13:30 🚨&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              🚨 Cutoff Time / Giờ cắt hàng - 13:30 🚨&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              🚨 Cutoff Time / Giờ cắt hàng - 13:30 🚨&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              🚨 Cutoff Time / Giờ cắt hàng - 13:30 🚨&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </span>
           </div>
         </div>
         
         {/* Impression Arrival Row */}
-        <div className="bg-blue-500/20 border-t border-blue-300 py-2 overflow-hidden">
-          <div className="animate-marquee whitespace-nowrap text-2xl font-bold text-blue-700">
-            <span className="mx-8">
-              Impression arrival / Dấu răng về - 22:30 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              Impression arrival / Dấu răng về - 22:30 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              Impression arrival / Dấu răng về - 22:30 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div className="bg-blue-500/30 border-t border-blue-400 h-12 overflow-hidden flex items-center">
+          <div className="animate-marquee whitespace-nowrap text-2xl font-bold text-blue-800">
+            <span className="inline-block">
+              📦 Impression arrival / Dấu răng về - 22:30 📦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              📦 Impression arrival / Dấu răng về - 22:30 📦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              📦 Impression arrival / Dấu răng về - 22:30 📦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              📦 Impression arrival / Dấu răng về - 22:30 📦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </span>
           </div>
         </div>
