@@ -17,7 +17,8 @@ import {
   Book,
   PlusCircle,
   Image,
-  Grid3X3
+  Grid3X3,
+  Tv
 } from "lucide-react";
 
 interface SubItem {
@@ -125,6 +126,26 @@ export const navigationItems: NavigationItem[] = [
     url: "/media-gallery",
     icon: Image,
     iconColor: "text-pink-600",
+  },
+  {
+    title: "TV Display",
+    url: "/tv-display",
+    icon: Tv,
+    iconColor: "text-blue-600",
+    subItems: [
+      {
+        title: "Dashboard Manager",
+        url: "/tv-display",
+        icon: Monitor,
+        iconColor: "text-blue-500",
+      },
+      {
+        title: "Bonus Summary",
+        url: "/tv/bonus-summary",
+        icon: BarChart3,
+        iconColor: "text-green-500",
+      },
+    ],
   },
   {
     title: "MIS",

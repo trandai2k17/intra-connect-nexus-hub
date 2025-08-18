@@ -17,6 +17,8 @@ import Dictionary from "./pages/Dictionary";
 import DictionaryManagement from "./pages/DictionaryManagement";
 import CaseDesignTracker from "./pages/CaseDesignTracker";
 import MediaGallery from "./pages/MediaGallery";
+import TVDisplay from "./pages/TVDisplay";
+import TVBonusSummary from "./pages/TVBonusSummary";
 import NotFound from "./pages/NotFound";
 import Education from "./pages/Education";
 import EducationNdx from "./pages/EducationNdx";
@@ -47,6 +49,8 @@ const App = () => (
               <Route path="/dictionary-management" element={<DictionaryManagement />} />
               <Route path="/case-design-tracker" element={<CaseDesignTracker />} />
               <Route path="/media-gallery" element={<MediaGallery />} />
+              <Route path="/tv-display" element={<TVDisplay />} />
+              <Route path="/tv/bonus-summary" element={<TVBonusSummary />} />
               <Route path="/mis/project-management" element={<ProjectManagement />} />
               <Route path="/content-management" element={<ContentManagement />} />
               <Route path="/user-permissions" element={<UserPermissions />} />

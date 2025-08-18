@@ -135,6 +135,10 @@ export default {
 				'breathe': {
 					'0%, 100%': { transform: 'scale(1)' },
 					'50%': { transform: 'scale(1.05)' }
+				},
+				'marquee': {
+					'0%': { transform: 'translateX(100%)' },
+					'100%': { transform: 'translateX(-100%)' }
 				}
 			},
 			animation: {
@@ -146,7 +150,8 @@ export default {
 				'scroll-up': 'scroll-up 20s linear infinite',
 				'scale-in': 'scale-in 0.2s ease-out',
 				'rotate-y-12': 'rotateY 0.3s ease-out',
-				'breathe': 'breathe 4s ease-in-out infinite'
+				'breathe': 'breathe 4s ease-in-out infinite',
+				'marquee': 'marquee 15s linear infinite'
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
