@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import RunningTextFooter from '@/components/footer/RunningTextFooter';
+import '../styles/header-section.css';
+import '../styles/table-section.css';
 
 interface BonusData {
   tech: string;
@@ -113,53 +115,53 @@ export default function TVBonusSummary() {
   };
 
   const getPerformanceBadge = (performance: number) => {
-    if (performance >= 100) return "from-green-500 to-green-600";
-    if (performance >= 90) return "from-yellow-500 to-yellow-600";
-    return "from-red-500 to-red-600";
+    if (performance >= 100) return "performance-excellent";
+    if (performance >= 90) return "performance-good";
+    return "performance-poor";
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-2">
-      {/* Compact Smart Header - All in one row */}
-      <div className="bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl mb-2 p-4 border border-white/20">
-        <div className="grid grid-cols-12 gap-6 items-center">
-          {/* Time & Shift - 2 cols */}
-          <div className="col-span-2 text-center">
-            <div className="text-3xl font-bold text-gray-800">
+      {/* Header Section */}
+      <div className="header-section">
+        <div className="header-grid">
+          {/* Time & Shift */}
+          <div className="time-shift-section">
+            <div className="time-display">
               {currentTime.toLocaleTimeString('en-US', { 
                 hour: '2-digit', 
                 minute: '2-digit',
                 hour12: false 
               })}
             </div>
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm px-3 py-1 rounded-lg font-bold mt-1">
+            <div className="shift-badge">
               {currentShift}
             </div>
           </div>
 
-          {/* Late Cases - Horizontal Layout - 6 cols */}
-          <div className="col-span-6">
-            <div className="bg-gradient-to-r from-red-50 to-red-100 rounded-xl p-3 border border-red-200/50">
-              <div className="flex items-center justify-between">
-                <div className="text-lg font-bold text-red-700">LATE CASES</div>
-                <div className="flex items-center space-x-4">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-red-600">{lateCaseData.totalCount}</div>
-                    <div className="text-xs text-red-500 font-medium">TOTAL</div>
+          {/* Late Cases - Enhanced */}
+          <div className="late-cases-section">
+            <div className="late-cases-container">
+              <div className="late-cases-content">
+                <div className="late-cases-title">LATE CASES</div>
+                <div className="late-cases-stats">
+                  <div className="total-count">
+                    <div className="total-count-number">{lateCaseData.totalCount}</div>
+                    <div className="total-count-label">TOTAL</div>
                   </div>
-                  <div className="h-8 w-px bg-red-300"></div>
-                  <div className="flex space-x-3">
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-orange-600">{lateCaseData.oneDayCount}</div>
-                      <div className="text-xs text-orange-500">1D</div>
+                  <div className="divider"></div>
+                  <div className="breakdown-stats">
+                    <div className="breakdown-item">
+                      <div className="breakdown-number one-day">{lateCaseData.oneDayCount}</div>
+                      <div className="breakdown-label one-day-label">1D</div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-red-600">{lateCaseData.twoDaysCount}</div>
-                      <div className="text-xs text-red-500">2D</div>
+                    <div className="breakdown-item">
+                      <div className="breakdown-number two-day">{lateCaseData.twoDaysCount}</div>
+                      <div className="breakdown-label two-day-label">2D</div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-red-700">{lateCaseData.threeDaysCount + lateCaseData.moreThanThreeDaysCount}</div>
-                      <div className="text-xs text-red-700">3D+</div>
+                    <div className="breakdown-item">
+                      <div className="breakdown-number three-day">{lateCaseData.threeDaysCount + lateCaseData.moreThanThreeDaysCount}</div>
+                      <div className="breakdown-label three-day-label">3D+</div>
                     </div>
                   </div>
                 </div>
@@ -167,86 +169,80 @@ export default function TVBonusSummary() {
             </div>
           </div>
 
-          {/* Prodline - 2 cols */}
-          <div className="col-span-2">
-            <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-3 text-center border border-blue-200/50">
-              <div className="text-sm font-bold text-blue-700 mb-1">PRODLINE</div>
-              <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-2">
-                <div className="text-2xl font-bold text-white animate-fade-in tracking-wider">
+          {/* Prodline - Enhanced */}
+          <div className="prodline-section">
+            <div className="prodline-container">
+              <div className="prodline-title">PRODLINE</div>
+              <div className="prodline-display">
+                <div className="prodline-text">
                   {prodlineItems[currentProdline]}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Date - 2 cols */}
-          <div className="col-span-2 text-right">
-            <div className="text-lg text-gray-600">{currentTime.toLocaleDateString('vi-VN')}</div>
+          {/* Date */}
+          <div className="date-section">
+            <div className="date-display">{currentTime.toLocaleDateString('vi-VN')}</div>
           </div>
         </div>
       </div>
 
-      {/* Bonus Table with Headers */}
-      <div className="bg-white/80 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden border border-white/20">
+      {/* Table Section */}
+      <div className="table-section">
         {/* Table Header */}
-        <div className="bg-gradient-to-r from-green-500 to-green-600 text-white">
-          <div className="grid grid-cols-12 gap-4 items-center py-4 px-6">
-            <div className="col-span-3 text-xl font-bold">TECHNICIAN</div>
-            <div className="col-span-6 grid grid-cols-4 gap-3 text-center">
-              <div className="text-lg font-bold">TARGET</div>
-              <div className="text-lg font-bold">CURRENT</div>
-              <div className="text-lg font-bold">DOWNTIME</div>
-              <div className="text-lg font-bold">CORRECTION</div>
+        <div className="table-header">
+          <div className="table-header-grid">
+            <div className="header-technician">TECHNICIAN</div>
+            <div className="header-metrics">
+              <div className="header-metric">TARGET</div>
+              <div className="header-metric">CURRENT</div>
+              <div className="header-metric">DOWNTIME</div>
+              <div className="header-metric">CORRECTION</div>
             </div>
-            <div className="col-span-2 text-center text-lg font-bold">PERFORMANCE</div>
-            <div className="col-span-1 text-center text-lg font-bold">POS</div>
+            <div className="header-performance">PERFORMANCE</div>
+            <div className="header-position">POS</div>
           </div>
         </div>
         
         {/* Table Content */}
-        <div className="p-4">
-          <div className="space-y-3">
+        <div className="table-content">
+          <div className="table-rows">
             {bonusData.map((row, index) => (
-              <div key={index} className="bg-gradient-to-r from-gray-50 to-white rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200/50">
-                <div className="grid grid-cols-12 gap-4 items-center">
-                  {/* Tech Name - 3 cols */}
-                  <div className="col-span-3">
-                    <div className="text-2xl font-bold bg-gradient-to-r from-blue-900 to-blue-700 bg-clip-text text-transparent">
-                      {row.tech}
-                    </div>
-                    <div className="text-sm bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 px-3 py-1 rounded-lg font-medium inline-block mt-1">
-                      {row.skillLevel}
-                    </div>
+              <div key={index} className="table-row">
+                <div className="table-row-grid">
+                  {/* Tech Name */}
+                  <div className="tech-name-column">
+                    <div className="tech-name">{row.tech}</div>
+                    <div className="tech-skill">{row.skillLevel}</div>
                   </div>
                   
-                  {/* Metrics Grid - 6 cols */}
-                  <div className="col-span-6 grid grid-cols-4 gap-3">
-                    <div className="text-center">
-                      <div className="text-xl font-bold text-gray-700">{row.target}</div>
+                  {/* Metrics */}
+                  <div className="metrics-column">
+                    <div className="metric-item">
+                      <div className="metric-value metric-target">{row.target}</div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-xl font-bold text-green-600">{row.curTarget}</div>
+                    <div className="metric-item">
+                      <div className="metric-value metric-current">{row.curTarget}</div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-xl font-bold text-red-500">{row.downtime}</div>
+                    <div className="metric-item">
+                      <div className="metric-value metric-downtime">{row.downtime}</div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-xl font-bold text-orange-500">{row.correction}</div>
+                    <div className="metric-item">
+                      <div className="metric-value metric-correction">{row.correction}</div>
                     </div>
                   </div>
 
-                  {/* Performance - 2 cols */}
-                  <div className="col-span-2 text-center">
-                    <div className={`inline-block text-2xl px-6 py-3 text-white font-bold rounded-xl shadow-lg bg-gradient-to-r ${getPerformanceBadge(row.performance)}`}>
+                  {/* Performance */}
+                  <div className="performance-column">
+                    <div className={`performance-badge ${getPerformanceBadge(row.performance)}`}>
                       {row.performance}%
                     </div>
                   </div>
 
-                  {/* Position - 1 col */}
-                  <div className="col-span-1 text-center">
-                    <div className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
-                      #{index + 1}
-                    </div>
+                  {/* Position */}
+                  <div className="position-column">
+                    <div className="position-number">#{index + 1}</div>
                   </div>
                 </div>
               </div>
@@ -255,7 +251,7 @@ export default function TVBonusSummary() {
         </div>
       </div>
 
-      {/* Running Text Footer Component */}
+      {/* Footer Section */}
       <RunningTextFooter cutoffTime="13:30" arrivalTime="22:30" />
     </div>
   );
