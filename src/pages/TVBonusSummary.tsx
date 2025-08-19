@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import RunningTextFooter from '@/components/footer/RunningTextFooter';
 
 interface BonusData {
   tech: string;
@@ -185,14 +186,24 @@ export default function TVBonusSummary() {
         </div>
       </div>
 
-      {/* Smart Bonus Table - No Header, Direct Content */}
+      {/* Bonus Table with Headers */}
       <div className="bg-white/80 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden border border-white/20">
-        {/* Title Bar Only */}
-        <div className="bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-6">
-          <h2 className="text-4xl font-bold text-center tracking-wide drop-shadow-lg">BONUS SUMMARY</h2>
+        {/* Table Header */}
+        <div className="bg-gradient-to-r from-green-500 to-green-600 text-white">
+          <div className="grid grid-cols-12 gap-4 items-center py-4 px-6">
+            <div className="col-span-3 text-xl font-bold">TECHNICIAN</div>
+            <div className="col-span-6 grid grid-cols-4 gap-3 text-center">
+              <div className="text-lg font-bold">TARGET</div>
+              <div className="text-lg font-bold">CURRENT</div>
+              <div className="text-lg font-bold">DOWNTIME</div>
+              <div className="text-lg font-bold">CORRECTION</div>
+            </div>
+            <div className="col-span-2 text-center text-lg font-bold">PERFORMANCE</div>
+            <div className="col-span-1 text-center text-lg font-bold">POS</div>
+          </div>
         </div>
         
-        {/* Direct Table Content - No redundant headers */}
+        {/* Table Content */}
         <div className="p-4">
           <div className="space-y-3">
             {bonusData.map((row, index) => (
@@ -211,19 +222,15 @@ export default function TVBonusSummary() {
                   {/* Metrics Grid - 6 cols */}
                   <div className="col-span-6 grid grid-cols-4 gap-3">
                     <div className="text-center">
-                      <div className="text-xs text-gray-500 mb-1">TARGET</div>
                       <div className="text-xl font-bold text-gray-700">{row.target}</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-xs text-gray-500 mb-1">CURRENT</div>
                       <div className="text-xl font-bold text-green-600">{row.curTarget}</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-xs text-gray-500 mb-1">DOWNTIME</div>
                       <div className="text-xl font-bold text-red-500">{row.downtime}</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-xs text-gray-500 mb-1">CORRECTION</div>
                       <div className="text-xl font-bold text-orange-500">{row.correction}</div>
                     </div>
                   </div>
@@ -248,26 +255,8 @@ export default function TVBonusSummary() {
         </div>
       </div>
 
-      {/* Running Text Footer - Two Rows */}
-      <footer className="fixed bottom-0 left-0 right-0 shadow-lg">
-        {/* Cutoff Time Row */}
-        <div className="bg-red-500/30 border-t border-red-400 h-12 overflow-hidden flex items-center">
-          <div className="whitespace-nowrap text-2xl font-bold text-red-800 animate-[marquee_15s_linear_infinite]">
-            <span className="inline-block">
-              🚨 Cutoff Time / Giờ cắt hàng - 13:30 🚨&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </span>
-          </div>
-        </div>
-        
-        {/* Impression Arrival Row */}
-        <div className="bg-blue-500/30 border-t border-blue-400 h-12 overflow-hidden flex items-center">
-          <div className="whitespace-nowrap text-2xl font-bold text-blue-800 animate-[marquee_20s_linear_infinite]">
-            <span className="inline-block">
-              📦 Impression arrival / Dấu răng về - 22:30 📦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </span>
-          </div>
-        </div>
-      </footer>
+      {/* Running Text Footer Component */}
+      <RunningTextFooter cutoffTime="13:30" arrivalTime="22:30" />
     </div>
   );
 }
