@@ -73,12 +73,42 @@ const prodlineItems = [
   "CAST-TECHNICIAN"
 ];
 
+const locationData = {
+  "CB-DESIGNER": ["Location A1", "Location A2", "Location A3"],
+  "CB-TECHNICIAN": ["Location B1", "Location B2"], 
+  "CB-QUALITY": ["Location C1", "Location C2", "Location C3", "Location C4"],
+  "MILL-OPERATOR": ["Location D1", "Location D2", "Location D3"],
+  "CAST-TECHNICIAN": ["Location E1", "Location E2", "Location E3", "Location E4", "Location E5"]
+};
+
+// Mock data for different locations
+const locationBonusData = {
+  "Location A1": [
+    { tech: "John Doe", skillLevel: "Senior", target: 50, unit: "cases", curTarget: 45, downtime: 2, correction: 1, performance: 92 },
+    { tech: "Jane Smith", skillLevel: "Mid", target: 40, unit: "cases", curTarget: 38, downtime: 1, correction: 2, performance: 88 },
+    { tech: "Mike Johnson", skillLevel: "Junior", target: 30, unit: "cases", curTarget: 32, downtime: 0, correction: 0, performance: 107 },
+    { tech: "Sarah Wilson", skillLevel: "Senior", target: 55, unit: "cases", curTarget: 50, downtime: 1, correction: 0, performance: 91 },
+    { tech: "Tom Brown", skillLevel: "Mid", target: 45, unit: "cases", curTarget: 42, downtime: 2, correction: 1, performance: 87 },
+    { tech: "Lisa Davis", skillLevel: "Junior", target: 35, unit: "cases", curTarget: 38, downtime: 0, correction: 1, performance: 106 },
+    { tech: "Bob Miller", skillLevel: "Senior", target: 60, unit: "cases", curTarget: 55, downtime: 1, correction: 2, performance: 88 }
+  ],
+  "Location A2": [
+    { tech: "Alice Green", skillLevel: "Senior", target: 52, unit: "cases", curTarget: 48, downtime: 1, correction: 1, performance: 90 },
+    { tech: "Charlie Black", skillLevel: "Mid", target: 42, unit: "cases", curTarget: 40, downtime: 2, correction: 0, performance: 95 }
+  ]
+};
+
 export default function TVBonusSummary() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [currentShift, setCurrentShift] = useState("S2");
-  const [currentProdline, setCurrentProdline] = useState(0);
-  const [bonusData] = useState<BonusData[]>(mockBonusData);
+  const [selectedProdline, setSelectedProdline] = useState(prodlineItems[0]);
+  const [selectedLocation, setSelectedLocation] = useState(locationData[prodlineItems[0]][0]);
+  const [isProdlineDropdownOpen, setIsProdlineDropdownOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [bonusData, setBonusData] = useState<BonusData[]>(locationBonusData["Location A1"] || mockBonusData);
   const [lateCaseData] = useState<LateCaseData>(mockLateCaseData);
+  
+  const rowsPerPage = 5;
 
   // Update time every second
   useEffect(() => {
@@ -88,13 +118,12 @@ export default function TVBonusSummary() {
     return () => clearInterval(timer);
   }, []);
 
-  // Rotate prodline display every 5 seconds
+  // Load data when location changes
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentProdline((prev) => (prev + 1) % prodlineItems.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
+    const data = locationBonusData[selectedLocation] || mockBonusData;
+    setBonusData(data);
+    setCurrentPage(1); // Reset to first page when location changes
+  }, [selectedLocation]);
 
   // Determine shift based on time
   useEffect(() => {
@@ -107,6 +136,27 @@ export default function TVBonusSummary() {
       setCurrentShift("S3");
     }
   }, [currentTime]);
+
+  // Handle prodline selection
+  const handleProdlineSelect = (prodline: string) => {
+    setSelectedProdline(prodline);
+    setSelectedLocation(locationData[prodline][0]); // Select first location of new prodline
+    setIsProdlineDropdownOpen(false);
+  };
+
+  // Pagination logic
+  const totalPages = Math.ceil(bonusData.length / rowsPerPage);
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
+  const currentData = bonusData.slice(startIndex, endIndex);
+
+  const handlePrevPage = () => {
+    setCurrentPage(prev => Math.max(prev - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage(prev => Math.min(prev + 1, totalPages));
+  };
 
   const getPerformanceColor = (performance: number) => {
     if (performance >= 100) return "text-green-500";
@@ -169,14 +219,54 @@ export default function TVBonusSummary() {
             </div>
           </div>
 
-          {/* Prodline - Enhanced */}
+          {/* Prodline - Enhanced with Dropdown */}
           <div className="prodline-section">
             <div className="prodline-container">
               <div className="prodline-title">PRODLINE</div>
-              <div className="prodline-display">
-                <div className="prodline-text">
-                  {prodlineItems[currentProdline]}
-                </div>
+              <div className="prodline-dropdown">
+                <button 
+                  className="prodline-button"
+                  onClick={() => setIsProdlineDropdownOpen(!isProdlineDropdownOpen)}
+                >
+                  <span>{selectedProdline}</span>
+                  <svg 
+                    className={`w-4 h-4 prodline-dropdown-icon ${isProdlineDropdownOpen ? 'prodline-dropdown-open' : ''}`}
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                
+                {isProdlineDropdownOpen && (
+                  <div className="prodline-dropdown-menu">
+                    {prodlineItems.map((item) => (
+                      <div
+                        key={item}
+                        className="prodline-dropdown-item"
+                        onClick={() => handleProdlineSelect(item)}
+                      >
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              {/* Location selector */}
+              <div className="mt-2">
+                <select 
+                  value={selectedLocation}
+                  onChange={(e) => setSelectedLocation(e.target.value)}
+                  className="w-full text-sm bg-white border border-blue-300 rounded px-2 py-1 text-blue-800"
+                >
+                  {locationData[selectedProdline]?.map((location) => (
+                    <option key={location} value={location}>
+                      {location}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>
@@ -190,6 +280,26 @@ export default function TVBonusSummary() {
 
       {/* Table Section */}
       <div className="table-section">
+        {/* Table Info Header */}
+        <div className="table-info-header">
+          <div className="table-info-left">
+            <div className="table-info-item">
+              <div className="table-info-label">LOCATIONS</div>
+              <div className="table-info-value">{locationData[selectedProdline]?.length || 0}</div>
+            </div>
+            <div className="table-info-item">
+              <div className="table-info-label">TOTAL ROWS</div>
+              <div className="table-info-value">{bonusData.length}</div>
+            </div>
+            <div className="table-info-item">
+              <div className="table-info-label">CURRENT LOCATION</div>
+              <div className="table-info-value">{selectedLocation}</div>
+            </div>
+          </div>
+          <div className="table-pagination-info">
+            Page {currentPage} of {totalPages}
+          </div>
+        </div>
         {/* Table Header */}
         <div className="table-header">
           <div className="table-header-grid">
@@ -208,7 +318,7 @@ export default function TVBonusSummary() {
         {/* Table Content */}
         <div className="table-content">
           <div className="table-rows">
-            {bonusData.map((row, index) => (
+            {currentData.map((row, index) => (
               <div key={index} className="table-row">
                 <div className="table-row-grid">
                   {/* Tech Name */}
@@ -242,14 +352,45 @@ export default function TVBonusSummary() {
 
                   {/* Position */}
                   <div className="position-column">
-                    <div className="position-number">#{index + 1}</div>
+                    <div className="position-number">#{startIndex + index + 1}</div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
+          </div>
         </div>
-      </div>
+        
+        {/* Table Pagination */}
+        {totalPages > 1 && (
+          <div className="table-pagination">
+            <button 
+              className="pagination-button"
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Previous
+            </button>
+            
+            <div className="pagination-info">
+              Showing {startIndex + 1}-{Math.min(endIndex, bonusData.length)} of {bonusData.length} rows
+            </div>
+            
+            <button 
+              className="pagination-button"
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+            >
+              Next
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        )}
 
       {/* Footer Section */}
       <RunningTextFooter cutoffTime="13:30" arrivalTime="22:30" />
