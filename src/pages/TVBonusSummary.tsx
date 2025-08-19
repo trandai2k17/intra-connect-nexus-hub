@@ -1,202 +1,119 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import RunningTextFooter from '@/components/footer/RunningTextFooter';
+import { TVBonusController } from '@/components/tv-bonus/TVBonusController';
+import { TVBonusModel, type BonusData, type LateCaseData } from '@/components/tv-bonus/TVBonusModel';
 import '../styles/header-section.css';
 import '../styles/table-section.css';
 
-interface BonusData {
-  tech: string;
-  skillLevel: string;
-  target: number;
-  unit: string;
-  curTarget: number;
-  downtime: number;
-  correction: number;
-  performance: number;
-}
-
-interface LateCaseData {
-  oneDayCount: number;
-  twoDaysCount: number;
-  threeDaysCount: number;
-  moreThanThreeDaysCount: number;
-  totalCount: number;
-}
-
-const mockBonusData: BonusData[] = [
-  {
-    tech: "John Doe",
-    skillLevel: "Senior",
-    target: 50,
-    unit: "cases",
-    curTarget: 45,
-    downtime: 2,
-    correction: 1,
-    performance: 92
-  },
-  {
-    tech: "Jane Smith",
-    skillLevel: "Mid",
-    target: 40,
-    unit: "cases", 
-    curTarget: 38,
-    downtime: 1,
-    correction: 2,
-    performance: 88
-  },
-  {
-    tech: "Mike Johnson",
-    skillLevel: "Junior",
-    target: 30,
-    unit: "cases",
-    curTarget: 32,
-    downtime: 0,
-    correction: 0,
-    performance: 107
-  }
-];
-
-const mockLateCaseData: LateCaseData = {
-  oneDayCount: 8,
-  twoDaysCount: 1,
-  threeDaysCount: 0,
-  moreThanThreeDaysCount: 1,
-  totalCount: 10
-};
-
-const prodlineItems = [
-  "CB-DESIGNER",
-  "CB-TECHNICIAN", 
-  "CB-QUALITY",
-  "MILL-OPERATOR",
-  "CAST-TECHNICIAN"
-];
-
-const locationData = {
-  "CB-DESIGNER": ["Location A1", "Location A2", "Location A3"],
-  "CB-TECHNICIAN": ["Location B1", "Location B2"], 
-  "CB-QUALITY": ["Location C1", "Location C2", "Location C3", "Location C4"],
-  "MILL-OPERATOR": ["Location D1", "Location D2", "Location D3"],
-  "CAST-TECHNICIAN": ["Location E1", "Location E2", "Location E3", "Location E4", "Location E5"]
-};
-
-// Mock data for different locations
-const locationBonusData = {
-  "Location A1": [
-    { tech: "John Doe", skillLevel: "Senior", target: 50, unit: "cases", curTarget: 45, downtime: 2, correction: 1, performance: 92 },
-    { tech: "Jane Smith", skillLevel: "Mid", target: 40, unit: "cases", curTarget: 38, downtime: 1, correction: 2, performance: 88 },
-    { tech: "Mike Johnson", skillLevel: "Junior", target: 30, unit: "cases", curTarget: 32, downtime: 0, correction: 0, performance: 107 },
-    { tech: "Sarah Wilson", skillLevel: "Senior", target: 55, unit: "cases", curTarget: 50, downtime: 1, correction: 0, performance: 91 },
-    { tech: "Tom Brown", skillLevel: "Mid", target: 45, unit: "cases", curTarget: 42, downtime: 2, correction: 1, performance: 87 },
-    { tech: "Lisa Davis", skillLevel: "Junior", target: 35, unit: "cases", curTarget: 38, downtime: 0, correction: 1, performance: 106 },
-    { tech: "Bob Miller", skillLevel: "Senior", target: 60, unit: "cases", curTarget: 55, downtime: 1, correction: 2, performance: 88 }
-  ],
-  "Location A2": [
-    { tech: "Alice Green", skillLevel: "Senior", target: 52, unit: "cases", curTarget: 48, downtime: 1, correction: 1, performance: 90 },
-    { tech: "Charlie Black", skillLevel: "Mid", target: 42, unit: "cases", curTarget: 40, downtime: 2, correction: 0, performance: 95 }
-  ]
-};
-
 export default function TVBonusSummary() {
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [currentShift, setCurrentShift] = useState("S2");
-  const [selectedLocation, setSelectedLocation] = useState("Location A1");
-  const [selectedProdline, setSelectedProdline] = useState("CB-DESIGNER");
-  const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [bonusData, setBonusData] = useState<BonusData[]>(locationBonusData["Location A1"] || mockBonusData);
-  const [lateCaseData] = useState<LateCaseData>(mockLateCaseData);
-  const [rotationIndex, setRotationIndex] = useState(0);
-  
-  const rowsPerPage = 5;
+  // State management with descriptive IDs
+  const [currentTimeState, setCurrentTimeState] = useState(new Date());
+  const [currentShiftState, setCurrentShiftState] = useState("S2");
+  const [selectedLocationState, setSelectedLocationState] = useState("Location A1");
+  const [selectedProdlineState, setSelectedProdlineState] = useState("CB-DESIGNER");
+  const [isLocationDropdownOpenState, setIsLocationDropdownOpenState] = useState(false);
+  const [currentPageState, setCurrentPageState] = useState(1);
+  const [bonusDataState, setBonusDataState] = useState<BonusData[]>(TVBonusModel.getDefaultBonusData());
+  const [lateCaseDataState] = useState<LateCaseData>(TVBonusModel.MOCK_LATE_CASE_DATA);
+  const [rotationIndexState, setRotationIndexState] = useState(0);
+  const [locationDisplayTimeState, setLocationDisplayTimeState] = useState(5000);
 
-  // Update time every second
+  // Configuration constants
+  const ROWS_PER_PAGE_CONFIG = 5;
+
+  // Effect: Update time every second
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
+    const timeUpdateTimer = setInterval(() => {
+      setCurrentTimeState(new Date());
     }, 1000);
-    return () => clearInterval(timer);
+    return () => clearInterval(timeUpdateTimer);
   }, []);
 
-  // Rotate location every 5 seconds within the same prodline group
+  // Effect: Auto-rotate locations with dynamic timing based on slide count
   useEffect(() => {
-    const timer = setInterval(() => {
-      const currentLocations = locationData[selectedProdline];
-      if (currentLocations && currentLocations.length > 1) {
-        setRotationIndex(prev => (prev + 1) % currentLocations.length);
-        setSelectedLocation(currentLocations[(rotationIndex + 1) % currentLocations.length]);
-      }
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [selectedProdline, rotationIndex]);
-
-  // Load data when location changes
-  useEffect(() => {
-    const data = locationBonusData[selectedLocation] || mockBonusData;
-    setBonusData(data);
-    setCurrentPage(1); // Reset to first page when location changes
-  }, [selectedLocation]);
-
-  // Determine shift based on time
-  useEffect(() => {
-    const hour = currentTime.getHours();
-    if (hour >= 6 && hour < 14) {
-      setCurrentShift("S1");
-    } else if (hour >= 14 && hour < 22) {
-      setCurrentShift("S2");
-    } else {
-      setCurrentShift("S3");
+    const currentLocationsArray = TVBonusModel.LOCATION_DATA[selectedProdlineState];
+    if (currentLocationsArray && currentLocationsArray.length > 1) {
+      const locationRotationTimer = setInterval(() => {
+        setRotationIndexState(prevIndex => {
+          const newIndex = (prevIndex + 1) % currentLocationsArray.length;
+          const nextLocation = currentLocationsArray[newIndex];
+          setSelectedLocationState(nextLocation);
+          
+          // Calculate display time for next location
+          const nextLocationData = TVBonusModel.getBonusDataByLocation(nextLocation);
+          const displayTime = TVBonusController.calculateLocationDisplayTime(nextLocationData.length);
+          setLocationDisplayTimeState(displayTime);
+          
+          return newIndex;
+        });
+      }, locationDisplayTimeState);
+      
+      return () => clearInterval(locationRotationTimer);
     }
-  }, [currentTime]);
+  }, [selectedProdlineState, rotationIndexState, locationDisplayTimeState]);
 
-  // Handle location selection
-  const handleLocationSelect = (location: string) => {
-    // Find which prodline this location belongs to
-    const prodline = Object.keys(locationData).find(key => 
-      locationData[key].includes(location)
-    );
+  // Effect: Load data when location changes
+  useEffect(() => {
+    const locationDataLoader = () => {
+      const newBonusData = TVBonusModel.getBonusDataByLocation(selectedLocationState);
+      setBonusDataState(newBonusData);
+      setCurrentPageState(1); // Reset to first page when location changes
+    };
     
-    if (prodline) {
-      setSelectedProdline(prodline);
-      setSelectedLocation(location);
-      setRotationIndex(locationData[prodline].indexOf(location));
+    locationDataLoader();
+  }, [selectedLocationState]);
+
+  // Effect: Determine shift based on current time
+  useEffect(() => {
+    const shiftDeterminer = () => {
+      const currentHour = currentTimeState.getHours();
+      const newShift = TVBonusController.getCurrentShift(currentHour);
+      setCurrentShiftState(newShift);
+    };
+    
+    shiftDeterminer();
+  }, [currentTimeState]);
+
+  // Handler: Location selection with prodline detection
+  const handleLocationSelection = useCallback((selectedLocation: string) => {
+    const detectedProdline = TVBonusController.findProdlineByLocation(selectedLocation, TVBonusModel.LOCATION_DATA);
+    
+    if (detectedProdline) {
+      setSelectedProdlineState(detectedProdline);
+      setSelectedLocationState(selectedLocation);
+      
+      const locationIndex = TVBonusModel.LOCATION_DATA[detectedProdline].indexOf(selectedLocation);
+      setRotationIndexState(locationIndex);
+      
+      // Set display time for selected location
+      const locationData = TVBonusModel.getBonusDataByLocation(selectedLocation);
+      const displayTime = TVBonusController.calculateLocationDisplayTime(locationData.length);
+      setLocationDisplayTimeState(displayTime);
     }
-    setIsLocationDropdownOpen(false);
-  };
+    setIsLocationDropdownOpenState(false);
+  }, []);
 
-  // Get all locations grouped by prodline
-  const getAllLocations = () => {
-    return Object.entries(locationData).map(([prodline, locations]) => ({
-      prodline,
-      locations
-    }));
-  };
+  // Handler: Pagination navigation
+  const handlePageNavigation = useCallback((direction: 'prev' | 'next') => {
+    const { totalPages } = TVBonusController.getPaginationData(currentPageState, bonusDataState.length);
+    
+    if (direction === 'prev') {
+      setCurrentPageState(prevPage => Math.max(prevPage - 1, 1));
+    } else {
+      setCurrentPageState(prevPage => Math.min(prevPage + 1, totalPages));
+    }
+  }, [currentPageState, bonusDataState.length]);
 
-  // Pagination logic
-  const totalPages = Math.ceil(bonusData.length / rowsPerPage);
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const endIndex = startIndex + rowsPerPage;
-  const currentData = bonusData.slice(startIndex, endIndex);
+  // Computed values using controller logic
+  const paginationData = TVBonusController.getPaginationData(currentPageState, bonusDataState.length);
+  const { totalPages, startIndex, endIndex } = paginationData;
+  const currentTableData = bonusDataState.slice(startIndex, endIndex);
 
-  const handlePrevPage = () => {
-    setCurrentPage(prev => Math.max(prev - 1, 1));
-  };
-
-  const handleNextPage = () => {
-    setCurrentPage(prev => Math.min(prev + 1, totalPages));
-  };
-
-  const getPerformanceColor = (performance: number) => {
-    if (performance >= 100) return "text-green-500";
-    if (performance >= 90) return "text-yellow-500";
-    return "text-red-500";
-  };
-
-  const getPerformanceBadge = (performance: number) => {
-    if (performance >= 100) return "performance-excellent";
-    if (performance >= 90) return "performance-good";
-    return "performance-poor";
+  // Performance styling helpers
+  const getPerformanceDisplayClasses = (performance: number) => {
+    return TVBonusController.getPerformanceClasses(performance);
   };
 
   return (
@@ -207,14 +124,14 @@ export default function TVBonusSummary() {
           {/* Time & Shift */}
           <div className="time-shift-section">
             <div className="time-display">
-              {currentTime.toLocaleTimeString('en-US', { 
+              {currentTimeState.toLocaleTimeString('en-US', { 
                 hour: '2-digit', 
                 minute: '2-digit',
                 hour12: false 
               })}
             </div>
             <div className="shift-badge">
-              {currentShift}
+              {currentShiftState}
             </div>
           </div>
 
@@ -225,21 +142,21 @@ export default function TVBonusSummary() {
                 <div className="late-cases-title">LATE CASES</div>
                 <div className="late-cases-stats">
                   <div className="total-count">
-                    <div className="total-count-number">{lateCaseData.totalCount}</div>
+                    <div className="total-count-number">{lateCaseDataState.totalCount}</div>
                     <div className="total-count-label">TOTAL</div>
                   </div>
                   <div className="divider"></div>
                   <div className="breakdown-stats">
                     <div className="breakdown-item">
-                      <div className="breakdown-number one-day">{lateCaseData.oneDayCount}</div>
+                      <div className="breakdown-number one-day">{lateCaseDataState.oneDayCount}</div>
                       <div className="breakdown-label one-day-label">1D</div>
                     </div>
                     <div className="breakdown-item">
-                      <div className="breakdown-number two-day">{lateCaseData.twoDaysCount}</div>
+                      <div className="breakdown-number two-day">{lateCaseDataState.twoDaysCount}</div>
                       <div className="breakdown-label two-day-label">2D</div>
                     </div>
                     <div className="breakdown-item">
-                      <div className="breakdown-number three-day">{lateCaseData.threeDaysCount + lateCaseData.moreThanThreeDaysCount}</div>
+                      <div className="breakdown-number three-day">{lateCaseDataState.threeDaysCount + lateCaseDataState.moreThanThreeDaysCount}</div>
                       <div className="breakdown-label three-day-label">3D+</div>
                     </div>
                   </div>
@@ -255,11 +172,11 @@ export default function TVBonusSummary() {
               <div className="prodline-dropdown">
                 <button 
                   className="prodline-button"
-                  onClick={() => setIsLocationDropdownOpen(!isLocationDropdownOpen)}
+                  onClick={() => setIsLocationDropdownOpenState(!isLocationDropdownOpenState)}
                 >
-                  <span>{selectedLocation}</span>
+                  <span>{selectedLocationState}</span>
                   <svg 
-                    className={`w-4 h-4 prodline-dropdown-icon ${isLocationDropdownOpen ? 'prodline-dropdown-open' : ''}`}
+                    className={`w-4 h-4 prodline-dropdown-icon ${isLocationDropdownOpenState ? 'prodline-dropdown-open' : ''}`}
                     fill="none" 
                     stroke="currentColor" 
                     viewBox="0 0 24 24"
@@ -268,9 +185,9 @@ export default function TVBonusSummary() {
                   </svg>
                 </button>
                 
-                {isLocationDropdownOpen && (
+                {isLocationDropdownOpenState && (
                   <div className="prodline-dropdown-menu">
-                    {getAllLocations().map(({ prodline, locations }) => (
+                    {TVBonusModel.getAllLocationsByProdline().map(({ prodline, locations }) => (
                       <div key={prodline} className="prodline-group">
                         <div className="prodline-group-header">
                           {prodline}
@@ -279,7 +196,7 @@ export default function TVBonusSummary() {
                           <div
                             key={location}
                             className="prodline-dropdown-item"
-                            onClick={() => handleLocationSelect(location)}
+                            onClick={() => handleLocationSelection(location)}
                           >
                             {location}
                           </div>
@@ -297,17 +214,17 @@ export default function TVBonusSummary() {
             <div className="header-info-compact">
               <div className="header-info-item">
                 <span className="header-info-label">LOCATIONS:</span>
-                <span className="header-info-value">{locationData[selectedProdline]?.length || 0}</span>
+                <span className="header-info-value">{TVBonusModel.LOCATION_DATA[selectedProdlineState]?.length || 0}</span>
               </div>
               <div className="header-info-separator">|</div>
               <div className="header-info-item">
                 <span className="header-info-label">SLIDE:</span>
-                <span className="header-info-value">{currentPage}/{totalPages}</span>
+                <span className="header-info-value">{currentPageState}/{totalPages}</span>
               </div>
               <div className="header-info-separator">|</div>
               <div className="header-info-item">
                 <span className="header-info-label">ROWS:</span>
-                <span className="header-info-value">{bonusData.length}</span>
+                <span className="header-info-value">{bonusDataState.length}</span>
               </div>
             </div>
           </div>
@@ -332,7 +249,7 @@ export default function TVBonusSummary() {
                 <span>POS</span>
                   {totalPages > 1 && (
                     <div className="mini-pagination">
-                      <span className="pagination-text">S{currentPage}/{totalPages}</span>
+                      <span className="pagination-text">S{currentPageState}/{totalPages}</span>
                     </div>
                   )}
               </div>
@@ -343,41 +260,41 @@ export default function TVBonusSummary() {
         {/* Table Content */}
         <div className="table-content">
           <div className="table-rows transition-all duration-500 ease-in-out">
-            {currentData.map((row, index) => (
-              <div key={index} className="table-row animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+            {currentTableData.map((tableRow, rowIndex) => (
+              <div key={rowIndex} className="table-row animate-fade-in" style={{ animationDelay: `${rowIndex * 0.1}s` }}>
                 <div className="table-row-grid">
                   {/* Tech Name */}
                   <div className="tech-name-column">
-                    <div className="tech-name">{row.tech}</div>
-                    <div className="tech-skill">{row.skillLevel}</div>
+                    <div className="tech-name">{tableRow.tech}</div>
+                    <div className="tech-skill">{tableRow.skillLevel}</div>
                   </div>
                   
                   {/* Metrics */}
                   <div className="metrics-column">
                     <div className="metric-item">
-                      <div className="metric-value metric-target">{row.target}</div>
+                      <div className="metric-value metric-target">{tableRow.target}</div>
                     </div>
                     <div className="metric-item">
-                      <div className="metric-value metric-current">{row.curTarget}</div>
+                      <div className="metric-value metric-current">{tableRow.curTarget}</div>
                     </div>
                     <div className="metric-item">
-                      <div className="metric-value metric-downtime">{row.downtime}</div>
+                      <div className="metric-value metric-downtime">{tableRow.downtime}</div>
                     </div>
                     <div className="metric-item">
-                      <div className="metric-value metric-correction">{row.correction}</div>
+                      <div className="metric-value metric-correction">{tableRow.correction}</div>
                     </div>
                   </div>
 
                   {/* Performance */}
                   <div className="performance-column">
-                    <div className={`performance-badge ${getPerformanceBadge(row.performance)}`}>
-                      {row.performance}%
+                    <div className={`performance-badge ${getPerformanceDisplayClasses(tableRow.performance).badgeClass}`}>
+                      {tableRow.performance}%
                     </div>
                   </div>
 
                   {/* Position */}
                   <div className="position-column">
-                    <div className="position-number">#{startIndex + index + 1}</div>
+                    <div className="position-number">#{startIndex + rowIndex + 1}</div>
                   </div>
                 </div>
               </div>
