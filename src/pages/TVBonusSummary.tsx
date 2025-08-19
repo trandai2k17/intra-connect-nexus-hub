@@ -292,24 +292,22 @@ export default function TVBonusSummary() {
             </div>
           </div>
 
-          {/* Table Info - Moved from footer */}
+          {/* Table Info - Compact display */}
           <div className="header-table-info">
-            <div className="header-info-grid">
+            <div className="header-info-compact">
               <div className="header-info-item">
-                <div className="header-info-label">PRODLINE</div>
-                <div className="header-info-value">{selectedProdline}</div>
+                <span className="header-info-label">PRODLINE:</span>
+                <span className="header-info-value">{selectedProdline}</span>
               </div>
+              <div className="header-info-separator">|</div>
               <div className="header-info-item">
-                <div className="header-info-label">LOCATIONS</div>
-                <div className="header-info-value">{locationData[selectedProdline]?.length || 0}</div>
+                <span className="header-info-label">LOCATIONS:</span>
+                <span className="header-info-value">{locationData[selectedProdline]?.length || 0}</span>
               </div>
+              <div className="header-info-separator">|</div>
               <div className="header-info-item">
-                <div className="header-info-label">ROWS</div>
-                <div className="header-info-value">{bonusData.length}</div>
-              </div>
-              <div className="header-info-item">
-                <div className="header-info-label">PAGE</div>
-                <div className="header-info-value">{currentPage}/{totalPages}</div>
+                <span className="header-info-label">ROWS:</span>
+                <span className="header-info-value">{bonusData.length}</span>
               </div>
             </div>
           </div>
@@ -329,7 +327,16 @@ export default function TVBonusSummary() {
               <div className="header-metric">CORRECTION</div>
             </div>
             <div className="header-performance">PERFORMANCE</div>
-            <div className="header-position">POS</div>
+            <div className="header-position">
+              <div className="position-header-content">
+                <span>POS</span>
+                {totalPages > 1 && (
+                  <div className="mini-pagination">
+                    <span className="pagination-text">{currentPage}/{totalPages}</span>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
         
@@ -377,37 +384,6 @@ export default function TVBonusSummary() {
             ))}
           </div>
         </div>
-        
-        {/* Table Pagination */}
-        {totalPages > 1 && (
-          <div className="table-pagination">
-            <button 
-              className="pagination-button"
-              onClick={handlePrevPage}
-              disabled={currentPage === 1}
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Previous
-            </button>
-            
-            <div className="pagination-info">
-              Showing {startIndex + 1}-{Math.min(endIndex, bonusData.length)} of {bonusData.length} rows
-            </div>
-            
-            <button 
-              className="pagination-button"
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-            >
-              Next
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Footer Section */}
