@@ -252,7 +252,7 @@ export default function TVBonusSummary() {
       <footer className="fixed bottom-0 left-0 right-0 shadow-lg">
         {/* Cutoff Time Row */}
         <div className="bg-red-500/30 border-t border-red-400 h-12 overflow-hidden flex items-center">
-          <div className="animate-marquee whitespace-nowrap text-2xl font-bold text-red-800">
+          <div className="whitespace-nowrap text-2xl font-bold text-red-800 animate-[marquee_15s_linear_infinite]">
             <span className="inline-block">
               🚨 Cutoff Time / Giờ cắt hàng - 13:30 🚨&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               🚨 Cutoff Time / Giờ cắt hàng - 13:30 🚨&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -264,7 +264,7 @@ export default function TVBonusSummary() {
         
         {/* Impression Arrival Row */}
         <div className="bg-blue-500/30 border-t border-blue-400 h-12 overflow-hidden flex items-center">
-          <div className="animate-marquee whitespace-nowrap text-2xl font-bold text-blue-800">
+          <div className="whitespace-nowrap text-2xl font-bold text-blue-800 animate-[marquee_20s_linear_infinite]">
             <span className="inline-block">
               📦 Impression arrival / Dấu răng về - 22:30 📦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               📦 Impression arrival / Dấu răng về - 22:30 📦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
