@@ -309,6 +309,5 @@ function updateTableInfo() {
     document.getElementById('currentProdline').textContent = selectedProdline;
     document.getElementById('locationCount').textContent = locationData[selectedProdline]?.length || 0;
     document.getElementById('totalRows').textContent = currentData.length;
-    document.getElementById('footerLocation').textContent = selectedLocation;
-    document.getElementById('footerPaginationInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+    document.getElementById('headerPaginationInfo').textContent = `${currentPage}/${totalPages}`;
 }
