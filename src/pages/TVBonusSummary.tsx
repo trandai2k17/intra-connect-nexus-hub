@@ -292,9 +292,26 @@ export default function TVBonusSummary() {
             </div>
           </div>
 
-          {/* Date */}
-          <div className="date-section">
-            <div className="date-display">{currentTime.toLocaleDateString('vi-VN')}</div>
+          {/* Table Info - Moved from footer */}
+          <div className="header-table-info">
+            <div className="header-info-grid">
+              <div className="header-info-item">
+                <div className="header-info-label">PRODLINE</div>
+                <div className="header-info-value">{selectedProdline}</div>
+              </div>
+              <div className="header-info-item">
+                <div className="header-info-label">LOCATIONS</div>
+                <div className="header-info-value">{locationData[selectedProdline]?.length || 0}</div>
+              </div>
+              <div className="header-info-item">
+                <div className="header-info-label">ROWS</div>
+                <div className="header-info-value">{bonusData.length}</div>
+              </div>
+              <div className="header-info-item">
+                <div className="header-info-label">PAGE</div>
+                <div className="header-info-value">{currentPage}/{totalPages}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -391,31 +408,6 @@ export default function TVBonusSummary() {
             </button>
           </div>
         )}
-        
-        {/* Table Info Footer */}
-        <div className="table-info-footer">
-          <div className="table-info-left">
-            <div className="table-info-item">
-              <div className="table-info-label">PRODLINE</div>
-              <div className="table-info-value">{selectedProdline}</div>
-            </div>
-            <div className="table-info-item">
-              <div className="table-info-label">LOCATIONS</div>
-              <div className="table-info-value">{locationData[selectedProdline]?.length || 0}</div>
-            </div>
-            <div className="table-info-item">
-              <div className="table-info-label">TOTAL ROWS</div>
-              <div className="table-info-value">{bonusData.length}</div>
-            </div>
-            <div className="table-info-item">
-              <div className="table-info-label">CURRENT LOCATION</div>
-              <div className="table-info-value">{selectedLocation}</div>
-            </div>
-          </div>
-          <div className="table-pagination-info">
-            Page {currentPage} of {totalPages}
-          </div>
-        </div>
       </div>
 
       {/* Footer Section */}
