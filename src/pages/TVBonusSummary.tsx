@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import RunningTextFooter from '@/components/footer/RunningTextFooter';
 import { TVBonusController } from '@/components/tv-bonus/TVBonusController';
+import { TVBonusConfig } from '@/components/tv-bonus/TVBonusConfig';
 import { TVBonusModel, type BonusData, type LateCaseData } from '@/components/tv-bonus/TVBonusModel';
 import '../styles/header-section.css';
 import '../styles/table-section.css';
@@ -18,10 +19,10 @@ export default function TVBonusSummary() {
   const [bonusDataState, setBonusDataState] = useState<BonusData[]>(TVBonusModel.getDefaultBonusData());
   const [lateCaseDataState] = useState<LateCaseData>(TVBonusModel.MOCK_LATE_CASE_DATA);
   const [rotationIndexState, setRotationIndexState] = useState(0);
-  const [locationDisplayTimeState, setLocationDisplayTimeState] = useState(5000);
+  const [locationDisplayTimeState, setLocationDisplayTimeState] = useState(TVBonusConfig.MIN_LOCATION_DURATION);
 
   // Configuration constants
-  const ROWS_PER_PAGE_CONFIG = 5;
+  const ROWS_PER_PAGE_CONFIG = TVBonusConfig.ROWS_PER_PAGE;
 
   // Effect: Update time every second
   useEffect(() => {
@@ -41,10 +42,14 @@ export default function TVBonusSummary() {
           const nextLocation = currentLocationsArray[newIndex];
           setSelectedLocationState(nextLocation);
           
-          // Calculate display time for next location
+          // Calculate display time for next location based on slide count and transitions
           const nextLocationData = TVBonusModel.getBonusDataByLocation(nextLocation);
           const displayTime = TVBonusController.calculateLocationDisplayTime(nextLocationData.length);
           setLocationDisplayTimeState(displayTime);
+          
+          // Debug timing information
+          const timingInfo = TVBonusController.getTimingBreakdown(nextLocationData.length);
+          console.log(`Location ${nextLocation} timing:`, timingInfo);
           
           return newIndex;
         });
@@ -261,7 +266,11 @@ export default function TVBonusSummary() {
         <div className="table-content">
           <div className="table-rows transition-all duration-500 ease-in-out">
             {currentTableData.map((tableRow, rowIndex) => (
-              <div key={rowIndex} className="table-row animate-fade-in" style={{ animationDelay: `${rowIndex * 0.1}s` }}>
+              <div 
+                key={rowIndex} 
+                className="table-row animate-fade-in" 
+                style={{ animationDelay: `${TVBonusController.getRowAnimationDelay(rowIndex)}ms` }}
+              >
                 <div className="table-row-grid">
                   {/* Tech Name */}
                   <div className="tech-name-column">
