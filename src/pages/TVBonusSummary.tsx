@@ -292,17 +292,17 @@ export default function TVBonusSummary() {
             </div>
           </div>
 
-          {/* Table Info - Compact display */}
+          {/* Table Info - Slide display */}
           <div className="header-table-info">
             <div className="header-info-compact">
               <div className="header-info-item">
-                <span className="header-info-label">PRODLINE:</span>
-                <span className="header-info-value">{selectedProdline}</span>
+                <span className="header-info-label">LOCATIONS:</span>
+                <span className="header-info-value">{locationData[selectedProdline]?.length || 0}</span>
               </div>
               <div className="header-info-separator">|</div>
               <div className="header-info-item">
-                <span className="header-info-label">LOCATIONS:</span>
-                <span className="header-info-value">{locationData[selectedProdline]?.length || 0}</span>
+                <span className="header-info-label">SLIDE:</span>
+                <span className="header-info-value">{currentPage}/{totalPages}</span>
               </div>
               <div className="header-info-separator">|</div>
               <div className="header-info-item">
@@ -330,11 +330,11 @@ export default function TVBonusSummary() {
             <div className="header-position">
               <div className="position-header-content">
                 <span>POS</span>
-                {totalPages > 1 && (
-                  <div className="mini-pagination">
-                    <span className="pagination-text">{currentPage}/{totalPages}</span>
-                  </div>
-                )}
+                  {totalPages > 1 && (
+                    <div className="mini-pagination">
+                      <span className="pagination-text">S{currentPage}/{totalPages}</span>
+                    </div>
+                  )}
               </div>
             </div>
           </div>
@@ -342,9 +342,9 @@ export default function TVBonusSummary() {
         
         {/* Table Content */}
         <div className="table-content">
-          <div className="table-rows">
+          <div className="table-rows transition-all duration-500 ease-in-out">
             {currentData.map((row, index) => (
-              <div key={index} className="table-row">
+              <div key={index} className="table-row animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
                 <div className="table-row-grid">
                   {/* Tech Name */}
                   <div className="tech-name-column">
