@@ -101,12 +101,13 @@ const locationBonusData = {
 export default function TVBonusSummary() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [currentShift, setCurrentShift] = useState("S2");
-  const [selectedProdline, setSelectedProdline] = useState(prodlineItems[0]);
-  const [selectedLocation, setSelectedLocation] = useState(locationData[prodlineItems[0]][0]);
-  const [isProdlineDropdownOpen, setIsProdlineDropdownOpen] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState("Location A1");
+  const [selectedProdline, setSelectedProdline] = useState("CB-DESIGNER");
+  const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [bonusData, setBonusData] = useState<BonusData[]>(locationBonusData["Location A1"] || mockBonusData);
   const [lateCaseData] = useState<LateCaseData>(mockLateCaseData);
+  const [rotationIndex, setRotationIndex] = useState(0);
   
   const rowsPerPage = 5;
 
@@ -117,6 +118,18 @@ export default function TVBonusSummary() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Rotate location every 5 seconds within the same prodline group
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const currentLocations = locationData[selectedProdline];
+      if (currentLocations && currentLocations.length > 1) {
+        setRotationIndex(prev => (prev + 1) % currentLocations.length);
+        setSelectedLocation(currentLocations[(rotationIndex + 1) % currentLocations.length]);
+      }
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [selectedProdline, rotationIndex]);
 
   // Load data when location changes
   useEffect(() => {
@@ -137,11 +150,27 @@ export default function TVBonusSummary() {
     }
   }, [currentTime]);
 
-  // Handle prodline selection
-  const handleProdlineSelect = (prodline: string) => {
-    setSelectedProdline(prodline);
-    setSelectedLocation(locationData[prodline][0]); // Select first location of new prodline
-    setIsProdlineDropdownOpen(false);
+  // Handle location selection
+  const handleLocationSelect = (location: string) => {
+    // Find which prodline this location belongs to
+    const prodline = Object.keys(locationData).find(key => 
+      locationData[key].includes(location)
+    );
+    
+    if (prodline) {
+      setSelectedProdline(prodline);
+      setSelectedLocation(location);
+      setRotationIndex(locationData[prodline].indexOf(location));
+    }
+    setIsLocationDropdownOpen(false);
+  };
+
+  // Get all locations grouped by prodline
+  const getAllLocations = () => {
+    return Object.entries(locationData).map(([prodline, locations]) => ({
+      prodline,
+      locations
+    }));
   };
 
   // Pagination logic
@@ -219,18 +248,18 @@ export default function TVBonusSummary() {
             </div>
           </div>
 
-          {/* Prodline - Enhanced with Dropdown */}
+          {/* Location Dropdown - Enhanced */}
           <div className="prodline-section">
             <div className="prodline-container">
-              <div className="prodline-title">PRODLINE</div>
+              <div className="prodline-title">LOCATION</div>
               <div className="prodline-dropdown">
                 <button 
                   className="prodline-button"
-                  onClick={() => setIsProdlineDropdownOpen(!isProdlineDropdownOpen)}
+                  onClick={() => setIsLocationDropdownOpen(!isLocationDropdownOpen)}
                 >
-                  <span>{selectedProdline}</span>
+                  <span>{selectedLocation}</span>
                   <svg 
-                    className={`w-4 h-4 prodline-dropdown-icon ${isProdlineDropdownOpen ? 'prodline-dropdown-open' : ''}`}
+                    className={`w-4 h-4 prodline-dropdown-icon ${isLocationDropdownOpen ? 'prodline-dropdown-open' : ''}`}
                     fill="none" 
                     stroke="currentColor" 
                     viewBox="0 0 24 24"
@@ -239,34 +268,26 @@ export default function TVBonusSummary() {
                   </svg>
                 </button>
                 
-                {isProdlineDropdownOpen && (
+                {isLocationDropdownOpen && (
                   <div className="prodline-dropdown-menu">
-                    {prodlineItems.map((item) => (
-                      <div
-                        key={item}
-                        className="prodline-dropdown-item"
-                        onClick={() => handleProdlineSelect(item)}
-                      >
-                        {item}
+                    {getAllLocations().map(({ prodline, locations }) => (
+                      <div key={prodline} className="prodline-group">
+                        <div className="prodline-group-header">
+                          {prodline}
+                        </div>
+                        {locations.map((location) => (
+                          <div
+                            key={location}
+                            className="prodline-dropdown-item"
+                            onClick={() => handleLocationSelect(location)}
+                          >
+                            {location}
+                          </div>
+                        ))}
                       </div>
                     ))}
                   </div>
                 )}
-              </div>
-              
-              {/* Location selector */}
-              <div className="mt-2">
-                <select 
-                  value={selectedLocation}
-                  onChange={(e) => setSelectedLocation(e.target.value)}
-                  className="w-full text-sm bg-white border border-blue-300 rounded px-2 py-1 text-blue-800"
-                >
-                  {locationData[selectedProdline]?.map((location) => (
-                    <option key={location} value={location}>
-                      {location}
-                    </option>
-                  ))}
-                </select>
               </div>
             </div>
           </div>
@@ -280,26 +301,6 @@ export default function TVBonusSummary() {
 
       {/* Table Section */}
       <div className="table-section">
-        {/* Table Info Header */}
-        <div className="table-info-header">
-          <div className="table-info-left">
-            <div className="table-info-item">
-              <div className="table-info-label">LOCATIONS</div>
-              <div className="table-info-value">{locationData[selectedProdline]?.length || 0}</div>
-            </div>
-            <div className="table-info-item">
-              <div className="table-info-label">TOTAL ROWS</div>
-              <div className="table-info-value">{bonusData.length}</div>
-            </div>
-            <div className="table-info-item">
-              <div className="table-info-label">CURRENT LOCATION</div>
-              <div className="table-info-value">{selectedLocation}</div>
-            </div>
-          </div>
-          <div className="table-pagination-info">
-            Page {currentPage} of {totalPages}
-          </div>
-        </div>
         {/* Table Header */}
         <div className="table-header">
           <div className="table-header-grid">
@@ -358,7 +359,6 @@ export default function TVBonusSummary() {
               </div>
             ))}
           </div>
-          </div>
         </div>
         
         {/* Table Pagination */}
@@ -391,6 +391,32 @@ export default function TVBonusSummary() {
             </button>
           </div>
         )}
+        
+        {/* Table Info Footer */}
+        <div className="table-info-footer">
+          <div className="table-info-left">
+            <div className="table-info-item">
+              <div className="table-info-label">PRODLINE</div>
+              <div className="table-info-value">{selectedProdline}</div>
+            </div>
+            <div className="table-info-item">
+              <div className="table-info-label">LOCATIONS</div>
+              <div className="table-info-value">{locationData[selectedProdline]?.length || 0}</div>
+            </div>
+            <div className="table-info-item">
+              <div className="table-info-label">TOTAL ROWS</div>
+              <div className="table-info-value">{bonusData.length}</div>
+            </div>
+            <div className="table-info-item">
+              <div className="table-info-label">CURRENT LOCATION</div>
+              <div className="table-info-value">{selectedLocation}</div>
+            </div>
+          </div>
+          <div className="table-pagination-info">
+            Page {currentPage} of {totalPages}
+          </div>
+        </div>
+      </div>
 
       {/* Footer Section */}
       <RunningTextFooter cutoffTime="13:30" arrivalTime="22:30" />

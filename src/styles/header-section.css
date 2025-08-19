@@ -171,9 +171,9 @@
   border-radius: 0.5rem;
   padding: 0.75rem;
   color: white;
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: bold;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   border: none;
   cursor: pointer;
   width: 100%;
@@ -197,18 +197,36 @@
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(59, 130, 246, 0.2);
   z-index: 50;
-  max-height: 200px;
+  max-height: 300px;
   overflow-y: auto;
   margin-top: 0.25rem;
 }
 
+.prodline-group {
+  border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+}
+
+.prodline-group:last-child {
+  border-bottom: none;
+}
+
+.prodline-group-header {
+  background: rgb(239, 246, 255);
+  padding: 0.5rem 0.75rem;
+  font-weight: bold;
+  font-size: 0.875rem;
+  color: rgb(29, 78, 216);
+  border-bottom: 1px solid rgba(147, 197, 253, 0.3);
+}
+
 .prodline-dropdown-item {
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+  border-bottom: 1px solid rgba(229, 231, 235, 0.3);
   font-weight: 500;
   color: rgb(55, 65, 81);
+  padding-left: 1.5rem;
 }
 
 .prodline-dropdown-item:hover {
