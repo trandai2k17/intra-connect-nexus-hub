@@ -38,6 +38,16 @@ body {
   align-items: center;
 }
 
+/* Section Title Styling */
+.section-title {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: rgb(31, 41, 55);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
 /* Time & Shift Section */
 .time-shift-section {
   grid-column: span 2;
@@ -80,10 +90,11 @@ body {
 }
 
 .late-cases-title {
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   font-weight: bold;
-  color: rgb(185, 28, 28);
+  color: rgb(31, 41, 55);
   letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
 }
 
 .late-cases-stats {
