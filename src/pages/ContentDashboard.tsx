@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/layout/AppSidebar';
+import { Header } from '@/components/layout/Header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -142,103 +145,111 @@ export default function ContentDashboard() {
     .sort((a, b) => a.priority - b.priority);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Content Dashboard</h1>
-          <p className="text-muted-foreground">
-            Manage and view all your dynamic content in one place
-          </p>
-        </div>
-        <Button onClick={() => navigate('/content-management')}>
-          <Plus className="w-4 h-4 mr-2" />
-          Manage Content
-        </Button>
-      </div>
-
-      {/* Hero Section */}
-      {heroContent && (
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Featured Content</h2>
-          <ContentCard content={heroContent} variant="hero" />
-        </div>
-      )}
-
-      {/* Filters */}
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Filter className="w-5 h-5" />
-            Filters
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-              <Input
-                placeholder="Search content..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full">
+        <AppSidebar />
+        <SidebarInset className="flex-1">
+          <Header />
+          <div className="container mx-auto px-4 py-8">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h1 className="text-3xl font-bold mb-2">Content Dashboard</h1>
+                <p className="text-muted-foreground">
+                  Manage and view all your dynamic content in one place
+                </p>
+              </div>
+              <Button onClick={() => navigate('/content-management')}>
+                <Plus className="w-4 h-4 mr-2" />
+                Manage Content
+              </Button>
             </div>
-            
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                {categories.map(category => (
-                  <SelectItem key={category} value={category}>
-                    {category}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
 
-            <Select value={selectedType} onValueChange={setSelectedType}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                {types.map(type => (
-                  <SelectItem key={type} value={type}>
-                    {type}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {/* Hero Section */}
+            {heroContent && (
+              <div className="mb-8">
+                <h2 className="text-xl font-semibold mb-4">Featured Content</h2>
+                <ContentCard content={heroContent} variant="hero" />
+              </div>
+            )}
+
+            {/* Filters */}
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Filter className="w-5 h-5" />
+                  Filters
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                    <Input
+                      placeholder="Search content..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                  
+                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Categories</SelectItem>
+                      {categories.map(category => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Select value={selectedType} onValueChange={setSelectedType}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Types</SelectItem>
+                      {types.map(type => (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Content Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {regularContents.map(content => (
+                <ContentCard key={content.recId} content={content} />
+              ))}
+            </div>
+
+            {/* Empty State */}
+            {filteredContents.length === 0 && (
+              <div className="text-center py-12">
+                <h3 className="text-lg font-semibold mb-2">No content found</h3>
+                <p className="text-muted-foreground mb-4">
+                  Try adjusting your search terms or filters
+                </p>
+                <Button variant="outline" onClick={() => {
+                  setSearchTerm('');
+                  setSelectedCategory('all');
+                  setSelectedType('all');
+                }}>
+                  Clear Filters
+                </Button>
+              </div>
+            )}
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Content Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {regularContents.map(content => (
-          <ContentCard key={content.recId} content={content} />
-        ))}
+        </SidebarInset>
       </div>
-
-      {/* Empty State */}
-      {filteredContents.length === 0 && (
-        <div className="text-center py-12">
-          <h3 className="text-lg font-semibold mb-2">No content found</h3>
-          <p className="text-muted-foreground mb-4">
-            Try adjusting your search terms or filters
-          </p>
-          <Button variant="outline" onClick={() => {
-            setSearchTerm('');
-            setSelectedCategory('all');
-            setSelectedType('all');
-          }}>
-            Clear Filters
-          </Button>
-        </div>
-      )}
-    </div>
+    </SidebarProvider>
   );
 }
