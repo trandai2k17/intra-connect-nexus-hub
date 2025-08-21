@@ -285,10 +285,10 @@ export default function ContentManagement() {
         <div className="flex-1 flex flex-col">
           <Header />
           
-          {/* Fixed Header */}
-          <div className="sticky top-16 z-10 bg-background border-b shadow-sm">
-            <div className="p-6 pb-4">
-              <div className="flex justify-between items-start mb-4">
+          {/* Header Section */}
+          <div className="bg-background border-b">
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-6">
                 <div>
                   <h1 className="text-3xl font-bold">Quản lý nội dung Dashboard</h1>
                   <p className="text-muted-foreground mt-1">
@@ -319,7 +319,7 @@ export default function ContentManagement() {
               </div>
               
               {/* Search */}
-              <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center gap-4 mb-6">
                 <div className="relative flex-1 max-w-md">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                   <Input
@@ -348,8 +348,8 @@ export default function ContentManagement() {
             </div>
           </div>
           
-          {/* Main Content - Fixed Height with Scroll */}
-          <div className="flex-1 flex gap-6 p-6 pt-4 overflow-hidden">
+          {/* Main Content Area */}
+          <div className="flex-1 flex gap-6 p-6 min-h-0">
             {/* Table - Left side (55-65%) */}
             <div className="flex-[0.6] min-w-0 flex flex-col overflow-hidden">
               <div className="flex-1 overflow-auto">
