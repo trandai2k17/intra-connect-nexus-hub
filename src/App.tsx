@@ -23,6 +23,8 @@ import NotFound from "./pages/NotFound";
 import Education from "./pages/Education";
 import EducationNdx from "./pages/EducationNdx";
 import ContentManagement from "./pages/ContentManagement";
+import ContentDashboard from "./pages/ContentDashboard";
+import ContentView from "./pages/ContentView";
 import UserPermissions from "./pages/UserPermissions";
 
 const queryClient = new QueryClient();
@@ -53,6 +55,8 @@ const App = () => (
               <Route path="/tv/bonus-summary" element={<TVBonusSummary />} />
               <Route path="/mis/project-management" element={<ProjectManagement />} />
               <Route path="/content-management" element={<ContentManagement />} />
+              <Route path="/content-dashboard" element={<ContentDashboard />} />
+              <Route path="/content/view/:id" element={<ContentView />} />
               <Route path="/user-permissions" element={<UserPermissions />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
