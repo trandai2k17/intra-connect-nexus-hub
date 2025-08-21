@@ -267,7 +267,7 @@ export default function ContentManagement() {
           <Header />
           
           {/* Sticky Header */}
-          <div className="sticky top-0 z-10 bg-background border-b">
+          <div className="sticky top-16 z-10 bg-background border-b">
             <div className="p-6 pb-4">
               <div className="flex justify-between items-start mb-4">
                 <div>
