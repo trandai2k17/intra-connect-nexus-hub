@@ -216,6 +216,12 @@ export const navigationItems: NavigationItem[] = [
         iconColor: "text-blue-600",
       },
       {
+        title: "Dashboard Content",
+        url: "/content-dashboard",
+        icon: BarChart3,
+        iconColor: "text-purple-600",
+      },
+      {
         title: "Phân quyền User",
         url: "/user-permissions",
         icon: Users,
