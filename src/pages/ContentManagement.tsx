@@ -185,6 +185,25 @@ export default function ContentManagement() {
     toast({ title: "Đã sắp xếp", description: "Thứ tự hiển thị đã được cập nhật." });
   }, [toast]);
 
+  const handleQuickUpdate = useCallback((recId: number, field: keyof ContentItem, value: any) => {
+    setContents(prev => prev.map(item => 
+      item.recId === recId 
+        ? { ...item, [field]: value, modifiedAt: new Date() }
+        : item
+    ));
+    
+    const fieldNames = {
+      title: 'tiêu đề',
+      priority: 'độ ưu tiên', 
+      category: 'danh mục'
+    };
+    
+    toast({ 
+      title: "Đã cập nhật", 
+      description: `${fieldNames[field as keyof typeof fieldNames] || field} đã được thay đổi.` 
+    });
+  }, [toast]);
+
   const handleBulkAction = useCallback((action: 'activate' | 'deactivate' | 'delete', ids: number[]) => {
     if (action === 'delete') {
       setContents(prev => prev.filter(item => !ids.includes(item.recId)));
@@ -343,6 +362,7 @@ export default function ContentManagement() {
                   onDuplicate={handleDuplicate}
                   onToggleActive={handleToggleActive}
                   onReorder={handleReorder}
+                  onQuickUpdate={handleQuickUpdate}
                   isReorderMode={isReorderMode}
                   sortField={sortField}
                   sortDirection={sortDirection}

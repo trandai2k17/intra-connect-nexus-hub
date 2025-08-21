@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { ContentItem } from '@/types/content';
-import { Edit, Copy, Trash2, Eye, MoreHorizontal, GripVertical, ArrowUpDown, Plus } from 'lucide-react';
+import { Edit, Copy, Trash2, Eye, MoreHorizontal, GripVertical, ArrowUpDown, Plus, Check, X } from 'lucide-react';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 
@@ -22,6 +23,7 @@ interface ContentTableProps {
   onDuplicate: (content: ContentItem) => void;
   onToggleActive: (recId: number) => void;
   onReorder: (newOrder: ContentItem[]) => void;
+  onQuickUpdate: (recId: number, field: keyof ContentItem, value: any) => void;
   isReorderMode: boolean;
   sortField: keyof ContentItem;
   sortDirection: 'asc' | 'desc';
@@ -34,6 +36,12 @@ interface ContentTableProps {
   onPageSizeChange: (pageSize: number) => void;
 }
 
+interface EditingCell {
+  recId: number;
+  field: keyof ContentItem;
+  value: any;
+}
+
 export function ContentTable({
   contents,
   selectedItems,
@@ -43,6 +51,7 @@ export function ContentTable({
   onDuplicate,
   onToggleActive,
   onReorder,
+  onQuickUpdate,
   isReorderMode,
   sortField,
   sortDirection,
@@ -55,6 +64,8 @@ export function ContentTable({
   onPageSizeChange
 }: ContentTableProps) {
   const [draggedItem, setDraggedItem] = useState<ContentItem | null>(null);
+  const [editingCell, setEditingCell] = useState<EditingCell | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -154,6 +165,49 @@ export function ContentTable({
     setDraggedItem(null);
   };
 
+  // Inline editing functions
+  const startEditing = useCallback((recId: number, field: keyof ContentItem, currentValue: any) => {
+    setEditingCell({ recId, field, value: currentValue });
+  }, []);
+
+  const cancelEditing = useCallback(() => {
+    setEditingCell(null);
+  }, []);
+
+  const saveEditing = useCallback(() => {
+    if (editingCell) {
+      onQuickUpdate(editingCell.recId, editingCell.field, editingCell.value);
+      setEditingCell(null);
+    }
+  }, [editingCell, onQuickUpdate]);
+
+  const updateEditingValue = useCallback((value: any) => {
+    if (editingCell) {
+      setEditingCell({ ...editingCell, value });
+    }
+  }, [editingCell]);
+
+  // Focus input when editing starts
+  useEffect(() => {
+    if (editingCell && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [editingCell]);
+
+  // Handle keyboard shortcuts for inline editing
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (editingCell) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        saveEditing();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        cancelEditing();
+      }
+    }
+  }, [editingCell, saveEditing, cancelEditing]);
+
   if (contents.length === 0) {
     return (
       <div className="border rounded-lg p-8 text-center">
@@ -213,6 +267,7 @@ export function ContentTable({
               <TableHead>Trạng thái</TableHead>
               <TableHead>Thời gian</TableHead>
               <TableHead>Độ ưu tiên</TableHead>
+              <TableHead>Danh mục</TableHead>
               
               <TableHead 
                 className="cursor-pointer hover:bg-muted/50"
@@ -255,19 +310,45 @@ export function ContentTable({
                 </TableCell>
                 
                 <TableCell className="max-w-xs">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <div className="truncate text-left">{item.title}</div>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>{item.title}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                  {item.subContent && (
-                    <div className="text-xs text-muted-foreground truncate mt-1">
-                      {item.subContent}
+                  {editingCell?.recId === item.recId && editingCell?.field === 'title' ? (
+                    <div className="flex items-center gap-2">
+                      <Input
+                        ref={inputRef}
+                        value={editingCell.value}
+                        onChange={(e) => updateEditingValue(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        className="text-sm"
+                      />
+                      <div className="flex gap-1">
+                        <Button size="sm" variant="ghost" onClick={saveEditing}>
+                          <Check className="w-3 h-3" />
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={cancelEditing}>
+                          <X className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div 
+                      className="cursor-pointer hover:bg-muted/50 p-1 rounded"
+                      onDoubleClick={() => startEditing(item.recId, 'title', item.title)}
+                      title="Double-click để chỉnh sửa"
+                    >
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <div className="truncate text-left">{item.title}</div>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>{item.title}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                      {item.subContent && (
+                        <div className="text-xs text-muted-foreground truncate mt-1">
+                          {item.subContent}
+                        </div>
+                      )}
                     </div>
                   )}
                 </TableCell>
@@ -291,9 +372,80 @@ export function ContentTable({
                 </TableCell>
                 
                 <TableCell>
-                  {getPriorityBadge(item.priority)}
+                  {editingCell?.recId === item.recId && editingCell?.field === 'priority' ? (
+                    <div className="flex items-center gap-2">
+                      <Select
+                        value={editingCell.value}
+                        onValueChange={updateEditingValue}
+                      >
+                        <SelectTrigger className="w-28">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="High">Cao</SelectItem>
+                          <SelectItem value="Normal">Bình thường</SelectItem>
+                          <SelectItem value="Low">Thấp</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="flex gap-1">
+                        <Button size="sm" variant="ghost" onClick={saveEditing}>
+                          <Check className="w-3 h-3" />
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={cancelEditing}>
+                          <X className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div 
+                      className="cursor-pointer hover:bg-muted/50 p-1 rounded inline-block"
+                      onClick={() => startEditing(item.recId, 'priority', item.priority)}
+                      title="Click để thay đổi độ ưu tiên"
+                    >
+                      {getPriorityBadge(item.priority)}
+                    </div>
+                  )}
                 </TableCell>
                 
+                <TableCell>
+                  {editingCell?.recId === item.recId && editingCell?.field === 'category' ? (
+                    <div className="flex items-center gap-2">
+                      <Select
+                        value={editingCell.value}
+                        onValueChange={updateEditingValue}
+                      >
+                        <SelectTrigger className="w-32">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Policy">Chính sách</SelectItem>
+                          <SelectItem value="Announcement">Thông báo</SelectItem>
+                          <SelectItem value="Document">Tài liệu</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="flex gap-1">
+                        <Button size="sm" variant="ghost" onClick={saveEditing}>
+                          <Check className="w-3 h-3" />
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={cancelEditing}>
+                          <X className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div 
+                      className="cursor-pointer hover:bg-muted/50 p-1 rounded inline-block"
+                      onClick={() => startEditing(item.recId, 'category', item.category)}
+                      title="Click để thay đổi danh mục"
+                    >
+                      <Badge variant="outline">
+                        {item.category === 'Policy' ? 'Chính sách' : 
+                         item.category === 'Announcement' ? 'Thông báo' : 'Tài liệu'}
+                      </Badge>
+                    </div>
+                  )}
+                </TableCell>
+
                 <TableCell className="text-sm text-muted-foreground">
                   {format(item.modifiedAt, 'dd/MM HH:mm', { locale: vi })}
                 </TableCell>
