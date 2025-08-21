@@ -181,7 +181,7 @@ export const navigationItems: NavigationItem[] = [
   },
   {
     title: "Quản lý",
-    url: "#", // Add a placeholder URL
+    url: "#",
     icon: Settings,
     iconColor: "text-gray-600",
     subItems: [
