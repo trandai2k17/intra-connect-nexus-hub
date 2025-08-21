@@ -285,8 +285,8 @@ export default function ContentManagement() {
         <div className="flex-1 flex flex-col">
           <Header />
           
-          {/* Sticky Header */}
-          <div className="sticky top-16 z-10 bg-background border-b">
+          {/* Fixed Header */}
+          <div className="sticky top-16 z-10 bg-background border-b shadow-sm">
             <div className="p-6 pb-4">
               <div className="flex justify-between items-start mb-4">
                 <div>
@@ -348,11 +348,11 @@ export default function ContentManagement() {
             </div>
           </div>
           
-          {/* Main Content */}
-          <div className="flex-1 p-6 pt-0">
-            <div className="flex gap-6 h-full">
-              {/* Table - Left side (55-65%) */}
-              <div className="flex-[0.6] min-w-0">
+          {/* Main Content - Fixed Height with Scroll */}
+          <div className="flex-1 flex gap-6 p-6 pt-4 overflow-hidden">
+            {/* Table - Left side (55-65%) */}
+            <div className="flex-[0.6] min-w-0 flex flex-col overflow-hidden">
+              <div className="flex-1 overflow-auto">
                 <ContentTable
                   contents={paginatedContents}
                   selectedItems={selectedItems}
@@ -381,16 +381,16 @@ export default function ContentManagement() {
                   }}
                 />
               </div>
-              
-              {/* Form - Right side (35-45%) */}
-              <div className="flex-[0.4] min-w-0">
-                <ContentForm
-                  isOpen={isFormOpen}
-                  onClose={() => setIsFormOpen(false)}
-                  onSave={handleSave}
-                  editingContent={editingContent}
-                />
-              </div>
+            </div>
+            
+            {/* Form - Right side (35-45%) */}
+            <div className="flex-[0.4] min-w-0">
+              <ContentForm
+                isOpen={isFormOpen}
+                onClose={() => setIsFormOpen(false)}
+                onSave={handleSave}
+                editingContent={editingContent}
+              />
             </div>
           </div>
         </div>
