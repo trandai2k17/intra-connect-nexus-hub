@@ -1,0 +1,417 @@
+/* ============================================
+   PORTAL DASHBOARD - CUSTOM CSS STYLES
+   Using Bootstrap 5.3 as base framework
+============================================ */
+
+/* ROOT VARIABLES - Color System */
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --info-color: #0dcaf0;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    
+    /* Custom Portal Colors */
+    --portal-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --banner-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --card-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    --hover-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    
+    /* Spacing & Layout */
+    --header-height: 70px;
+    --border-radius: 0.5rem;
+    --transition: all 0.3s ease;
+}
+
+/* ============================================
+   GLOBAL LAYOUT & TYPOGRAPHY
+============================================ */
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+}
+
+/* Header Fixed Positioning */
+.header-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    height: var(--header-height);
+}
+
+/* Main Content Layout - Account for fixed header */
+.main-content {
+    margin-top: var(--header-height);
+    min-height: calc(100vh - var(--header-height));
+}
+
+/* Custom Card Styles */
+.card {
+    border: none;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+    border-radius: var(--border-radius);
+}
+
+.card:hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   BANNER SECTION STYLES
+============================================ */
+
+.portal-banner {
+    background: var(--portal-gradient);
+    border: none;
+    overflow: hidden;
+    min-height: 200px;
+}
+
+.banner-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--banner-gradient);
+    opacity: 0.9;
+}
+
+.banner-icon {
+    font-size: 4rem;
+    opacity: 0.8;
+}
+
+.z-index-2 {
+    z-index: 2;
+}
+
+/* ============================================
+   QUICK LINKS SECTION STYLES
+============================================ */
+
+.quick-link-item {
+    background: #fff;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.quick-link-item:hover {
+    background: #f8f9fa;
+    border-color: var(--primary-color) !important;
+    transform: translateX(5px);
+}
+
+.quick-link-icon {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+/* ============================================
+   ANNOUNCEMENTS SECTION STYLES
+============================================ */
+
+.announcement-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.announcement-item {
+    transition: var(--transition);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 0.5rem;
+}
+
+.announcement-item:hover {
+    background-color: #f8f9fa;
+}
+
+.announcement-avatar {
+    flex-shrink: 0;
+}
+
+/* Custom scrollbar for announcement list */
+.announcement-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.announcement-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.announcement-list::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+.announcement-list::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+/* ============================================
+   MY TASKS SECTION STYLES
+============================================ */
+
+.task-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.task-item {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    transition: var(--transition);
+}
+
+.task-item:hover {
+    background: #f8f9fa;
+    border-color: var(--primary-color);
+}
+
+.task-item input[type="checkbox"]:checked + .flex-grow-1 label {
+    text-decoration: line-through;
+    color: #6c757d;
+}
+
+/* ============================================
+   QUICK ACTIONS SECTION STYLES
+============================================ */
+
+.btn-outline-primary:hover,
+.btn-outline-success:hover,
+.btn-outline-info:hover,
+.btn-outline-warning:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--hover-shadow);
+}
+
+/* ============================================
+   TOP DOCUMENTS SECTION STYLES
+============================================ */
+
+.document-list {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.document-item {
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.document-item:hover {
+    background-color: #f8f9fa !important;
+    border-color: var(--primary-color) !important;
+}
+
+.document-icon {
+    flex-shrink: 0;
+}
+
+/* ============================================
+   EVENTS CALENDAR SECTION STYLES
+============================================ */
+
+.calendar-widget {
+    background: #fff;
+}
+
+.mini-calendar .row > div {
+    padding: 0.25rem;
+    margin: 1px;
+    border-radius: 3px;
+    transition: var(--transition);
+}
+
+.mini-calendar .row > div:hover:not(.text-muted) {
+    background-color: #e9ecef;
+    cursor: pointer;
+}
+
+.upcoming-events {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.event-item {
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.event-item:hover {
+    background-color: #e9ecef !important;
+}
+
+.event-date {
+    flex-shrink: 0;
+    width: 50px;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+============================================ */
+
+/* Large screens (lg and up) */
+@media (min-width: 992px) {
+    .container-fluid {
+        max-width: 1400px;
+    }
+}
+
+/* Medium screens (md) */
+@media (max-width: 991.98px) {
+    .portal-banner {
+        min-height: 150px;
+    }
+    
+    .banner-icon {
+        font-size: 3rem;
+    }
+    
+    .display-6 {
+        font-size: 2rem;
+    }
+}
+
+/* Small screens (sm and below) */
+@media (max-width: 767.98px) {
+    .main-content {
+        padding: 0.5rem;
+    }
+    
+    .portal-banner {
+        min-height: 120px;
+    }
+    
+    .banner-icon {
+        font-size: 2.5rem;
+    }
+    
+    .quick-link-item,
+    .task-item,
+    .document-item {
+        padding: 0.75rem !important;
+    }
+    
+    /* Stack cards vertically on mobile */
+    .row.g-4 {
+        margin: 0.5rem 0;
+    }
+    
+    /* Adjust card heights for mobile */
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    /* Reduce font sizes for mobile */
+    .card-title {
+        font-size: 1.1rem;
+    }
+    
+    .display-6 {
+        font-size: 1.5rem;
+    }
+}
+
+/* ============================================
+   UTILITY CLASSES
+============================================ */
+
+/* Custom Badge Styles */
+.badge.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.badge.bg-success {
+    background-color: var(--success-color) !important;
+}
+
+.badge.bg-warning {
+    background-color: var(--warning-color) !important;
+    color: #000;
+}
+
+.badge.bg-danger {
+    background-color: var(--danger-color) !important;
+}
+
+.badge.bg-info {
+    background-color: var(--info-color) !important;
+    color: #000;
+}
+
+/* Loading States */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.slide-up {
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Focus States for Accessibility */
+.btn:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Custom Tooltips */
+.tooltip {
+    font-size: 0.875rem;
+}
+
+/* Print Styles */
+@media print {
+    .header-fixed,
+    .btn,
+    .badge {
+        display: none !important;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #dee2e6;
+    }
+    
+    .main-content {
+        margin-top: 0;
+    }
+}
