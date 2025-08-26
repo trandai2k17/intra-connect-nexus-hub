@@ -9,6 +9,7 @@ import { ContentTable } from '@/components/content-management/ContentTable';
 import { ContentForm } from '@/components/content-management/ContentForm';
 import { ContentFilters } from '@/components/content-management/ContentFilters';
 import { BulkActions } from '@/components/content-management/BulkActions';
+import { TimeScheduleCard } from '@/components/content-management/TimeScheduleCard';
 import { ContentItem, ContentFilters as FilterType } from '@/types/content';
 import { Plus, RotateCcw, ArrowUpDown, Search } from 'lucide-react';
 
@@ -350,6 +351,11 @@ export default function ContentManagement() {
           
           {/* Main Content Area */}
           <div className="flex-1 flex gap-6 p-6 min-h-0">
+            {/* Time Schedule Card */}
+            <div className="w-80 flex-shrink-0">
+              <TimeScheduleCard />
+            </div>
+            
             {/* Table - Left side (55-65%) */}
             <div className="flex-[0.6] min-w-0 flex flex-col overflow-hidden">
               <div className="flex-1 overflow-auto">
