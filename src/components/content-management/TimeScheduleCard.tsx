@@ -178,68 +178,111 @@ export function TimeScheduleCard() {
           </Popover>
         </div>
 
-        {/* Schedule List */}
-        <div className="space-y-3 max-h-96 overflow-auto">
+        {/* Schedule Timeline */}
+        <div className="space-y-4">
           {filteredSchedules.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <Clock className="w-12 h-12 mx-auto mb-3 opacity-20" />
               <p>Không có lịch trình cho ngày này</p>
             </div>
           ) : (
-            filteredSchedules
-              .sort((a, b) => a.order - b.order)
-              .map((schedule) => (
-                <div
-                  key={schedule.id}
-                  className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors"
-                >
-                  <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab" />
-                  
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Badge className={getTypeColor(schedule.type)}>
-                        {schedule.type}
-                      </Badge>
-                      <span className="text-sm font-medium">
-                        {schedule.time && format(schedule.time, 'HH:mm')}
-                      </span>
-                    </div>
-                    <p className="text-sm text-muted-foreground truncate">
-                      {schedule.description}
-                    </p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-muted-foreground">
-                        Bởi: {schedule.createdBy}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        #{schedule.order}
-                      </span>
-                    </div>
-                  </div>
+            <div className="space-y-3">
+              {/* Timeline Header */}
+              <div className="flex items-center justify-between text-sm text-muted-foreground border-b pb-2">
+                <span>Lịch trình ngày {format(selectedDate, 'dd/MM/yyyy')}</span>
+                <span>{filteredSchedules.length} sự kiện</span>
+              </div>
 
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleToggleActive(schedule.id)}
-                    >
-                      {schedule.isActive ? (
-                        <Eye className="w-4 h-4 text-green-600" />
-                      ) : (
-                        <EyeOff className="w-4 h-4 text-muted-foreground" />
-                      )}
-                    </Button>
+              {/* Timeline Items */}
+              {filteredSchedules
+                .sort((a, b) => {
+                  if (!a.time || !b.time) return 0;
+                  return a.time.getTime() - b.time.getTime();
+                })
+                .map((schedule, index) => (
+                  <div key={schedule.id} className="relative">
+                    {/* Timeline connector */}
+                    {index < filteredSchedules.length - 1 && (
+                      <div className="absolute left-6 top-12 w-0.5 h-8 bg-border" />
+                    )}
                     
-                    <Input
-                      type="number"
-                      min="1"
-                      value={schedule.order}
-                      onChange={(e) => handleReorder(schedule.id, parseInt(e.target.value))}
-                      className="w-16 h-8"
-                    />
+                    <div className="flex items-start gap-4 group">
+                      {/* Timeline dot & time */}
+                      <div className="flex flex-col items-center min-w-0">
+                        <div className={cn(
+                          "w-3 h-3 rounded-full border-2 bg-background",
+                          schedule.isActive ? "border-primary" : "border-muted-foreground"
+                        )} />
+                        <div className="text-xs font-mono mt-1 text-center">
+                          {schedule.time && format(schedule.time, 'HH:mm')}
+                        </div>
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex-1 pb-4 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <Badge variant="outline" className={getTypeColor(schedule.type)}>
+                                {schedule.type === 'CutOff' ? 'Cắt hàng' : 'Nhận dấu'}
+                              </Badge>
+                              <span className="text-xs text-muted-foreground">
+                                #{schedule.order}
+                              </span>
+                            </div>
+                            
+                            <h4 className="font-medium text-sm leading-tight mb-1">
+                              {schedule.type === 'CutOff' 
+                                ? `Cutoff Time - ${schedule.time && format(schedule.time, 'HH:mm')}`
+                                : `Impression Arrival - ${schedule.time && format(schedule.time, 'HH:mm')}`
+                              }
+                            </h4>
+                            
+                            <p className="text-xs text-muted-foreground line-clamp-2">
+                              {schedule.description.split(' - ')[1] || schedule.description}
+                            </p>
+                            
+                            <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                              <span>ID: {schedule.id}</span>
+                              <span>Bởi: {schedule.createdBy}</span>
+                              <span>{format(schedule.createdAt, 'dd/MM HH:mm')}</span>
+                            </div>
+                          </div>
+
+                          {/* Controls */}
+                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleToggleActive(schedule.id)}
+                              className="h-8 w-8 p-0"
+                            >
+                              {schedule.isActive ? (
+                                <Eye className="w-3 h-3 text-green-600" />
+                              ) : (
+                                <EyeOff className="w-3 h-3 text-muted-foreground" />
+                              )}
+                            </Button>
+                            
+                            <div className="flex items-center gap-1">
+                              <GripVertical className="w-3 h-3 text-muted-foreground cursor-grab" />
+                              <Input
+                                type="number"
+                                min="1"
+                                max="10"
+                                value={schedule.order}
+                                onChange={(e) => handleReorder(schedule.id, parseInt(e.target.value) || 1)}
+                                className="w-12 h-6 text-xs p-1 text-center"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))
+                ))
+              }
+            </div>
           )}
         </div>
 
