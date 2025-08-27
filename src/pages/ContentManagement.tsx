@@ -11,7 +11,8 @@ import { ContentFilters } from '@/components/content-management/ContentFilters';
 import { BulkActions } from '@/components/content-management/BulkActions';
 import { TimeScheduleCard } from '@/components/content-management/TimeScheduleCard';
 import { ContentItem, ContentFilters as FilterType } from '@/types/content';
-import { Plus, RotateCcw, ArrowUpDown, Search } from 'lucide-react';
+import { TemplateManager } from '@/components/template/TemplateManager';
+import { Plus, RotateCcw, ArrowUpDown, Search, Settings } from 'lucide-react';
 
 export default function ContentManagement() {
   const { toast } = useToast();
@@ -35,6 +36,7 @@ export default function ContentManagement() {
   const [pageSize, setPageSize] = useState(20);
   const [sortField, setSortField] = useState<keyof ContentItem>('orderDisplay');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [showTemplateManager, setShowTemplateManager] = useState(false);
 
   // Mock data initialization
   useEffect(() => {
@@ -300,6 +302,14 @@ export default function ContentManagement() {
                 <div className="flex gap-3">
                   <Button
                     variant="outline"
+                    onClick={() => setShowTemplateManager(true)}
+                  >
+                    <Settings className="w-4 h-4 mr-2" />
+                    Quản lý Template
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
                     onClick={() => setIsReorderMode(!isReorderMode)}
                     className={isReorderMode ? 'bg-primary text-primary-foreground' : ''}
                   >
@@ -401,6 +411,12 @@ export default function ContentManagement() {
           </div>
         </div>
       </div>
+      
+      {/* Template Manager Dialog */}
+      <TemplateManager
+        isOpen={showTemplateManager}
+        onClose={() => setShowTemplateManager(false)}
+      />
     </SidebarProvider>
   );
 }

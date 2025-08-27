@@ -11,8 +11,11 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ContentItem } from '@/types/content';
+import { Template } from '@/types/template';
 import { ContentPreview } from './ContentPreview';
-import { CalendarIcon, X, Save, Eye } from 'lucide-react';
+import { TemplateSelector } from '@/components/template/TemplateSelector';
+import { Badge } from '@/components/ui/badge';
+import { CalendarIcon, X, Save, Eye, Palette } from 'lucide-react';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
@@ -43,6 +46,7 @@ interface FormData {
   isActive: boolean;
   startDate: Date;
   endDate?: Date;
+  selectedTemplateId?: number;
 }
 
 export function ContentForm({ isOpen, onClose, onSave, editingContent }: ContentFormProps) {
@@ -71,6 +75,8 @@ export function ContentForm({ isOpen, onClose, onSave, editingContent }: Content
   const [showPreview, setShowPreview] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [activeTab, setActiveTab] = useState('content');
+  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
   // Initialize form data when editing
   useEffect(() => {
@@ -114,7 +120,8 @@ export function ContentForm({ isOpen, onClose, onSave, editingContent }: Content
         category: 'Document',
         isActive: true,
         startDate: new Date(),
-        endDate: undefined
+        endDate: undefined,
+        selectedTemplateId: undefined
       });
       setIsDirty(false);
     }
@@ -216,7 +223,11 @@ export function ContentForm({ isOpen, onClose, onSave, editingContent }: Content
     return (
       <Card className="h-fit">
         <CardContent className="p-8 text-center text-muted-foreground">
-          <FileX className="w-12 h-12 mx-auto mb-4 opacity-50" />
+          <div className="w-12 h-12 mx-auto mb-4 opacity-50 flex items-center justify-center">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-full h-full">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
           <p>Chọn mục để chỉnh sửa hoặc bấm "Thêm mới" để tạo nội dung</p>
         </CardContent>
       </Card>
@@ -261,9 +272,10 @@ export function ContentForm({ isOpen, onClose, onSave, editingContent }: Content
         {/* Form Content */}
         <CardContent className="flex-1 overflow-y-auto">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="content">Nội dung</TabsTrigger>
               <TabsTrigger value="presentation">Trình bày</TabsTrigger>
+              <TabsTrigger value="template">Template</TabsTrigger>
               <TabsTrigger value="schedule">Lịch & Trạng thái</TabsTrigger>
             </TabsList>
 
@@ -460,7 +472,78 @@ export function ContentForm({ isOpen, onClose, onSave, editingContent }: Content
               </div>
             </TabsContent>
 
-            {/* Tab C: Lịch & Trạng thái */}
+            {/* Tab C: Template */}
+            <TabsContent value="template" className="space-y-4 mt-4">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label>Template hiển thị</Label>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Chọn template để hiển thị nội dung này
+                    </p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowTemplateSelector(true)}
+                  >
+                    <Palette className="w-4 h-4 mr-2" />
+                    Chọn Template
+                  </Button>
+                </div>
+
+                {selectedTemplate && (
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-start gap-4">
+                        <div className="w-16 h-12 bg-muted rounded flex-shrink-0">
+                          {selectedTemplate.thumbnailUrl && (
+                            <img 
+                              src={selectedTemplate.thumbnailUrl}
+                              alt={selectedTemplate.name}
+                              className="w-full h-full object-cover rounded"
+                            />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium">{selectedTemplate.name}</h4>
+                          <p className="text-sm text-muted-foreground">
+                            {selectedTemplate.description}
+                          </p>
+                          <div className="flex gap-1 mt-2">
+                            {selectedTemplate.metaJson?.deviceSupport?.map((device) => (
+                              <Badge key={device} variant="outline" className="text-xs">
+                                {device}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setSelectedTemplate(null)}
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {!selectedTemplate && (
+                  <Card>
+                    <CardContent className="p-6 text-center text-muted-foreground">
+                      <Palette className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">Chưa chọn template</p>
+                      <p className="text-xs mt-1">
+                        Nội dung sẽ sử dụng template mặc định
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            </TabsContent>
+
+            {/* Tab D: Lịch & Trạng thái */}
             <TabsContent value="schedule" className="space-y-4 mt-4">
               <div className="flex items-center space-x-2">
                 <Switch
@@ -576,15 +659,18 @@ export function ContentForm({ isOpen, onClose, onSave, editingContent }: Content
           <ContentPreview data={formData} />
         </DialogContent>
       </Dialog>
-    </>
-  );
-}
 
-function FileX({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 4L8 12l8 8" />
-    </svg>
+      {/* Template Selector */}
+      <TemplateSelector
+        isOpen={showTemplateSelector}
+        onClose={() => setShowTemplateSelector(false)}
+        onSelect={(template) => {
+          setSelectedTemplate(template);
+          updateField('selectedTemplateId', template.id);
+        }}
+        currentContent={formData}
+        selectedTemplateId={formData.selectedTemplateId}
+      />
+    </>
   );
 }
