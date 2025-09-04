@@ -1,15 +1,15 @@
-
 import React, { useState } from 'react';
-import { Search, Edit, Trash2, Eye, Download, Upload, Plus, X, Check } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Search, Plus, Edit, Trash2, Download, Upload, Save, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/AppSidebar";
+import { Header } from "@/components/layout/Header";
+import { useLanguage } from '@/contexts/LanguageContext';
 import { DictionaryTerm } from '@/types/dictionary';
 import { useToast } from '@/hooks/use-toast';
 
@@ -111,10 +111,11 @@ const initialTerms: DictionaryTerm[] = [
 export default function DictionaryManagement() {
   const [terms, setTerms] = useState<DictionaryTerm[]>(initialTerms);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedTerm, setSelectedTerm] = useState<string | null>(null);
-  const [formMode, setFormMode] = useState<'add' | 'edit'>('add');
-  const [photoFiles, setPhotoFiles] = useState<string[]>([]);
+  const [productGroupFilter, setProductGroupFilter] = useState('');
+  const [selectedTerm, setSelectedTerm] = useState<DictionaryTerm | null>(null);
+  const [currentMode, setCurrentMode] = useState<'add' | 'edit' | 'view'>('view');
   const [formData, setFormData] = useState({
+    termId: '',
     productGroup: 'RPD',
     alphabeta: '',
     dentalWord: '',
@@ -122,18 +123,28 @@ export default function DictionaryManagement() {
     engTerm: '',
     engDescription: '',
     vnDescription: '',
-    termId: '',
+    photos: [] as Array<{
+      id?: string;
+      photoName: string;
+      photoPath: string;
+      isMain: boolean;
+    }>
   });
+
+  const { t } = useLanguage();
   const { toast } = useToast();
 
-  const filteredTerms = terms.filter(term =>
-    term.dentalWord.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    term.vnTerm.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    term.termId.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredTerms = terms.filter(term => {
+    const matchesSearch = term.dentalWord.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      term.vnTerm.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      term.termId.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesGroup = !productGroupFilter || term.productGroup === productGroupFilter;
+    return matchesSearch && matchesGroup;
+  });
 
   const resetForm = () => {
     setFormData({
+      termId: '',
       productGroup: 'RPD',
       alphabeta: '',
       dentalWord: '',
@@ -141,20 +152,16 @@ export default function DictionaryManagement() {
       engTerm: '',
       engDescription: '',
       vnDescription: '',
-      termId: '',
+      photos: []
     });
-    setPhotoFiles([]);
     setSelectedTerm(null);
-    setFormMode('add');
+    setCurrentMode('view');
   };
 
-  const handleAddNew = () => {
-    resetForm();
-    setFormMode('add');
-  };
-
-  const handleEdit = (term: DictionaryTerm) => {
+  const handleRowClick = (term: DictionaryTerm) => {
+    setSelectedTerm(term);
     setFormData({
+      termId: term.termId,
       productGroup: term.productGroup,
       alphabeta: term.alphabeta,
       dentalWord: term.dentalWord,
@@ -162,26 +169,58 @@ export default function DictionaryManagement() {
       engTerm: term.engTerm,
       engDescription: term.engDescription,
       vnDescription: term.vnDescription,
-      termId: term.termId,
+      photos: term.photos.map(p => ({
+        id: p.id,
+        photoName: p.photoName,
+        photoPath: p.photoPath,
+        isMain: p.activePhoto
+      }))
     });
-    setPhotoFiles(term.photos.map(p => p.photoPath));
-    setSelectedTerm(term.termId);
-    setFormMode('edit');
+    setCurrentMode('view');
   };
 
-  const handleDeleteTerm = (termId: string) => {
-    setTerms(prev => prev.filter(term => term.termId !== termId));
-    if (selectedTerm === termId) {
-      resetForm();
-    }
+  const handleDelete = () => {
+    if (!selectedTerm) return;
+    
+    setTerms(prev => prev.filter(term => term.termId !== selectedTerm.termId));
     toast({
-      title: "Đã xóa",
-      description: "Thuật ngữ đã được xóa thành công",
+      title: "Thành công",
+      description: "Đã xóa thuật ngữ",
     });
+    resetForm();
+  };
+
+  const handleAddPhoto = () => {
+    const newPhotoIndex = formData.photos.length + 1;
+    const newPhoto = {
+      photoName: `${formData.termId}_${newPhotoIndex}`,
+      photoPath: '',
+      isMain: formData.photos.length === 0
+    };
+    setFormData({
+      ...formData,
+      photos: [...formData.photos, newPhoto]
+    });
+  };
+
+  const handleRemovePhoto = (index: number) => {
+    const newPhotos = formData.photos.filter((_, i) => i !== index);
+    // If we removed the main photo, make the first photo main
+    if (formData.photos[index].isMain && newPhotos.length > 0) {
+      newPhotos[0].isMain = true;
+    }
+    setFormData({
+      ...formData,
+      photos: newPhotos
+    });
+  };
+
+  const isFormValid = () => {
+    return formData.termId && formData.dentalWord && formData.vnTerm && formData.productGroup;
   };
 
   const handleApply = () => {
-    if (!formData.dentalWord || !formData.vnTerm || !formData.termId) {
+    if (!isFormValid()) {
       toast({
         title: "Lỗi",
         description: "Vui lòng điền đầy đủ thông tin bắt buộc",
@@ -190,18 +229,16 @@ export default function DictionaryManagement() {
       return;
     }
 
-    if (formMode === 'add') {
-      const photos = photoFiles.map((photoPath, index) => ({
-        id: `${Date.now()}_${index}`,
-        termId: formData.termId,
-        photoName: `${formData.termId}_${index + 1}`,
-        photoPath,
-        activePhoto: index === 0,
-      }));
-
+    if (currentMode === 'add') {
       const newTerm: DictionaryTerm = {
         ...formData,
-        photos,
+        photos: formData.photos.map((photo, index) => ({
+          id: `${Date.now()}_${index}`,
+          termId: formData.termId,
+          photoName: photo.photoName,
+          photoPath: photo.photoPath,
+          activePhoto: photo.isMain
+        })),
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -210,18 +247,21 @@ export default function DictionaryManagement() {
         title: "Thành công",
         description: "Đã thêm thuật ngữ mới",
       });
-    } else if (formMode === 'edit' && selectedTerm) {
-      const photos = photoFiles.map((photoPath, index) => ({
-        id: `${Date.now()}_${index}`,
-        termId: formData.termId,
-        photoName: `${formData.termId}_${index + 1}`,
-        photoPath,
-        activePhoto: index === 0,
-      }));
-
+    } else if (currentMode === 'edit' && selectedTerm) {
       setTerms(prev => prev.map(term => 
-        term.termId === selectedTerm 
-          ? { ...term, ...formData, photos, updatedAt: new Date() }
+        term.termId === selectedTerm.termId 
+          ? { 
+              ...term, 
+              ...formData,
+              photos: formData.photos.map((photo, index) => ({
+                id: photo.id || `${Date.now()}_${index}`,
+                termId: formData.termId,
+                photoName: photo.photoName,
+                photoPath: photo.photoPath,
+                activePhoto: photo.isMain
+              })),
+              updatedAt: new Date() 
+            }
           : term
       ));
       toast({
@@ -233,448 +273,299 @@ export default function DictionaryManagement() {
     resetForm();
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    
-    files.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          setPhotoFiles(prev => [...prev, event.target!.result as string]);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  };
-
-  const removeImage = (index: number) => {
-    setPhotoFiles(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const exportToCSV = () => {
-    const headers = ['TermID', 'ProductGroup', 'DentalWord', 'VnTerm', 'EngTerm', 'EngDescription', 'VnDescription'];
-    const csvContent = [
-      headers.join(','),
-      ...terms.map(term => [
-        term.termId,
-        term.productGroup,
-        `"${term.dentalWord}"`,
-        `"${term.vnTerm}"`,
-        `"${term.engTerm}"`,
-        `"${term.engDescription}"`,
-        `"${term.vnDescription}"`
-      ].join(','))
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `dictionary_${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
-    
-    toast({
-      title: "Xuất dữ liệu thành công",
-      description: "File CSV đã được tải xuống",
-    });
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="container mx-auto px-4 py-6">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-            Quản lý từ điển
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Thêm, sửa, xóa và quản lý các thuật ngữ nha khoa
-          </p>
-        </div>
-
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button
-              variant="outline"
-              onClick={exportToCSV}
-              className="border-blue-200 hover:bg-blue-50 dark:border-blue-800 dark:hover:bg-blue-900/20"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              Xuất CSV
-            </Button>
-          </div>
-        </div>
-
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-12 gap-6">
-          {/* Left Panel - Table (col-8) */}
-          <div className="col-span-12 lg:col-span-8 space-y-6">
-            {/* Search and Stats */}
-            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-              <CardContent className="p-6">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                  <div className="relative flex-1 max-w-md">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                    <Input
-                      placeholder="Tìm kiếm thuật ngữ..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                  
-                  <div className="flex items-center gap-6 text-sm text-gray-600 dark:text-gray-400">
-                    <div className="text-center">
-                      <div className="font-semibold text-blue-600 text-lg">{terms.length}</div>
-                      <div>Tổng số thuật ngữ</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="font-semibold text-green-600 text-lg">
-                        {terms.filter(t => t.photos.length > 0).length}
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full gradient-bg dark:bg-gray-900">
+        <AppSidebar />
+        <div className="flex-1 flex flex-col">
+          <Header />
+          <main className="flex-1 gradient-bg dark:bg-gray-900">
+            <div className="container mx-auto px-6 py-8">
+              <div className="grid grid-cols-12 gap-6">
+                {/* Main Table Section - Col 8 */}
+                <div className="col-span-8">
+                  <Card className="shadow-xl backdrop-blur-sm bg-white/95 dark:bg-gray-800/95 border border-white/30 dark:border-gray-700/30 hover:border-white/50 dark:hover:border-gray-600/50 transition-all duration-300 hover:shadow-2xl">
+                    <CardHeader className="bg-gradient-to-r from-blue-600/10 to-purple-600/10 dark:from-blue-500/20 dark:to-purple-500/20 backdrop-blur-sm border-b border-white/20 dark:border-gray-700/20">
+                      <div className="flex justify-between items-center">
+                        <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                          Dictionary Management
+                        </CardTitle>
+                        <div className="flex gap-2">
+                          <Button 
+                            onClick={() => setCurrentMode('add')}
+                            className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 border border-green-400/30"
+                          >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Add
+                          </Button>
+                          <Button 
+                            onClick={() => selectedTerm && setCurrentMode('edit')}
+                            disabled={!selectedTerm}
+                            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 border border-blue-400/30"
+                          >
+                            <Edit className="w-4 h-4 mr-2" />
+                            Edit
+                          </Button>
+                          <Button 
+                            onClick={handleDelete}
+                            disabled={!selectedTerm}
+                            className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 border border-red-400/30"
+                          >
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Delete
+                          </Button>
+                          <Button 
+                            onClick={handleApply}
+                            disabled={!isFormValid()}
+                            className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 border border-purple-400/30"
+                          >
+                            <Save className="w-4 h-4 mr-2" />
+                            Apply
+                          </Button>
+                        </div>
                       </div>
-                      <div>Có hình ảnh</div>
-                    </div>
-                  </div>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      {/* Search and Filter Controls */}
+                      <div className="flex gap-4 mb-6">
+                        <div className="flex-1 relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                          <Input
+                            placeholder="Search terms..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="pl-10 bg-white/90 dark:bg-gray-700/90 border-white/40 dark:border-gray-600/40 shadow-sm focus:shadow-md hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-200"
+                          />
+                        </div>
+                        <select 
+                          value={productGroupFilter}
+                          onChange={(e) => setProductGroupFilter(e.target.value)}
+                          className="px-4 py-2 rounded-lg bg-white/90 dark:bg-gray-700/90 border border-white/40 dark:border-gray-600/40 shadow-sm focus:shadow-md hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-200"
+                        >
+                          <option value="">All Groups</option>
+                          <option value="RPD">RPD</option>
+                          <option value="Crown">Crown</option>
+                          <option value="Implant">Implant</option>
+                        </select>
+                      </div>
+
+                      {/* Dictionary Table */}
+                      <div className="overflow-x-auto rounded-xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-white/30 dark:border-gray-700/30 hover:border-white/50 dark:hover:border-gray-600/50 transition-all duration-300">
+                        <table className="w-full">
+                          <thead className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 border-b border-white/20 dark:border-gray-700/20">
+                            <tr>
+                              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Term ID</th>
+                              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Dental Word</th>
+                              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Vietnamese</th>
+                              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Group</th>
+                              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Photos</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {filteredTerms.map((term) => (
+                              <tr 
+                                key={term.termId}
+                                onClick={() => handleRowClick(term)}
+                                className={`cursor-pointer hover:bg-blue-50/60 dark:hover:bg-gray-700/40 border-b border-gray-100/50 dark:border-gray-700/50 transition-all duration-200 ${
+                                  selectedTerm?.termId === term.termId ? 'bg-blue-100/60 dark:bg-blue-900/20' : ''
+                                }`}
+                              >
+                                <td className="px-4 py-3 font-mono text-sm font-medium text-blue-600 dark:text-blue-400">
+                                  {term.termId}
+                                </td>
+                                <td className="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
+                                  {term.dentalWord}
+                                </td>
+                                <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
+                                  {term.vnTerm}
+                                </td>
+                                <td className="px-4 py-3">
+                                  <Badge variant="secondary" className="text-xs border border-gray-200/50 dark:border-gray-600/50">
+                                    {term.productGroup}
+                                  </Badge>
+                                </td>
+                                <td className="px-4 py-3">
+                                  <Badge 
+                                    variant={term.photos.length > 0 ? "default" : "secondary"}
+                                    className="text-xs border border-gray-200/50 dark:border-gray-600/50"
+                                  >
+                                    {term.photos.length}
+                                  </Badge>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
-              </CardContent>
-            </Card>
 
-            {/* Terms Table */}
-            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm overflow-hidden">
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="bg-gray-50/80 dark:bg-gray-700/80">
-                      <TableHead className="font-semibold">Mã ID</TableHead>
-                      <TableHead className="font-semibold">Từ nha khoa</TableHead>
-                      <TableHead className="font-semibold">Tiếng Việt</TableHead>
-                      <TableHead className="font-semibold">Nhóm sản phẩm</TableHead>
-                      <TableHead className="font-semibold text-center">Hình ảnh</TableHead>
-                      <TableHead className="font-semibold">Ngày tạo</TableHead>
-                      <TableHead className="font-semibold text-center">Thao tác</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredTerms.map((term) => (
-                      <TableRow 
-                        key={term.termId} 
-                        className={`hover:bg-blue-50/50 dark:hover:bg-gray-700/50 transition-colors ${
-                          selectedTerm === term.termId ? 'bg-blue-100/60 dark:bg-blue-900/20' : ''
-                        }`}
-                      >
-                        <TableCell className="font-mono text-sm font-medium text-blue-600">
-                          {term.termId}
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {term.dentalWord}
-                        </TableCell>
-                        <TableCell className="text-gray-700 dark:text-gray-300">
-                          {term.vnTerm}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="secondary" className="text-xs">
-                            {term.productGroup}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <Badge variant={term.photos.length > 0 ? "default" : "secondary"}>
-                            {term.photos.length}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-sm text-gray-500">
-                          {term.createdAt.toLocaleDateString('vi-VN')}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center justify-center gap-2">
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button variant="ghost" size="sm" className="hover:bg-blue-50">
-                                  <Eye className="w-4 h-4" />
-                                </Button>
-                              </DialogTrigger>
-                              <DialogContent className="max-w-2xl">
-                                <DialogHeader>
-                                  <DialogTitle className="text-blue-600">{term.dentalWord}</DialogTitle>
-                                </DialogHeader>
-                                <div className="space-y-4">
-                                  <div>
-                                    <strong>Tiếng Việt:</strong> {term.vnTerm}
-                                  </div>
-                                  <div>
-                                    <strong>Mã ID:</strong> {term.termId}
-                                  </div>
-                                  <div>
-                                    <strong>Thuật ngữ tiếng Anh:</strong> {term.engTerm}
-                                  </div>
-                                  <div>
-                                    <strong>Mô tả tiếng Anh:</strong> {term.engDescription}
-                                  </div>
-                                  <div>
-                                    <strong>Mô tả tiếng Việt:</strong> {term.vnDescription}
-                                  </div>
-                                  {term.photos.length > 0 && (
-                                    <div>
-                                      <strong>Hình ảnh:</strong>
-                                      <div className="grid grid-cols-2 gap-2 mt-2">
-                                        {term.photos.map((photo) => (
-                                          <div key={photo.id} className="relative">
-                                            <img
-                                              src={photo.photoPath}
-                                              alt={photo.photoName}
-                                              className="w-full h-32 object-cover rounded border"
-                                            />
-                                            {photo.activePhoto && (
-                                              <Badge className="absolute top-2 left-2">Active</Badge>
-                                            )}
-                                          </div>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  )}
-                                </div>
-                              </DialogContent>
-                            </Dialog>
-
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => handleEdit(term)}
-                              className="hover:bg-yellow-50"
-                            >
-                              <Edit className="w-4 h-4" />
-                            </Button>
-                            
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDeleteTerm(term.termId)}
-                              className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
+                {/* Form Panel - Col 4 */}
+                <div className="col-span-4">
+                  <Card className="shadow-xl backdrop-blur-sm bg-white/95 dark:bg-gray-800/95 border border-white/30 dark:border-gray-700/30 hover:border-white/50 dark:hover:border-gray-600/50 transition-all duration-300 hover:shadow-2xl sticky top-6">
+                    <CardHeader className="bg-gradient-to-r from-purple-600/10 to-blue-600/10 dark:from-purple-500/20 dark:to-blue-500/20 backdrop-blur-sm border-b border-white/20 dark:border-gray-700/20">
+                      <CardTitle className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                        {currentMode === 'add' ? 'Add New Term' : 
+                         currentMode === 'edit' ? 'Edit Term' : 
+                         'Term Details'}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6 space-y-4">
+                      {currentMode !== 'view' ? (
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="termId" className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
+                                Term ID
+                              </Label>
+                              <Input
+                                id="termId"
+                                value={formData.termId}
+                                onChange={(e) => setFormData({...formData, termId: e.target.value})}
+                                className="bg-white/90 dark:bg-gray-700/90 border-white/40 dark:border-gray-600/40 shadow-sm focus:shadow-md hover:border-purple-300 dark:hover:border-purple-500 transition-all duration-200"
+                                placeholder="RPD0001"
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="productGroup" className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
+                                Product Group
+                              </Label>
+                              <select
+                                id="productGroup"
+                                value={formData.productGroup}
+                                onChange={(e) => setFormData({...formData, productGroup: e.target.value})}
+                                className="w-full px-3 py-2 rounded-lg bg-white/90 dark:bg-gray-700/90 border border-white/40 dark:border-gray-600/40 shadow-sm focus:shadow-md hover:border-purple-300 dark:hover:border-purple-500 transition-all duration-200"
+                              >
+                                <option value="">Select Group</option>
+                                <option value="RPD">RPD</option>
+                                <option value="Crown">Crown</option>
+                                <option value="Implant">Implant</option>
+                              </select>
+                            </div>
                           </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
 
-              {/* No Results */}
-              {filteredTerms.length === 0 && (
-                <div className="text-center py-12">
-                  <div className="text-gray-400 mb-4">
-                    <Search className="w-16 h-16 mx-auto mb-4" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">
-                    Không tìm thấy thuật ngữ nào
-                  </h3>
-                  <p className="text-gray-500 dark:text-gray-500">
-                    Thử thay đổi từ khóa tìm kiếm hoặc thêm thuật ngữ mới
-                  </p>
-                </div>
-              )}
-            </Card>
-          </div>
-
-          {/* Right Panel - Form (col-4) */}
-          <div className="col-span-12 lg:col-span-4">
-            <Card className="sticky top-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-              <CardHeader className="pb-4">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg font-semibold text-blue-600 dark:text-blue-400">
-                    {formMode === 'add' ? 'Thêm thuật ngữ mới' : 'Chỉnh sửa thuật ngữ'}
-                  </CardTitle>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleAddNew}
-                      className={`hover:bg-blue-50 ${formMode === 'add' ? 'bg-blue-50 border-blue-200' : ''}`}
-                    >
-                      <Plus className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        if (selectedTerm) {
-                          const term = terms.find(t => t.termId === selectedTerm);
-                          if (term) handleEdit(term);
-                        }
-                      }}
-                      disabled={!selectedTerm}
-                      className={`hover:bg-yellow-50 ${formMode === 'edit' ? 'bg-yellow-50 border-yellow-200' : ''}`}
-                    >
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        if (selectedTerm) handleDeleteTerm(selectedTerm);
-                      }}
-                      disabled={!selectedTerm}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={handleApply}
-                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
-                    >
-                      <Check className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              
-              <CardContent className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
-                {/* Basic Information */}
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="termId">Mã ID *</Label>
-                    <Input
-                      id="termId"
-                      value={formData.termId}
-                      onChange={(e) => setFormData(prev => ({ ...prev, termId: e.target.value }))}
-                      placeholder="VD: RPD0001"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="dentalWord">Từ nha khoa *</Label>
-                    <Input
-                      id="dentalWord"
-                      value={formData.dentalWord}
-                      onChange={(e) => setFormData(prev => ({ ...prev, dentalWord: e.target.value }))}
-                      placeholder="VD: Mandible"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="vnTerm">Thuật ngữ tiếng Việt *</Label>
-                    <Input
-                      id="vnTerm"
-                      value={formData.vnTerm}
-                      onChange={(e) => setFormData(prev => ({ ...prev, vnTerm: e.target.value }))}
-                      placeholder="VD: Hàm dưới"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="engTerm">Thuật ngữ tiếng Anh</Label>
-                    <Input
-                      id="engTerm"
-                      value={formData.engTerm}
-                      onChange={(e) => setFormData(prev => ({ ...prev, engTerm: e.target.value }))}
-                      placeholder="VD: Mand"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="productGroup">Nhóm sản phẩm</Label>
-                    <Select
-                      value={formData.productGroup}
-                      onValueChange={(value) => setFormData(prev => ({ ...prev, productGroup: value }))}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Chọn nhóm sản phẩm" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="RPD">RPD</SelectItem>
-                        <SelectItem value="Crown">Crown</SelectItem>
-                        <SelectItem value="Bridge">Bridge</SelectItem>
-                        <SelectItem value="Implant">Implant</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="alphabeta">Chữ cái</Label>
-                    <Input
-                      id="alphabeta"
-                      value={formData.alphabeta}
-                      onChange={(e) => setFormData(prev => ({ ...prev, alphabeta: e.target.value }))}
-                      placeholder="VD: M, A"
-                      maxLength={1}
-                    />
-                  </div>
-
-                  {/* Descriptions */}
-                  <div className="space-y-2">
-                    <Label htmlFor="engDescription">Mô tả tiếng Anh</Label>
-                    <Textarea
-                      id="engDescription"
-                      value={formData.engDescription}
-                      onChange={(e) => setFormData(prev => ({ ...prev, engDescription: e.target.value }))}
-                      placeholder="Mô tả chi tiết bằng tiếng Anh..."
-                      rows={2}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="vnDescription">Mô tả tiếng Việt</Label>
-                    <Textarea
-                      id="vnDescription"
-                      value={formData.vnDescription}
-                      onChange={(e) => setFormData(prev => ({ ...prev, vnDescription: e.target.value }))}
-                      placeholder="Mô tả chi tiết bằng tiếng Việt..."
-                      rows={2}
-                    />
-                  </div>
-
-                  {/* Image Upload */}
-                  <div className="space-y-4">
-                    <Label>Hình ảnh minh họa</Label>
-                    
-                    <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 text-center hover:border-blue-300 transition-colors">
-                      <input
-                        type="file"
-                        multiple
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="hidden"
-                        id="image-upload"
-                      />
-                      <label htmlFor="image-upload" className="cursor-pointer">
-                        <Upload className="w-6 h-6 mx-auto mb-2 text-gray-400" />
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
-                          Click để chọn ảnh
-                        </p>
-                      </label>
-                    </div>
-
-                    {/* Image Preview */}
-                    {photoFiles.length > 0 && (
-                      <div className="grid grid-cols-2 gap-2">
-                        {photoFiles.map((image, index) => (
-                          <div key={index} className="relative">
-                            <img
-                              src={image}
-                              alt={`Preview ${index + 1}`}
-                              className="w-full h-16 object-cover rounded border"
+                          <div>
+                            <Label htmlFor="dentalWord" className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
+                              Dental Word
+                            </Label>
+                            <Input
+                              id="dentalWord"
+                              value={formData.dentalWord}
+                              onChange={(e) => setFormData({...formData, dentalWord: e.target.value})}
+                              className="bg-white/90 dark:bg-gray-700/90 border-white/40 dark:border-gray-600/40 shadow-sm focus:shadow-md hover:border-purple-300 dark:hover:border-purple-500 transition-all duration-200"
+                              placeholder="Mandible"
                             />
-                            <Button
-                              type="button"
-                              variant="destructive"
-                              size="sm"
-                              className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0"
-                              onClick={() => removeImage(index)}
-                            >
-                              <X className="w-3 h-3" />
-                            </Button>
                           </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="vnTerm" className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
+                                Vietnamese Term
+                              </Label>
+                              <Input
+                                id="vnTerm"
+                                value={formData.vnTerm}
+                                onChange={(e) => setFormData({...formData, vnTerm: e.target.value})}
+                                className="bg-white/90 dark:bg-gray-700/90 border-white/40 dark:border-gray-600/40 shadow-sm focus:shadow-md hover:border-purple-300 dark:hover:border-purple-500 transition-all duration-200"
+                                placeholder="Hàm dưới"
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="engTerm" className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
+                                English Term
+                              </Label>
+                              <Input
+                                id="engTerm"
+                                value={formData.engTerm}
+                                onChange={(e) => setFormData({...formData, engTerm: e.target.value})}
+                                className="bg-white/90 dark:bg-gray-700/90 border-white/40 dark:border-gray-600/40 shadow-sm focus:shadow-md hover:border-purple-300 dark:hover:border-purple-500 transition-all duration-200"
+                                placeholder="Mand"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <Label htmlFor="engDescription" className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
+                              English Description
+                            </Label>
+                            <Textarea
+                              id="engDescription"
+                              value={formData.engDescription}
+                              onChange={(e) => setFormData({...formData, engDescription: e.target.value})}
+                              className="bg-white/90 dark:bg-gray-700/90 border-white/40 dark:border-gray-600/40 shadow-sm focus:shadow-md hover:border-purple-300 dark:hover:border-purple-500 transition-all duration-200"
+                              placeholder="The lower jaw"
+                              rows={3}
+                            />
+                          </div>
+
+                          <div>
+                            <Label htmlFor="vnDescription" className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
+                              Vietnamese Description
+                            </Label>
+                            <Textarea
+                              id="vnDescription"
+                              value={formData.vnDescription}
+                              onChange={(e) => setFormData({...formData, vnDescription: e.target.value})}
+                              className="bg-white/90 dark:bg-gray-700/90 border-white/40 dark:border-gray-600/40 shadow-sm focus:shadow-md hover:border-purple-300 dark:hover:border-purple-500 transition-all duration-200"
+                              placeholder="Hàm dưới"
+                              rows={3}
+                            />
+                          </div>
+
+                          {/* Photos Section */}
+                          <div>
+                            <Label className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
+                              Photos
+                            </Label>
+                            <div className="border-2 border-dashed border-gray-300/60 dark:border-gray-600/60 hover:border-purple-300 dark:hover:border-purple-500 rounded-lg p-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-300">
+                              <div className="grid grid-cols-2 gap-2 mb-4">
+                                {formData.photos.map((photo, index) => (
+                                  <div key={index} className="relative group">
+                                    <div className="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 text-xs border border-gray-200/60 dark:border-gray-600/60 hover:border-purple-300 dark:hover:border-purple-500 transition-all duration-200">
+                                      {photo.photoName || `Photo ${index + 1}`}
+                                    </div>
+                                    <button
+                                      onClick={() => handleRemovePhoto(index)}
+                                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity border border-red-400/30"
+                                    >
+                                      <X className="w-3 h-3" />
+                                    </button>
+                                    {photo.isMain && (
+                                      <div className="absolute bottom-1 left-1 bg-blue-500 text-white text-xs px-2 py-1 rounded border border-blue-400/30">
+                                        Main
+                                      </div>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                              <div className="flex gap-2">
+                                <Button
+                                  type="button"
+                                  onClick={handleAddPhoto}
+                                  className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 border border-blue-400/30"
+                                  size="sm"
+                                >
+                                  <Plus className="w-4 h-4 mr-2" />
+                                  Add Photo
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-gray-600 dark:text-gray-400 text-center py-8">
+                          Select a term to view details or click Add to create new term
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </div>
+          </main>
         </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }
