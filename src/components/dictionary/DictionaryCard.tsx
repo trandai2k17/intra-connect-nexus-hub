@@ -21,14 +21,14 @@ export function DictionaryCard({ term }: DictionaryCardProps) {
         <div className="flex justify-between items-start">
           <div className="flex-1">
             <CardTitle className="text-lg font-bold text-blue-600 dark:text-blue-400 mb-1">
-              {term.englishTerm}
+              {term.dentalWord}
             </CardTitle>
             <p className="text-base font-medium text-gray-800 dark:text-gray-200">
-              {term.vietnameseTerm}
+              {term.vnTerm}
             </p>
           </div>
           <Badge variant="outline" className="ml-2 text-xs">
-            {term.code}
+            {term.termId}
           </Badge>
         </div>
       </CardHeader>
@@ -40,14 +40,14 @@ export function DictionaryCard({ term }: DictionaryCardProps) {
               Mô tả:
             </p>
             <p className="text-sm text-gray-800 dark:text-gray-200">
-              {term.explanation}
+              {term.vnDescription}
             </p>
           </div>
 
           <div className="flex justify-between items-center pt-2">
             <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
               <ImageIcon className="w-3 h-3 mr-1" />
-              {term.images.length} ảnh
+              {term.photos.length} ảnh
             </div>
             
             <Dialog>
@@ -60,29 +60,34 @@ export function DictionaryCard({ term }: DictionaryCardProps) {
               <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle className="text-xl font-bold text-blue-600">
-                    {term.englishTerm}
+                    {term.dentalWord}
                   </DialogTitle>
                   <p className="text-lg font-medium text-gray-700">
-                    {term.vietnameseTerm}
+                    {term.vnTerm}
                   </p>
                 </DialogHeader>
                 
                 <div className="space-y-6">
                   {/* Images Carousel */}
-                  {term.images.length > 0 && (
+                  {term.photos.length > 0 && (
                     <div className="space-y-2">
                       <h4 className="font-semibold text-gray-800">Hình ảnh:</h4>
                       <Carousel className="w-full">
                         <CarouselContent>
-                          {term.images.map((image, index) => (
-                            <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                          {term.photos.map((photo) => (
+                            <CarouselItem key={photo.id} className="md:basis-1/2 lg:basis-1/3">
                               <div className="p-1">
-                                <img
-                                  src={image}
-                                  alt={`${term.englishTerm} - ${index + 1}`}
-                                  className="w-full h-48 object-cover rounded-lg border border-gray-200 cursor-pointer hover:shadow-md transition-shadow"
-                                  onClick={() => setSelectedImage(image)}
-                                />
+                                <div className="relative">
+                                  <img
+                                    src={photo.photoPath}
+                                    alt={photo.photoName}
+                                    className="w-full h-48 object-cover rounded-lg border border-gray-200 cursor-pointer hover:shadow-md transition-shadow"
+                                    onClick={() => setSelectedImage(photo.photoPath)}
+                                  />
+                                  {photo.activePhoto && (
+                                    <Badge className="absolute top-2 left-2">Active</Badge>
+                                  )}
+                                </div>
                               </div>
                             </CarouselItem>
                           ))}
@@ -93,28 +98,42 @@ export function DictionaryCard({ term }: DictionaryCardProps) {
                     </div>
                   )}
 
-                  {/* Description */}
+                  {/* English Description */}
                   <div className="space-y-2">
-                    <h4 className="font-semibold text-gray-800">Mô tả chi tiết:</h4>
+                    <h4 className="font-semibold text-gray-800">Mô tả tiếng Anh:</h4>
                     <p className="text-gray-700 leading-relaxed">
-                      {term.description}
+                      {term.engDescription}
                     </p>
                   </div>
 
-                  {/* Explanation */}
+                  {/* Vietnamese Description */}
                   <div className="space-y-2">
-                    <h4 className="font-semibold text-gray-800">Diễn giải:</h4>
+                    <h4 className="font-semibold text-gray-800">Mô tả tiếng Việt:</h4>
                     <p className="text-gray-700 leading-relaxed">
-                      {term.explanation}
+                      {term.vnDescription}
                     </p>
                   </div>
 
-                  {/* Code */}
-                  <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Mã: </span>
-                    <span className="font-mono text-sm font-bold text-blue-600">
-                      {term.code}
-                    </span>
+                  {/* Term ID and Product Group */}
+                  <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg space-y-2">
+                    <div>
+                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Mã ID: </span>
+                      <span className="font-mono text-sm font-bold text-blue-600">
+                        {term.termId}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Nhóm sản phẩm: </span>
+                      <span className="text-sm font-bold text-blue-600">
+                        {term.productGroup}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Thuật ngữ TA: </span>
+                      <span className="text-sm font-bold text-blue-600">
+                        {term.engTerm}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </DialogContent>
@@ -129,7 +148,7 @@ export function DictionaryCard({ term }: DictionaryCardProps) {
           <DialogContent className="max-w-3xl">
             <img
               src={selectedImage}
-              alt={term.englishTerm}
+              alt={term.dentalWord}
               className="w-full h-auto rounded-lg"
             />
           </DialogContent>

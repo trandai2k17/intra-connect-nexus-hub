@@ -279,24 +279,24 @@ export default function DictionaryManagement() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="container mx-auto px-4 py-6">
         {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+            Quản lý từ điển
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Thêm, sửa, xóa và quản lý các thuật ngữ nha khoa
+          </p>
+        </div>
+
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-              Quản lý từ điển
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400">
-              Thêm, sửa, xóa và quản lý các thuật ngữ nha khoa
-            </p>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-3 mt-4 md:mt-0">
+          <div className="flex flex-col sm:flex-row gap-3">
             <Button
               variant="outline"
               onClick={exportToCSV}
-              className="border-blue-200 hover:bg-blue-50"
+              className="border-blue-200 hover:bg-blue-50 dark:border-blue-800 dark:hover:bg-blue-900/20"
             >
               <Download className="w-4 h-4 mr-2" />
               Xuất CSV
@@ -309,39 +309,41 @@ export default function DictionaryManagement() {
           {/* Left Panel - Table (col-8) */}
           <div className="col-span-12 lg:col-span-8 space-y-6">
             {/* Search and Stats */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div className="relative flex-1 max-w-md">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <Input
-                    placeholder="Tìm kiếm thuật ngữ..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-                
-                <div className="flex items-center gap-6 text-sm text-gray-600 dark:text-gray-400">
-                  <div className="text-center">
-                    <div className="font-semibold text-blue-600 text-lg">{terms.length}</div>
-                    <div>Tổng số thuật ngữ</div>
+            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+              <CardContent className="p-6">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                  <div className="relative flex-1 max-w-md">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <Input
+                      placeholder="Tìm kiếm thuật ngữ..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
                   </div>
-                  <div className="text-center">
-                    <div className="font-semibold text-green-600 text-lg">
-                      {terms.filter(t => t.photos.length > 0).length}
+                  
+                  <div className="flex items-center gap-6 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="text-center">
+                      <div className="font-semibold text-blue-600 text-lg">{terms.length}</div>
+                      <div>Tổng số thuật ngữ</div>
                     </div>
-                    <div>Có hình ảnh</div>
+                    <div className="text-center">
+                      <div className="font-semibold text-green-600 text-lg">
+                        {terms.filter(t => t.photos.length > 0).length}
+                      </div>
+                      <div>Có hình ảnh</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
 
             {/* Terms Table */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm overflow-hidden">
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow className="bg-gray-50 dark:bg-gray-700">
+                    <TableRow className="bg-gray-50/80 dark:bg-gray-700/80">
                       <TableHead className="font-semibold">Mã ID</TableHead>
                       <TableHead className="font-semibold">Từ nha khoa</TableHead>
                       <TableHead className="font-semibold">Tiếng Việt</TableHead>
@@ -355,8 +357,8 @@ export default function DictionaryManagement() {
                     {filteredTerms.map((term) => (
                       <TableRow 
                         key={term.termId} 
-                        className={`hover:bg-gray-50 dark:hover:bg-gray-700 ${
-                          selectedTerm === term.termId ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+                        className={`hover:bg-blue-50/50 dark:hover:bg-gray-700/50 transition-colors ${
+                          selectedTerm === term.termId ? 'bg-blue-100/60 dark:bg-blue-900/20' : ''
                         }`}
                       >
                         <TableCell className="font-mono text-sm font-medium text-blue-600">
@@ -385,13 +387,13 @@ export default function DictionaryManagement() {
                           <div className="flex items-center justify-center gap-2">
                             <Dialog>
                               <DialogTrigger asChild>
-                                <Button variant="ghost" size="sm">
+                                <Button variant="ghost" size="sm" className="hover:bg-blue-50">
                                   <Eye className="w-4 h-4" />
                                 </Button>
                               </DialogTrigger>
                               <DialogContent className="max-w-2xl">
                                 <DialogHeader>
-                                  <DialogTitle>{term.dentalWord}</DialogTitle>
+                                  <DialogTitle className="text-blue-600">{term.dentalWord}</DialogTitle>
                                 </DialogHeader>
                                 <div className="space-y-4">
                                   <div>
@@ -436,6 +438,7 @@ export default function DictionaryManagement() {
                               variant="ghost" 
                               size="sm"
                               onClick={() => handleEdit(term)}
+                              className="hover:bg-yellow-50"
                             >
                               <Edit className="w-4 h-4" />
                             </Button>
@@ -470,15 +473,15 @@ export default function DictionaryManagement() {
                   </p>
                 </div>
               )}
-            </div>
+            </Card>
           </div>
 
           {/* Right Panel - Form (col-4) */}
           <div className="col-span-12 lg:col-span-4">
-            <Card className="sticky top-4">
+            <Card className="sticky top-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg font-semibold">
+                  <CardTitle className="text-lg font-semibold text-blue-600 dark:text-blue-400">
                     {formMode === 'add' ? 'Thêm thuật ngữ mới' : 'Chỉnh sửa thuật ngữ'}
                   </CardTitle>
                   <div className="flex gap-2">
@@ -486,7 +489,7 @@ export default function DictionaryManagement() {
                       variant="outline"
                       size="sm"
                       onClick={handleAddNew}
-                      className={formMode === 'add' ? 'bg-blue-50' : ''}
+                      className={`hover:bg-blue-50 ${formMode === 'add' ? 'bg-blue-50 border-blue-200' : ''}`}
                     >
                       <Plus className="w-4 h-4" />
                     </Button>
@@ -500,7 +503,7 @@ export default function DictionaryManagement() {
                         }
                       }}
                       disabled={!selectedTerm}
-                      className={formMode === 'edit' ? 'bg-yellow-50' : ''}
+                      className={`hover:bg-yellow-50 ${formMode === 'edit' ? 'bg-yellow-50 border-yellow-200' : ''}`}
                     >
                       <Edit className="w-4 h-4" />
                     </Button>
@@ -511,14 +514,14 @@ export default function DictionaryManagement() {
                         if (selectedTerm) handleDeleteTerm(selectedTerm);
                       }}
                       disabled={!selectedTerm}
-                      className="text-red-600 hover:text-red-700"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                     <Button
                       size="sm"
                       onClick={handleApply}
-                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
                     >
                       <Check className="w-4 h-4" />
                     </Button>
@@ -526,7 +529,7 @@ export default function DictionaryManagement() {
                 </div>
               </CardHeader>
               
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
                 {/* Basic Information */}
                 <div className="space-y-4">
                   <div className="space-y-2">
@@ -625,7 +628,7 @@ export default function DictionaryManagement() {
                   <div className="space-y-4">
                     <Label>Hình ảnh minh họa</Label>
                     
-                    <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 text-center">
+                    <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 text-center hover:border-blue-300 transition-colors">
                       <input
                         type="file"
                         multiple

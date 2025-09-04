@@ -13,45 +13,72 @@ import { DictionaryTerm } from '@/types/dictionary';
 // Sample data - trong thực tế sẽ fetch từ API
 const sampleTerms: DictionaryTerm[] = [
   {
-    id: '1',
-    englishTerm: 'Palatal Strap',
-    vietnameseTerm: 'Bản khẩu cái',
-    description: 'A major connector on an upper partial denture that crosses the hard palate in the bicuspid and molar region.',
-    explanation: 'Một kết nối chính trên một hàm giả răng trên mở bảng qua vòm miệng cứng ở vùng răng nanh và răng hàm.',
-    code: 'RPD0057',
-    images: [
-      '/lovable-uploads/9bcec0a6-9336-4ef4-b0e3-c4b13db813e8.png',
-      'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400',
-      'https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=400'
+    termId: 'RPD0001',
+    productGroup: 'RPD',
+    alphabeta: 'M',
+    dentalWord: 'Mandible',
+    vnTerm: 'Hàm dưới',
+    engTerm: 'Mand',
+    engDescription: 'The lower jaw',
+    vnDescription: 'Hàm dưới',
+    photos: [
+      {
+        id: '1',
+        termId: 'RPD0001',
+        photoName: 'RPD0001_1',
+        photoPath: '/lovable-uploads/9bcec0a6-9336-4ef4-b0e3-c4b13db813e8.png',
+        activePhoto: true
+      }
     ],
-    category: 'Prosthodontics',
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: '2',
-    englishTerm: 'Crown',
-    vietnameseTerm: 'Mão răng',
-    description: 'A type of dental restoration which completely caps or encircles a tooth or dental implant.',
-    explanation: 'Một loại phục hồi nha khoa bao phủ hoàn toàn hoặc bao quanh một răng hoặc cấy ghép nha khoa.',
-    code: 'CR001',
-    images: [
-      'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400',
-      'https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=400'
+    termId: 'RPD0002',
+    productGroup: 'RPD',
+    alphabeta: 'M',
+    dentalWord: 'Maxilla',
+    vnTerm: 'Hàm trên',
+    engTerm: 'Max',
+    engDescription: 'The upper jaw',
+    vnDescription: 'Hàm trên',
+    photos: [
+      {
+        id: '2',
+        termId: 'RPD0002',
+        photoName: 'RPD0002_1',
+        photoPath: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400',
+        activePhoto: true
+      },
+      {
+        id: '3',
+        termId: 'RPD0002',
+        photoName: 'RPD0002_2',
+        photoPath: 'https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=400',
+        activePhoto: false
+      }
     ],
-    category: 'Prosthodontics',
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: '3',
-    englishTerm: 'Bridge',
-    vietnameseTerm: 'Cầu răng',
-    description: 'A fixed dental restoration used to replace one or more missing teeth by joining permanently to adjacent teeth.',
-    explanation: 'Một phục hình nha khoa cố định được sử dụng để thay thế một hoặc nhiều răng bị mất bằng cách gắn vĩnh viễn với các răng liền kề.',
-    code: 'BR001',
-    images: ['https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=400'],
-    category: 'Prosthodontics',
+    termId: 'RPD0003',
+    productGroup: 'RPD',
+    alphabeta: 'A',
+    dentalWord: 'Abutment',
+    vnTerm: 'Răng trụ',
+    engTerm: 'Abutment tooth',
+    engDescription: 'A tooth used to support a removable partial denture or anchor a fixed partial denture',
+    vnDescription: 'Nếu là HTL: răng sẽ đặt móc. Nếu là răng sứ: là cùi răng',
+    photos: [
+      {
+        id: '4',
+        termId: 'RPD0003',
+        photoName: 'RPD0003_1',
+        photoPath: 'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=400',
+        activePhoto: true
+      }
+    ],
     createdAt: new Date(),
     updatedAt: new Date(),
   },
@@ -68,12 +95,12 @@ export default function Dictionary() {
   const filteredTerms = useMemo(() => {
     return sampleTerms.filter(term => {
       const matchesSearch = 
-        term.englishTerm.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        term.vietnameseTerm.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        term.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        term.description.toLowerCase().includes(searchTerm.toLowerCase());
+        term.dentalWord.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        term.vnTerm.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        term.termId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        term.engDescription.toLowerCase().includes(searchTerm.toLowerCase());
       
-      const matchesCategory = selectedCategory === 'all' || term.category === selectedCategory;
+      const matchesCategory = selectedCategory === 'all' || term.productGroup === selectedCategory;
       
       return matchesSearch && matchesCategory;
     });
@@ -174,27 +201,27 @@ export default function Dictionary() {
                     <div className="divide-y divide-gray-200">
                       {filteredTerms.map((term) => (
                         <div
-                          key={term.id}
+                          key={term.termId}
                           className={`p-4 cursor-pointer transition-all duration-200 hover:bg-blue-50 dark:hover:bg-gray-700 ${
-                            selectedTerm?.id === term.id ? 'bg-blue-100 dark:bg-gray-600 border-l-4 border-blue-500' : ''
+                            selectedTerm?.termId === term.termId ? 'bg-blue-100 dark:bg-gray-600 border-l-4 border-blue-500' : ''
                           }`}
                           onClick={() => handleTermSelect(term)}
                         >
                           <div className="flex justify-between items-start">
                             <div className="flex-1">
                               <h3 className="font-semibold text-blue-600 dark:text-blue-400 text-sm">
-                                {term.englishTerm}
+                                {term.dentalWord}
                               </h3>
                               <p className="text-gray-800 dark:text-gray-200 text-sm mt-1">
-                                {term.vietnameseTerm}
+                                {term.vnTerm}
                               </p>
                               <div className="flex items-center gap-2 mt-2">
                                 <Badge variant="outline" className="text-xs">
-                                  {term.code}
+                                  {term.termId}
                                 </Badge>
                                 <span className="text-xs text-gray-500 flex items-center gap-1">
                                   <ImageIcon className="w-3 h-3" />
-                                  {term.images.length}
+                                  {term.photos.length}
                                 </span>
                               </div>
                             </div>
@@ -215,23 +242,23 @@ export default function Dictionary() {
                       <TableBody>
                         {filteredTerms.map((term) => (
                           <TableRow
-                            key={term.id}
+                            key={term.termId}
                             className={`cursor-pointer transition-colors ${
-                              selectedTerm?.id === term.id ? 'bg-blue-100 dark:bg-gray-600' : ''
+                              selectedTerm?.termId === term.termId ? 'bg-blue-100 dark:bg-gray-600' : ''
                             }`}
                             onClick={() => handleTermSelect(term)}
                           >
                             <TableCell className="font-medium text-blue-600 dark:text-blue-400">
-                              {term.englishTerm}
+                              {term.dentalWord}
                             </TableCell>
-                            <TableCell>{term.vietnameseTerm}</TableCell>
+                            <TableCell>{term.vnTerm}</TableCell>
                             <TableCell>
-                              <Badge variant="outline">{term.code}</Badge>
+                              <Badge variant="outline">{term.termId}</Badge>
                             </TableCell>
                             <TableCell>
                               <span className="flex items-center gap-1 text-sm text-gray-500">
                                 <ImageIcon className="w-3 h-3" />
-                                {term.images.length}
+                                {term.photos.length}
                               </span>
                             </TableCell>
                           </TableRow>
@@ -250,85 +277,101 @@ export default function Dictionary() {
               <Card className="h-full shadow-lg border-0 bg-white/80 backdrop-blur-sm">
                 <CardHeader className="pb-4">
                   <CardTitle className="text-xl font-bold text-blue-600 dark:text-blue-400">
-                    {selectedTerm.englishTerm}
+                    {selectedTerm.dentalWord}
                   </CardTitle>
                   <p className="text-lg font-medium text-gray-800 dark:text-gray-200">
-                    {selectedTerm.vietnameseTerm}
+                    {selectedTerm.vnTerm}
                   </p>
                   <Badge variant="outline" className="w-fit">
-                    {selectedTerm.code}
+                    {selectedTerm.termId}
                   </Badge>
                 </CardHeader>
 
                 <CardContent className="flex-1 overflow-y-auto">
                   <div className="space-y-6">
                     {/* Images */}
-                    {selectedTerm.images.length > 0 && (
+                    {selectedTerm.photos.length > 0 && (
                       <div className="space-y-3">
                         <h4 className="font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
                           <ImageIcon className="w-4 h-4" />
-                          Hình ảnh ({selectedTerm.images.length})
+                          Hình ảnh ({selectedTerm.photos.length})
                         </h4>
                         
                         {/* Main Image */}
                         <div className="relative">
                           <img
-                            src={selectedTerm.images[selectedImageIndex]}
-                            alt={selectedTerm.englishTerm}
+                            src={selectedTerm.photos[selectedImageIndex]?.photoPath}
+                            alt={selectedTerm.dentalWord}
                             className="w-full h-64 object-cover rounded-lg border border-gray-200 shadow-md cursor-pointer hover:shadow-lg transition-shadow"
-                            onClick={() => handleImageClick(selectedTerm.images[selectedImageIndex], selectedImageIndex)}
+                            onClick={() => handleImageClick(selectedTerm.photos[selectedImageIndex]?.photoPath, selectedImageIndex)}
                           />
                           <div className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-xs">
-                            {selectedImageIndex + 1} / {selectedTerm.images.length}
+                            {selectedImageIndex + 1} / {selectedTerm.photos.length}
                           </div>
                         </div>
 
                         {/* Image Thumbnails */}
-                        {selectedTerm.images.length > 1 && (
+                        {selectedTerm.photos.length > 1 && (
                           <div className="flex gap-2 overflow-x-auto pb-2">
-                            {selectedTerm.images.map((image, index) => (
-                              <img
-                                key={index}
-                                src={image}
-                                alt={`${selectedTerm.englishTerm} - ${index + 1}`}
-                                className={`w-16 h-16 object-cover rounded border-2 cursor-pointer transition-all ${
-                                  selectedImageIndex === index 
-                                    ? 'border-blue-500 shadow-md' 
-                                    : 'border-gray-200 hover:border-gray-300'
-                                }`}
-                                onClick={() => setSelectedImageIndex(index)}
-                              />
+                            {selectedTerm.photos.map((photo, index) => (
+                              <div key={photo.id} className="relative">
+                                <img
+                                  src={photo.photoPath}
+                                  alt={photo.photoName}
+                                  className={`w-16 h-16 object-cover rounded border-2 cursor-pointer transition-all ${
+                                    selectedImageIndex === index 
+                                      ? 'border-blue-500 shadow-md' 
+                                      : 'border-gray-200 hover:border-gray-300'
+                                  }`}
+                                  onClick={() => setSelectedImageIndex(index)}
+                                />
+                                {photo.activePhoto && (
+                                  <Badge className="absolute -top-1 -right-1 text-xs">Active</Badge>
+                                )}
+                              </div>
                             ))}
                           </div>
                         )}
                       </div>
                     )}
 
-                    {/* Description */}
+                    {/* English Description */}
                     <div className="space-y-2">
-                      <h4 className="font-semibold text-gray-800 dark:text-gray-200">Mô tả chi tiết:</h4>
+                      <h4 className="font-semibold text-gray-800 dark:text-gray-200">Mô tả tiếng Anh:</h4>
                       <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
-                        {selectedTerm.description}
+                        {selectedTerm.engDescription}
                       </p>
                     </div>
 
-                    {/* Explanation */}
+                    {/* Vietnamese Description */}
                     <div className="space-y-2">
-                      <h4 className="font-semibold text-gray-800 dark:text-gray-200">Diễn giải:</h4>
+                      <h4 className="font-semibold text-gray-800 dark:text-gray-200">Mô tả tiếng Việt:</h4>
                       <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
-                        {selectedTerm.explanation}
+                        {selectedTerm.vnDescription}
                       </p>
                     </div>
 
-                    {/* Category */}
-                    {selectedTerm.category && (
-                      <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Danh mục: </span>
-                        <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
-                          {selectedTerm.category}
+                    {/* Product Group */}
+                    <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg space-y-2">
+                      <div>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Mã ID: </span>
+                        <span className="font-mono text-sm font-bold text-blue-600">
+                          {selectedTerm.termId}
                         </span>
                       </div>
-                    )}
+                      <div>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Nhóm sản phẩm: </span>
+                        <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                          {selectedTerm.productGroup}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Thuật ngữ TA: </span>
+                        <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                          {selectedTerm.engTerm}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
