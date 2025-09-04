@@ -13,19 +13,98 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DictionaryTerm } from '@/types/dictionary';
 import { useToast } from '@/hooks/use-toast';
 
-// Sample data
+// Sample data based on the provided seed data
 const initialTerms: DictionaryTerm[] = [
   {
-    id: '1',
-    englishTerm: 'Palatal Strap',
-    vietnameseTerm: 'Bản khẩu cái',
-    description: 'A major connector on an upper partial denture that crosses the hard palate in the bicuspid and molar region.',
-    explanation: 'Một kết nối chính trên một hàm giả răng trên mở bảng qua vòm miệng cứng ở vùng răng nanh và răng hàm.',
-    code: 'RPD0057',
-    images: ['/lovable-uploads/9bcec0a6-9336-4ef4-b0e3-c4b13db813e8.png'],
-    category: 'Prosthodontics',
+    termId: 'RPD0001',
+    productGroup: 'RPD',
+    alphabeta: 'M',
+    dentalWord: 'Mandible',
+    vnTerm: 'Hàm dưới',
+    engTerm: 'Mand',
+    engDescription: 'The lower jaw',
+    vnDescription: 'Hàm dưới',
+    photos: [
+      {
+        id: '1',
+        termId: 'RPD0001',
+        photoName: 'RPD0001_1',
+        photoPath: '/lovable-uploads/9bcec0a6-9336-4ef4-b0e3-c4b13db813e8.png',
+        activePhoto: true
+      }
+    ],
     createdAt: new Date('2024-01-15'),
     updatedAt: new Date('2024-01-15'),
+  },
+  {
+    termId: 'RPD0002',
+    productGroup: 'RPD',
+    alphabeta: 'M',
+    dentalWord: 'Maxilla',
+    vnTerm: 'Hàm trên',
+    engTerm: 'Max',
+    engDescription: 'The upper jaw',
+    vnDescription: 'Hàm trên',
+    photos: [
+      {
+        id: '2',
+        termId: 'RPD0002',
+        photoName: 'RPD0002_1',
+        photoPath: '/lovable-uploads/cb0bf27b-00e3-497d-b8d9-ab79e7751d6f.png',
+        activePhoto: true
+      }
+    ],
+    createdAt: new Date('2024-01-16'),
+    updatedAt: new Date('2024-01-16'),
+  },
+  {
+    termId: 'RPD0003',
+    productGroup: 'RPD',
+    alphabeta: 'A',
+    dentalWord: 'Abutment',
+    vnTerm: 'Răng trụ',
+    engTerm: 'Abutment tooth',
+    engDescription: 'A tooth used to support a removable partial denture or anchor a fixed partial denture',
+    vnDescription: 'Nếu là HTL: răng sẽ đặt móc. Nếu là răng sứ: là cùi răng',
+    photos: [
+      {
+        id: '3',
+        termId: 'RPD0003',
+        photoName: 'RPD0003_1',
+        photoPath: '/lovable-uploads/9bcec0a6-9336-4ef4-b0e3-c4b13db813e8.png',
+        activePhoto: true
+      },
+      {
+        id: '4',
+        termId: 'RPD0003',
+        photoName: 'RPD0003_2',
+        photoPath: '/lovable-uploads/cb0bf27b-00e3-497d-b8d9-ab79e7751d6f.png',
+        activePhoto: false
+      }
+    ],
+    createdAt: new Date('2024-01-17'),
+    updatedAt: new Date('2024-01-17'),
+  },
+  {
+    termId: 'RPD0004',
+    productGroup: 'RPD',
+    alphabeta: 'A',
+    dentalWord: 'Acrylic Resin',
+    vnTerm: 'Nướu giả',
+    engTerm: 'Partial Base / Denture Base',
+    engDescription: 'The plastic material widely used in dentistry to make the denture base.',
+    vnDescription: 'Phần nền nướu giả, làm từ nhựa theo sản phẩm yêu cầu, giúp cố định răng nhựa.',
+    photos: [
+      {
+        id: '5',
+        termId: 'RPD0004',
+        photoName: 'RPD0004_1',
+        photoPath: '/lovable-uploads/9bcec0a6-9336-4ef4-b0e3-c4b13db813e8.png',
+        activePhoto: true
+      }
+    ],
+    createdAt: new Date('2024-01-18'),
+    updatedAt: new Date('2024-01-18'),
   },
 ];
 
@@ -34,33 +113,37 @@ export default function DictionaryManagement() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTerm, setSelectedTerm] = useState<string | null>(null);
   const [formMode, setFormMode] = useState<'add' | 'edit'>('add');
-  const [images, setImages] = useState<string[]>([]);
+  const [photoFiles, setPhotoFiles] = useState<string[]>([]);
   const [formData, setFormData] = useState({
-    englishTerm: '',
-    vietnameseTerm: '',
-    description: '',
-    explanation: '',
-    code: '',
-    category: '',
+    productGroup: 'RPD',
+    alphabeta: '',
+    dentalWord: '',
+    vnTerm: '',
+    engTerm: '',
+    engDescription: '',
+    vnDescription: '',
+    termId: '',
   });
   const { toast } = useToast();
 
   const filteredTerms = terms.filter(term =>
-    term.englishTerm.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    term.vietnameseTerm.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    term.code.toLowerCase().includes(searchTerm.toLowerCase())
+    term.dentalWord.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    term.vnTerm.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    term.termId.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const resetForm = () => {
     setFormData({
-      englishTerm: '',
-      vietnameseTerm: '',
-      description: '',
-      explanation: '',
-      code: '',
-      category: '',
+      productGroup: 'RPD',
+      alphabeta: '',
+      dentalWord: '',
+      vnTerm: '',
+      engTerm: '',
+      engDescription: '',
+      vnDescription: '',
+      termId: '',
     });
-    setImages([]);
+    setPhotoFiles([]);
     setSelectedTerm(null);
     setFormMode('add');
   };
@@ -72,21 +155,23 @@ export default function DictionaryManagement() {
 
   const handleEdit = (term: DictionaryTerm) => {
     setFormData({
-      englishTerm: term.englishTerm,
-      vietnameseTerm: term.vietnameseTerm,
-      description: term.description,
-      explanation: term.explanation,
-      code: term.code,
-      category: term.category || '',
+      productGroup: term.productGroup,
+      alphabeta: term.alphabeta,
+      dentalWord: term.dentalWord,
+      vnTerm: term.vnTerm,
+      engTerm: term.engTerm,
+      engDescription: term.engDescription,
+      vnDescription: term.vnDescription,
+      termId: term.termId,
     });
-    setImages(term.images);
-    setSelectedTerm(term.id);
+    setPhotoFiles(term.photos.map(p => p.photoPath));
+    setSelectedTerm(term.termId);
     setFormMode('edit');
   };
 
-  const handleDeleteTerm = (id: string) => {
-    setTerms(prev => prev.filter(term => term.id !== id));
-    if (selectedTerm === id) {
+  const handleDeleteTerm = (termId: string) => {
+    setTerms(prev => prev.filter(term => term.termId !== termId));
+    if (selectedTerm === termId) {
       resetForm();
     }
     toast({
@@ -96,7 +181,7 @@ export default function DictionaryManagement() {
   };
 
   const handleApply = () => {
-    if (!formData.englishTerm || !formData.vietnameseTerm || !formData.code) {
+    if (!formData.dentalWord || !formData.vnTerm || !formData.termId) {
       toast({
         title: "Lỗi",
         description: "Vui lòng điền đầy đủ thông tin bắt buộc",
@@ -106,10 +191,17 @@ export default function DictionaryManagement() {
     }
 
     if (formMode === 'add') {
+      const photos = photoFiles.map((photoPath, index) => ({
+        id: `${Date.now()}_${index}`,
+        termId: formData.termId,
+        photoName: `${formData.termId}_${index + 1}`,
+        photoPath,
+        activePhoto: index === 0,
+      }));
+
       const newTerm: DictionaryTerm = {
-        id: Date.now().toString(),
         ...formData,
-        images,
+        photos,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -119,9 +211,17 @@ export default function DictionaryManagement() {
         description: "Đã thêm thuật ngữ mới",
       });
     } else if (formMode === 'edit' && selectedTerm) {
+      const photos = photoFiles.map((photoPath, index) => ({
+        id: `${Date.now()}_${index}`,
+        termId: formData.termId,
+        photoName: `${formData.termId}_${index + 1}`,
+        photoPath,
+        activePhoto: index === 0,
+      }));
+
       setTerms(prev => prev.map(term => 
-        term.id === selectedTerm 
-          ? { ...term, ...formData, images, updatedAt: new Date() }
+        term.termId === selectedTerm 
+          ? { ...term, ...formData, photos, updatedAt: new Date() }
           : term
       ));
       toast({
@@ -140,7 +240,7 @@ export default function DictionaryManagement() {
       const reader = new FileReader();
       reader.onload = (event) => {
         if (event.target?.result) {
-          setImages(prev => [...prev, event.target!.result as string]);
+          setPhotoFiles(prev => [...prev, event.target!.result as string]);
         }
       };
       reader.readAsDataURL(file);
@@ -148,20 +248,21 @@ export default function DictionaryManagement() {
   };
 
   const removeImage = (index: number) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
+    setPhotoFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const exportToCSV = () => {
-    const headers = ['Mã số', 'Tiếng Anh', 'Tiếng Việt', 'Danh mục', 'Mô tả', 'Diễn giải'];
+    const headers = ['TermID', 'ProductGroup', 'DentalWord', 'VnTerm', 'EngTerm', 'EngDescription', 'VnDescription'];
     const csvContent = [
       headers.join(','),
       ...terms.map(term => [
-        term.code,
-        `"${term.englishTerm}"`,
-        `"${term.vietnameseTerm}"`,
-        term.category || '',
-        `"${term.description}"`,
-        `"${term.explanation}"`
+        term.termId,
+        term.productGroup,
+        `"${term.dentalWord}"`,
+        `"${term.vnTerm}"`,
+        `"${term.engTerm}"`,
+        `"${term.engDescription}"`,
+        `"${term.vnDescription}"`
       ].join(','))
     ].join('\n');
 
@@ -227,7 +328,7 @@ export default function DictionaryManagement() {
                   </div>
                   <div className="text-center">
                     <div className="font-semibold text-green-600 text-lg">
-                      {terms.filter(t => t.images.length > 0).length}
+                      {terms.filter(t => t.photos.length > 0).length}
                     </div>
                     <div>Có hình ảnh</div>
                   </div>
@@ -241,10 +342,10 @@ export default function DictionaryManagement() {
                 <Table>
                   <TableHeader>
                     <TableRow className="bg-gray-50 dark:bg-gray-700">
-                      <TableHead className="font-semibold">Mã số</TableHead>
-                      <TableHead className="font-semibold">Tiếng Anh</TableHead>
+                      <TableHead className="font-semibold">Mã ID</TableHead>
+                      <TableHead className="font-semibold">Từ nha khoa</TableHead>
                       <TableHead className="font-semibold">Tiếng Việt</TableHead>
-                      <TableHead className="font-semibold">Danh mục</TableHead>
+                      <TableHead className="font-semibold">Nhóm sản phẩm</TableHead>
                       <TableHead className="font-semibold text-center">Hình ảnh</TableHead>
                       <TableHead className="font-semibold">Ngày tạo</TableHead>
                       <TableHead className="font-semibold text-center">Thao tác</TableHead>
@@ -253,30 +354,28 @@ export default function DictionaryManagement() {
                   <TableBody>
                     {filteredTerms.map((term) => (
                       <TableRow 
-                        key={term.id} 
+                        key={term.termId} 
                         className={`hover:bg-gray-50 dark:hover:bg-gray-700 ${
-                          selectedTerm === term.id ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+                          selectedTerm === term.termId ? 'bg-blue-50 dark:bg-blue-900/20' : ''
                         }`}
                       >
                         <TableCell className="font-mono text-sm font-medium text-blue-600">
-                          {term.code}
+                          {term.termId}
                         </TableCell>
                         <TableCell className="font-medium">
-                          {term.englishTerm}
+                          {term.dentalWord}
                         </TableCell>
                         <TableCell className="text-gray-700 dark:text-gray-300">
-                          {term.vietnameseTerm}
+                          {term.vnTerm}
                         </TableCell>
                         <TableCell>
-                          {term.category && (
-                            <Badge variant="secondary" className="text-xs">
-                              {term.category}
-                            </Badge>
-                          )}
+                          <Badge variant="secondary" className="text-xs">
+                            {term.productGroup}
+                          </Badge>
                         </TableCell>
                         <TableCell className="text-center">
-                          <Badge variant={term.images.length > 0 ? "default" : "secondary"}>
-                            {term.images.length}
+                          <Badge variant={term.photos.length > 0 ? "default" : "secondary"}>
+                            {term.photos.length}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-sm text-gray-500">
@@ -292,32 +391,39 @@ export default function DictionaryManagement() {
                               </DialogTrigger>
                               <DialogContent className="max-w-2xl">
                                 <DialogHeader>
-                                  <DialogTitle>{term.englishTerm}</DialogTitle>
+                                  <DialogTitle>{term.dentalWord}</DialogTitle>
                                 </DialogHeader>
                                 <div className="space-y-4">
                                   <div>
-                                    <strong>Tiếng Việt:</strong> {term.vietnameseTerm}
+                                    <strong>Tiếng Việt:</strong> {term.vnTerm}
                                   </div>
                                   <div>
-                                    <strong>Mã:</strong> {term.code}
+                                    <strong>Mã ID:</strong> {term.termId}
                                   </div>
                                   <div>
-                                    <strong>Mô tả:</strong> {term.description}
+                                    <strong>Thuật ngữ tiếng Anh:</strong> {term.engTerm}
                                   </div>
                                   <div>
-                                    <strong>Diễn giải:</strong> {term.explanation}
+                                    <strong>Mô tả tiếng Anh:</strong> {term.engDescription}
                                   </div>
-                                  {term.images.length > 0 && (
+                                  <div>
+                                    <strong>Mô tả tiếng Việt:</strong> {term.vnDescription}
+                                  </div>
+                                  {term.photos.length > 0 && (
                                     <div>
                                       <strong>Hình ảnh:</strong>
                                       <div className="grid grid-cols-2 gap-2 mt-2">
-                                        {term.images.map((img, idx) => (
-                                          <img
-                                            key={idx}
-                                            src={img}
-                                            alt={`${term.englishTerm} ${idx + 1}`}
-                                            className="w-full h-32 object-cover rounded border"
-                                          />
+                                        {term.photos.map((photo) => (
+                                          <div key={photo.id} className="relative">
+                                            <img
+                                              src={photo.photoPath}
+                                              alt={photo.photoName}
+                                              className="w-full h-32 object-cover rounded border"
+                                            />
+                                            {photo.activePhoto && (
+                                              <Badge className="absolute top-2 left-2">Active</Badge>
+                                            )}
+                                          </div>
                                         ))}
                                       </div>
                                     </div>
@@ -337,7 +443,7 @@ export default function DictionaryManagement() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleDeleteTerm(term.id)}
+                              onClick={() => handleDeleteTerm(term.termId)}
                               className="text-red-600 hover:text-red-700 hover:bg-red-50"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -389,7 +495,7 @@ export default function DictionaryManagement() {
                       size="sm"
                       onClick={() => {
                         if (selectedTerm) {
-                          const term = terms.find(t => t.id === selectedTerm);
+                          const term = terms.find(t => t.termId === selectedTerm);
                           if (term) handleEdit(term);
                         }
                       }}
@@ -424,73 +530,93 @@ export default function DictionaryManagement() {
                 {/* Basic Information */}
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="englishTerm">Thuật ngữ tiếng Anh *</Label>
+                    <Label htmlFor="termId">Mã ID *</Label>
                     <Input
-                      id="englishTerm"
-                      value={formData.englishTerm}
-                      onChange={(e) => setFormData(prev => ({ ...prev, englishTerm: e.target.value }))}
-                      placeholder="VD: Palatal Strap"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="vietnameseTerm">Thuật ngữ tiếng Việt *</Label>
-                    <Input
-                      id="vietnameseTerm"
-                      value={formData.vietnameseTerm}
-                      onChange={(e) => setFormData(prev => ({ ...prev, vietnameseTerm: e.target.value }))}
-                      placeholder="VD: Bản khẩu cái"
+                      id="termId"
+                      value={formData.termId}
+                      onChange={(e) => setFormData(prev => ({ ...prev, termId: e.target.value }))}
+                      placeholder="VD: RPD0001"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="code">Mã số *</Label>
+                    <Label htmlFor="dentalWord">Từ nha khoa *</Label>
                     <Input
-                      id="code"
-                      value={formData.code}
-                      onChange={(e) => setFormData(prev => ({ ...prev, code: e.target.value }))}
-                      placeholder="VD: RPD0057"
+                      id="dentalWord"
+                      value={formData.dentalWord}
+                      onChange={(e) => setFormData(prev => ({ ...prev, dentalWord: e.target.value }))}
+                      placeholder="VD: Mandible"
                     />
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="category">Danh mục</Label>
+                    <Label htmlFor="vnTerm">Thuật ngữ tiếng Việt *</Label>
+                    <Input
+                      id="vnTerm"
+                      value={formData.vnTerm}
+                      onChange={(e) => setFormData(prev => ({ ...prev, vnTerm: e.target.value }))}
+                      placeholder="VD: Hàm dưới"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="engTerm">Thuật ngữ tiếng Anh</Label>
+                    <Input
+                      id="engTerm"
+                      value={formData.engTerm}
+                      onChange={(e) => setFormData(prev => ({ ...prev, engTerm: e.target.value }))}
+                      placeholder="VD: Mand"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="productGroup">Nhóm sản phẩm</Label>
                     <Select
-                      value={formData.category}
-                      onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
+                      value={formData.productGroup}
+                      onValueChange={(value) => setFormData(prev => ({ ...prev, productGroup: value }))}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Chọn danh mục" />
+                        <SelectValue placeholder="Chọn nhóm sản phẩm" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Prosthodontics">Phục hình</SelectItem>
-                        <SelectItem value="Orthodontics">Chỉnh nha</SelectItem>
-                        <SelectItem value="Endodontics">Nội nha</SelectItem>
-                        <SelectItem value="Periodontics">Nha chu</SelectItem>
-                        <SelectItem value="Oral Surgery">Phẫu thuật hàm mặt</SelectItem>
+                        <SelectItem value="RPD">RPD</SelectItem>
+                        <SelectItem value="Crown">Crown</SelectItem>
+                        <SelectItem value="Bridge">Bridge</SelectItem>
+                        <SelectItem value="Implant">Implant</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
+                  <div className="space-y-2">
+                    <Label htmlFor="alphabeta">Chữ cái</Label>
+                    <Input
+                      id="alphabeta"
+                      value={formData.alphabeta}
+                      onChange={(e) => setFormData(prev => ({ ...prev, alphabeta: e.target.value }))}
+                      placeholder="VD: M, A"
+                      maxLength={1}
+                    />
+                  </div>
+
                   {/* Descriptions */}
                   <div className="space-y-2">
-                    <Label htmlFor="description">Mô tả (tiếng Anh)</Label>
+                    <Label htmlFor="engDescription">Mô tả tiếng Anh</Label>
                     <Textarea
-                      id="description"
-                      value={formData.description}
-                      onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                      id="engDescription"
+                      value={formData.engDescription}
+                      onChange={(e) => setFormData(prev => ({ ...prev, engDescription: e.target.value }))}
                       placeholder="Mô tả chi tiết bằng tiếng Anh..."
                       rows={2}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="explanation">Diễn giải (tiếng Việt)</Label>
+                    <Label htmlFor="vnDescription">Mô tả tiếng Việt</Label>
                     <Textarea
-                      id="explanation"
-                      value={formData.explanation}
-                      onChange={(e) => setFormData(prev => ({ ...prev, explanation: e.target.value }))}
-                      placeholder="Diễn giải chi tiết bằng tiếng Việt..."
+                      id="vnDescription"
+                      value={formData.vnDescription}
+                      onChange={(e) => setFormData(prev => ({ ...prev, vnDescription: e.target.value }))}
+                      placeholder="Mô tả chi tiết bằng tiếng Việt..."
                       rows={2}
                     />
                   </div>
@@ -517,9 +643,9 @@ export default function DictionaryManagement() {
                     </div>
 
                     {/* Image Preview */}
-                    {images.length > 0 && (
+                    {photoFiles.length > 0 && (
                       <div className="grid grid-cols-2 gap-2">
-                        {images.map((image, index) => (
+                        {photoFiles.map((image, index) => (
                           <div key={index} className="relative">
                             <img
                               src={image}
