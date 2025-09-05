@@ -1,8 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { Calendar, Clock } from "lucide-react";
 
 interface Course {
   id: string;
@@ -113,25 +110,33 @@ const coursesData: Course[] = [
 ];
 
 export const ActiveTrainingPrograms = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const coursesPerPage = 6;
-  const totalPages = Math.ceil(coursesData.length / coursesPerPage);
-  
-  const startIndex = (currentPage - 1) * coursesPerPage;
-  const currentCourses = coursesData.slice(startIndex, startIndex + coursesPerPage);
 
   const getProgressColor = (progress: number) => {
-    if (progress >= 80) return 'stroke-green-500';
-    if (progress >= 50) return 'stroke-blue-500';
-    if (progress >= 30) return 'stroke-orange-500';
-    return 'stroke-red-500';
+    if (progress >= 80) return 'stroke-emerald-500';
+    if (progress >= 50) return 'stroke-cyan-500';
+    if (progress >= 30) return 'stroke-amber-500';
+    return 'stroke-rose-500';
   };
 
   const getProgressBgColor = (progress: number) => {
-    if (progress >= 80) return 'text-green-500';
-    if (progress >= 50) return 'text-blue-500';
-    if (progress >= 30) return 'text-orange-500';
-    return 'text-red-500';
+    if (progress >= 80) return 'text-emerald-600';
+    if (progress >= 50) return 'text-cyan-600';
+    if (progress >= 30) return 'text-amber-600';
+    return 'text-rose-600';
+  };
+
+  const getCardGradient = (progress: number) => {
+    if (progress >= 80) return 'from-emerald-50 via-white to-emerald-50/30';
+    if (progress >= 50) return 'from-cyan-50 via-white to-cyan-50/30';
+    if (progress >= 30) return 'from-amber-50 via-white to-amber-50/30';
+    return 'from-rose-50 via-white to-rose-50/30';
+  };
+
+  const getBorderColor = (progress: number) => {
+    if (progress >= 80) return 'border-emerald-200';
+    if (progress >= 50) return 'border-cyan-200';
+    if (progress >= 30) return 'border-amber-200';
+    return 'border-rose-200';
   };
 
   const CircularProgress = ({ progress }: { progress: number }) => {
@@ -174,27 +179,27 @@ export const ActiveTrainingPrograms = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-blue-600 to-blue-800 p-8 rounded-xl">
+    <div className="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-8 rounded-3xl shadow-2xl">
       {/* Header */}
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-white mb-2">
+      <div className="text-center mb-10">
+        <h2 className="text-4xl font-bold bg-gradient-to-r from-white via-blue-100 to-cyan-100 bg-clip-text text-transparent mb-3">
           ACTIVE TRAINING PROGRAMS
         </h2>
-        <div className="text-blue-100 text-lg">
-          CURRENT: {currentCourses.length}/{coursesData.length} PROGRAMS SHOWN
+        <div className="text-slate-200 text-lg font-medium">
+          CURRENT: {coursesData.length} PROGRAMS ACTIVE
         </div>
       </div>
 
-      {/* Courses Grid - 3x2 layout */}
-      <div className="grid grid-cols-3 gap-6 mb-8">
-        {currentCourses.map((course) => (
+      {/* Courses Grid - 4x3 layout for all 12 courses */}
+      <div className="grid grid-cols-4 gap-6">
+        {coursesData.map((course) => (
           <Card 
             key={course.id} 
-            className="bg-white/95 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+            className={`bg-gradient-to-br ${getCardGradient(course.progress)} backdrop-blur-sm ${getBorderColor(course.progress)} border-2 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 hover:rotate-1 transform-gpu`}
           >
-            <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
+            <CardContent className="p-5 flex flex-col items-center text-center space-y-4">
               {/* Course Name */}
-              <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wide min-h-[2rem] flex items-center">
+              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider leading-tight min-h-[2.5rem] flex items-center">
                 {course.name}
               </h3>
 
@@ -203,49 +208,20 @@ export const ActiveTrainingPrograms = () => {
 
               {/* Date Information */}
               <div className="w-full space-y-2">
-                <div className="flex items-center justify-center gap-2 text-xs text-gray-600">
-                  <Calendar className="w-4 h-4 text-blue-500" />
-                  <span className="font-medium">Started on</span>
+                <div className="flex items-center justify-center gap-2 text-xs text-slate-600">
+                  <Calendar className="w-3 h-3 text-emerald-500" />
+                  <span className="font-medium">Started</span>
                   <span className="font-bold">{course.startDate}</span>
                 </div>
-                <div className="flex items-center justify-center gap-2 text-xs text-gray-600">
-                  <Clock className="w-4 h-4 text-orange-500" />
-                  <span className="font-medium">Expected by</span>
+                <div className="flex items-center justify-center gap-2 text-xs text-slate-600">
+                  <Clock className="w-3 h-3 text-amber-500" />
+                  <span className="font-medium">Expected</span>
                   <span className="font-bold">{course.endDate}</span>
                 </div>
               </div>
             </CardContent>
           </Card>
         ))}
-      </div>
-
-      {/* Pagination */}
-      <div className="flex items-center justify-center space-x-4">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-          className="text-white hover:bg-white/20"
-        >
-          <ChevronLeft className="w-4 h-4" />
-        </Button>
-        
-        <div className="bg-white/20 px-4 py-2 rounded-lg">
-          <span className="text-white font-medium">
-            PAGE {currentPage}/{totalPages}
-          </span>
-        </div>
-
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-          disabled={currentPage === totalPages}
-          className="text-white hover:bg-white/20"
-        >
-          <ChevronRight className="w-4 h-4" />
-        </Button>
       </div>
     </div>
   );
