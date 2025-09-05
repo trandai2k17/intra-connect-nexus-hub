@@ -77,26 +77,6 @@ export const navigationItems: NavigationItem[] = [
     ],
   },
   {
-    title: "Từ điển",
-    url: "#",
-    icon: Book,
-    iconColor: "text-indigo-600",
-    subItems: [
-      {
-        title: "Xem từ vựng",
-        url: "/dictionary",
-        icon: BookOpen,
-        iconColor: "text-blue-600",
-      },
-      {
-        title: "Quản lý từ vựng",
-        url: "/dictionary-management",
-        icon: PlusCircle,
-        iconColor: "text-green-600",
-      },
-    ],
-  },
-  {
     title: "Thư viện",
     url: "#",
     icon: BookOpen,

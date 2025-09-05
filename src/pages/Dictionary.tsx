@@ -9,6 +9,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table as TableComponent, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { DictionaryTerm } from '@/types/dictionary';
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/AppSidebar";
+import { Header } from "@/components/layout/Header";
 
 // Sample data - trong thực tế sẽ fetch từ API
 const sampleTerms: DictionaryTerm[] = [
@@ -117,8 +120,13 @@ export default function Dictionary() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="container mx-auto px-4 py-6">
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full gradient-bg dark:bg-gray-900">
+        <AppSidebar />
+        <div className="flex-1 flex flex-col">
+          <Header />
+          <main className="flex-1 gradient-bg dark:bg-gray-900 pt-20">
+            <div className="container mx-auto px-4 py-6">
         {/* Header */}
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
@@ -400,7 +408,10 @@ export default function Dictionary() {
             </DialogContent>
           </Dialog>
         )}
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }
