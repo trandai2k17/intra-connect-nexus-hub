@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/Header";
 import { TrainingBanner } from "@/components/training/TrainingBanner";
 import { CoursesTable } from "@/components/training/CoursesTable";
 import { TVCoursesDisplay } from "@/components/training/TVCoursesDisplay";
+import { ActiveTrainingPrograms } from "@/components/training/ActiveTrainingPrograms";
 
 const TrainingCenter = () => {
   const { t } = useLanguage();
@@ -25,6 +26,11 @@ const TrainingCenter = () => {
               {/* Courses Statistics */}
               <div className="grid grid-cols-1 gap-8">
                 <CoursesTable />
+              </div>
+
+              {/* Active Training Programs Dashboard */}
+              <div className="grid grid-cols-1 gap-8">
+                <ActiveTrainingPrograms />
               </div>
 
               {/* TV Display - Courses Grid */}
