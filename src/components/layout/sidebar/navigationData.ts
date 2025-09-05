@@ -199,11 +199,17 @@ export const navigationItems: NavigationItem[] = [
     iconColor: "text-orange-600",
   },
   {
-    title: "Đào tạo",
+    title: "Training Center",
     url: "#",
-    icon: BookOpen,
-    iconColor: "text-purple-600",
+    icon: GraduationCap,
+    iconColor: "text-indigo-600",
     subItems: [
+      {
+        title: "Dashboard",
+        url: "/training-center/dashboard",
+        icon: BarChart3,
+        iconColor: "text-blue-600",
+      },
       {
         title: "Tài Liệu Hướng Dẫn",
         url: "/education",
@@ -215,20 +221,6 @@ export const navigationItems: NavigationItem[] = [
         url: "/education-ndx",
         icon: BookOpen,
         iconColor: "text-purple-600",
-      },
-    ],
-  },
-  {
-    title: "Training Center",
-    url: "#",
-    icon: GraduationCap,
-    iconColor: "text-indigo-600",
-    subItems: [
-      {
-        title: "Dashboard",
-        url: "/training-center/dashboard",
-        icon: BarChart3,
-        iconColor: "text-blue-600",
       },
       {
         title: "Xem từ vựng",
