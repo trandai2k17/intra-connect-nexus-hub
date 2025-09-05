@@ -18,7 +18,8 @@ import {
   PlusCircle,
   Image,
   Grid3X3,
-  Tv
+  Tv,
+  GraduationCap
 } from "lucide-react";
 
 interface SubItem {
@@ -234,6 +235,32 @@ export const navigationItems: NavigationItem[] = [
         url: "/education-ndx",
         icon: BookOpen,
         iconColor: "text-purple-600",
+      },
+    ],
+  },
+  {
+    title: "Training Center",
+    url: "#",
+    icon: GraduationCap,
+    iconColor: "text-indigo-600",
+    subItems: [
+      {
+        title: "Dashboard",
+        url: "/training-center/dashboard",
+        icon: BarChart3,
+        iconColor: "text-blue-600",
+      },
+      {
+        title: "Xem từ vựng",
+        url: "/dictionary",
+        icon: BookOpen,
+        iconColor: "text-blue-600",
+      },
+      {
+        title: "Quản lý từ vựng",
+        url: "/dictionary-management",
+        icon: PlusCircle,
+        iconColor: "text-green-600",
       },
     ],
   },

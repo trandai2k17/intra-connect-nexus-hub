@@ -26,6 +26,7 @@ import ContentManagement from "./pages/ContentManagement";
 import ContentDashboard from "./pages/ContentDashboard";
 import ContentView from "./pages/ContentView";
 import UserPermissions from "./pages/UserPermissions";
+import TrainingCenter from "./pages/TrainingCenter";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,7 @@ const App = () => (
               <Route path="/content-dashboard" element={<ContentDashboard />} />
               <Route path="/content/view/:id" element={<ContentView />} />
               <Route path="/user-permissions" element={<UserPermissions />} />
+              <Route path="/training-center/dashboard" element={<TrainingCenter />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
