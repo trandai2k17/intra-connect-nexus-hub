@@ -145,14 +145,14 @@ export const TVCoursesDisplay = () => {
             {/* Gradient overlay */}
             <div className={`absolute inset-0 opacity-[0.03] bg-gradient-to-br ${getProgressGradient(course.progress)}`} />
             
-            <CardContent className="relative p-3 space-y-3">
-              {/* Course Name */}
-              <h3 className="text-sm font-bold text-foreground leading-tight min-h-[2.5rem] flex items-center line-clamp-2">
+            <CardContent className="relative p-3 flex flex-col h-full">
+              {/* Course Name - takes most space */}
+              <h3 className="text-sm font-bold text-foreground leading-tight flex-1 flex items-start mb-2 line-clamp-3">
                 {course.name}
               </h3>
 
               {/* Date Information */}
-              <div className="space-y-1.5">
+              <div className="space-y-1 mb-2">
                 <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <Calendar className="w-3 h-3 text-green-500" />
                   <span className="font-medium">{course.startDate}</span>
@@ -163,8 +163,8 @@ export const TVCoursesDisplay = () => {
                 </div>
               </div>
 
-              {/* Progress Pill */}
-              <div className="flex justify-center">
+              {/* Progress Pill - always at bottom */}
+              <div className="flex justify-center mt-auto">
                 <div 
                   className={`px-3 py-1 rounded-full text-xs font-bold text-white shadow-md ${
                     course.progress >= 80 ? 'bg-gradient-to-r from-green-500 to-green-600' : 
