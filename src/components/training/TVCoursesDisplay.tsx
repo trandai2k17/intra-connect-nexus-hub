@@ -124,73 +124,81 @@ export const TVCoursesDisplay = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-6xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-4">
+        <h2 className="text-5xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent mb-3">
           Ongoing Courses
         </h2>
-        <div className="text-3xl font-semibold text-muted-foreground">
+        <div className="text-2xl font-semibold text-muted-foreground/80">
           {coursesData.length} Active Training Programs
         </div>
       </div>
 
-      {/* Courses Grid */}
-      <div className="grid grid-cols-3 gap-8 px-8">
+      {/* Courses Grid - 4 columns for better TV display */}
+      <div className="grid grid-cols-4 gap-4 px-4">
         {coursesData.map((course) => (
           <Card 
             key={course.id} 
-            className={`relative overflow-hidden border-2 border-border/20 shadow-xl bg-gradient-to-br ${getProgressGradient(course.progress)} backdrop-blur-sm hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]`}
+            className="group relative overflow-hidden border border-border/10 bg-card/95 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_48px_rgba(0,0,0,0.18)] transition-all duration-500 hover:scale-[1.02] hover:border-primary/20"
           >
-            <CardContent className="p-8 space-y-6">
-              {/* Course ID Badge */}
+            {/* Gradient overlay */}
+            <div className={`absolute inset-0 opacity-[0.03] bg-gradient-to-br ${getProgressGradient(course.progress)}`} />
+            
+            <CardContent className="relative p-5 space-y-4">
+              {/* Course ID Badge & Status Dot */}
               <div className="flex justify-between items-start">
-                <div className="bg-primary/10 px-4 py-2 rounded-full">
-                  <span className="text-xl font-bold text-primary">{course.id}</span>
+                <div className="bg-gradient-to-r from-primary/15 to-primary/10 px-3 py-1.5 rounded-lg border border-primary/20 shadow-sm">
+                  <span className="text-base font-bold text-primary">{course.id}</span>
                 </div>
-                <div className={`w-4 h-4 rounded-full ${
-                  course.progress >= 80 ? 'bg-green-500' : 
-                  course.progress >= 50 ? 'bg-yellow-500' : 'bg-red-500'
-                }`} />
+                <div 
+                  className={`w-3 h-3 rounded-full shadow-lg ${
+                    course.progress >= 80 ? 'bg-gradient-to-r from-green-400 to-green-600 shadow-green-500/30' : 
+                    course.progress >= 50 ? 'bg-gradient-to-r from-yellow-400 to-yellow-600 shadow-yellow-500/30' : 
+                    'bg-gradient-to-r from-red-400 to-red-600 shadow-red-500/30'
+                  }`} 
+                />
               </div>
 
               {/* Course Name */}
-              <h3 className="text-2xl font-bold text-foreground leading-tight min-h-[6rem] flex items-center">
+              <h3 className="text-lg font-bold text-foreground leading-snug min-h-[4.5rem] flex items-center line-clamp-3">
                 {course.name}
               </h3>
 
               {/* Date Information */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-3 text-lg text-muted-foreground">
-                  <Calendar className="w-6 h-6" />
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Calendar className="w-4 h-4 text-primary/70" />
                   <span className="font-medium">Start: {course.startDate}</span>
                 </div>
-                <div className="flex items-center gap-3 text-lg text-muted-foreground">
-                  <Clock className="w-6 h-6" />
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Clock className="w-4 h-4 text-primary/70" />
                   <span className="font-medium">End: {course.endDate}</span>
                 </div>
               </div>
 
               {/* Progress */}
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold text-foreground">Progress</span>
-                  <span className="text-3xl font-bold" style={{ color: getProgressColor(course.progress) }}>
+                  <span className="text-sm font-semibold text-foreground">Progress</span>
+                  <span 
+                    className="text-xl font-bold drop-shadow-sm" 
+                    style={{ color: getProgressColor(course.progress) }}
+                  >
                     {course.progress}%
                   </span>
                 </div>
                 <div className="relative">
-                  <Progress 
-                    value={course.progress} 
-                    className="h-4 bg-muted/30"
-                  />
-                  <div 
-                    className="absolute top-0 left-0 h-4 rounded-full transition-all duration-500 shadow-lg"
-                    style={{ 
-                      width: `${course.progress}%`,
-                      backgroundColor: getProgressColor(course.progress),
-                    }}
-                  />
+                  <div className="h-2 bg-muted/20 rounded-full overflow-hidden shadow-inner">
+                    <div 
+                      className="h-full rounded-full transition-all duration-700 ease-out shadow-sm"
+                      style={{ 
+                        width: `${course.progress}%`,
+                        background: `linear-gradient(90deg, ${getProgressColor(course.progress)}, ${getProgressColor(course.progress)}dd)`,
+                        boxShadow: `0 0 8px ${getProgressColor(course.progress)}40`
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
             </CardContent>
