@@ -1,5 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock } from "lucide-react";
 
 interface Course {
@@ -110,78 +110,159 @@ const coursesData: Course[] = [
   }
 ];
 
+// Top performing courses data
+const topPerformingCourses = coursesData
+  .sort((a, b) => b.progress - a.progress)
+  .slice(0, 5);
+
+// Most recent courses data  
+const newestCourses = coursesData
+  .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
+  .slice(0, 5);
+
 export const TVCoursesDisplay = () => {
   const getProgressColor = (progress: number) => {
-    if (progress >= 80) return 'hsl(var(--chart-2))'; // Green
-    if (progress >= 50) return 'hsl(var(--chart-3))'; // Yellow  
-    return 'hsl(var(--chart-1))'; // Red
+    if (progress >= 80) return 'text-emerald-600';
+    if (progress >= 50) return 'text-amber-600'; 
+    return 'text-rose-600';
   };
 
   const getProgressGradient = (progress: number) => {
-    if (progress >= 80) return 'from-green-500/20 to-green-600/10';
-    if (progress >= 50) return 'from-yellow-500/20 to-yellow-600/10';
-    return 'from-red-500/20 to-red-600/10';
+    if (progress >= 80) return 'from-emerald-50 to-emerald-100';
+    if (progress >= 50) return 'from-amber-50 to-amber-100';
+    return 'from-rose-50 to-rose-100';
+  };
+
+  const CircularProgress = ({ progress }: { progress: number }) => {
+    const radius = 45;
+    const circumference = 2 * Math.PI * radius;
+    const strokeDashoffset = circumference - (progress / 100) * circumference;
+    
+    return (
+      <div className="relative w-16 h-16 sm:w-20 sm:h-20">
+        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+          <circle
+            cx="50"
+            cy="50"
+            r={radius}
+            stroke="currentColor"
+            strokeWidth="10"
+            fill="none"
+            className="text-gray-200"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r={radius}
+            stroke="currentColor"
+            strokeWidth="10"
+            fill="none"
+            strokeLinecap="round"
+            className={getProgressColor(progress)}
+            style={{
+              strokeDasharray: circumference,
+              strokeDashoffset: strokeDashoffset,
+            }}
+          />
+        </svg>
+        <div className={`absolute inset-0 flex items-center justify-center text-xs sm:text-sm font-bold ${getProgressColor(progress)}`}>
+          {progress}%
+        </div>
+      </div>
+    );
   };
 
   return (
-    <div className="space-y-4">
-      {/* Header */}
-      <div className="text-center">
-        <h2 className="text-4xl font-bold text-emerald-700 dark:text-emerald-400 mb-2">
-          Ongoing Course
-        </h2>
-        <div className="text-xl font-semibold text-muted-foreground/80">
-          {coursesData.length} Active Training Programs
-        </div>
-      </div>
-
-      {/* Courses Grid - 6 columns for 2 rows display */}
-      <div className="grid grid-cols-6 gap-3 px-3">
-        {coursesData.map((course) => (
-          <Card 
-            key={course.id} 
-            className="group relative overflow-hidden border border-border/10 bg-card/95 backdrop-blur-md shadow-[0_6px_24px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] transition-all duration-500 hover:scale-[1.02] hover:border-primary/20"
-          >
-            {/* Gradient overlay */}
-            <div className={`absolute inset-0 opacity-[0.03] bg-gradient-to-br ${getProgressGradient(course.progress)}`} />
-            
-            <CardContent className="relative p-3 flex h-full">
-              {/* Left side - Course info */}
-              <div className="flex-1 flex flex-col">
-                {/* Course Name - takes most space */}
-                <h3 className="text-sm font-bold text-foreground leading-tight flex-1 flex items-start mb-2 line-clamp-3">
-                  {course.name}
-                </h3>
-
-                {/* Date Information */}
-                <div className="space-y-1">
-                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <Calendar className="w-3 h-3 text-green-500" />
-                    <span className="font-medium">{course.startDate}</span>
+    <div className="space-y-8">
+      {/* Main Courses Grid */}
+      <Card className="border-white/20 dark:border-gray-700/20 shadow-2xl bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
+            Ongoing Course
+            <Badge variant="secondary" className="ml-2">
+              {coursesData.length} courses
+            </Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+            {coursesData.map((course) => (
+              <Card 
+                key={course.id} 
+                className={`bg-gradient-to-br ${getProgressGradient(course.progress)} border border-gray-200 dark:border-gray-600 shadow-md hover:shadow-lg transition-all duration-300 rounded-xl`}
+              >
+                <CardContent className="p-3 sm:p-4 flex flex-col items-center text-center space-y-2 sm:space-y-3">
+                  <h3 className="text-xs font-bold text-gray-800 dark:text-gray-200 leading-tight min-h-[2.5rem] sm:min-h-[3rem] flex items-center line-clamp-2">
+                    {course.name}
+                  </h3>
+                  
+                  <CircularProgress progress={course.progress} />
+                  
+                  <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1 w-full">
+                    <div className="truncate">Start: {course.startDate}</div>
+                    <div className="truncate">End: {course.endDate}</div>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <Clock className="w-3 h-3 text-red-500" />
-                    <span className="font-medium">{course.endDate}</span>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Top Performing Courses */}
+      <Card className="border-white/20 dark:border-gray-700/20 shadow-xl bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-emerald-700 dark:text-emerald-400">
+            Top Performing Courses
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {topPerformingCourses.map((course, index) => (
+              <div key={course.id} className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center text-sm font-bold">
+                    {index + 1}
                   </div>
+                  <span className="font-medium text-gray-800 dark:text-gray-200 truncate">{course.name}</span>
                 </div>
-              </div>
-
-              {/* Right side - Progress */}
-              <div className="flex items-center justify-center ml-3">
-                <div 
-                  className={`w-12 h-12 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-md ${
-                    course.progress >= 80 ? 'bg-gradient-to-r from-green-500 to-green-600' : 
-                    course.progress >= 50 ? 'bg-gradient-to-r from-blue-500 to-blue-600' : 
-                    'bg-gradient-to-r from-orange-500 to-red-500'
-                  }`}
-                >
+                <Badge className="bg-emerald-500 text-white">
                   {course.progress}%
-                </div>
+                </Badge>
               </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Newest Courses */}
+      <Card className="border-white/20 dark:border-gray-700/20 shadow-xl bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-blue-700 dark:text-blue-400">
+            Newest Courses
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {newestCourses.map((course, index) => (
+              <div key={course.id} className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-bold">
+                    {index + 1}
+                  </div>
+                  <div>
+                    <div className="font-medium text-gray-800 dark:text-gray-200 truncate">{course.name}</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">Started: {course.startDate}</div>
+                  </div>
+                </div>
+                <Badge variant="outline" className="border-blue-300 text-blue-700">
+                  {course.progress}%
+                </Badge>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

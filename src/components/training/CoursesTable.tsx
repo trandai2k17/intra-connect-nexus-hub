@@ -141,10 +141,10 @@ export const CoursesTable = () => {
           <table className="w-full">
             <thead>
                <tr className="border-b border-border/20">
-                <th className="text-left py-3 px-2 font-semibold text-muted-foreground">Course</th>
-                <th className="text-left py-3 px-2 font-semibold text-muted-foreground">Start date</th>
-                <th className="text-left py-3 px-2 font-semibold text-muted-foreground">End date</th>
-                <th className="text-right py-3 px-2 font-semibold text-muted-foreground">Progress</th>
+                <th className="text-left py-3 px-2 font-semibold text-muted-foreground w-2/5">Course</th>
+                <th className="text-left py-3 px-2 font-semibold text-muted-foreground w-1/5">Start date</th>
+                <th className="text-left py-3 px-2 font-semibold text-muted-foreground w-1/5">End date</th>
+                <th className="text-right py-3 px-2 font-semibold text-muted-foreground w-1/5">Progress</th>
               </tr>
             </thead>
             <tbody>
@@ -154,7 +154,7 @@ export const CoursesTable = () => {
                   className="border-b border-border/10 hover:bg-muted/20 transition-colors"
                 >
                   <td className="py-4 px-2">
-                    <div className="font-medium text-foreground">
+                    <div className="font-medium text-foreground truncate max-w-xs">
                       {course.name}
                     </div>
                   </td>
