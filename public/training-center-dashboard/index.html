@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Center Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="training-dashboard">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="container">
+                <h1 class="header-title">Training Center Dashboard</h1>
+                <nav class="header-nav">
+                    <a href="#" class="nav-link">Dashboard</a>
+                    <a href="#" class="nav-link">Courses</a>
+                    <a href="#" class="nav-link">Profile</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Banner Section -->
+                <section class="banner-section">
+                    <div class="training-banner" id="trainingBanner">
+                        <div class="slide active" data-slide="0">
+                            <div class="slide-content">
+                                <div class="slide-text">
+                                    <h2 class="slide-title">Training Center 2024</h2>
+                                    <p class="slide-subtitle">Nâng cao kỹ năng chuyên môn</p>
+                                    <p class="slide-description">Tham gia các khóa học chuyên sâu về công nghệ nha khoa hiện đại</p>
+                                    <button class="slide-button">
+                                        Xem khóa học
+                                        <span class="arrow">→</span>
+                                    </button>
+                                </div>
+                                <div class="slide-decoration"></div>
+                            </div>
+                        </div>
+                        <div class="slide" data-slide="1">
+                            <div class="slide-content slide-emerald">
+                                <div class="slide-text">
+                                    <h2 class="slide-title">Chứng chỉ Quốc tế</h2>
+                                    <p class="slide-subtitle">Được công nhận toàn cầu</p>
+                                    <p class="slide-description">Hoàn thành khóa học và nhận chứng chỉ được công nhận quốc tế</p>
+                                    <button class="slide-button">
+                                        Đăng ký ngay
+                                        <span class="arrow">→</span>
+                                    </button>
+                                </div>
+                                <div class="slide-decoration"></div>
+                            </div>
+                        </div>
+                        <div class="slide" data-slide="2">
+                            <div class="slide-content slide-blue">
+                                <div class="slide-text">
+                                    <h2 class="slide-title">Thực hành trực tiếp</h2>
+                                    <p class="slide-subtitle">Học qua dự án thực tế</p>
+                                    <p class="slide-description">Áp dụng kiến thức vào các case study và dự án thực tế</p>
+                                    <button class="slide-button">
+                                        Khám phá
+                                        <span class="arrow">→</span>
+                                    </button>
+                                </div>
+                                <div class="slide-decoration"></div>
+                            </div>
+                        </div>
+                        <button class="nav-button nav-prev" onclick="previousSlide()">‹</button>
+                        <button class="nav-button nav-next" onclick="nextSlide()">›</button>
+                        <div class="slide-indicators">
+                            <button class="indicator active" onclick="goToSlide(0)"></button>
+                            <button class="indicator" onclick="goToSlide(1)"></button>
+                            <button class="indicator" onclick="goToSlide(2)"></button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Courses Table Section -->
+                <section class="courses-table-section">
+                    <div class="card table-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Ongoing Course</h3>
+                            <span class="badge">12 courses</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="table-container">
+                                <table class="courses-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="course-column">Course</th>
+                                            <th class="date-column">Start date</th>
+                                            <th class="date-column">End date</th>
+                                            <th class="progress-column">Progress</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="course-name">Setup/Festoon Wax try-in/Flexible product</td>
+                                            <td>25-Jul-25</td>
+                                            <td>22-Sep-25</td>
+                                            <td class="progress-cell">
+                                                <span class="progress-badge">75%</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="course-name">Setup/Festoon Flexible/Wax try-in product</td>
+                                            <td>25-Jul-25</td>
+                                            <td>22-Sep-25</td>
+                                            <td class="progress-cell">
+                                                <span class="progress-badge">30%</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="course-name">Cast Frame-Scan/Design-upgrade training</td>
+                                            <td>24-Jul-25</td>
+                                            <td>7-Sep-25</td>
+                                            <td class="progress-cell">
+                                                <span class="progress-badge">31%</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="course-name">Pre-test: NG-Other</td>
+                                            <td>9-Aug-25</td>
+                                            <td>9-Sep-25</td>
+                                            <td class="progress-cell">
+                                                <span class="progress-badge">31%</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="course-name">PDNG-Blockout</td>
+                                            <td>11-Aug-25</td>
+                                            <td>30-Sep-25</td>
+                                            <td class="progress-cell">
+                                                <span class="progress-badge">31%</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="course-name">Flexible-Fit/Polish-Group 3</td>
+                                            <td>25-Aug-25</td>
+                                            <td>24-Sep-25</td>
+                                            <td class="progress-cell">
+                                                <span class="progress-badge">37%</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Active Training Programs Section -->
+                <section class="active-programs-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Active Training Programs</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="programs-grid">
+                                <div class="program-card high-progress">
+                                    <div class="program-header">
+                                        <h4 class="program-title">Setup/Festoon Wax try-in/Flexible product</h4>
+                                        <div class="circular-progress" data-progress="75">
+                                            <svg class="progress-ring" width="60" height="60">
+                                                <circle class="progress-ring-circle" cx="30" cy="30" r="26"></circle>
+                                                <circle class="progress-ring-bar" cx="30" cy="30" r="26" style="stroke-dashoffset: 40.82"></circle>
+                                            </svg>
+                                            <span class="progress-text">75%</span>
+                                        </div>
+                                    </div>
+                                    <div class="program-dates">
+                                        <span class="start-date">Start: 25-Jul-25</span>
+                                        <span class="end-date">End: 22-Sep-25</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="program-card medium-progress">
+                                    <div class="program-header">
+                                        <h4 class="program-title">CT Scan</h4>
+                                        <div class="circular-progress" data-progress="87">
+                                            <svg class="progress-ring" width="60" height="60">
+                                                <circle class="progress-ring-circle" cx="30" cy="30" r="26"></circle>
+                                                <circle class="progress-ring-bar" cx="30" cy="30" r="26" style="stroke-dashoffset: 21.20"></circle>
+                                            </svg>
+                                            <span class="progress-text">87%</span>
+                                        </div>
+                                    </div>
+                                    <div class="program-dates">
+                                        <span class="start-date">Start: 27-Aug-25</span>
+                                        <span class="end-date">End: 25-Sep-25</span>
+                                    </div>
+                                </div>
+
+                                <div class="program-card high-progress">
+                                    <div class="program-header">
+                                        <h4 class="program-title">CT Scan-Practicing</h4>
+                                        <div class="circular-progress" data-progress="96">
+                                            <svg class="progress-ring" width="60" height="60">
+                                                <circle class="progress-ring-circle" cx="30" cy="30" r="26"></circle>
+                                                <circle class="progress-ring-bar" cx="30" cy="30" r="26" style="stroke-dashoffset: 6.53"></circle>
+                                            </svg>
+                                            <span class="progress-text">96%</span>
+                                        </div>
+                                    </div>
+                                    <div class="program-dates">
+                                        <span class="start-date">Start: 27-Aug-25</span>
+                                        <span class="end-date">End: 25-Sep-25</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TV Courses Display Section -->
+                <section class="tv-courses-section">
+                    <!-- Main Courses Grid -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title emerald">Ongoing Course</h3>
+                            <span class="badge">12 courses</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="tv-courses-grid">
+                                <div class="tv-course-card high-progress">
+                                    <h5 class="tv-course-title">Setup/Festoon Wax try-in/Flexible product</h5>
+                                    <div class="tv-circular-progress" data-progress="75">
+                                        <svg width="64" height="64">
+                                            <circle cx="32" cy="32" r="28" class="progress-bg"></circle>
+                                            <circle cx="32" cy="32" r="28" class="progress-bar" style="stroke-dashoffset: 44"></circle>
+                                        </svg>
+                                        <span class="tv-progress-text">75%</span>
+                                    </div>
+                                    <div class="tv-course-dates">
+                                        <div>Start: 25-Jul-25</div>
+                                        <div>End: 22-Sep-25</div>
+                                    </div>
+                                </div>
+
+                                <div class="tv-course-card low-progress">
+                                    <h5 class="tv-course-title">Setup/Festoon Flexible/Wax try-in product</h5>
+                                    <div class="tv-circular-progress" data-progress="30">
+                                        <svg width="64" height="64">
+                                            <circle cx="32" cy="32" r="28" class="progress-bg"></circle>
+                                            <circle cx="32" cy="32" r="28" class="progress-bar" style="stroke-dashoffset: 123"></circle>
+                                        </svg>
+                                        <span class="tv-progress-text">30%</span>
+                                    </div>
+                                    <div class="tv-course-dates">
+                                        <div>Start: 25-Jul-25</div>
+                                        <div>End: 22-Sep-25</div>
+                                    </div>
+                                </div>
+
+                                <div class="tv-course-card low-progress">
+                                    <h5 class="tv-course-title">Cast Frame-Scan/Design-upgrade training</h5>
+                                    <div class="tv-circular-progress" data-progress="31">
+                                        <svg width="64" height="64">
+                                            <circle cx="32" cy="32" r="28" class="progress-bg"></circle>
+                                            <circle cx="32" cy="32" r="28" class="progress-bar" style="stroke-dashoffset: 121"></circle>
+                                        </svg>
+                                        <span class="tv-progress-text">31%</span>
+                                    </div>
+                                    <div class="tv-course-dates">
+                                        <div>Start: 24-Jul-25</div>
+                                        <div>End: 7-Sep-25</div>
+                                    </div>
+                                </div>
+
+                                <div class="tv-course-card medium-progress">
+                                    <h5 class="tv-course-title">Printed Model</h5>
+                                    <div class="tv-circular-progress" data-progress="50">
+                                        <svg width="64" height="64">
+                                            <circle cx="32" cy="32" r="28" class="progress-bg"></circle>
+                                            <circle cx="32" cy="32" r="28" class="progress-bar" style="stroke-dashoffset: 88"></circle>
+                                        </svg>
+                                        <span class="tv-progress-text">50%</span>
+                                    </div>
+                                    <div class="tv-course-dates">
+                                        <div>Start: 27-Aug-25</div>
+                                        <div>End: 25-Sep-25</div>
+                                    </div>
+                                </div>
+
+                                <div class="tv-course-card high-progress">
+                                    <h5 class="tv-course-title">CT Scan</h5>
+                                    <div class="tv-circular-progress" data-progress="87">
+                                        <svg width="64" height="64">
+                                            <circle cx="32" cy="32" r="28" class="progress-bg"></circle>
+                                            <circle cx="32" cy="32" r="28" class="progress-bar" style="stroke-dashoffset: 23"></circle>
+                                        </svg>
+                                        <span class="tv-progress-text">87%</span>
+                                    </div>
+                                    <div class="tv-course-dates">
+                                        <div>Start: 27-Aug-25</div>
+                                        <div>End: 25-Sep-25</div>
+                                    </div>
+                                </div>
+
+                                <div class="tv-course-card high-progress">
+                                    <h5 class="tv-course-title">CT Scan-Practicing</h5>
+                                    <div class="tv-circular-progress" data-progress="96">
+                                        <svg width="64" height="64">
+                                            <circle cx="32" cy="32" r="28" class="progress-bg"></circle>
+                                            <circle cx="32" cy="32" r="28" class="progress-bar" style="stroke-dashoffset: 7"></circle>
+                                        </svg>
+                                        <span class="tv-progress-text">96%</span>
+                                    </div>
+                                    <div class="tv-course-dates">
+                                        <div>Start: 27-Aug-25</div>
+                                        <div>End: 25-Sep-25</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Performing Courses -->
+                    <div class="card top-performing">
+                        <div class="card-header">
+                            <h3 class="card-title emerald">Top Performing Courses</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="performance-list">
+                                <div class="performance-item">
+                                    <div class="performance-info">
+                                        <span class="performance-rank">1</span>
+                                        <span class="performance-name">CT Scan-Practicing</span>
+                                    </div>
+                                    <span class="performance-badge">96%</span>
+                                </div>
+                                <div class="performance-item">
+                                    <div class="performance-info">
+                                        <span class="performance-rank">2</span>
+                                        <span class="performance-name">CT Scan</span>
+                                    </div>
+                                    <span class="performance-badge">87%</span>
+                                </div>
+                                <div class="performance-item">
+                                    <div class="performance-info">
+                                        <span class="performance-rank">3</span>
+                                        <span class="performance-name">Setup/Festoon Wax try-in/Flexible product</span>
+                                    </div>
+                                    <span class="performance-badge">75%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Newest Courses -->
+                    <div class="card newest-courses">
+                        <div class="card-header">
+                            <h3 class="card-title blue">Newest Courses</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="newest-list">
+                                <div class="newest-item">
+                                    <div class="newest-info">
+                                        <span class="newest-rank">1</span>
+                                        <div class="newest-details">
+                                            <span class="newest-name">Printed Model</span>
+                                            <span class="newest-date">Started: 27-Aug-25</span>
+                                        </div>
+                                    </div>
+                                    <span class="newest-badge">50%</span>
+                                </div>
+                                <div class="newest-item">
+                                    <div class="newest-info">
+                                        <span class="newest-rank">2</span>
+                                        <div class="newest-details">
+                                            <span class="newest-name">CT Scan</span>
+                                            <span class="newest-date">Started: 27-Aug-25</span>
+                                        </div>
+                                    </div>
+                                    <span class="newest-badge">87%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
