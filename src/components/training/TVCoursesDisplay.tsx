@@ -127,8 +127,8 @@ export const TVCoursesDisplay = () => {
     <div className="space-y-4">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-4xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent mb-2">
-          Ongoing Courses
+        <h2 className="text-4xl font-bold text-emerald-700 dark:text-emerald-400 mb-2">
+          Ongoing Course
         </h2>
         <div className="text-xl font-semibold text-muted-foreground/80">
           {coursesData.length} Active Training Programs
@@ -145,28 +145,31 @@ export const TVCoursesDisplay = () => {
             {/* Gradient overlay */}
             <div className={`absolute inset-0 opacity-[0.03] bg-gradient-to-br ${getProgressGradient(course.progress)}`} />
             
-            <CardContent className="relative p-3 flex flex-col h-full">
-              {/* Course Name - takes most space */}
-              <h3 className="text-sm font-bold text-foreground leading-tight flex-1 flex items-start mb-2 line-clamp-3">
-                {course.name}
-              </h3>
+            <CardContent className="relative p-3 flex h-full">
+              {/* Left side - Course info */}
+              <div className="flex-1 flex flex-col">
+                {/* Course Name - takes most space */}
+                <h3 className="text-sm font-bold text-foreground leading-tight flex-1 flex items-start mb-2 line-clamp-3">
+                  {course.name}
+                </h3>
 
-              {/* Date Information */}
-              <div className="space-y-1 mb-2">
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <Calendar className="w-3 h-3 text-green-500" />
-                  <span className="font-medium">{course.startDate}</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <Clock className="w-3 h-3 text-red-500" />
-                  <span className="font-medium">{course.endDate}</span>
+                {/* Date Information */}
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <Calendar className="w-3 h-3 text-green-500" />
+                    <span className="font-medium">{course.startDate}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <Clock className="w-3 h-3 text-red-500" />
+                    <span className="font-medium">{course.endDate}</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Progress Pill - always at bottom */}
-              <div className="flex justify-center mt-auto">
+              {/* Right side - Progress */}
+              <div className="flex items-center justify-center ml-3">
                 <div 
-                  className={`px-3 py-1 rounded-full text-xs font-bold text-white shadow-md ${
+                  className={`w-12 h-12 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-md ${
                     course.progress >= 80 ? 'bg-gradient-to-r from-green-500 to-green-600' : 
                     course.progress >= 50 ? 'bg-gradient-to-r from-blue-500 to-blue-600' : 
                     'bg-gradient-to-r from-orange-500 to-red-500'
