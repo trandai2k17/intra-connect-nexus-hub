@@ -182,8 +182,8 @@ export const ActiveTrainingPrograms = () => {
     <div className="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-8 rounded-3xl shadow-2xl">
       {/* Header */}
       <div className="text-center mb-10">
-        <h2 className="text-4xl font-bold bg-gradient-to-r from-white via-blue-100 to-cyan-100 bg-clip-text text-transparent mb-3">
-          ACTIVE TRAINING PROGRAMS
+        <h2 className="text-4xl font-bold text-emerald-700 dark:text-emerald-400 mb-3">
+          ONGOING COURSE
         </h2>
         <div className="text-slate-200 text-lg font-medium">
           CURRENT: {coursesData.length} PROGRAMS ACTIVE
@@ -197,25 +197,23 @@ export const ActiveTrainingPrograms = () => {
             key={course.id} 
             className={`bg-gradient-to-br ${getCardGradient(course.progress)} backdrop-blur-sm ${getBorderColor(course.progress)} border-2 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 hover:rotate-1 transform-gpu`}
           >
-            <CardContent className="p-5 flex flex-col items-center text-center space-y-4">
+            <CardContent className="p-3 flex flex-col items-center text-center space-y-3">
               {/* Course Name */}
-              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider leading-tight min-h-[2.5rem] flex items-center">
+              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider leading-tight min-h-[2rem] flex items-center">
                 {course.name}
               </h3>
 
               {/* Circular Progress */}
               <CircularProgress progress={course.progress} />
 
-              {/* Date Information */}
-              <div className="w-full space-y-2">
-                <div className="flex items-center justify-center gap-2 text-xs text-slate-600">
+              {/* Date Information - Horizontal Layout */}
+              <div className="w-full flex justify-between items-center text-xs text-slate-600">
+                <div className="flex items-center gap-1">
                   <Calendar className="w-3 h-3 text-emerald-500" />
-                  <span className="font-medium">Started</span>
                   <span className="font-bold">{course.startDate}</span>
                 </div>
-                <div className="flex items-center justify-center gap-2 text-xs text-slate-600">
+                <div className="flex items-center gap-1">
                   <Clock className="w-3 h-3 text-amber-500" />
-                  <span className="font-medium">Expected</span>
                   <span className="font-bold">{course.endDate}</span>
                 </div>
               </div>

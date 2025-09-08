@@ -129,8 +129,8 @@ export const CoursesTable = () => {
   return (
     <Card className="border-white/20 dark:border-gray-700/20 shadow-2xl bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-foreground flex items-center gap-2">
-          Ongoing Courses
+        <CardTitle className="text-2xl font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
+          Ongoing Course
           <Badge variant="secondary" className="ml-2">
             {coursesData.length} courses
           </Badge>
@@ -140,12 +140,11 @@ export const CoursesTable = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-border/20">
+               <tr className="border-b border-border/20">
                 <th className="text-left py-3 px-2 font-semibold text-muted-foreground">Course</th>
                 <th className="text-left py-3 px-2 font-semibold text-muted-foreground">Start date</th>
                 <th className="text-left py-3 px-2 font-semibold text-muted-foreground">End date</th>
-                <th className="text-left py-3 px-2 font-semibold text-muted-foreground">Progress</th>
-                <th className="text-left py-3 px-2 font-semibold text-muted-foreground">Status</th>
+                <th className="text-right py-3 px-2 font-semibold text-muted-foreground">Progress</th>
               </tr>
             </thead>
             <tbody>
@@ -165,23 +164,11 @@ export const CoursesTable = () => {
                   <td className="py-4 px-2 text-muted-foreground">
                     {course.endDate}
                   </td>
-                  <td className="py-4 px-2">
-                    <div className="flex items-center gap-3">
-                      <Progress 
-                        value={course.progress} 
-                        className="flex-1 max-w-32"
-                      />
-                      <span className="text-sm font-medium text-foreground min-w-[3rem]">
-                        {course.progress}%
-                      </span>
-                    </div>
-                  </td>
-                  <td className="py-4 px-2">
+                  <td className="py-4 px-2 text-right">
                     <Badge 
-                      variant="secondary" 
-                      className={getStatusColor(course.status)}
+                      className="bg-green-500/90 hover:bg-green-500 text-white border-0 px-3 py-1 rounded-full font-medium"
                     >
-                      {course.status}
+                      {course.progress}%
                     </Badge>
                   </td>
                 </tr>
