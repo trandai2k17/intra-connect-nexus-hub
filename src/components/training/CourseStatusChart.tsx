@@ -3,24 +3,35 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { cn } from "@/lib/utils";
 
 const chartConfig = {
   new: {
     label: "New",
-    color: "hsl(var(--color-primary-500))",
+    color: "hsl(217 91% 60%)", 
+    bgColor: "hsl(217 91% 95%)",
   },
   ongoing: {
     label: "On-going", 
-    color: "hsl(var(--color-warning-500))",
+    color: "hsl(43 96% 56%)",
+    bgColor: "hsl(43 96% 95%)",
   },
   complete: {
     label: "Complete",
-    color: "hsl(var(--color-success-500))",
+    color: "hsl(142 76% 36%)",
+    bgColor: "hsl(142 76% 95%)",
   },
   cancel: {
     label: "Cancel",
-    color: "hsl(var(--color-error-500))",
+    color: "hsl(0 84% 60%)",
+    bgColor: "hsl(0 84% 95%)",
   },
+};
+
+const tabColors = {
+  rpd: { color: "hsl(217 91% 60%)", bgColor: "hsl(217 91% 95%)" },
+  ng: { color: "hsl(142 76% 36%)", bgColor: "hsl(142 76% 95%)" },
+  cb: { color: "hsl(262 83% 58%)", bgColor: "hsl(262 83% 95%)" },
 };
 
 // Sample data for each area
@@ -51,24 +62,44 @@ const cbData = [
 export const CourseStatusChart = () => {
   const { t } = useLanguage();
 
-  const renderAreaContent = (data: any[], areaName: string) => (
+  const renderAreaContent = (data: any[], areaName: string, tabKey: string) => (
     <div className="space-y-4">
-      {/* Column Chart */}
+      {/* Chart Header with Tab Color */}
+      <div 
+        className="text-center p-3 rounded-lg mb-4"
+        style={{ 
+          backgroundColor: tabColors[tabKey as keyof typeof tabColors].bgColor,
+          borderLeft: `4px solid ${tabColors[tabKey as keyof typeof tabColors].color}`
+        }}
+      >
+        <h3 
+          className="text-sm font-semibold"
+          style={{ color: tabColors[tabKey as keyof typeof tabColors].color }}
+        >
+          {areaName} Status Distribution
+        </h3>
+      </div>
+
+      {/* Horizontal Bar Chart */}
       <div className="w-full">
-        <div className="text-center mb-4">
-          <h3 className="text-sm font-medium text-muted-foreground">{areaName} Status Distribution</h3>
-        </div>
-        <ChartContainer config={chartConfig} className="h-[300px]">
+        <ChartContainer config={chartConfig} className="h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
-              <XAxis 
+            <BarChart 
+              data={data} 
+              layout="horizontal"
+              margin={{ top: 20, right: 30, left: 80, bottom: 20 }}
+            >
+              <XAxis type="number" tick={{ fontSize: 11 }} />
+              <YAxis 
+                type="category"
                 dataKey="department" 
-                tick={{ fontSize: 11 }}
-                angle={-45}
-                textAnchor="end"
-                height={80}
+                tick={{ fontSize: 10 }}
+                width={75}
+                tickFormatter={(value) => {
+                  const parts = value.split('-');
+                  return parts[parts.length - 1];
+                }}
               />
-              <YAxis tick={{ fontSize: 11 }} />
               <ChartTooltip content={<ChartTooltipContent />} />
               <Bar dataKey="new" stackId="a" fill={chartConfig.new.color} />
               <Bar dataKey="ongoing" stackId="a" fill={chartConfig.ongoing.color} />
@@ -78,17 +109,49 @@ export const CourseStatusChart = () => {
           </ResponsiveContainer>
         </ChartContainer>
         
-        {/* Legend */}
-        <div className="grid grid-cols-2 gap-2 mt-4">
+        {/* Enhanced Legend with Status Colors */}
+        <div className="grid grid-cols-2 gap-3 mt-4">
           {Object.entries(chartConfig).map(([key, config]) => (
-            <div key={key} className="flex items-center gap-2 p-2 rounded-lg bg-muted/50">
+            <div 
+              key={key} 
+              className="flex items-center gap-3 p-3 rounded-lg border transition-all hover:shadow-md"
+              style={{ 
+                backgroundColor: config.bgColor,
+                borderColor: config.color + "40"
+              }}
+            >
               <div 
-                className="w-3 h-3 rounded-full" 
+                className="w-4 h-4 rounded-full shadow-sm" 
                 style={{ backgroundColor: config.color }}
               />
-              <span className="text-xs font-medium">{config.label}</span>
+              <span 
+                className="text-sm font-medium"
+                style={{ color: config.color }}
+              >
+                {config.label}
+              </span>
             </div>
           ))}
+        </div>
+
+        {/* Location Labels with Colors */}
+        <div className="mt-4 space-y-2">
+          <h4 className="text-xs font-medium text-muted-foreground mb-2">Locations:</h4>
+          <div className="flex flex-wrap gap-2">
+            {data.map((item, index) => (
+              <div
+                key={index}
+                className="px-3 py-1 rounded-full text-xs font-medium border transition-all hover:shadow-sm"
+                style={{
+                  backgroundColor: tabColors[tabKey as keyof typeof tabColors].bgColor,
+                  borderColor: tabColors[tabKey as keyof typeof tabColors].color + "60",
+                  color: tabColors[tabKey as keyof typeof tabColors].color
+                }}
+              >
+                {item.department.split('-')[1] || item.department}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -101,22 +164,37 @@ export const CourseStatusChart = () => {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="rpd" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="rpd">RPD</TabsTrigger>
-            <TabsTrigger value="ng">NG</TabsTrigger>
-            <TabsTrigger value="cb">CB</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 bg-muted/30">
+            <TabsTrigger 
+              value="rpd"
+              className="data-[state=active]:bg-[hsl(217_91%_60%)] data-[state=active]:text-white transition-all data-[state=active]:shadow-md"
+            >
+              RPD
+            </TabsTrigger>
+            <TabsTrigger 
+              value="ng"
+              className="data-[state=active]:bg-[hsl(142_76%_36%)] data-[state=active]:text-white transition-all data-[state=active]:shadow-md"
+            >
+              NG
+            </TabsTrigger>
+            <TabsTrigger 
+              value="cb"
+              className="data-[state=active]:bg-[hsl(262_83%_58%)] data-[state=active]:text-white transition-all data-[state=active]:shadow-md"
+            >
+              CB
+            </TabsTrigger>
           </TabsList>
           
           <TabsContent value="rpd" className="mt-6">
-            {renderAreaContent(rpdData, "RPD Area")}
+            {renderAreaContent(rpdData, "RPD Area", "rpd")}
           </TabsContent>
           
           <TabsContent value="ng" className="mt-6">
-            {renderAreaContent(ngData, "NG Area")}
+            {renderAreaContent(ngData, "NG Area", "ng")}
           </TabsContent>
           
           <TabsContent value="cb" className="mt-6">
-            {renderAreaContent(cbData, "CB Area")}
+            {renderAreaContent(cbData, "CB Area", "cb")}
           </TabsContent>
         </Tabs>
       </CardContent>
