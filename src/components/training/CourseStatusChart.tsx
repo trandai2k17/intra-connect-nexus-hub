@@ -67,59 +67,61 @@ export const CourseStatusChart = () => {
       </div>
 
       {/* Horizontal Bar Chart */}
-      <div className="w-full h-[400px]">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart 
-            data={data} 
-            layout="horizontal"
-            margin={{ top: 20, right: 30, left: 120, bottom: 20 }}
-          >
-            <XAxis 
-              type="number" 
-              tick={{ fontSize: 12, fill: 'hsl(var(--foreground))' }}
-              axisLine={false}
-              tickLine={false}
-              domain={[0, 'dataMax + 5']}
-            />
-            <YAxis 
-              type="category"
-              dataKey="department" 
-              tick={{ fontSize: 11, fill: 'hsl(var(--foreground))' }}
-              width={110}
-              axisLine={false}
-              tickLine={false}
-              tickFormatter={(value) => value.split('-')[1] || value}
-            />
-            <ChartTooltip 
-              content={<ChartTooltipContent />}
-              cursor={{ fill: 'hsl(var(--muted) / 0.1)' }}
-            />
-            <Bar 
-              dataKey="new" 
-              stackId="status" 
-              fill={chartConfig.new.color}
-              name={chartConfig.new.label}
-            />
-            <Bar 
-              dataKey="ongoing" 
-              stackId="status" 
-              fill={chartConfig.ongoing.color}
-              name={chartConfig.ongoing.label}
-            />
-            <Bar 
-              dataKey="complete" 
-              stackId="status" 
-              fill={chartConfig.complete.color}
-              name={chartConfig.complete.label}
-            />
-            <Bar 
-              dataKey="cancel" 
-              stackId="status" 
-              fill={chartConfig.cancel.color}
-              name={chartConfig.cancel.label}
-            />
-          </BarChart>
-        </ResponsiveContainer>
+      <div className="w-full">
+        <ChartContainer config={chartConfig} className="h-[400px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart 
+              data={data} 
+              layout="horizontal"
+              margin={{ top: 20, right: 30, left: 120, bottom: 20 }}
+            >
+              <XAxis 
+                type="number" 
+                tick={{ fontSize: 12, fill: 'hsl(var(--foreground))' }}
+                axisLine={false}
+                tickLine={false}
+                domain={[0, 'dataMax + 5']}
+              />
+              <YAxis 
+                type="category"
+                dataKey="department" 
+                tick={{ fontSize: 11, fill: 'hsl(var(--foreground))' }}
+                width={110}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(value) => value.split('-')[1] || value}
+              />
+              <ChartTooltip 
+                content={<ChartTooltipContent />}
+                cursor={{ fill: 'hsl(var(--muted) / 0.1)' }}
+              />
+              <Bar 
+                dataKey="new" 
+                stackId="status" 
+                fill={chartConfig.new.color}
+                name={chartConfig.new.label}
+              />
+              <Bar 
+                dataKey="ongoing" 
+                stackId="status" 
+                fill={chartConfig.ongoing.color}
+                name={chartConfig.ongoing.label}
+              />
+              <Bar 
+                dataKey="complete" 
+                stackId="status" 
+                fill={chartConfig.complete.color}
+                name={chartConfig.complete.label}
+              />
+              <Bar 
+                dataKey="cancel" 
+                stackId="status" 
+                fill={chartConfig.cancel.color}
+                name={chartConfig.cancel.label}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartContainer>
         
         {/* Status Legend */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
