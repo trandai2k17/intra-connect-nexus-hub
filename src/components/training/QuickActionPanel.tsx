@@ -62,7 +62,7 @@ export const QuickActionPanel = () => {
   ];
 
   return (
-    <Card className="h-fit">
+    <Card className="bg-white dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700 h-fit">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg">Quick Access</CardTitle>
       </CardHeader>

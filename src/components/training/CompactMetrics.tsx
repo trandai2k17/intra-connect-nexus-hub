@@ -61,10 +61,11 @@ export const CompactMetrics = () => {
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
-      {metrics.map((metric, index) => (
-        <Card key={index} className={`${metric.borderColor} bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm hover:shadow-md transition-all duration-200`}>
-          <CardContent className="p-4">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        {metrics.map((metric, index) => (
+          <Card key={index} className={`${metric.borderColor} bg-gray-50 dark:bg-gray-700 hover:shadow-lg transition-all duration-200 border-0`}>
+            <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
               <div className={`p-2 rounded-lg ${metric.color}`}>
                 <metric.icon className="h-4 w-4" />
@@ -84,9 +85,10 @@ export const CompactMetrics = () => {
               <p className="text-2xl font-bold text-foreground">{metric.value}</p>
               <p className="text-xs text-muted-foreground truncate">{metric.title}</p>
             </div>
-          </CardContent>
-        </Card>
-      ))}
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };
