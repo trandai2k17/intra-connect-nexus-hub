@@ -22,24 +22,24 @@ const TrainingCenter = () => {
         <CompactMetrics />
       </div>
 
-      {/* Quick Actions Row */}
-      <div className="w-full">
-        <QuickActionPanel />
-      </div>
-
       {/* Active Training Programs Row */}
       <div className="w-full">
         <ActiveTrainingPrograms />
       </div>
 
-      {/* Bottom Row - Two Columns */}
+      {/* Quick Access & Course Status Row */}
       <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="w-full">
+          <QuickActionPanel />
+        </div>
         <div className="w-full">
           <CourseStatusChart />
         </div>
-        <div className="w-full">
-          <CoursesTable />
-        </div>
+      </div>
+
+      {/* Courses Table Row */}
+      <div className="w-full">
+        <CoursesTable />
       </div>
 
       {/* TV Display Row */}
