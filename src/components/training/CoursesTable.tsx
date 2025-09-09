@@ -111,11 +111,9 @@ const coursesData: Course[] = [
 ];
 
 export const CoursesTable = () => {
-  // Sort courses by start date
+  // Sort courses by progress (highest to lowest)
   const sortedCourses = [...coursesData].sort((a, b) => {
-    const dateA = new Date(a.startDate);
-    const dateB = new Date(b.startDate);
-    return dateA.getTime() - dateB.getTime();
+    return b.progress - a.progress;
   });
 
   const getStatusColor = (status: string) => {
