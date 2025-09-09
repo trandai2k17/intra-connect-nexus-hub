@@ -7,19 +7,19 @@ import { useLanguage } from "@/contexts/LanguageContext";
 const chartConfig = {
   new: {
     label: "New",
-    color: "hsl(var(--chart-1))",
+    color: "hsl(var(--color-primary-500))",
   },
   ongoing: {
     label: "On-going", 
-    color: "hsl(var(--chart-2))",
+    color: "hsl(var(--color-warning-500))",
   },
   complete: {
     label: "Complete",
-    color: "hsl(var(--chart-3))",
+    color: "hsl(var(--color-success-500))",
   },
   cancel: {
     label: "Cancel",
-    color: "hsl(var(--chart-4))",
+    color: "hsl(var(--color-error-500))",
   },
 };
 
