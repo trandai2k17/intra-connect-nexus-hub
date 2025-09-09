@@ -97,13 +97,14 @@ const HorizontalChart = ({ data, areaName }: { data: any[], areaName: string }) 
           data={data}
           layout="horizontal"
           margin={{ top: 20, right: 30, left: 100, bottom: 20 }}
+          barCategoryGap="20%"
         >
           <XAxis 
             type="number" 
             tick={{ fontSize: 12, fill: 'hsl(var(--foreground))' }}
             axisLine={false}
             tickLine={false}
-            domain={[0, 'dataMax + 2']}
+            domain={[0, 'dataMax + 5']}
           />
           <YAxis 
             type="category" 
@@ -118,27 +119,31 @@ const HorizontalChart = ({ data, areaName }: { data: any[], areaName: string }) 
           {/* Stacked bars for each status */}
           <Bar 
             dataKey="new" 
-            stackId="status" 
+            stackId="a" 
             fill={statusColors.new}
             name="New"
+            radius={[0, 0, 0, 0]}
           />
           <Bar 
             dataKey="ongoing" 
-            stackId="status" 
+            stackId="a" 
             fill={statusColors.ongoing}
             name="On-going"
+            radius={[0, 0, 0, 0]}
           />
           <Bar 
             dataKey="complete" 
-            stackId="status" 
+            stackId="a" 
             fill={statusColors.complete}
             name="Complete"
+            radius={[0, 0, 0, 0]}
           />
           <Bar 
             dataKey="cancel" 
-            stackId="status" 
+            stackId="a" 
             fill={statusColors.cancel}
             name="Cancel"
+            radius={[0, 2, 2, 0]}
           />
         </BarChart>
       </ResponsiveContainer>
