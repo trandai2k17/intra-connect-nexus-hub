@@ -20,43 +20,46 @@ const TrainingCenter = () => {
         <div className="flex-1 flex flex-col">
           <Header />
           <main className="flex-1 gradient-bg dark:bg-gray-900">
-            <div className="container mx-auto px-6 py-8">
-              {/* Dashboard Header Banner */}
-              <div className="mb-8">
-                <TrainingBanner />
-              </div>
-
-              {/* Top Metrics Row */}
-              <div className="mb-8">
-                <TrainingMetrics />
-              </div>
-
-              {/* Main Dashboard Grid */}
-              <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
-                {/* Left Column - Quick Access */}
+            <div className="container mx-auto px-4 py-4 max-w-7xl">
+              {/* Compact Header Section */}
+              <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 mb-6">
+                {/* Banner - spans 3 columns */}
+                <div className="xl:col-span-3">
+                  <TrainingBanner />
+                </div>
+                {/* Quick Access - compact in 1 column */}
                 <div className="xl:col-span-1">
                   <TrainingQuickAccess />
                 </div>
+              </div>
 
-                {/* Right Column - Active Training Programs */}
-                <div className="xl:col-span-2">
+              {/* Metrics Row - Compact */}
+              <div className="mb-6">
+                <TrainingMetrics />
+              </div>
+
+              {/* Main Content Grid - 2 Columns */}
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
+                {/* Left: Active Programs */}
+                <div>
                   <ActiveTrainingPrograms />
+                </div>
+                {/* Right: Course Status Chart */}
+                <div>
+                  <CourseStatusChart />
                 </div>
               </div>
 
-              {/* Courses Table Section */}
-              <div className="mb-8">
-                <CoursesTable />
-              </div>
-
-              {/* Course Status Statistics */}
-              <div className="mb-8">
-                <CourseStatusChart />
-              </div>
-
-              {/* TV Display Section */}
-              <div className="mb-8">
-                <TVCoursesDisplay />
+              {/* Bottom Section - Full Width */}
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
+                {/* Courses Table */}
+                <div>
+                  <CoursesTable />
+                </div>
+                {/* TV Display */}
+                <div>
+                  <TVCoursesDisplay />
+                </div>
               </div>
             </div>
           </main>
