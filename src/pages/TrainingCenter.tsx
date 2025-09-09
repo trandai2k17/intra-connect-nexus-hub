@@ -21,21 +21,22 @@ const TrainingCenter = () => {
           <Header />
           <main className="flex-1 gradient-bg dark:bg-gray-900">
             <div className="w-full px-2 sm:px-4 lg:px-6 py-3 sm:py-4">
-              {/* Compact Header Section */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
+              {/* Top Section: Banner + Metrics + Quick Access */}
+              <div className="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 mb-4 sm:mb-6">
                 {/* Banner - spans most columns */}
                 <div className="lg:col-span-2 xl:col-span-3">
                   <TrainingBanner />
                 </div>
-                {/* Quick Access - compact in 1 column */}
+                
+                {/* Compact Metrics - vertical stack */}
+                <div className="lg:col-span-1 xl:col-span-1 space-y-2">
+                  <TrainingMetrics />
+                </div>
+                
+                {/* Quick Access */}
                 <div className="lg:col-span-1 xl:col-span-1">
                   <TrainingQuickAccess />
                 </div>
-              </div>
-
-              {/* Metrics Row - Compact and Responsive */}
-              <div className="mb-4 sm:mb-6">
-                <TrainingMetrics />
               </div>
 
               {/* Main Content Grid - Responsive 2 Columns */}
