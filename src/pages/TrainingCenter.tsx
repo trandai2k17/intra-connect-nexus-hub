@@ -11,40 +11,40 @@ const TrainingCenter = () => {
   const { t } = useLanguage();
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full max-w-none px-4 md:px-6 lg:px-8 space-y-6">
       {/* Page Header */}
-      <DashboardHeader />
+      <div className="w-full">
+        <DashboardHeader />
+      </div>
       
       {/* KPI Metrics Strip */}
-      <CompactMetrics />
+      <div className="w-full">
+        <CompactMetrics />
+      </div>
 
-      {/* Main Content Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* Left Sidebar - Quick Actions */}
-        <div className="lg:col-span-3">
-          <QuickActionPanel />
+      {/* Quick Actions Row */}
+      <div className="w-full">
+        <QuickActionPanel />
+      </div>
+
+      {/* Active Training Programs Row */}
+      <div className="w-full">
+        <ActiveTrainingPrograms />
+      </div>
+
+      {/* Bottom Row - Two Columns */}
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="w-full">
+          <CourseStatusChart />
         </div>
-        
-        {/* Main Content Area */}
-        <div className="lg:col-span-9">
-          <div className="space-y-8">
-            
-            {/* Top Row - Key Charts */}
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-              <CourseStatusChart />
-              <ActiveTrainingPrograms />
-            </div>
-            
-            {/* Bottom Row - Data Management */}
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-              <CoursesTable />
-              <TVCoursesDisplay />
-            </div>
-            
-          </div>
+        <div className="w-full">
+          <CoursesTable />
         </div>
-        
+      </div>
+
+      {/* TV Display Row */}
+      <div className="w-full">
+        <TVCoursesDisplay />
       </div>
     </div>
   );
