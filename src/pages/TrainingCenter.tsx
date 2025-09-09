@@ -3,6 +3,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { Header } from "@/components/layout/Header";
 import { TrainingBanner } from "@/components/training/TrainingBanner";
+import { TrainingMetrics } from "@/components/training/TrainingMetrics";
 import { CoursesTable } from "@/components/training/CoursesTable";
 import { TVCoursesDisplay } from "@/components/training/TVCoursesDisplay";
 import { ActiveTrainingPrograms } from "@/components/training/ActiveTrainingPrograms";
@@ -21,6 +22,11 @@ const TrainingCenter = () => {
               {/* Banner */}
               <div className="grid grid-cols-1 gap-8">
                 <TrainingBanner />
+              </div>
+
+              {/* Training Metrics */}
+              <div className="grid grid-cols-1 gap-8">
+                <TrainingMetrics />
               </div>
 
               {/* Courses Statistics */}
