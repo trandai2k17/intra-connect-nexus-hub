@@ -111,6 +111,13 @@ const coursesData: Course[] = [
 ];
 
 export const CoursesTable = () => {
+  // Sort courses by start date
+  const sortedCourses = [...coursesData].sort((a, b) => {
+    const dateA = new Date(a.startDate);
+    const dateB = new Date(b.startDate);
+    return dateA.getTime() - dateB.getTime();
+  });
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'ongoing': return 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-300';
@@ -148,7 +155,7 @@ export const CoursesTable = () => {
               </tr>
             </thead>
             <tbody>
-              {coursesData.map((course) => (
+              {sortedCourses.map((course) => (
                 <tr 
                   key={course.id} 
                   className="border-b border-border/10 hover:bg-muted/20 transition-colors"
@@ -165,11 +172,17 @@ export const CoursesTable = () => {
                     {course.endDate}
                   </td>
                   <td className="py-4 px-2 text-right">
-                    <Badge 
-                      className="bg-green-500/90 hover:bg-green-500 text-white border-0 px-3 py-1 rounded-full font-medium"
-                    >
-                      {course.progress}%
-                    </Badge>
+                    <div className="flex items-center justify-end">
+                      <Badge 
+                        className="bg-green-500/90 hover:bg-green-500 text-white border-0 py-1 rounded-full font-medium transition-all"
+                        style={{ 
+                          width: `${Math.max(course.progress * 0.8 + 20, 40)}px`,
+                          minWidth: '40px'
+                        }}
+                      >
+                        {course.progress}%
+                      </Badge>
+                    </div>
                   </td>
                 </tr>
               ))}
