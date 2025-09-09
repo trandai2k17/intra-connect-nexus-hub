@@ -1,7 +1,25 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 // Data for each area
 const chartData = {
@@ -27,78 +45,136 @@ const chartData = {
   ]
 };
 
-// Custom tooltip
-const CustomTooltip = ({ active, payload, label }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-background border rounded-lg p-3 shadow-lg">
-        <p className="font-semibold mb-2">{label}</p>
-        {payload.map((entry: any, index: number) => (
-          <div key={index} className="flex items-center gap-2 text-sm">
-            <div className="w-3 h-3 rounded" style={{ backgroundColor: entry.color }} />
-            <span>{entry.name}: {entry.value}</span>
-          </div>
-        ))}
-      </div>
-    );
-  }
-  return null;
+// Transform data for Chart.js
+const transformDataForChart = (data: any[]) => {
+  const labels = data.map(item => item.location);
+  
+  return {
+    labels,
+    datasets: [
+      {
+        label: 'New',
+        data: data.map(item => item.new),
+        backgroundColor: '#3b82f6',
+        borderColor: '#3b82f6',
+        borderWidth: 0,
+      },
+      {
+        label: 'On-going',
+        data: data.map(item => item.ongoing),
+        backgroundColor: '#f59e0b',
+        borderColor: '#f59e0b',
+        borderWidth: 0,
+      },
+      {
+        label: 'Complete',
+        data: data.map(item => item.complete),
+        backgroundColor: '#10b981',
+        borderColor: '#10b981',
+        borderWidth: 0,
+      },
+      {
+        label: 'Cancel',
+        data: data.map(item => item.cancel),
+        backgroundColor: '#ef4444',
+        borderColor: '#ef4444',
+        borderWidth: 0,
+      },
+    ],
+  };
+};
+
+// Chart options
+const chartOptions = {
+  indexAxis: 'y' as const,
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: false, // We'll use custom legend
+    },
+    tooltip: {
+      mode: 'index' as const,
+      intersect: false,
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      titleColor: 'white',
+      bodyColor: 'white',
+      borderColor: 'rgba(255, 255, 255, 0.1)',
+      borderWidth: 1,
+    },
+  },
+  scales: {
+    x: {
+      stacked: true,
+      grid: {
+        display: false,
+      },
+      ticks: {
+        color: 'hsl(var(--foreground))',
+        font: {
+          size: 11,
+        },
+      },
+    },
+    y: {
+      stacked: true,
+      grid: {
+        display: false,
+      },
+      ticks: {
+        color: 'hsl(var(--foreground))',
+        font: {
+          size: 11,
+        },
+      },
+    },
+  },
+  layout: {
+    padding: {
+      left: 10,
+      right: 10,
+      top: 10,
+      bottom: 10,
+    },
+  },
 };
 
 // Horizontal Bar Chart Component
-const HorizontalBarChart = ({ data, title }: { data: any[], title: string }) => (
-  <div className="space-y-4">
-    <div className="text-center p-3 rounded-lg bg-muted/50">
-      <h3 className="text-sm font-semibold">{title} Area Status Distribution</h3>
-    </div>
-    
-    <div className="h-[350px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart
-          data={data}
-          layout="horizontal"
-          margin={{ top: 20, right: 30, left: 80, bottom: 20 }}
-        >
-          <XAxis type="number" axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
-          <YAxis 
-            type="category" 
-            dataKey="location" 
-            axisLine={false} 
-            tickLine={false} 
-            tick={{ fontSize: 11 }}
-            width={70}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          
-          <Bar dataKey="new" stackId="a" fill="#3b82f6" name="New" />
-          <Bar dataKey="ongoing" stackId="a" fill="#f59e0b" name="On-going" />
-          <Bar dataKey="complete" stackId="a" fill="#10b981" name="Complete" />
-          <Bar dataKey="cancel" stackId="a" fill="#ef4444" name="Cancel" />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+const HorizontalBarChart = ({ data, title }: { data: any[], title: string }) => {
+  const chartDataFormatted = transformDataForChart(data);
 
-    {/* Legend */}
-    <div className="grid grid-cols-4 gap-2 mt-4">
-      <div className="flex items-center gap-2 p-2 rounded bg-muted/30">
-        <div className="w-3 h-3 rounded bg-blue-500" />
-        <span className="text-xs font-medium">New</span>
+  return (
+    <div className="space-y-4">
+      <div className="text-center p-3 rounded-lg bg-muted/50">
+        <h3 className="text-sm font-semibold">{title} Area Status Distribution</h3>
       </div>
-      <div className="flex items-center gap-2 p-2 rounded bg-muted/30">
-        <div className="w-3 h-3 rounded bg-orange-500" />
-        <span className="text-xs font-medium">On-going</span>
+      
+      <div className="h-[350px] w-full">
+        <Bar data={chartDataFormatted} options={chartOptions} />
       </div>
-      <div className="flex items-center gap-2 p-2 rounded bg-muted/30">
-        <div className="w-3 h-3 rounded bg-green-500" />
-        <span className="text-xs font-medium">Complete</span>
-      </div>
-      <div className="flex items-center gap-2 p-2 rounded bg-muted/30">
-        <div className="w-3 h-3 rounded bg-red-500" />
-        <span className="text-xs font-medium">Cancel</span>
+
+      {/* Custom Legend */}
+      <div className="grid grid-cols-4 gap-2 mt-4">
+        <div className="flex items-center gap-2 p-2 rounded bg-muted/30">
+          <div className="w-3 h-3 rounded bg-blue-500" />
+          <span className="text-xs font-medium">New</span>
+        </div>
+        <div className="flex items-center gap-2 p-2 rounded bg-muted/30">
+          <div className="w-3 h-3 rounded bg-orange-500" />
+          <span className="text-xs font-medium">On-going</span>
+        </div>
+        <div className="flex items-center gap-2 p-2 rounded bg-muted/30">
+          <div className="w-3 h-3 rounded bg-green-500" />
+          <span className="text-xs font-medium">Complete</span>
+        </div>
+        <div className="flex items-center gap-2 p-2 rounded bg-muted/30">
+          <div className="w-3 h-3 rounded bg-red-500" />
+          <span className="text-xs font-medium">Cancel</span>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export const CourseStatusChart = () => {
   const { t } = useLanguage();
