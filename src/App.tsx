@@ -27,6 +27,10 @@ import ContentDashboard from "./pages/ContentDashboard";
 import ContentView from "./pages/ContentView";
 import UserPermissions from "./pages/UserPermissions";
 import TrainingCenter from "./pages/TrainingCenter";
+import DictionaryRPD from "./pages/training/DictionaryRPD";
+import DictionaryNG from "./pages/training/DictionaryNG";
+import QuizCenter from "./pages/training/QuizCenter";
+import ThankCorner from "./pages/training/ThankCorner";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +64,10 @@ const App = () => (
               <Route path="/content/view/:id" element={<ContentView />} />
               <Route path="/user-permissions" element={<UserPermissions />} />
               <Route path="/training-center/dashboard" element={<TrainingCenter />} />
+              <Route path="/training/dictionary/rpd" element={<DictionaryRPD />} />
+              <Route path="/training/dictionary/ng" element={<DictionaryNG />} />
+              <Route path="/training/quiz" element={<QuizCenter />} />
+              <Route path="/training/thank-corner" element={<ThankCorner />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

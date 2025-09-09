@@ -5,6 +5,7 @@ import { AppSidebar } from "@/components/layout/AppSidebar";
 import { Header } from "@/components/layout/Header";
 import { HeroBanner } from "@/components/home/HeroBanner";
 import { TabNavigation } from "@/components/home/TabNavigation";
+import { TrainingQuickAccess } from "@/components/home/TrainingQuickAccess";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const Index = () => {
@@ -30,6 +31,11 @@ const Index = () => {
                   activeTab={activeTab} 
                   onTabChange={setActiveTab} 
                 />
+              </section>
+
+              {/* Training Center Quick Access */}
+              <section className="rounded-3xl p-6 shadow-lg border border-white/30 dark:border-gray-700/30 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
+                <TrainingQuickAccess />
               </section>
 
               {/* Quick Stats */}
