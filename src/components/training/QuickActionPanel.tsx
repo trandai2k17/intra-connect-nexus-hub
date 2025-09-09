@@ -1,7 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Brain, Heart, Plus, Calendar, Users } from "lucide-react";
+import { BookOpen, Brain, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const QuickActionPanel = () => {
@@ -40,26 +39,6 @@ export const QuickActionPanel = () => {
     }
   ];
 
-  const systemActions = [
-    {
-      icon: Plus,
-      label: "New Course",
-      action: () => {},
-      variant: "default" as const
-    },
-    {
-      icon: Calendar,
-      label: "Schedule",
-      action: () => {},
-      variant: "outline" as const
-    },
-    {
-      icon: Users,
-      label: "Manage Users", 
-      action: () => {},
-      variant: "outline" as const
-    }
-  ];
 
   return (
     <Card className="bg-white dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700 h-fit">
@@ -98,24 +77,6 @@ export const QuickActionPanel = () => {
           ))}
         </div>
 
-        {/* System Actions */}
-        <div className="pt-4 border-t border-border/50">
-          <p className="text-base font-medium text-muted-foreground mb-4">System Actions</p>
-          <div className="space-y-3">
-            {systemActions.map((action, index) => (
-              <Button 
-                key={index}
-                variant={action.variant}
-                size="default"
-                className="w-full justify-start gap-3 h-auto py-3"
-                onClick={action.action}
-              >
-                <action.icon className="h-5 w-5" />
-                <span className="text-base">{action.label}</span>
-              </Button>
-            ))}
-          </div>
-        </div>
       </CardContent>
     </Card>
   );
