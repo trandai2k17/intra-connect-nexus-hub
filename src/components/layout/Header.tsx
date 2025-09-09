@@ -37,9 +37,7 @@ export function Header() {
   const [showAnnouncement, setShowAnnouncement] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // Calculate sidebar width for proper spacing
-  const sidebarWidth = isCollapsed ? "5rem" : "18rem";
-  const headerLeftMargin = isCollapsed ? "ml-20" : "ml-72";
+  // Header no longer needs sidebar margin calculations
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,11 +73,7 @@ export function Header() {
   }, [language]);
 
   return (
-    <>
-      {/* Spacer div to push content down */}
-      <div style={{ height: 'var(--header-height)' }} />
-      
-      <header className="fixed top-0 left-0 right-0 z-30 h-20 transition-all duration-300"
+    <header className="sticky top-0 z-30 h-20 transition-all duration-300 shrink-0"
         style={{
           background: 'rgba(255, 255, 255, 0.98)',
           backdropFilter: 'blur(20px)',
@@ -93,8 +87,8 @@ export function Header() {
             <SidebarTrigger className="lg:hidden p-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/20 dark:hover:to-blue-800/20 rounded-xl transition-all duration-200 text-gray-700 dark:text-gray-300" />
           </div>
 
-          {/* Center - Running announcement with dynamic spacing based on sidebar */}
-          <div className={`flex-1 flex justify-center px-8 transition-all duration-300 ${headerLeftMargin}`}>
+          {/* Center - Running announcement */}
+          <div className="flex-1 flex justify-center px-8 transition-all duration-300">
             <div className="max-w-2xl w-full">
               <div 
                 className={`overflow-hidden rounded-full px-6 py-3 border border-gray-200 dark:border-gray-700 transition-all duration-1000 ${
@@ -153,6 +147,5 @@ export function Header() {
           </div>
         </div>
       </header>
-    </>
   );
 }
