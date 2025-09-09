@@ -19,34 +19,37 @@ const TrainingCenter = () => {
         <div className="flex-1 flex flex-col">
           <Header />
           <main className="flex-1 gradient-bg dark:bg-gray-900">
-            <div className="container mx-auto px-6 py-8 space-y-8">
-              {/* Banner */}
-              <div className="grid grid-cols-1 gap-8">
+            <div className="container mx-auto px-6 py-8">
+              {/* Dashboard Header Banner */}
+              <div className="mb-8">
                 <TrainingBanner />
               </div>
 
-              {/* Training Metrics */}
-              <div className="grid grid-cols-1 gap-8">
+              {/* Top Metrics Row */}
+              <div className="mb-8">
                 <TrainingMetrics />
               </div>
 
-              {/* Quick Access Navigation */}
-              <div className="grid grid-cols-1 gap-8">
-                <TrainingQuickAccess />
+              {/* Main Dashboard Grid */}
+              <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
+                {/* Left Column - Quick Access */}
+                <div className="xl:col-span-1">
+                  <TrainingQuickAccess />
+                </div>
+
+                {/* Right Column - Active Training Programs */}
+                <div className="xl:col-span-2">
+                  <ActiveTrainingPrograms />
+                </div>
               </div>
 
-              {/* Courses Statistics */}
-              <div className="grid grid-cols-1 gap-8">
+              {/* Courses Table Section */}
+              <div className="mb-8">
                 <CoursesTable />
               </div>
 
-              {/* Active Training Programs Dashboard */}
-              <div className="grid grid-cols-1 gap-8">
-                <ActiveTrainingPrograms />
-              </div>
-
-              {/* TV Display - Courses Grid */}
-              <div className="grid grid-cols-1 gap-8">
+              {/* TV Display Section */}
+              <div className="mb-8">
                 <TVCoursesDisplay />
               </div>
             </div>
