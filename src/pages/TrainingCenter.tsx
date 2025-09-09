@@ -1,7 +1,4 @@
 import { useLanguage } from "@/contexts/LanguageContext";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/layout/AppSidebar";
-import { Header } from "@/components/layout/Header";
 import { DashboardHeader } from "@/components/training/DashboardHeader";
 import { CompactMetrics } from "@/components/training/CompactMetrics";
 import { QuickActionPanel } from "@/components/training/QuickActionPanel";
@@ -14,53 +11,42 @@ const TrainingCenter = () => {
   const { t } = useLanguage();
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
-        <AppSidebar />
-        <div className="flex-1 flex flex-col">
-          <Header />
-          <main className="flex-1 overflow-auto">
-            <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-              
-              {/* Page Header */}
-              <DashboardHeader />
-              
-              {/* KPI Metrics Strip */}
-              <CompactMetrics />
+    <div className="w-full space-y-6">
+      {/* Page Header */}
+      <DashboardHeader />
+      
+      {/* KPI Metrics Strip */}
+      <CompactMetrics />
 
-              {/* Main Content Layout */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                
-                {/* Left Sidebar - Quick Actions */}
-                <div className="lg:col-span-3">
-                  <QuickActionPanel />
-                </div>
-                
-                {/* Main Content Area */}
-                <div className="lg:col-span-9">
-                  <div className="space-y-8">
-                    
-                    {/* Top Row - Key Charts */}
-                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                      <CourseStatusChart />
-                      <ActiveTrainingPrograms />
-                    </div>
-                    
-                    {/* Bottom Row - Data Management */}
-                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                      <CoursesTable />
-                      <TVCoursesDisplay />
-                    </div>
-                    
-                  </div>
-                </div>
-                
-              </div>
-            </div>
-          </main>
+      {/* Main Content Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        {/* Left Sidebar - Quick Actions */}
+        <div className="lg:col-span-3">
+          <QuickActionPanel />
         </div>
+        
+        {/* Main Content Area */}
+        <div className="lg:col-span-9">
+          <div className="space-y-8">
+            
+            {/* Top Row - Key Charts */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+              <CourseStatusChart />
+              <ActiveTrainingPrograms />
+            </div>
+            
+            {/* Bottom Row - Data Management */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+              <CoursesTable />
+              <TVCoursesDisplay />
+            </div>
+            
+          </div>
+        </div>
+        
       </div>
-    </SidebarProvider>
+    </div>
   );
 };
 

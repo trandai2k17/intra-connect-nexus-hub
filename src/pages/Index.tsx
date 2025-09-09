@@ -1,8 +1,5 @@
 
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/layout/AppSidebar";
-import { Header } from "@/components/layout/Header";
 import { HeroBanner } from "@/components/home/HeroBanner";
 import { TabNavigation } from "@/components/home/TabNavigation";
 import { TrainingQuickAccess } from "@/components/home/TrainingQuickAccess";
@@ -13,13 +10,8 @@ const Index = () => {
   const { t } = useLanguage();
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full gradient-bg dark:bg-gray-900">
-        <AppSidebar />
-        <div className="flex-1 flex flex-col">
-          <Header />
-          <main className="flex-1 gradient-bg dark:bg-gray-900">
-            <div className="p-8 space-y-10">
+    <div className="w-full">
+      <div className="p-8 space-y-10">
               {/* Hero Banner */}
               <section className="mb-10">
                 <HeroBanner />
@@ -78,12 +70,9 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
-              </section>
-            </div>
-          </main>
-        </div>
+        </section>
       </div>
-    </SidebarProvider>
+    </div>
   );
 };
 
