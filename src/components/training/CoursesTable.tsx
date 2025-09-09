@@ -149,7 +149,7 @@ export const CoursesTable = () => {
                 <th className="text-left py-3 px-2 font-semibold text-muted-foreground w-2/5">Course</th>
                 <th className="text-left py-3 px-2 font-semibold text-muted-foreground w-1/5">Start date</th>
                 <th className="text-left py-3 px-2 font-semibold text-muted-foreground w-1/5">End date</th>
-                <th className="text-right py-3 px-2 font-semibold text-muted-foreground w-1/5">Progress</th>
+                <th className="text-left py-3 px-2 font-semibold text-muted-foreground w-1/5">Progress</th>
               </tr>
             </thead>
             <tbody>
@@ -169,9 +169,9 @@ export const CoursesTable = () => {
                   <td className="py-4 px-2 text-muted-foreground">
                     {course.endDate}
                   </td>
-                  <td className="py-4 px-2 text-right">
-                    <div className="flex items-center justify-end">
-                      <Badge 
+                   <td className="py-4 px-2 text-left">
+                     <div className="flex items-center justify-start">
+                       <Badge
                         className="bg-green-500/90 hover:bg-green-500 text-white border-0 py-1 rounded-full font-medium transition-all"
                         style={{ 
                           width: `${Math.max(course.progress * 0.8 + 20, 40)}px`,
