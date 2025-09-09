@@ -29,25 +29,25 @@ const TrainingCenter = () => {
               <CompactMetrics />
 
               {/* Main Content Layout */}
-              <div className="grid grid-cols-12 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
                 {/* Left Sidebar - Quick Actions */}
-                <div className="col-span-12 lg:col-span-3 xl:col-span-2">
+                <div className="lg:col-span-3">
                   <QuickActionPanel />
                 </div>
                 
                 {/* Main Content Area */}
-                <div className="col-span-12 lg:col-span-9 xl:col-span-10">
-                  <div className="space-y-6">
+                <div className="lg:col-span-9">
+                  <div className="space-y-8">
                     
                     {/* Top Row - Key Charts */}
-                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                       <CourseStatusChart />
                       <ActiveTrainingPrograms />
                     </div>
                     
                     {/* Bottom Row - Data Management */}
-                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                       <CoursesTable />
                       <TVCoursesDisplay />
                     </div>

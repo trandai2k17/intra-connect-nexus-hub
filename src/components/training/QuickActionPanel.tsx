@@ -63,29 +63,29 @@ export const QuickActionPanel = () => {
 
   return (
     <Card className="bg-white dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700 h-fit">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg">Quick Access</CardTitle>
+      <CardHeader className="pb-4">
+        <CardTitle className="text-xl font-semibold">Quick Access</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-6">
         {/* Quick Links */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           {quickActions.map((action, index) => (
             <Link key={index} to={action.url} className="block">
-              <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors group">
-                <div className={`p-2 rounded-lg ${action.color}`}>
-                  <action.icon className="h-4 w-4" />
+              <div className="flex items-center gap-4 p-4 rounded-lg hover:bg-muted/50 transition-colors group border border-transparent hover:border-muted">
+                <div className={`p-3 rounded-lg ${action.color} flex-shrink-0`}>
+                  <action.icon className="h-5 w-5" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm text-foreground group-hover:text-primary transition-colors">
+                  <p className="font-medium text-base text-foreground group-hover:text-primary transition-colors mb-1">
                     {action.title}
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">
                     {action.description}
                   </p>
                 </div>
                 <Badge 
                   variant="secondary" 
-                  className={`text-xs ${
+                  className={`text-xs px-3 py-1 flex-shrink-0 ${
                     action.badge === "New" ? "bg-green-500/10 text-green-600 dark:text-green-400" :
                     action.badge === "Hot" ? "bg-red-500/10 text-red-600 dark:text-red-400" :
                     "bg-blue-500/10 text-blue-600 dark:text-blue-400"
@@ -99,19 +99,19 @@ export const QuickActionPanel = () => {
         </div>
 
         {/* System Actions */}
-        <div className="pt-3 border-t border-border/50">
-          <p className="text-sm font-medium text-muted-foreground mb-3">System Actions</p>
-          <div className="space-y-2">
+        <div className="pt-4 border-t border-border/50">
+          <p className="text-base font-medium text-muted-foreground mb-4">System Actions</p>
+          <div className="space-y-3">
             {systemActions.map((action, index) => (
               <Button 
                 key={index}
                 variant={action.variant}
-                size="sm"
-                className="w-full justify-start gap-2"
+                size="default"
+                className="w-full justify-start gap-3 h-auto py-3"
                 onClick={action.action}
               >
-                <action.icon className="h-4 w-4" />
-                {action.label}
+                <action.icon className="h-5 w-5" />
+                <span className="text-base">{action.label}</span>
               </Button>
             ))}
           </div>

@@ -62,29 +62,29 @@ export const CompactMetrics = () => {
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-6">
         {metrics.map((metric, index) => (
-          <Card key={index} className={`${metric.borderColor} bg-gray-50 dark:bg-gray-700 hover:shadow-lg transition-all duration-200 border-0`}>
-            <CardContent className="p-4">
-            <div className="flex items-center justify-between mb-2">
-              <div className={`p-2 rounded-lg ${metric.color}`}>
-                <metric.icon className="h-4 w-4" />
+          <Card key={index} className={`${metric.borderColor} bg-gray-50 dark:bg-gray-700 hover:shadow-lg transition-all duration-200 border-0 min-h-[120px]`}>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className={`p-3 rounded-lg ${metric.color}`}>
+                  <metric.icon className="h-5 w-5" />
+                </div>
+                <Badge 
+                  variant={metric.trend === "up" ? "default" : "secondary"}
+                  className={`text-xs px-2 py-1 ${
+                    metric.trend === "up" 
+                      ? "bg-green-500/10 text-green-600 dark:text-green-400" 
+                      : "bg-red-500/10 text-red-600 dark:text-red-400"
+                  }`}
+                >
+                  {metric.change}
+                </Badge>
               </div>
-              <Badge 
-                variant={metric.trend === "up" ? "default" : "secondary"}
-                className={`text-xs px-2 py-0 ${
-                  metric.trend === "up" 
-                    ? "bg-green-500/10 text-green-600 dark:text-green-400" 
-                    : "bg-red-500/10 text-red-600 dark:text-red-400"
-                }`}
-              >
-                {metric.change}
-              </Badge>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-foreground">{metric.value}</p>
-              <p className="text-xs text-muted-foreground truncate">{metric.title}</p>
-            </div>
+              <div className="space-y-2">
+                <p className="text-2xl font-bold text-foreground leading-tight">{metric.value}</p>
+                <p className="text-sm text-muted-foreground leading-tight">{metric.title}</p>
+              </div>
             </CardContent>
           </Card>
         ))}
