@@ -20,44 +20,44 @@ const TrainingCenter = () => {
         <div className="flex-1 flex flex-col">
           <Header />
           <main className="flex-1 gradient-bg dark:bg-gray-900">
-            <div className="container mx-auto px-4 py-4 max-w-7xl">
+            <div className="w-full px-2 sm:px-4 lg:px-6 py-3 sm:py-4">
               {/* Compact Header Section */}
-              <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 mb-6">
-                {/* Banner - spans 3 columns */}
-                <div className="xl:col-span-3">
+              <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
+                {/* Banner - spans most columns */}
+                <div className="lg:col-span-2 xl:col-span-3">
                   <TrainingBanner />
                 </div>
                 {/* Quick Access - compact in 1 column */}
-                <div className="xl:col-span-1">
+                <div className="lg:col-span-1 xl:col-span-1">
                   <TrainingQuickAccess />
                 </div>
               </div>
 
-              {/* Metrics Row - Compact */}
-              <div className="mb-6">
+              {/* Metrics Row - Compact and Responsive */}
+              <div className="mb-4 sm:mb-6">
                 <TrainingMetrics />
               </div>
 
-              {/* Main Content Grid - 2 Columns */}
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
+              {/* Main Content Grid - Responsive 2 Columns */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6">
                 {/* Left: Active Programs */}
-                <div>
+                <div className="w-full">
                   <ActiveTrainingPrograms />
                 </div>
                 {/* Right: Course Status Chart */}
-                <div>
+                <div className="w-full">
                   <CourseStatusChart />
                 </div>
               </div>
 
-              {/* Bottom Section - Full Width */}
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
+              {/* Bottom Section - Full Width Responsive Grid */}
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6">
                 {/* Courses Table */}
-                <div>
+                <div className="w-full">
                   <CoursesTable />
                 </div>
                 {/* TV Display */}
-                <div>
+                <div className="w-full">
                   <TVCoursesDisplay />
                 </div>
               </div>
