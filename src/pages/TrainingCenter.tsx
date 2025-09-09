@@ -29,10 +29,10 @@ const TrainingCenter = () => {
 
       {/* Quick Access & Course Status Row */}
       <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="w-full lg:col-span-5">
+        <div className="w-full lg:col-span-4">
           <QuickActionPanel />
         </div>
-        <div className="w-full lg:col-span-7">
+        <div className="w-full lg:col-span-8">
           <CourseStatusChart />
         </div>
       </div>

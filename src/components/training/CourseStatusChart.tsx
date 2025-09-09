@@ -3,35 +3,30 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { cn } from "@/lib/utils";
 
 const chartConfig = {
   new: {
     label: "New",
-    color: "hsl(217 91% 60%)", 
-    bgColor: "hsl(217 91% 95%)",
+    color: "#3b82f6", 
   },
   ongoing: {
     label: "On-going", 
-    color: "hsl(43 96% 56%)",
-    bgColor: "hsl(43 96% 95%)",
+    color: "#f59e0b",
   },
   complete: {
     label: "Complete",
-    color: "hsl(142 76% 36%)",
-    bgColor: "hsl(142 76% 95%)",
+    color: "#10b981",
   },
   cancel: {
     label: "Cancel",
-    color: "hsl(0 84% 60%)",
-    bgColor: "hsl(0 84% 95%)",
+    color: "#ef4444",
   },
 };
 
 const tabColors = {
-  rpd: { color: "hsl(217 91% 60%)", bgColor: "hsl(217 91% 95%)" },
-  ng: { color: "hsl(142 76% 36%)", bgColor: "hsl(142 76% 95%)" },
-  cb: { color: "hsl(262 83% 58%)", bgColor: "hsl(262 83% 95%)" },
+  rpd: "#3b82f6",
+  ng: "#10b981", 
+  cb: "#8b5cf6",
 };
 
 // Sample data for each area
@@ -64,122 +59,95 @@ export const CourseStatusChart = () => {
 
   const renderAreaContent = (data: any[], areaName: string, tabKey: string) => (
     <div className="space-y-4">
-      {/* Chart Header with Tab Color */}
-      <div 
-        className="text-center p-3 rounded-lg mb-4"
-        style={{ 
-          backgroundColor: tabColors[tabKey as keyof typeof tabColors].bgColor,
-          borderLeft: `4px solid ${tabColors[tabKey as keyof typeof tabColors].color}`
-        }}
-      >
-        <h3 
-          className="text-sm font-semibold"
-          style={{ color: tabColors[tabKey as keyof typeof tabColors].color }}
-        >
+      {/* Chart Header */}
+      <div className="text-center p-3 rounded-lg mb-4 bg-muted/50">
+        <h3 className="text-sm font-semibold text-foreground">
           {areaName} Status Distribution
         </h3>
       </div>
 
       {/* Horizontal Bar Chart */}
       <div className="w-full">
-        <ChartContainer config={chartConfig} className="h-[400px]">
+        <ChartContainer config={chartConfig} className="h-[350px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart 
               data={data} 
               layout="horizontal"
-              margin={{ top: 20, right: 30, left: 80, bottom: 20 }}
+              margin={{ top: 20, right: 40, left: 100, bottom: 20 }}
             >
-              <XAxis type="number" tick={{ fontSize: 11 }} />
+              <XAxis 
+                type="number" 
+                tick={{ fontSize: 12 }}
+                axisLine={false}
+                tickLine={false}
+              />
               <YAxis 
                 type="category"
                 dataKey="department" 
-                tick={{ fontSize: 10 }}
-                width={75}
+                tick={{ fontSize: 11 }}
+                width={90}
+                axisLine={false}
+                tickLine={false}
                 tickFormatter={(value) => {
-                  const parts = value.split('-');
-                  return parts[parts.length - 1];
+                  return value.split('-')[1] || value;
                 }}
               />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar dataKey="new" stackId="a" fill={chartConfig.new.color} />
-              <Bar dataKey="ongoing" stackId="a" fill={chartConfig.ongoing.color} />
-              <Bar dataKey="complete" stackId="a" fill={chartConfig.complete.color} />
-              <Bar dataKey="cancel" stackId="a" fill={chartConfig.cancel.color} />
+              <ChartTooltip 
+                content={<ChartTooltipContent />}
+                cursor={{ fill: 'rgba(0,0,0,0.1)' }}
+              />
+              <Bar dataKey="new" stackId="a" fill={chartConfig.new.color} radius={[0, 2, 2, 0]} />
+              <Bar dataKey="ongoing" stackId="a" fill={chartConfig.ongoing.color} radius={[0, 0, 0, 0]} />
+              <Bar dataKey="complete" stackId="a" fill={chartConfig.complete.color} radius={[0, 0, 0, 0]} />
+              <Bar dataKey="cancel" stackId="a" fill={chartConfig.cancel.color} radius={[0, 2, 2, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </ChartContainer>
         
-        {/* Enhanced Legend with Status Colors */}
-        <div className="grid grid-cols-2 gap-3 mt-4">
+        {/* Status Legend */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
           {Object.entries(chartConfig).map(([key, config]) => (
             <div 
               key={key} 
-              className="flex items-center gap-3 p-3 rounded-lg border transition-all hover:shadow-md"
-              style={{ 
-                backgroundColor: config.bgColor,
-                borderColor: config.color + "40"
-              }}
+              className="flex items-center gap-2 p-2 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
             >
               <div 
-                className="w-4 h-4 rounded-full shadow-sm" 
+                className="w-3 h-3 rounded-full" 
                 style={{ backgroundColor: config.color }}
               />
-              <span 
-                className="text-sm font-medium"
-                style={{ color: config.color }}
-              >
+              <span className="text-xs font-medium text-foreground">
                 {config.label}
               </span>
             </div>
           ))}
-        </div>
-
-        {/* Location Labels with Colors */}
-        <div className="mt-4 space-y-2">
-          <h4 className="text-xs font-medium text-muted-foreground mb-2">Locations:</h4>
-          <div className="flex flex-wrap gap-2">
-            {data.map((item, index) => (
-              <div
-                key={index}
-                className="px-3 py-1 rounded-full text-xs font-medium border transition-all hover:shadow-sm"
-                style={{
-                  backgroundColor: tabColors[tabKey as keyof typeof tabColors].bgColor,
-                  borderColor: tabColors[tabKey as keyof typeof tabColors].color + "60",
-                  color: tabColors[tabKey as keyof typeof tabColors].color
-                }}
-              >
-                {item.department.split('-')[1] || item.department}
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>
   );
 
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="text-lg font-semibold">Course Status Statistics</CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="rpd" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-muted/30">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger 
               value="rpd"
-              className="data-[state=active]:bg-[hsl(217_91%_60%)] data-[state=active]:text-white transition-all data-[state=active]:shadow-md"
+              className="data-[state=active]:bg-blue-500 data-[state=active]:text-white"
             >
               RPD
             </TabsTrigger>
             <TabsTrigger 
               value="ng"
-              className="data-[state=active]:bg-[hsl(142_76%_36%)] data-[state=active]:text-white transition-all data-[state=active]:shadow-md"
+              className="data-[state=active]:bg-green-500 data-[state=active]:text-white"
             >
               NG
             </TabsTrigger>
             <TabsTrigger 
               value="cb"
-              className="data-[state=active]:bg-[hsl(262_83%_58%)] data-[state=active]:text-white transition-all data-[state=active]:shadow-md"
+              className="data-[state=active]:bg-purple-500 data-[state=active]:text-white"
             >
               CB
             </TabsTrigger>
