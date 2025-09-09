@@ -134,58 +134,95 @@ export const CoursesTable = () => {
   return (
     <Card className="border-white/20 dark:border-gray-700/20 shadow-2xl bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
-          Ongoing Course
+        <CardTitle className="text-xl font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
+          Ongoing Courses
           <Badge variant="secondary" className="ml-2">
-            {coursesData.length} courses
+            {coursesData.length}
           </Badge>
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto">
-          <table className="w-full">
+        {/* Desktop Table View */}
+        <div className="hidden lg:block overflow-x-auto">
+          <table className="w-full min-w-[600px]">
             <thead>
-               <tr className="border-b border-border/20">
-                <th className="text-left py-3 px-2 font-semibold text-muted-foreground w-2/5">Course</th>
-                <th className="text-left py-3 px-2 font-semibold text-muted-foreground w-1/5">Start date</th>
-                <th className="text-left py-3 px-2 font-semibold text-muted-foreground w-1/5">End date</th>
-                <th className="text-left py-3 px-2 font-semibold text-muted-foreground w-1/5">Progress</th>
+              <tr className="border-b border-border/20">
+                <th className="text-left py-3 px-3 font-semibold text-muted-foreground">Course Name</th>
+                <th className="text-left py-3 px-3 font-semibold text-muted-foreground min-w-[100px]">Start</th>
+                <th className="text-left py-3 px-3 font-semibold text-muted-foreground min-w-[100px]">End</th>
+                <th className="text-left py-3 px-3 font-semibold text-muted-foreground min-w-[120px]">Progress</th>
               </tr>
             </thead>
             <tbody>
-              {sortedCourses.map((course) => (
+              {sortedCourses.slice(0, 6).map((course) => (
                 <tr 
                   key={course.id} 
                   className="border-b border-border/10 hover:bg-muted/20 transition-colors"
                 >
-                  <td className="py-4 px-2">
-                    <div className="font-medium text-foreground truncate max-w-xs">
-                      {course.name}
+                  <td className="py-4 px-3">
+                    <div className="font-medium text-foreground">
+                      <div className="line-clamp-2 leading-tight">
+                        {course.name}
+                      </div>
                     </div>
                   </td>
-                  <td className="py-4 px-2 text-muted-foreground">
+                  <td className="py-4 px-3 text-muted-foreground text-sm whitespace-nowrap">
                     {course.startDate}
                   </td>
-                  <td className="py-4 px-2 text-muted-foreground">
+                  <td className="py-4 px-3 text-muted-foreground text-sm whitespace-nowrap">
                     {course.endDate}
                   </td>
-                   <td className="py-4 px-2 text-left">
-                     <div className="flex items-center justify-start">
-                       <Badge
-                        className="bg-green-500/90 hover:bg-green-500 text-white border-0 py-1 rounded-full font-medium transition-all"
-                        style={{ 
-                          width: `${Math.max(course.progress * 0.8 + 20, 40)}px`,
-                          minWidth: '40px'
-                        }}
-                      >
+                  <td className="py-4 px-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div 
+                          className={`h-2 rounded-full transition-all ${getProgressColor(course.progress)}`}
+                          style={{ width: `${course.progress}%` }}
+                        />
+                      </div>
+                      <span className="text-sm font-medium text-foreground min-w-[40px]">
                         {course.progress}%
-                      </Badge>
+                      </span>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="lg:hidden space-y-4">
+          {sortedCourses.slice(0, 6).map((course) => (
+            <div 
+              key={course.id}
+              className="p-4 bg-muted/30 rounded-lg border border-border/20"
+            >
+              <div className="space-y-3">
+                <h4 className="font-medium text-foreground text-sm leading-tight">
+                  {course.name}
+                </h4>
+                
+                <div className="flex justify-between items-center text-xs text-muted-foreground">
+                  <span>Start: {course.startDate}</span>
+                  <span>End: {course.endDate}</span>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-muted-foreground">Progress</span>
+                    <span className="text-sm font-medium text-foreground">{course.progress}%</span>
+                  </div>
+                  <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                    <div 
+                      className={`h-2 rounded-full transition-all ${getProgressColor(course.progress)}`}
+                      style={{ width: `${course.progress}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </CardContent>
     </Card>

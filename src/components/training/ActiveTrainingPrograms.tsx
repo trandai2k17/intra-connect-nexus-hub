@@ -190,31 +190,35 @@ export const ActiveTrainingPrograms = () => {
         </div>
       </div>
 
-      {/* Courses Grid - 4x3 layout for all 12 courses */}
-      <div className="grid grid-cols-4 gap-6">
+      {/* Responsive Courses Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 lg:gap-6">
         {coursesData.map((course) => (
           <Card 
             key={course.id} 
-            className={`bg-gradient-to-br ${getCardGradient(course.progress)} backdrop-blur-sm ${getBorderColor(course.progress)} border-2 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 hover:rotate-1 transform-gpu`}
+            className={`bg-gradient-to-br ${getCardGradient(course.progress)} backdrop-blur-sm ${getBorderColor(course.progress)} border-2 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 hover:rotate-1 transform-gpu min-h-[200px]`}
           >
-            <CardContent className="p-3 flex flex-col items-center text-center space-y-3">
+            <CardContent className="p-3 lg:p-4 flex flex-col items-center text-center space-y-3 h-full">
               {/* Course Name */}
-              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider leading-tight min-h-[2rem] flex items-center">
-                {course.name}
+              <h3 className="text-xs lg:text-sm font-bold text-slate-800 uppercase tracking-wider leading-tight min-h-[2.5rem] flex items-center text-center px-1">
+                <span className="line-clamp-2 break-words">
+                  {course.name}
+                </span>
               </h3>
 
               {/* Circular Progress */}
-              <CircularProgress progress={course.progress} />
+              <div className="flex-1 flex items-center justify-center">
+                <CircularProgress progress={course.progress} />
+              </div>
 
-              {/* Date Information - Horizontal Layout */}
-              <div className="w-full flex justify-between items-center text-xs text-slate-600">
-                <div className="flex items-center gap-1">
-                  <Calendar className="w-3 h-3 text-emerald-500" />
-                  <span className="font-bold">{course.startDate}</span>
+              {/* Date Information - Responsive Layout */}
+              <div className="w-full space-y-2 lg:space-y-0 lg:flex lg:justify-between lg:items-center text-xs text-slate-600">
+                <div className="flex items-center justify-center lg:justify-start gap-1">
+                  <Calendar className="w-3 h-3 text-emerald-500 flex-shrink-0" />
+                  <span className="font-bold text-xs truncate">{course.startDate}</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-amber-500" />
-                  <span className="font-bold">{course.endDate}</span>
+                <div className="flex items-center justify-center lg:justify-end gap-1">
+                  <Clock className="w-3 h-3 text-amber-500 flex-shrink-0" />
+                  <span className="font-bold text-xs truncate">{course.endDate}</span>
                 </div>
               </div>
             </CardContent>
