@@ -8,6 +8,7 @@ import { TrainingQuickAccess } from "@/components/home/TrainingQuickAccess";
 import { CoursesTable } from "@/components/training/CoursesTable";
 import { TVCoursesDisplay } from "@/components/training/TVCoursesDisplay";
 import { ActiveTrainingPrograms } from "@/components/training/ActiveTrainingPrograms";
+import { CourseStatusChart } from "@/components/training/CourseStatusChart";
 
 const TrainingCenter = () => {
   const { t } = useLanguage();
@@ -46,6 +47,11 @@ const TrainingCenter = () => {
               {/* Courses Table Section */}
               <div className="mb-8">
                 <CoursesTable />
+              </div>
+
+              {/* Course Status Statistics */}
+              <div className="mb-8">
+                <CourseStatusChart />
               </div>
 
               {/* TV Display Section */}
