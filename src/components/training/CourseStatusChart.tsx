@@ -69,76 +69,53 @@ export const CourseStatusChart = () => {
   const { t } = useLanguage();
 
   const renderAreaContent = (data: any[], areaName: string) => (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {/* Bar Chart */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-sm font-medium">Department Breakdown</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig} className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <XAxis 
-                  dataKey="department" 
-                  tick={{ fontSize: 10 }}
-                  angle={-45}
-                  textAnchor="end"
-                  height={80}
-                />
-                <YAxis tick={{ fontSize: 12 }} />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="new" stackId="a" fill={chartConfig.new.color} />
-                <Bar dataKey="ongoing" stackId="a" fill={chartConfig.ongoing.color} />
-                <Bar dataKey="complete" stackId="a" fill={chartConfig.complete.color} />
-                <Bar dataKey="cancel" stackId="a" fill={chartConfig.cancel.color} />
-              </BarChart>
-            </ResponsiveContainer>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-
-      {/* Pie Chart */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-sm font-medium">{areaName} Overview</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig} className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={calculateSummary(data)}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={5}
-                  dataKey="value"
-                >
-                  {calculateSummary(data).map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill} />
-                  ))}
-                </Pie>
-                <ChartTooltip content={<ChartTooltipContent />} />
-              </PieChart>
-            </ResponsiveContainer>
-          </ChartContainer>
-          
-          {/* Legend */}
-          <div className="grid grid-cols-2 gap-2 mt-4">
-            {Object.entries(chartConfig).map(([key, config]) => (
-              <div key={key} className="flex items-center gap-2">
-                <div 
-                  className="w-3 h-3 rounded-full" 
-                  style={{ backgroundColor: config.color }}
-                />
-                <span className="text-xs text-muted-foreground">{config.label}</span>
+    <div className="space-y-4">
+      {/* Pie Chart Overview */}
+      <div className="w-full">
+        <div className="text-center mb-4">
+          <h3 className="text-sm font-medium text-muted-foreground">{areaName} Overview</h3>
+        </div>
+        <ChartContainer config={chartConfig} className="h-[250px] mx-auto">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={calculateSummary(data)}
+                cx="50%"
+                cy="50%"
+                innerRadius={50}
+                outerRadius={90}
+                paddingAngle={5}
+                dataKey="value"
+              >
+                {calculateSummary(data).map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.fill} />
+                ))}
+              </Pie>
+              <ChartTooltip content={<ChartTooltipContent />} />
+            </PieChart>
+          </ResponsiveContainer>
+        </ChartContainer>
+        
+        {/* Legend */}
+        <div className="grid grid-cols-2 gap-2 mt-4">
+          {Object.entries(chartConfig).map(([key, config]) => {
+            const summary = calculateSummary(data);
+            const statusData = summary.find(item => item.name.toLowerCase().replace('-', '') === key);
+            return (
+              <div key={key} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="w-3 h-3 rounded-full" 
+                    style={{ backgroundColor: config.color }}
+                  />
+                  <span className="text-xs font-medium">{config.label}</span>
+                </div>
+                <span className="text-xs font-semibold">{statusData?.value || 0}</span>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 
