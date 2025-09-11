@@ -4,18 +4,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock, Users, CheckCircle } from "lucide-react";
 
 export const QuizListCard = () => {
-  const basicQuizzes = Array.from({ length: 10 }, (_, i) => ({
+  const rpdQuizzes = Array.from({ length: 10 }, (_, i) => ({
     id: i + 1,
-    title: `Basic Quiz ${i + 1}`,
+    title: `RPD Test - ${i + 1}`,
     participants: Math.floor(Math.random() * 30) + 10,
     duration: `${Math.floor(Math.random() * 15) + 5} min`,
     status: ["active", "new", "completed"][Math.floor(Math.random() * 3)],
     completionRate: Math.floor(Math.random() * 30) + 70
   }));
 
-  const advancedQuizzes = Array.from({ length: 10 }, (_, i) => ({
+  const ngQuizzes = Array.from({ length: 7 }, (_, i) => ({
     id: i + 11,
-    title: `Advanced Quiz ${i + 1}`,
+    title: `NG Test - ${i + 1}`,
     participants: Math.floor(Math.random() * 25) + 5,
     duration: `${Math.floor(Math.random() * 20) + 10} min`,
     status: ["active", "new", "completed"][Math.floor(Math.random() * 3)],
@@ -31,7 +31,7 @@ export const QuizListCard = () => {
     }
   };
 
-  const renderQuizList = (quizzes: typeof basicQuizzes) => (
+  const renderQuizList = (quizzes: typeof rpdQuizzes) => (
     <div className="space-y-1 max-h-64 overflow-y-auto">
       {quizzes.map((quiz) => (
         <div 
@@ -74,21 +74,21 @@ export const QuizListCard = () => {
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
           Quiz Center
           <Badge variant="secondary" className="text-xs">
-            20 quizzes
+            17 quizzes
           </Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        <Tabs defaultValue="basic" className="w-full">
+        <Tabs defaultValue="rpd" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="basic" className="text-xs">Basic (1-10)</TabsTrigger>
-            <TabsTrigger value="advanced" className="text-xs">Advanced (1-10)</TabsTrigger>
+            <TabsTrigger value="rpd" className="text-xs">RPD (1-10)</TabsTrigger>
+            <TabsTrigger value="ng" className="text-xs">NG (1-7)</TabsTrigger>
           </TabsList>
-          <TabsContent value="basic" className="space-y-2">
-            {renderQuizList(basicQuizzes)}
+          <TabsContent value="rpd" className="space-y-2">
+            {renderQuizList(rpdQuizzes)}
           </TabsContent>
-          <TabsContent value="advanced" className="space-y-2">
-            {renderQuizList(advancedQuizzes)}
+          <TabsContent value="ng" className="space-y-2">
+            {renderQuizList(ngQuizzes)}
           </TabsContent>
         </Tabs>
       </CardContent>
