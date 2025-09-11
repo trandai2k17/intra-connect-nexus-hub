@@ -2,6 +2,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { DashboardHeader } from "@/components/training/DashboardHeader";
 import { CompactMetrics } from "@/components/training/CompactMetrics";
 import { QuickActionPanel } from "@/components/training/QuickActionPanel";
+import { QuizListCard } from "@/components/training/QuizListCard";
 import { CourseStatusChart } from "@/components/training/CourseStatusChart";
 import { CoursesTable } from "@/components/training/CoursesTable";
 import { TVCoursesDisplay } from "@/components/training/TVCoursesDisplay";
@@ -29,8 +30,9 @@ const TrainingCenter = () => {
 
       {/* Quick Access & Course Status Row */}
       <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="w-full lg:col-span-4">
+        <div className="w-full lg:col-span-4 space-y-4">
           <QuickActionPanel />
+          <QuizListCard />
         </div>
         <div className="w-full lg:col-span-8">
           <CourseStatusChart />
