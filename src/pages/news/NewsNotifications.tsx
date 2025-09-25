@@ -119,7 +119,7 @@ export default function NewsNotifications() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
               <Bell className="w-8 h-8 text-yellow-600" />
-              Thông tin
+              Notifications
               {unreadCount > 0 && (
                 <Badge className="bg-red-500 text-white">
                   {unreadCount}
@@ -131,7 +131,7 @@ export default function NewsNotifications() {
             </p>
           </div>
           <Button onClick={markAllAsRead} variant="outline">
-            Đánh dấu đã đọc tất cả
+            Mark All as Read
           </Button>
         </div>
 
@@ -142,7 +142,7 @@ export default function NewsNotifications() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <BellRing className="w-5 h-5 text-blue-600" />
-                  Thông báo gần đây
+                  Recent Notifications
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -150,7 +150,7 @@ export default function NewsNotifications() {
                   <div className="text-center py-8">
                     <Bell className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                     <p className="text-gray-500 dark:text-gray-400">
-                      Không có thông báo nào
+                      No notifications
                     </p>
                   </div>
                 ) : (
@@ -212,7 +212,7 @@ export default function NewsNotifications() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Settings className="w-5 h-5 text-gray-600" />
-                  Cài đặt thông báo
+                  Notification Settings
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -296,7 +296,7 @@ export default function NewsNotifications() {
             {/* Quick Stats */}
             <Card className="border-0 shadow-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-lg">Thống kê</CardTitle>
+                <CardTitle className="text-lg">Statistics</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between items-center">

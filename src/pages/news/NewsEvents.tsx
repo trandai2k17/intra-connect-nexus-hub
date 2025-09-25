@@ -110,7 +110,7 @@ export default function NewsEvents() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Sự kiện
+              Events
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-2">
               Quản lý và theo dõi các sự kiện, hoạt động của công ty
@@ -119,11 +119,11 @@ export default function NewsEvents() {
           <div className="flex gap-3">
             <Button variant="outline" className="flex items-center gap-2">
               <Filter className="w-4 h-4" />
-              Bộ lọc
+              Filter
             </Button>
             <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
               <Plus className="w-4 h-4 mr-2" />
-              Tạo sự kiện
+              Create Event
             </Button>
           </div>
         </div>
@@ -135,7 +135,7 @@ export default function NewsEvents() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <CalendarIcon className="w-5 h-5 text-blue-600" />
-                  Lịch
+                  Calendar
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -156,7 +156,7 @@ export default function NewsEvents() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <CalendarIcon className="w-5 h-5 text-blue-600" />
-                  Sự kiện sắp tới ({upcomingEvents.length})
+                  Upcoming Events ({upcomingEvents.length})
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -206,11 +206,11 @@ export default function NewsEvents() {
                       </div>
                       <div className="flex gap-2">
                         <Button variant="outline" size="sm">
-                          Xem chi tiết
+                          View Details
                         </Button>
                         {event.attendees < event.maxAttendees && (
                           <Button size="sm" className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700">
-                            Đăng ký
+                            Register
                           </Button>
                         )}
                       </div>
@@ -219,7 +219,7 @@ export default function NewsEvents() {
                     {/* Progress bar for attendees */}
                     <div className="mt-4">
                       <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
-                        <span>Số người đăng ký</span>
+                        <span>Registration Count</span>
                         <span>{event.attendees}/{event.maxAttendees}</span>
                       </div>
                       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
@@ -239,7 +239,7 @@ export default function NewsEvents() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <CalendarIcon className="w-5 h-5 text-green-600" />
-                  Sự kiện đã diễn ra ({completedEvents.length})
+                  Completed Events ({completedEvents.length})
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">

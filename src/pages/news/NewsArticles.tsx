@@ -102,15 +102,15 @@ export default function NewsArticles() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Tin tức
+              News Articles
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-2">
-              Các bài viết và tin tức nổi bật của công ty
+              Cập nhật tin tức mới nhất và thông tin hữu ích
             </p>
           </div>
           <Button className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700">
             <FileText className="w-4 h-4 mr-2" />
-            Viết bài mới
+            Write New Article
           </Button>
         </div>
 
@@ -121,7 +121,7 @@ export default function NewsArticles() {
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
-                  placeholder="Tìm kiếm bài viết..."
+                  placeholder="Search articles..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10 bg-white dark:bg-gray-700"
@@ -129,7 +129,7 @@ export default function NewsArticles() {
               </div>
               <Button variant="outline" className="flex items-center gap-2">
                 <Filter className="w-4 h-4" />
-                Bộ lọc
+                Filter
               </Button>
             </div>
           </CardContent>
@@ -193,7 +193,7 @@ export default function NewsArticles() {
                 </div>
 
                 <Button className="w-full mt-4" variant="outline">
-                  Đọc thêm
+                  Read More
                 </Button>
               </CardContent>
             </Card>
@@ -205,10 +205,10 @@ export default function NewsArticles() {
             <CardContent className="p-12 text-center">
               <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                Không tìm thấy bài viết
+                No articles found
               </h3>
               <p className="text-gray-500 dark:text-gray-400">
-                Thử thay đổi từ khóa tìm kiếm hoặc bộ lọc
+                Try changing your search terms or filters
               </p>
             </CardContent>
           </Card>

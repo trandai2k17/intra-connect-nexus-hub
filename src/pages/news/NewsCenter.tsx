@@ -86,7 +86,7 @@ export default function NewsCenter() {
           </div>
           <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
             <Bell className="w-4 h-4 mr-2" />
-            Tạo thông báo mới
+            Create New Post
           </Button>
         </div>
 
@@ -118,10 +118,10 @@ export default function NewsCenter() {
           {/* Recent Posts */}
           <Card className="border-0 shadow-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-blue-600" />
-                Bài viết gần đây
-              </CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-blue-600" />
+                  Recent Posts
+                </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -156,10 +156,10 @@ export default function NewsCenter() {
           {/* Department Activity */}
           <Card className="border-0 shadow-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-green-600" />
-                Hoạt động phòng ban
-              </CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="w-5 h-5 text-green-600" />
+                  Department Activity
+                </CardTitle>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="hr" className="w-full">

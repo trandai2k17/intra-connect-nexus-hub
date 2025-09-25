@@ -39,13 +39,13 @@ interface NavigationItem {
 
 export const navigationItems: NavigationItem[] = [
   {
-    title: "Trang chủ",
+    title: "Homepage",
     url: "/",
     icon: Home,
     iconColor: "text-blue-600",
   },
   {
-    title: "Portal Chính",
+    title: "Main Portal",
     url: "/portal",
     icon: Grid3X3,
     iconColor: "text-emerald-600",
@@ -63,31 +63,31 @@ export const navigationItems: NavigationItem[] = [
         iconColor: "text-blue-600",
       },
       {
-        title: "Thông báo",
+        title: "Announcements",
         url: "/news/announcements",
         icon: MessageSquare,
         iconColor: "text-orange-600",
       },
       {
-        title: "Tin tức",
+        title: "News Articles",
         url: "/news/articles",
         icon: FileText,
         iconColor: "text-green-600",
       },
       {
-        title: "Thông tin",
+        title: "Notifications",
         url: "/news/notifications",
         icon: MessageSquare,
         iconColor: "text-yellow-600",
       },
       {
-        title: "Sự kiện",
+        title: "Events",
         url: "/news/events",
         icon: TrendingUp,
         iconColor: "text-purple-600",
       },
       {
-        title: "Nội quy - Quy định",
+        title: "Policies & Regulations",
         url: "/news/policies",
         icon: Book,
         iconColor: "text-red-600",
@@ -95,7 +95,7 @@ export const navigationItems: NavigationItem[] = [
     ],
   },
   {
-    title: "Ứng dụng",
+    title: "Applications",
     url: "/software-application",
     icon: Monitor,
     iconColor: "text-green-600",
@@ -107,13 +107,13 @@ export const navigationItems: NavigationItem[] = [
     iconColor: "text-blue-600",
     subItems: [
       {
-        title: "Dashboard Content",
+        title: "Content Dashboard",
         url: "/content-dashboard",
         icon: BarChart3,
         iconColor: "text-purple-600",
       },
       {
-        title: "Quản lý Content",
+        title: "Content Management",
         url: "/content-management",
         icon: Settings,
         iconColor: "text-blue-600",
@@ -121,7 +121,7 @@ export const navigationItems: NavigationItem[] = [
     ],
   },
   {
-    title: "Thư viện",
+    title: "Library",
     url: "#",
     icon: BookOpen,
     iconColor: "text-purple-600",
@@ -173,7 +173,7 @@ export const navigationItems: NavigationItem[] = [
     iconColor: "text-cyan-600",
     subItems: [
       {
-        title: "Quản lý Project",
+        title: "Project Management",
         url: "/mis/project-management",
         icon: FolderKanban,
         iconColor: "text-blue-600",
@@ -191,7 +191,7 @@ export const navigationItems: NavigationItem[] = [
         iconColor: "text-orange-600",
       },
       {
-        title: "Báo cáo Project",
+        title: "Project Reports",
         url: "/mis/reports",
         icon: TrendingUp,
         iconColor: "text-purple-600",
@@ -199,37 +199,37 @@ export const navigationItems: NavigationItem[] = [
     ],
   },
   {
-    title: "Quản lý",
+    title: "Management",
     url: "#",
     icon: Settings,
     iconColor: "text-gray-600",
     subItems: [
       {
-        title: "Kho hàng",
+        title: "Inventory",
         url: "/inventory",
         icon: Package,
         iconColor: "text-amber-600",
       },
       {
-        title: "Mua hàng", 
+        title: "Purchasing", 
         url: "/purchase",
         icon: ShoppingCart,
         iconColor: "text-emerald-600",
       },
       {
-        title: "Nhân sự",
+        title: "Human Resources",
         url: "/hr",
         icon: Users,
         iconColor: "text-indigo-600",
       },
       {
-        title: "Báo cáo",
+        title: "Reports",
         url: "/reports", 
         icon: BarChart3,
         iconColor: "text-red-600",
       },
       {
-        title: "Phân quyền User",
+        title: "User Permissions",
         url: "/user-permissions",
         icon: Users,
         iconColor: "text-purple-600",
@@ -237,7 +237,7 @@ export const navigationItems: NavigationItem[] = [
     ],
   },
   {
-    title: "Yêu cầu vật tư",
+    title: "Material Request",
     url: "/material-request", 
     icon: FileText,
     iconColor: "text-orange-600",
@@ -255,7 +255,7 @@ export const navigationItems: NavigationItem[] = [
         iconColor: "text-blue-600",
       },
       {
-        title: "Tài Liệu Hướng Dẫn",
+        title: "Training Materials",
         url: "/education",
         icon: BookOpen,
         iconColor: "text-blue-600",
@@ -267,13 +267,13 @@ export const navigationItems: NavigationItem[] = [
         iconColor: "text-purple-600",
       },
       {
-        title: "Xem từ vựng",
+        title: "Dictionary View",
         url: "/dictionary",
         icon: BookOpen,
         iconColor: "text-blue-600",
       },
       {
-        title: "Quản lý từ vựng",
+        title: "Dictionary Management",
         url: "/dictionary-management",
         icon: PlusCircle,
         iconColor: "text-green-600",

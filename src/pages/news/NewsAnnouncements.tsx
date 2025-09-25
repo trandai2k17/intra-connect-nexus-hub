@@ -103,7 +103,7 @@ export default function NewsAnnouncements() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Thông báo
+              Announcements
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-2">
               Quản lý và xem các thông báo nội bộ
@@ -111,7 +111,7 @@ export default function NewsAnnouncements() {
           </div>
           <Button className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700">
             <MessageSquare className="w-4 h-4 mr-2" />
-            Tạo thông báo
+            Create Announcement
           </Button>
         </div>
 
@@ -122,7 +122,7 @@ export default function NewsAnnouncements() {
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
-                  placeholder="Tìm kiếm thông báo..."
+                  placeholder="Search announcements..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10 bg-white dark:bg-gray-700"
@@ -130,7 +130,7 @@ export default function NewsAnnouncements() {
               </div>
               <Button variant="outline" className="flex items-center gap-2">
                 <Filter className="w-4 h-4" />
-                Bộ lọc
+                Filter
               </Button>
             </div>
           </CardContent>
@@ -178,7 +178,7 @@ export default function NewsAnnouncements() {
                     </div>
                   </div>
                   <Button variant="outline" size="sm">
-                    Xem chi tiết
+                    View Details
                   </Button>
                 </div>
               </CardContent>
@@ -191,10 +191,10 @@ export default function NewsAnnouncements() {
             <CardContent className="p-12 text-center">
               <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                Không tìm thấy thông báo
+                No announcements found
               </h3>
               <p className="text-gray-500 dark:text-gray-400">
-                Thử thay đổi từ khóa tìm kiếm hoặc bộ lọc
+                Try changing your search terms or filters
               </p>
             </CardContent>
           </Card>

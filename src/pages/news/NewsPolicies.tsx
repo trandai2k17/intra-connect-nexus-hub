@@ -193,13 +193,13 @@ export default function NewsPolicies() {
             <span>Cập nhật: {policy.lastUpdated}</span>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="flex items-center gap-1">
-              <Download className="w-4 h-4" />
-              Tải về ({policy.downloads})
-            </Button>
-            <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-              Xem chi tiết
-            </Button>
+              <Button variant="outline" size="sm" className="flex items-center gap-1">
+                <Download className="w-4 h-4" />
+                Download ({policy.downloads})
+              </Button>
+              <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                View Details
+              </Button>
           </div>
         </div>
       </CardContent>
@@ -213,7 +213,7 @@ export default function NewsPolicies() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Nội quy - Quy định
+              Policies & Regulations
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-2">
               Tổng hợp các quy định, chính sách của công ty từ các phòng ban
@@ -221,7 +221,7 @@ export default function NewsPolicies() {
           </div>
           <Button className="bg-gradient-to-r from-red-600 to-purple-600 hover:from-red-700 hover:to-purple-700">
             <Book className="w-4 h-4 mr-2" />
-            Tạo quy định mới
+            Create New Policy
           </Button>
         </div>
 
@@ -232,7 +232,7 @@ export default function NewsPolicies() {
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
-                  placeholder="Tìm kiếm quy định..."
+                  placeholder="Search policies..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10 bg-white dark:bg-gray-700"
@@ -240,7 +240,7 @@ export default function NewsPolicies() {
               </div>
               <Button variant="outline" className="flex items-center gap-2">
                 <Filter className="w-4 h-4" />
-                Bộ lọc
+                Filter
               </Button>
             </div>
           </CardContent>
@@ -251,11 +251,11 @@ export default function NewsPolicies() {
           <TabsList className="grid w-full grid-cols-2 mb-8">
             <TabsTrigger value="active" className="flex items-center gap-2">
               <FileText className="w-4 h-4" />
-              Đang hiệu lực ({activePolicies.length})
+              Active Policies ({activePolicies.length})
             </TabsTrigger>
             <TabsTrigger value="archived" className="flex items-center gap-2">
               <Book className="w-4 h-4" />
-              Lưu trữ ({archivedPolicies.length})
+              Archived ({archivedPolicies.length})
             </TabsTrigger>
           </TabsList>
 
@@ -268,10 +268,10 @@ export default function NewsPolicies() {
                 <CardContent className="p-12 text-center">
                   <Book className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                    Không tìm thấy quy định
+                    No policies found
                   </h3>
                   <p className="text-gray-500 dark:text-gray-400">
-                    Thử thay đổi từ khóa tìm kiếm
+                    Try changing your search terms
                   </p>
                 </CardContent>
               </Card>
@@ -287,10 +287,10 @@ export default function NewsPolicies() {
                 <CardContent className="p-12 text-center">
                   <Book className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                    Không có quy định lưu trữ
+                    No archived policies
                   </h3>
                   <p className="text-gray-500 dark:text-gray-400">
-                    Các quy định đã hết hiệu lực sẽ hiển thị tại đây
+                    Expired policies will appear here
                   </p>
                 </CardContent>
               </Card>
