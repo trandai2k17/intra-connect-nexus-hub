@@ -28,6 +28,12 @@ import ContentDashboard from "./pages/ContentDashboard";
 import ContentView from "./pages/ContentView";
 import UserPermissions from "./pages/UserPermissions";
 import TrainingCenter from "./pages/TrainingCenter";
+import NewsCenter from "./pages/news/NewsCenter";
+import NewsAnnouncements from "./pages/news/NewsAnnouncements";
+import NewsArticles from "./pages/news/NewsArticles";
+import NewsNotifications from "./pages/news/NewsNotifications";
+import NewsEvents from "./pages/news/NewsEvents";
+import NewsPolicies from "./pages/news/NewsPolicies";
 import DictionaryRPD from "./pages/training/DictionaryRPD";
 import DictionaryNG from "./pages/training/DictionaryNG";
 import QuizCenter from "./pages/training/QuizCenter";
@@ -64,6 +70,14 @@ const App = () => (
               <Route path="/training/dictionary/ng" element={<DashboardLayout><DictionaryNG /></DashboardLayout>} />
               <Route path="/training/quiz" element={<DashboardLayout><QuizCenter /></DashboardLayout>} />
               <Route path="/training/thank-corner" element={<DashboardLayout><ThankCorner /></DashboardLayout>} />
+              
+              {/* News & Feed Routes */}
+              <Route path="/news/center" element={<DashboardLayout><NewsCenter /></DashboardLayout>} />
+              <Route path="/news/announcements" element={<DashboardLayout><NewsAnnouncements /></DashboardLayout>} />
+              <Route path="/news/articles" element={<DashboardLayout><NewsArticles /></DashboardLayout>} />
+              <Route path="/news/notifications" element={<DashboardLayout><NewsNotifications /></DashboardLayout>} />
+              <Route path="/news/events" element={<DashboardLayout><NewsEvents /></DashboardLayout>} />
+              <Route path="/news/policies" element={<DashboardLayout><NewsPolicies /></DashboardLayout>} />
               
               {/* Header-only pages */}
               <Route path="/material-request" element={<HeaderOnlyLayout><MaterialRequest /></HeaderOnlyLayout>} />

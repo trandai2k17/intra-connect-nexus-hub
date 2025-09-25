@@ -51,6 +51,50 @@ export const navigationItems: NavigationItem[] = [
     iconColor: "text-emerald-600",
   },
   {
+    title: "News & Feed",
+    url: "#",
+    icon: MessageSquare,
+    iconColor: "text-orange-600",
+    subItems: [
+      {
+        title: "News Center",
+        url: "/news/center",
+        icon: BarChart3,
+        iconColor: "text-blue-600",
+      },
+      {
+        title: "Thông báo",
+        url: "/news/announcements",
+        icon: MessageSquare,
+        iconColor: "text-orange-600",
+      },
+      {
+        title: "Tin tức",
+        url: "/news/articles",
+        icon: FileText,
+        iconColor: "text-green-600",
+      },
+      {
+        title: "Thông tin",
+        url: "/news/notifications",
+        icon: MessageSquare,
+        iconColor: "text-yellow-600",
+      },
+      {
+        title: "Sự kiện",
+        url: "/news/events",
+        icon: TrendingUp,
+        iconColor: "text-purple-600",
+      },
+      {
+        title: "Nội quy - Quy định",
+        url: "/news/policies",
+        icon: Book,
+        iconColor: "text-red-600",
+      },
+    ],
+  },
+  {
     title: "Ứng dụng",
     url: "/software-application",
     icon: Monitor,
