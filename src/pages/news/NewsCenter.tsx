@@ -1,9 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { DocumentCard } from '@/components/document/DocumentCard';
+import { DocumentBanner } from '@/components/document/DocumentBanner';
+import { FeedDocument, FeedDocumentPage } from '@/types/feedDocument';
 import { 
   MessageSquare, 
   TrendingUp, 
@@ -15,6 +19,74 @@ import {
 
 export default function NewsCenter() {
   const { t } = useLanguage();
+  const navigate = useNavigate();
+
+  // Mock document data
+  const mockDocuments: FeedDocument[] = [
+    {
+      docID: '1',
+      feedID: 'feed-1',
+      fileType: 'pptx',
+      filePathOriginal: '/documents/company-policy-q1-2024.pptx',
+      filePathPdf: '/documents/company-policy-q1-2024.pdf',
+      pageCount: 12,
+      version: 1,
+      isCurrent: true,
+      createdAt: new Date('2024-01-15'),
+      title: 'Company Policy Updates Q1 2024',
+      description: 'Comprehensive overview of new policies and procedures effective from Q1 2024',
+      fileSize: 2048000,
+      status: 'ready'
+    },
+    {
+      docID: '2',
+      feedID: 'feed-2',
+      fileType: 'docx',
+      filePathOriginal: '/documents/remote-work-guidelines.docx',
+      filePathPdf: '/documents/remote-work-guidelines.pdf',
+      pageCount: 8,
+      version: 2,
+      isCurrent: true,
+      createdAt: new Date('2024-02-01'),
+      title: 'Remote Work Guidelines 2024',
+      description: 'Updated guidelines for remote work arrangements and best practices',
+      fileSize: 1024000,
+      status: 'ready'
+    },
+    {
+      docID: '3',
+      feedID: 'feed-3',
+      fileType: 'pdf',
+      filePathOriginal: '/documents/security-protocols.pdf',
+      filePathPdf: '/documents/security-protocols.pdf',
+      pageCount: 24,
+      version: 1,
+      isCurrent: true,
+      createdAt: new Date('2024-02-10'),
+      title: 'IT Security Protocols Manual',
+      description: 'Complete guide to company IT security measures and compliance requirements',
+      fileSize: 3072000,
+      status: 'processing'
+    }
+  ];
+
+  const mockPages: FeedDocumentPage[] = [
+    { pageID: 'page-1-1', docID: '1', pageNumber: 1, thumbUrl: '/api/documents/1/thumbnails/page-1.png' },
+    { pageID: 'page-1-2', docID: '1', pageNumber: 2, thumbUrl: '/api/documents/1/thumbnails/page-2.png' },
+    { pageID: 'page-1-3', docID: '1', pageNumber: 3, thumbUrl: '/api/documents/1/thumbnails/page-3.png' },
+    { pageID: 'page-2-1', docID: '2', pageNumber: 1, thumbUrl: '/api/documents/2/thumbnails/page-1.png' },
+    { pageID: 'page-2-2', docID: '2', pageNumber: 2, thumbUrl: '/api/documents/2/thumbnails/page-2.png' },
+    { pageID: 'page-2-3', docID: '2', pageNumber: 3, thumbUrl: '/api/documents/2/thumbnails/page-3.png' },
+  ];
+
+  const handleViewDocument = (docId: string) => {
+    navigate(`/documents/${docId}`);
+  };
+
+  const handleDownloadDocument = (docId: string) => {
+    console.log('Download document:', docId);
+    // Mock download functionality
+  };
 
   const newsStats = [
     {
@@ -88,6 +160,35 @@ export default function NewsCenter() {
             <Bell className="w-4 h-4 mr-2" />
             Create New Post
           </Button>
+        </div>
+
+        {/* Document Banner - Featured Document */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Featured Documents
+          </h2>
+          <DocumentBanner
+            document={mockDocuments[0]}
+            onViewDocument={handleViewDocument}
+          />
+        </div>
+
+        {/* Document Cards Grid */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Recent Documents
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {mockDocuments.slice(1).map((doc) => (
+              <DocumentCard
+                key={doc.docID}
+                document={doc}
+                pages={mockPages.filter(page => page.docID === doc.docID)}
+                onViewDocument={handleViewDocument}
+                onDownload={handleDownloadDocument}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Stats Cards */}

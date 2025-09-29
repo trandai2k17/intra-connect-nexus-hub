@@ -34,6 +34,7 @@ import NewsArticles from "./pages/news/NewsArticles";
 import NewsNotifications from "./pages/news/NewsNotifications";
 import NewsEvents from "./pages/news/NewsEvents";
 import NewsPolicies from "./pages/news/NewsPolicies";
+import { DocumentViewer } from "./pages/DocumentViewer";
 import DictionaryRPD from "./pages/training/DictionaryRPD";
 import DictionaryNG from "./pages/training/DictionaryNG";
 import QuizCenter from "./pages/training/QuizCenter";
@@ -78,6 +79,7 @@ const App = () => (
               <Route path="/news/notifications" element={<DashboardLayout><NewsNotifications /></DashboardLayout>} />
               <Route path="/news/events" element={<DashboardLayout><NewsEvents /></DashboardLayout>} />
               <Route path="/news/policies" element={<DashboardLayout><NewsPolicies /></DashboardLayout>} />
+              <Route path="/documents/:docId" element={<DashboardLayout><DocumentViewer /></DashboardLayout>} />
               
               {/* Header-only pages */}
               <Route path="/material-request" element={<HeaderOnlyLayout><MaterialRequest /></HeaderOnlyLayout>} />
