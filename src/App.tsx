@@ -39,6 +39,7 @@ import DictionaryRPD from "./pages/training/DictionaryRPD";
 import DictionaryNG from "./pages/training/DictionaryNG";
 import QuizCenter from "./pages/training/QuizCenter";
 import ThankCorner from "./pages/training/ThankCorner";
+import MasterDataUpload from "./pages/MasterDataUpload";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,7 @@ const App = () => (
               <Route path="/library" element={<DashboardLayout><Library /></DashboardLayout>} />
               <Route path="/library/carousel" element={<DashboardLayout><CarouselLibrary /></DashboardLayout>} />
               <Route path="/software-application" element={<DashboardLayout><SoftwareApplication /></DashboardLayout>} />
+              <Route path="/master-data-upload" element={<DashboardLayout><MasterDataUpload /></DashboardLayout>} />
               <Route path="/dictionary" element={<DashboardLayout><Dictionary /></DashboardLayout>} />
               <Route path="/dictionary-management" element={<DashboardLayout><DictionaryManagement /></DashboardLayout>} />
               <Route path="/case-design-tracker" element={<DashboardLayout><CaseDesignTracker /></DashboardLayout>} />

@@ -96,9 +96,23 @@ export const navigationItems: NavigationItem[] = [
   },
   {
     title: "Applications",
-    url: "/software-application",
+    url: "#",
     icon: Monitor,
     iconColor: "text-green-600",
+    subItems: [
+      {
+        title: "Software Application",
+        url: "/software-application",
+        icon: Monitor,
+        iconColor: "text-green-600",
+      },
+      {
+        title: "Master Data Upload",
+        url: "/master-data-upload",
+        icon: FileText,
+        iconColor: "text-blue-600",
+      },
+    ],
   },
   {
     title: "Content",
