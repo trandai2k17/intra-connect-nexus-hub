@@ -20,6 +20,7 @@ import CaseDesignTracker from "./pages/CaseDesignTracker";
 import MediaGallery from "./pages/MediaGallery";
 import TVDisplay from "./pages/TVDisplay";
 import TVBonusSummary from "./pages/TVBonusSummary";
+import ProductionDashboard from "./pages/ProductionDashboard";
 import NotFound from "./pages/NotFound";
 import Education from "./pages/Education";
 import EducationNdx from "./pages/EducationNdx";
@@ -92,6 +93,7 @@ const App = () => (
               <Route path="/login" element={<FullPageLayout><Login /></FullPageLayout>} />
               <Route path="/tv-display" element={<FullPageLayout><TVDisplay /></FullPageLayout>} />
               <Route path="/tv/bonus-summary" element={<FullPageLayout><TVBonusSummary /></FullPageLayout>} />
+              <Route path="/tv/production-dashboard" element={<FullPageLayout><ProductionDashboard /></FullPageLayout>} />
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<DashboardLayout><NotFound /></DashboardLayout>} />
