@@ -30,6 +30,16 @@ interface Dashboard {
 
 const dashboards: Dashboard[] = [
   {
+    id: 'production-dashboard',
+    name: 'Production Dashboard',
+    description: 'Dashboard năng suất thời gian thực 3 slide (C&S, RPD, NG)',
+    icon: <TrendingUp className="w-6 h-6" />,
+    status: 'active',
+    lastUpdated: 'Trực tiếp',
+    url: '/tv/production-dashboard',
+    category: 'performance'
+  },
+  {
     id: 'bonus-summary',
     name: 'Bonus Summary',
     description: 'Hiển thị thống kê bonus và hiệu suất nhân viên',
