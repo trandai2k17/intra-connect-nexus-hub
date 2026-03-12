@@ -330,6 +330,7 @@ export default function FrontPage() {
     { id: "services", label: t.nav.services },
     { id: "technology", label: t.nav.technology },
     { id: "team", label: t.nav.team },
+    { id: "milestones", label: t.nav.milestones },
     { id: "contact", label: t.nav.contact }
   ];
 
