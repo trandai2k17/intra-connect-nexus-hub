@@ -6,7 +6,7 @@ import {
   GraduationCap, FileText, Monitor, Database, Package,
   BarChart3, MessageSquare, Image, Tv, Settings,
   ChevronUp, BookOpen, FolderKanban, Phone, Mail, MapPin,
-  Microscope, Cpu, Zap, Building2, Heart
+  Microscope, Cpu, Zap, Building2, Heart, Flag, Star, TrendingUp, Calendar
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import dentalHeroBg from "@/assets/dental-hero-bg.jpg";
