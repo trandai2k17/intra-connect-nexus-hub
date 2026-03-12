@@ -41,6 +41,7 @@ import DictionaryNG from "./pages/training/DictionaryNG";
 import QuizCenter from "./pages/training/QuizCenter";
 import ThankCorner from "./pages/training/ThankCorner";
 import MasterDataUpload from "./pages/MasterDataUpload";
+import FrontPage from "./pages/FrontPage";
 
 const queryClient = new QueryClient();
 
@@ -94,6 +95,7 @@ const App = () => (
               <Route path="/tv-display" element={<FullPageLayout><TVDisplay /></FullPageLayout>} />
               <Route path="/tv/bonus-summary" element={<FullPageLayout><TVBonusSummary /></FullPageLayout>} />
               <Route path="/tv/production-dashboard" element={<FullPageLayout><ProductionDashboard /></FullPageLayout>} />
+              <Route path="/frontpage" element={<FullPageLayout><FrontPage /></FullPageLayout>} />
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<DashboardLayout><NotFound /></DashboardLayout>} />
