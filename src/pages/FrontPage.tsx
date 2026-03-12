@@ -113,6 +113,21 @@ const content = {
         { name: "KTV. Phạm Minh Đức", role: "Trưởng bộ phận RPD", exp: "10 năm kinh nghiệm" }
       ]
     },
+    milestones: {
+      tag: "THÀNH TỰU",
+      title: "Hành trình Phát triển",
+      desc: "Những cột mốc quan trọng đánh dấu sự phát triển không ngừng của Digital Age Dental Lab.",
+      items: [
+        { year: "2009", title: "Thành lập công ty", desc: "Digital Age Dental Lab chính thức ra đời tại Bình Dương với 20 nhân viên đầu tiên.", icon: "flag" },
+        { year: "2012", title: "Đạt chứng nhận ISO 13485", desc: "Hệ thống quản lý chất lượng đạt tiêu chuẩn quốc tế cho thiết bị y tế.", icon: "award" },
+        { year: "2015", title: "Xuất khẩu quốc tế", desc: "Mở rộng thị trường sang Nhật Bản, Úc và các nước ASEAN.", icon: "globe" },
+        { year: "2017", title: "Đầu tư CAD/CAM", desc: "Triển khai hệ thống thiết kế và gia công kỹ thuật số toàn diện.", icon: "cpu" },
+        { year: "2019", title: "100 nhân viên", desc: "Đội ngũ phát triển lên 100 kỹ thuật viên, mở rộng nhà máy giai đoạn 2.", icon: "users" },
+        { year: "2021", title: "FDA Approved", desc: "Đạt chứng nhận FDA Hoa Kỳ, mở rộng xuất khẩu sang thị trường Mỹ.", icon: "star" },
+        { year: "2023", title: "134K+ sản phẩm/tháng", desc: "Đạt công suất 134,000+ đơn vị sản phẩm mỗi tháng với 200+ nhân viên.", icon: "trending" },
+        { year: "2025", title: "Chuyển đổi số toàn diện", desc: "Triển khai hệ thống MES, ERP và 42+ ứng dụng nội bộ hỗ trợ vận hành.", icon: "zap" },
+      ]
+    },
     contact: {
       tag: "LIÊN HỆ NỘI BỘ",
       title: "Thông tin Liên hệ",
