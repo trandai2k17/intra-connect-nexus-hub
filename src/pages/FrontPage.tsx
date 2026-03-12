@@ -17,7 +17,7 @@ import dentalServices from "@/assets/dental-services.jpg";
 // ─── Language Content ────────────────────────────────────────────────
 const content = {
   vi: {
-    nav: { about: "Về chúng tôi", systems: "Hệ thống", services: "Dịch vụ", technology: "Công nghệ", team: "Đội ngũ", contact: "Liên hệ" },
+    nav: { about: "Về chúng tôi", systems: "Hệ thống", services: "Dịch vụ", technology: "Công nghệ", team: "Đội ngũ", milestones: "Thành tựu", contact: "Liên hệ" },
     hero: {
       badge: "🏠 Cổng thông tin nội bộ",
       greeting: "Chào mừng đến với",
