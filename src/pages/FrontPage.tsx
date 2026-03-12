@@ -296,6 +296,10 @@ const iconMap: Record<string, React.ReactNode> = {
   cpu: <Cpu className="w-6 h-6" />,
   zap: <Zap className="w-6 h-6" />,
   sparkles: <Sparkles className="w-6 h-6" />,
+  flag: <Flag className="w-6 h-6" />,
+  star: <Star className="w-6 h-6" />,
+  trending: <TrendingUp className="w-6 h-6" />,
+  globe: <Globe className="w-6 h-6" />,
 };
 
 export default function FrontPage() {
