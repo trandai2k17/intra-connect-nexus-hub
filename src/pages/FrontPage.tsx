@@ -6,7 +6,7 @@ import {
   GraduationCap, FileText, Monitor, Database, Package,
   BarChart3, MessageSquare, Image, Tv, Settings,
   ChevronUp, BookOpen, FolderKanban, Phone, Mail, MapPin,
-  Microscope, Cpu, Zap, Building2, Heart
+  Microscope, Cpu, Zap, Building2, Heart, Flag, Star, TrendingUp, Calendar
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import dentalHeroBg from "@/assets/dental-hero-bg.jpg";
@@ -17,7 +17,7 @@ import dentalServices from "@/assets/dental-services.jpg";
 // ─── Language Content ────────────────────────────────────────────────
 const content = {
   vi: {
-    nav: { about: "Về chúng tôi", systems: "Hệ thống", services: "Dịch vụ", technology: "Công nghệ", team: "Đội ngũ", contact: "Liên hệ" },
+    nav: { about: "Về chúng tôi", systems: "Hệ thống", services: "Dịch vụ", technology: "Công nghệ", team: "Đội ngũ", milestones: "Thành tựu", contact: "Liên hệ" },
     hero: {
       badge: "🏠 Cổng thông tin nội bộ",
       greeting: "Chào mừng đến với",
@@ -113,6 +113,21 @@ const content = {
         { name: "KTV. Phạm Minh Đức", role: "Trưởng bộ phận RPD", exp: "10 năm kinh nghiệm" }
       ]
     },
+    milestones: {
+      tag: "THÀNH TỰU",
+      title: "Hành trình Phát triển",
+      desc: "Những cột mốc quan trọng đánh dấu sự phát triển không ngừng của Digital Age Dental Lab.",
+      items: [
+        { year: "2009", title: "Thành lập công ty", desc: "Digital Age Dental Lab chính thức ra đời tại Bình Dương với 20 nhân viên đầu tiên.", icon: "flag" },
+        { year: "2012", title: "Đạt chứng nhận ISO 13485", desc: "Hệ thống quản lý chất lượng đạt tiêu chuẩn quốc tế cho thiết bị y tế.", icon: "award" },
+        { year: "2015", title: "Xuất khẩu quốc tế", desc: "Mở rộng thị trường sang Nhật Bản, Úc và các nước ASEAN.", icon: "globe" },
+        { year: "2017", title: "Đầu tư CAD/CAM", desc: "Triển khai hệ thống thiết kế và gia công kỹ thuật số toàn diện.", icon: "cpu" },
+        { year: "2019", title: "100 nhân viên", desc: "Đội ngũ phát triển lên 100 kỹ thuật viên, mở rộng nhà máy giai đoạn 2.", icon: "users" },
+        { year: "2021", title: "FDA Approved", desc: "Đạt chứng nhận FDA Hoa Kỳ, mở rộng xuất khẩu sang thị trường Mỹ.", icon: "star" },
+        { year: "2023", title: "134K+ sản phẩm/tháng", desc: "Đạt công suất 134,000+ đơn vị sản phẩm mỗi tháng với 200+ nhân viên.", icon: "trending" },
+        { year: "2025", title: "Chuyển đổi số toàn diện", desc: "Triển khai hệ thống MES, ERP và 42+ ứng dụng nội bộ hỗ trợ vận hành.", icon: "zap" },
+      ]
+    },
     contact: {
       tag: "LIÊN HỆ NỘI BỘ",
       title: "Thông tin Liên hệ",
@@ -130,7 +145,7 @@ const content = {
     }
   },
   en: {
-    nav: { about: "About Us", systems: "Systems", services: "Services", technology: "Technology", team: "Team", contact: "Contact" },
+    nav: { about: "About Us", systems: "Systems", services: "Services", technology: "Technology", team: "Team", milestones: "Milestones", contact: "Contact" },
     hero: {
       badge: "🏠 Internal Information Portal",
       greeting: "Welcome to",
@@ -226,6 +241,21 @@ const content = {
         { name: "Tech. Pham Minh Duc", role: "RPD Department Head", exp: "10 years experience" }
       ]
     },
+    milestones: {
+      tag: "MILESTONES",
+      title: "Our Journey",
+      desc: "Key milestones marking the continuous growth of Digital Age Dental Lab.",
+      items: [
+        { year: "2009", title: "Company Founded", desc: "Digital Age Dental Lab officially established in Binh Duong with 20 founding employees.", icon: "flag" },
+        { year: "2012", title: "ISO 13485 Certified", desc: "Quality management system achieved international standards for medical devices.", icon: "award" },
+        { year: "2015", title: "International Expansion", desc: "Expanded market to Japan, Australia and ASEAN countries.", icon: "globe" },
+        { year: "2017", title: "CAD/CAM Investment", desc: "Deployed comprehensive digital design and manufacturing system.", icon: "cpu" },
+        { year: "2019", title: "100 Employees", desc: "Team grew to 100 technicians, factory phase 2 expansion.", icon: "users" },
+        { year: "2021", title: "FDA Approved", desc: "Achieved US FDA certification, expanding exports to the American market.", icon: "star" },
+        { year: "2023", title: "134K+ Units/Month", desc: "Reached capacity of 134,000+ product units per month with 200+ employees.", icon: "trending" },
+        { year: "2025", title: "Full Digital Transformation", desc: "Deployed MES, ERP and 42+ internal applications for operations.", icon: "zap" },
+      ]
+    },
     contact: {
       tag: "INTERNAL CONTACT",
       title: "Contact Information",
@@ -266,6 +296,10 @@ const iconMap: Record<string, React.ReactNode> = {
   cpu: <Cpu className="w-6 h-6" />,
   zap: <Zap className="w-6 h-6" />,
   sparkles: <Sparkles className="w-6 h-6" />,
+  flag: <Flag className="w-6 h-6" />,
+  star: <Star className="w-6 h-6" />,
+  trending: <TrendingUp className="w-6 h-6" />,
+  globe: <Globe className="w-6 h-6" />,
 };
 
 export default function FrontPage() {
@@ -296,6 +330,7 @@ export default function FrontPage() {
     { id: "services", label: t.nav.services },
     { id: "technology", label: t.nav.technology },
     { id: "team", label: t.nav.team },
+    { id: "milestones", label: t.nav.milestones },
     { id: "contact", label: t.nav.contact }
   ];
 
@@ -625,6 +660,54 @@ export default function FrontPage() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════ MILESTONES SECTION ════════ */}
+      <section id="milestones" className="py-24 lg:py-32 bg-gradient-to-b from-white to-[hsl(30,30%,97%)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-[hsl(40,60%,92%)] text-[hsl(30,60%,40%)] text-xs font-bold tracking-widest mb-6">
+              {t.milestones.tag}
+            </span>
+            <h2 className="text-4xl lg:text-5xl font-black text-[hsl(25,10%,15%)] mb-4">
+              {t.milestones.title}
+            </h2>
+            <p className="text-lg text-[hsl(25,10%,45%)] max-w-2xl mx-auto">{t.milestones.desc}</p>
+          </div>
+
+          {/* Timeline */}
+          <div className="relative">
+            {/* Vertical line */}
+            <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[hsl(175,50%,40%)] via-[hsl(40,80%,55%)] to-[hsl(175,50%,40%)]" />
+
+            <div className="space-y-12">
+              {t.milestones.items.map((item, i) => (
+                <div key={i} className={`relative flex items-start gap-8 ${i % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}>
+                  {/* Dot on timeline */}
+                  <div className="absolute left-6 lg:left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-white border-4 border-[hsl(175,50%,40%)] shadow-lg flex items-center justify-center z-10">
+                    <div className="text-[hsl(175,50%,30%)]">
+                      {iconMap[item.icon] || <Calendar className="w-5 h-5" />}
+                    </div>
+                  </div>
+
+                  {/* Content card */}
+                  <div className={`ml-20 lg:ml-0 lg:w-[calc(50%-3rem)] ${i % 2 === 0 ? 'lg:pr-8 lg:text-right' : 'lg:pl-8'}`}>
+                    <div className="group p-6 rounded-2xl bg-white border border-[hsl(30,20%,92%)] shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-500">
+                      <div className={`flex items-center gap-3 mb-3 ${i % 2 === 0 ? 'lg:justify-end' : ''}`}>
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-[hsl(175,50%,40%)] to-[hsl(175,60%,30%)] text-white text-sm font-bold">
+                          <Calendar className="w-3.5 h-3.5" />
+                          {item.year}
+                        </span>
+                      </div>
+                      <h3 className="text-xl font-bold text-[hsl(25,10%,15%)] mb-2">{item.title}</h3>
+                      <p className="text-[hsl(25,10%,45%)] leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
