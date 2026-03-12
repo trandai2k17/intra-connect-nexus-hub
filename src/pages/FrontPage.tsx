@@ -145,7 +145,7 @@ const content = {
     }
   },
   en: {
-    nav: { about: "About Us", systems: "Systems", services: "Services", technology: "Technology", team: "Team", contact: "Contact" },
+    nav: { about: "About Us", systems: "Systems", services: "Services", technology: "Technology", team: "Team", milestones: "Milestones", contact: "Contact" },
     hero: {
       badge: "🏠 Internal Information Portal",
       greeting: "Welcome to",
