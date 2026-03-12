@@ -1,74 +1,111 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { 
-  Menu, X, ChevronDown, ArrowRight, Star, Shield, Clock, 
-  Award, Users, Microscope, Cpu, Phone, Mail, MapPin, 
-  ChevronUp, Globe, Sparkles, CheckCircle2, Quote
+  Menu, X, ChevronDown, ArrowRight, Shield, Clock, 
+  Award, Users, Globe, Sparkles, CheckCircle2,
+  GraduationCap, FileText, Monitor, Database, Package,
+  BarChart3, MessageSquare, Image, Tv, Settings,
+  ChevronUp, BookOpen, FolderKanban, Phone, Mail, MapPin,
+  Microscope, Cpu, Zap, Building2, Heart
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import dentalHeroBg from "@/assets/dental-hero-bg.jpg";
 import dentalTeam from "@/assets/dental-team.jpg";
 import dentalLogo from "@/assets/dental-logo.png";
 import dentalServices from "@/assets/dental-services.jpg";
-import dentalCarousel1 from "@/assets/dental-carousel-1.jpg";
-import dentalCarousel2 from "@/assets/dental-carousel-2.jpg";
 
 // ─── Language Content ────────────────────────────────────────────────
 const content = {
   vi: {
-    nav: { about: "Về chúng tôi", services: "Dịch vụ", technology: "Công nghệ", team: "Đội ngũ", testimonials: "Đánh giá", contact: "Liên hệ" },
+    nav: { about: "Về chúng tôi", systems: "Hệ thống", services: "Dịch vụ", technology: "Công nghệ", team: "Đội ngũ", contact: "Liên hệ" },
     hero: {
-      badge: "🏆 ISO 13485 & FDA Certified",
+      badge: "🏠 Cổng thông tin nội bộ",
+      greeting: "Chào mừng đến với",
       title1: "Digital Age",
       title2: "Dental Lab",
-      subtitle: "Phòng Lab Nha Khoa Kỹ Thuật Số Hàng Đầu",
-      desc: "Chúng tôi kết hợp công nghệ CAD/CAM tiên tiến với tay nghề thủ công tinh xảo để mang đến những sản phẩm phục hình răng chất lượng cao nhất.",
-      cta1: "Tìm hiểu thêm",
-      cta2: "Liên hệ ngay",
+      subtitle: "Cổng Thông Tin Nội Bộ",
+      desc: "Truy cập nhanh tất cả hệ thống, ứng dụng và dịch vụ nội bộ của công ty. Mọi thứ bạn cần đều ở đây.",
+      cta1: "Vào Portal chính",
+      cta2: "Xem hệ thống",
       stats: [
-        { value: "15+", label: "Năm kinh nghiệm" },
-        { value: "500+", label: "Đối tác nha sĩ" },
+        { value: "15+", label: "Năm hoạt động" },
+        { value: "200+", label: "Nhân viên" },
         { value: "134K+", label: "Sản phẩm/tháng" },
-        { value: "99.8%", label: "Tỷ lệ hài lòng" }
+        { value: "42", label: "Ứng dụng nội bộ" }
       ]
     },
     about: {
       tag: "VỀ CHÚNG TÔI",
-      title: "Đối tác tin cậy của Nha sĩ",
-      desc: "Digital Age Dental Lab được thành lập với sứ mệnh nâng cao chất lượng phục hình răng thông qua công nghệ số. Với hơn 15 năm kinh nghiệm, chúng tôi tự hào là đơn vị gia công răng hàng đầu tại Việt Nam.",
+      title: "Digital Age Dental Lab",
+      desc: "Được thành lập với sứ mệnh nâng cao chất lượng phục hình răng thông qua công nghệ số. Với hơn 15 năm kinh nghiệm, chúng tôi tự hào là đơn vị gia công răng hàng đầu tại Việt Nam, phục vụ hơn 500 đối tác nha sĩ trong và ngoài nước.",
       values: [
-        { icon: "shield", title: "Chất lượng ISO", desc: "Tuân thủ nghiêm ngặt tiêu chuẩn ISO 13485 & FDA" },
-        { icon: "clock", title: "Giao hàng đúng hạn", desc: "Cam kết OTD 100% với quy trình quản lý chặt chẽ" },
-        { icon: "award", title: "Vật liệu cao cấp", desc: "Sử dụng 100% vật liệu nhập khẩu chính hãng" },
-        { icon: "users", title: "Đội ngũ chuyên gia", desc: "Hơn 200 kỹ thuật viên được đào tạo bài bản" }
+        { icon: "shield", title: "ISO 13485 & FDA", desc: "Tuân thủ nghiêm ngặt tiêu chuẩn quốc tế" },
+        { icon: "clock", title: "OTD 100%", desc: "Cam kết giao hàng đúng hạn tuyệt đối" },
+        { icon: "award", title: "Vật liệu chính hãng", desc: "100% vật liệu nhập khẩu cao cấp" },
+        { icon: "users", title: "200+ Kỹ thuật viên", desc: "Đội ngũ được đào tạo chuyên nghiệp" }
+      ]
+    },
+    systems: {
+      tag: "HỆ THỐNG NỘI BỘ",
+      title: "Truy cập nhanh các Hệ thống",
+      desc: "Tất cả công cụ và ứng dụng bạn cần để làm việc hiệu quả",
+      categories: [
+        {
+          title: "Quản lý & Vận hành",
+          items: [
+            { name: "IT Portal", desc: "Cổng thông tin IT chính", icon: "monitor", url: "/", color: "from-blue-500 to-blue-600" },
+            { name: "Main Portal", desc: "Dashboard tổng hợp", icon: "grid", url: "/portal", color: "from-emerald-500 to-emerald-600" },
+            { name: "Material Request", desc: "Yêu cầu nguyên vật liệu", icon: "package", url: "/material-request", color: "from-orange-500 to-orange-600" },
+            { name: "Project Management", desc: "Quản lý dự án MIS", icon: "folder", url: "/mis/project-management", color: "from-purple-500 to-purple-600" },
+          ]
+        },
+        {
+          title: "Đào tạo & Phát triển",
+          items: [
+            { name: "Training Center", desc: "Trung tâm đào tạo", icon: "graduation", url: "/training-center/dashboard", color: "from-indigo-500 to-indigo-600" },
+            { name: "Education", desc: "Tài liệu đào tạo", icon: "book", url: "/education", color: "from-cyan-500 to-cyan-600" },
+            { name: "Dictionary", desc: "Từ điển chuyên ngành", icon: "bookopen", url: "/dictionary", color: "from-teal-500 to-teal-600" },
+            { name: "Quiz Center", desc: "Kiểm tra kiến thức", icon: "check", url: "/training/quiz", color: "from-pink-500 to-pink-600" },
+          ]
+        },
+        {
+          title: "Nội dung & Truyền thông",
+          items: [
+            { name: "News Center", desc: "Tin tức & thông báo", icon: "message", url: "/news/center", color: "from-red-500 to-red-600" },
+            { name: "Content Management", desc: "Quản lý nội dung", icon: "file", url: "/content-management", color: "from-violet-500 to-violet-600" },
+            { name: "Media Gallery", desc: "Thư viện hình ảnh & video", icon: "image", url: "/media-gallery", color: "from-rose-500 to-rose-600" },
+            { name: "TV Display", desc: "Màn hình hiển thị TV", icon: "tv", url: "/tv-display", color: "from-amber-500 to-amber-600" },
+          ]
+        }
       ]
     },
     services: {
-      tag: "DỊCH VỤ",
-      title: "Giải pháp Phục hình Toàn diện",
+      tag: "NĂNG LỰC SẢN XUẤT",
+      title: "Dịch vụ Gia công Răng",
       items: [
-        { title: "Crown & Bridge (C&S)", desc: "Mão răng sứ, cầu răng với độ chính xác tối đa từ hệ thống CAD/CAM", capacity: "94,700 units/tháng" },
-        { title: "Removable Prosthetics (RPD)", desc: "Hàm tháo lắp, khung kim loại với thiết kế 3D scanning hiện đại", capacity: "24,100 units/tháng" },
-        { title: "Nghiên cứu & Phát triển (NG)", desc: "Nghiên cứu vật liệu mới, phát triển quy trình sản xuất tiên tiến", capacity: "15,700 units/tháng" },
-        { title: "Implant Solutions", desc: "Abutment tùy chỉnh, surgical guides với độ chính xác micron", capacity: "Theo yêu cầu" }
+        { title: "Crown & Bridge (C&S)", desc: "Mão răng sứ, cầu răng với hệ thống CAD/CAM", capacity: "94,700 units/tháng", icon: "microscope" },
+        { title: "Removable (RPD)", desc: "Hàm tháo lắp, khung kim loại với 3D scanning", capacity: "24,100 units/tháng", icon: "cpu" },
+        { title: "R&D (NG)", desc: "Nghiên cứu vật liệu & quy trình mới", capacity: "15,700 units/tháng", icon: "zap" },
+        { title: "Implant Solutions", desc: "Abutment tùy chỉnh & surgical guides", capacity: "Theo yêu cầu", icon: "sparkles" },
       ]
     },
     technology: {
       tag: "CÔNG NGHỆ",
-      title: "Nền tảng Kỹ thuật số Tiên tiến",
-      desc: "Chúng tôi đầu tư mạnh vào công nghệ để đảm bảo mỗi sản phẩm đều đạt chất lượng hoàn hảo.",
+      title: "Nền tảng Công nghệ Số",
+      desc: "Đầu tư mạnh vào công nghệ để đảm bảo chất lượng sản phẩm hoàn hảo.",
       items: [
-        { title: "3D Scanning", desc: "Quét dấu răng kỹ thuật số với độ chính xác 7 micron" },
-        { title: "CAD/CAM Design", desc: "Thiết kế 3D với phần mềm chuyên dụng hàng đầu thế giới" },
-        { title: "CNC Milling", desc: "Gia công CNC 5 trục cho độ khít sát tối ưu" },
-        { title: "3D Printing", desc: "In 3D vật liệu y tế cho mẫu thử và surgical guides" },
-        { title: "Sintering", desc: "Lò nung chân không kiểm soát nhiệt độ chính xác ±1°C" },
-        { title: "Quality Control", desc: "Kiểm tra chất lượng đa tầng với thiết bị đo lường hiện đại" }
+        { title: "3D Scanning", desc: "Quét dấu răng kỹ thuật số, độ chính xác 7 micron" },
+        { title: "CAD/CAM Design", desc: "Thiết kế 3D với phần mềm chuyên dụng hàng đầu" },
+        { title: "CNC Milling", desc: "Gia công CNC 5 trục, độ khít sát tối ưu" },
+        { title: "3D Printing", desc: "In 3D vật liệu y tế cho mẫu thử" },
+        { title: "Sintering", desc: "Lò nung chân không ±1°C" },
+        { title: "Quality Control", desc: "Kiểm tra chất lượng đa tầng" }
       ]
     },
     team: {
       tag: "ĐỘI NGŨ",
       title: "Con người là Tài sản Quý giá nhất",
-      desc: "Đội ngũ hơn 200 kỹ thuật viên tay nghề cao, được đào tạo liên tục và làm việc với tinh thần trách nhiệm cao nhất.",
+      desc: "Hơn 200 kỹ thuật viên tay nghề cao, được đào tạo liên tục.",
       members: [
         { name: "Dr. Nguyễn Văn An", role: "Giám đốc Kỹ thuật", exp: "20 năm kinh nghiệm" },
         { name: "ThS. Trần Thị Bình", role: "Trưởng phòng R&D", exp: "15 năm kinh nghiệm" },
@@ -76,85 +113,112 @@ const content = {
         { name: "KTV. Phạm Minh Đức", role: "Trưởng bộ phận RPD", exp: "10 năm kinh nghiệm" }
       ]
     },
-    testimonials: {
-      tag: "ĐÁNH GIÁ",
-      title: "Khách hàng nói gì về chúng tôi",
-      items: [
-        { name: "Dr. Sarah Johnson", clinic: "Smile Dental Clinic, USA", text: "Digital Age Dental Lab delivers exceptional quality consistently. Their CAD/CAM crowns fit perfectly every time.", rating: 5 },
-        { name: "Dr. Tanaka Hiroshi", clinic: "Tokyo Dental Center, Japan", text: "Outstanding turnaround time and the quality of their zirconia restorations is world-class.", rating: 5 },
-        { name: "BS. Nguyễn Thanh Hà", clinic: "Nha khoa Quốc tế, HCM", text: "Đối tác đáng tin cậy nhất của phòng khám chúng tôi. Chất lượng ổn định và dịch vụ chuyên nghiệp.", rating: 5 }
-      ]
-    },
     contact: {
-      tag: "LIÊN HỆ",
-      title: "Hãy liên hệ với chúng tôi",
-      desc: "Chúng tôi luôn sẵn sàng tư vấn và hỗ trợ bạn.",
+      tag: "LIÊN HỆ NỘI BỘ",
+      title: "Thông tin Liên hệ",
+      desc: "Liên hệ phòng IT hoặc các bộ phận hỗ trợ khi cần.",
       address: "Lô CN-01, KCN VSIP II-A, Bình Dương, Việt Nam",
-      phone: "+84 274 3000 123",
-      email: "info@digitalagedentallab.com",
-      hours: "Thứ 2 - Thứ 7: 7:30 - 17:30"
+      phone: "Ext. 100 (IT Support) | Ext. 200 (HR)",
+      email: "it-support@digitalagedentallab.com",
+      hours: "Thứ 2 - Thứ 7: 7:30 - 17:30",
+      quickLinks: "Truy cập nhanh"
     },
     footer: {
       slogan: "Nâng tầm nụ cười Việt với công nghệ số",
-      copyright: "© 2025 Digital Age Dental Lab. All rights reserved.",
-      links: ["Chính sách bảo mật", "Điều khoản sử dụng", "Tuyển dụng"]
+      copyright: "© 2025 Digital Age Dental Lab. Internal Use Only.",
+      links: ["IT Helpdesk", "HR Portal", "Chính sách công ty"]
     }
   },
   en: {
-    nav: { about: "About Us", services: "Services", technology: "Technology", team: "Team", testimonials: "Testimonials", contact: "Contact" },
+    nav: { about: "About Us", systems: "Systems", services: "Services", technology: "Technology", team: "Team", contact: "Contact" },
     hero: {
-      badge: "🏆 ISO 13485 & FDA Certified",
+      badge: "🏠 Internal Information Portal",
+      greeting: "Welcome to",
       title1: "Digital Age",
       title2: "Dental Lab",
-      subtitle: "Leading Digital Dental Laboratory",
-      desc: "We combine advanced CAD/CAM technology with skilled craftsmanship to deliver the highest quality dental restorations.",
-      cta1: "Learn More",
-      cta2: "Contact Us",
+      subtitle: "Internal Information Portal",
+      desc: "Quick access to all company systems, applications and internal services. Everything you need is right here.",
+      cta1: "Go to Main Portal",
+      cta2: "View Systems",
       stats: [
-        { value: "15+", label: "Years Experience" },
-        { value: "500+", label: "Dentist Partners" },
+        { value: "15+", label: "Years Operating" },
+        { value: "200+", label: "Employees" },
         { value: "134K+", label: "Units/Month" },
-        { value: "99.8%", label: "Satisfaction Rate" }
+        { value: "42", label: "Internal Apps" }
       ]
     },
     about: {
       tag: "ABOUT US",
-      title: "Your Trusted Dental Partner",
-      desc: "Digital Age Dental Lab was founded with the mission to elevate dental restoration quality through digital technology. With over 15 years of experience, we are proudly one of the leading dental labs in Vietnam.",
+      title: "Digital Age Dental Lab",
+      desc: "Founded with the mission to elevate dental restoration quality through digital technology. With over 15 years of experience, we are proudly one of the leading dental labs in Vietnam, serving over 500 dentist partners domestically and internationally.",
       values: [
-        { icon: "shield", title: "ISO Quality", desc: "Strict compliance with ISO 13485 & FDA standards" },
-        { icon: "clock", title: "On-Time Delivery", desc: "100% OTD commitment with rigorous process management" },
-        { icon: "award", title: "Premium Materials", desc: "100% genuine imported materials from leading brands" },
-        { icon: "users", title: "Expert Team", desc: "Over 200 professionally trained dental technicians" }
+        { icon: "shield", title: "ISO 13485 & FDA", desc: "Strict compliance with international standards" },
+        { icon: "clock", title: "100% OTD", desc: "Absolute on-time delivery commitment" },
+        { icon: "award", title: "Genuine Materials", desc: "100% premium imported materials" },
+        { icon: "users", title: "200+ Technicians", desc: "Professionally trained team" }
+      ]
+    },
+    systems: {
+      tag: "INTERNAL SYSTEMS",
+      title: "Quick Access to Systems",
+      desc: "All tools and applications you need to work efficiently",
+      categories: [
+        {
+          title: "Management & Operations",
+          items: [
+            { name: "IT Portal", desc: "Main IT information portal", icon: "monitor", url: "/", color: "from-blue-500 to-blue-600" },
+            { name: "Main Portal", desc: "Aggregated dashboard", icon: "grid", url: "/portal", color: "from-emerald-500 to-emerald-600" },
+            { name: "Material Request", desc: "Material request system", icon: "package", url: "/material-request", color: "from-orange-500 to-orange-600" },
+            { name: "Project Management", desc: "MIS project management", icon: "folder", url: "/mis/project-management", color: "from-purple-500 to-purple-600" },
+          ]
+        },
+        {
+          title: "Training & Development",
+          items: [
+            { name: "Training Center", desc: "Training center dashboard", icon: "graduation", url: "/training-center/dashboard", color: "from-indigo-500 to-indigo-600" },
+            { name: "Education", desc: "Training materials", icon: "book", url: "/education", color: "from-cyan-500 to-cyan-600" },
+            { name: "Dictionary", desc: "Technical dictionary", icon: "bookopen", url: "/dictionary", color: "from-teal-500 to-teal-600" },
+            { name: "Quiz Center", desc: "Knowledge assessment", icon: "check", url: "/training/quiz", color: "from-pink-500 to-pink-600" },
+          ]
+        },
+        {
+          title: "Content & Communication",
+          items: [
+            { name: "News Center", desc: "News & announcements", icon: "message", url: "/news/center", color: "from-red-500 to-red-600" },
+            { name: "Content Management", desc: "Content management", icon: "file", url: "/content-management", color: "from-violet-500 to-violet-600" },
+            { name: "Media Gallery", desc: "Image & video library", icon: "image", url: "/media-gallery", color: "from-rose-500 to-rose-600" },
+            { name: "TV Display", desc: "TV display screens", icon: "tv", url: "/tv-display", color: "from-amber-500 to-amber-600" },
+          ]
+        }
       ]
     },
     services: {
-      tag: "SERVICES",
-      title: "Comprehensive Restoration Solutions",
+      tag: "PRODUCTION CAPACITY",
+      title: "Dental Lab Services",
       items: [
-        { title: "Crown & Bridge (C&S)", desc: "Porcelain crowns and bridges with maximum precision from CAD/CAM systems", capacity: "94,700 units/month" },
-        { title: "Removable Prosthetics (RPD)", desc: "Removable dentures and metal frameworks with modern 3D scanning design", capacity: "24,100 units/month" },
-        { title: "Research & Development (NG)", desc: "New material research and advanced manufacturing process development", capacity: "15,700 units/month" },
-        { title: "Implant Solutions", desc: "Custom abutments and surgical guides with micron-level precision", capacity: "On demand" }
+        { title: "Crown & Bridge (C&S)", desc: "Porcelain crowns & bridges with CAD/CAM", capacity: "94,700 units/month", icon: "microscope" },
+        { title: "Removable (RPD)", desc: "Removable dentures with 3D scanning", capacity: "24,100 units/month", icon: "cpu" },
+        { title: "R&D (NG)", desc: "New materials & process research", capacity: "15,700 units/month", icon: "zap" },
+        { title: "Implant Solutions", desc: "Custom abutments & surgical guides", capacity: "On demand", icon: "sparkles" },
       ]
     },
     technology: {
       tag: "TECHNOLOGY",
-      title: "Advanced Digital Platform",
-      desc: "We invest heavily in technology to ensure every product achieves perfect quality.",
+      title: "Digital Technology Platform",
+      desc: "Heavy investment in technology to ensure perfect product quality.",
       items: [
-        { title: "3D Scanning", desc: "Digital impression scanning with 7-micron accuracy" },
-        { title: "CAD/CAM Design", desc: "3D design with world-leading specialized software" },
-        { title: "CNC Milling", desc: "5-axis CNC machining for optimal fit" },
-        { title: "3D Printing", desc: "Medical-grade 3D printing for models and surgical guides" },
-        { title: "Sintering", desc: "Vacuum sintering furnace with ±1°C temperature control" },
-        { title: "Quality Control", desc: "Multi-level quality checks with modern measuring equipment" }
+        { title: "3D Scanning", desc: "Digital impression scanning, 7-micron accuracy" },
+        { title: "CAD/CAM Design", desc: "3D design with world-leading software" },
+        { title: "CNC Milling", desc: "5-axis CNC machining, optimal fit" },
+        { title: "3D Printing", desc: "Medical-grade 3D printing for models" },
+        { title: "Sintering", desc: "Vacuum sintering furnace ±1°C" },
+        { title: "Quality Control", desc: "Multi-level quality checks" }
       ]
     },
     team: {
       tag: "OUR TEAM",
       title: "People are our Greatest Asset",
-      desc: "A team of over 200 highly skilled technicians, continuously trained and working with the highest sense of responsibility.",
+      desc: "Over 200 highly skilled technicians, continuously trained.",
       members: [
         { name: "Dr. Nguyen Van An", role: "Technical Director", exp: "20 years experience" },
         { name: "MSc. Tran Thi Binh", role: "R&D Head", exp: "15 years experience" },
@@ -162,28 +226,20 @@ const content = {
         { name: "Tech. Pham Minh Duc", role: "RPD Department Head", exp: "10 years experience" }
       ]
     },
-    testimonials: {
-      tag: "TESTIMONIALS",
-      title: "What Our Clients Say",
-      items: [
-        { name: "Dr. Sarah Johnson", clinic: "Smile Dental Clinic, USA", text: "Digital Age Dental Lab delivers exceptional quality consistently. Their CAD/CAM crowns fit perfectly every time.", rating: 5 },
-        { name: "Dr. Tanaka Hiroshi", clinic: "Tokyo Dental Center, Japan", text: "Outstanding turnaround time and the quality of their zirconia restorations is world-class.", rating: 5 },
-        { name: "Dr. Nguyen Thanh Ha", clinic: "International Dental, HCM", text: "The most reliable partner for our clinic. Consistent quality and professional service.", rating: 5 }
-      ]
-    },
     contact: {
-      tag: "CONTACT",
-      title: "Get in Touch",
-      desc: "We are always ready to consult and support you.",
+      tag: "INTERNAL CONTACT",
+      title: "Contact Information",
+      desc: "Contact IT department or support teams when needed.",
       address: "Lot CN-01, VSIP II-A Industrial Park, Binh Duong, Vietnam",
-      phone: "+84 274 3000 123",
-      email: "info@digitalagedentallab.com",
-      hours: "Monday - Saturday: 7:30 AM - 5:30 PM"
+      phone: "Ext. 100 (IT Support) | Ext. 200 (HR)",
+      email: "it-support@digitalagedentallab.com",
+      hours: "Monday - Saturday: 7:30 AM - 5:30 PM",
+      quickLinks: "Quick Access"
     },
     footer: {
       slogan: "Elevating Vietnamese Smiles with Digital Technology",
-      copyright: "© 2025 Digital Age Dental Lab. All rights reserved.",
-      links: ["Privacy Policy", "Terms of Service", "Careers"]
+      copyright: "© 2025 Digital Age Dental Lab. Internal Use Only.",
+      links: ["IT Helpdesk", "HR Portal", "Company Policies"]
     }
   }
 };
@@ -193,7 +249,23 @@ const iconMap: Record<string, React.ReactNode> = {
   shield: <Shield className="w-6 h-6" />,
   clock: <Clock className="w-6 h-6" />,
   award: <Award className="w-6 h-6" />,
-  users: <Users className="w-6 h-6" />
+  users: <Users className="w-6 h-6" />,
+  monitor: <Monitor className="w-5 h-5" />,
+  grid: <Building2 className="w-5 h-5" />,
+  package: <Package className="w-5 h-5" />,
+  folder: <FolderKanban className="w-5 h-5" />,
+  graduation: <GraduationCap className="w-5 h-5" />,
+  book: <BookOpen className="w-5 h-5" />,
+  bookopen: <BookOpen className="w-5 h-5" />,
+  check: <CheckCircle2 className="w-5 h-5" />,
+  message: <MessageSquare className="w-5 h-5" />,
+  file: <FileText className="w-5 h-5" />,
+  image: <Image className="w-5 h-5" />,
+  tv: <Tv className="w-5 h-5" />,
+  microscope: <Microscope className="w-6 h-6" />,
+  cpu: <Cpu className="w-6 h-6" />,
+  zap: <Zap className="w-6 h-6" />,
+  sparkles: <Sparkles className="w-6 h-6" />,
 };
 
 export default function FrontPage() {
@@ -201,7 +273,7 @@ export default function FrontPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showBackTop, setShowBackTop] = useState(false);
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const navigate = useNavigate();
   const t = content[lang];
 
   useEffect(() => {
@@ -213,13 +285,6 @@ export default function FrontPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveTestimonial(prev => (prev + 1) % t.testimonials.items.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [t.testimonials.items.length]);
-
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     setMenuOpen(false);
@@ -227,10 +292,10 @@ export default function FrontPage() {
 
   const navLinks = [
     { id: "about", label: t.nav.about },
+    { id: "systems", label: t.nav.systems },
     { id: "services", label: t.nav.services },
     { id: "technology", label: t.nav.technology },
     { id: "team", label: t.nav.team },
-    { id: "testimonials", label: t.nav.testimonials },
     { id: "contact", label: t.nav.contact }
   ];
 
@@ -244,7 +309,6 @@ export default function FrontPage() {
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
-            {/* Logo */}
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => scrollTo("hero")}>
               <img src={dentalLogo} alt="Logo" className="w-10 h-10 lg:w-12 lg:h-12" />
               <div>
@@ -257,7 +321,6 @@ export default function FrontPage() {
               </div>
             </div>
 
-            {/* Desktop Nav */}
             <div className="hidden lg:flex items-center gap-1">
               {navLinks.map(link => (
                 <button
@@ -285,7 +348,6 @@ export default function FrontPage() {
               </button>
             </div>
 
-            {/* Mobile menu btn */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className={`lg:hidden p-2 rounded-xl ${scrolled ? "text-[hsl(25,10%,30%)]" : "text-white"}`}
@@ -295,7 +357,6 @@ export default function FrontPage() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {menuOpen && (
           <div className="lg:hidden bg-white/98 backdrop-blur-xl border-t border-[hsl(30,20%,90%)] shadow-2xl animate-in slide-in-from-top-2">
             <div className="px-4 py-4 space-y-1">
@@ -335,6 +396,9 @@ export default function FrontPage() {
               {t.hero.badge}
             </div>
 
+            <p className="text-lg text-[hsl(40,40%,80%)] font-medium mb-2 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
+              {t.hero.greeting}
+            </p>
             <h1 className="text-5xl sm:text-6xl lg:text-8xl font-black leading-[0.9] mb-6 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-150">
               <span className="text-white">{t.hero.title1}</span>
               <br />
@@ -352,21 +416,20 @@ export default function FrontPage() {
 
             <div className="flex flex-wrap gap-4 mb-16 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-700">
               <Button
-                onClick={() => scrollTo("about")}
+                onClick={() => navigate("/")}
                 className="px-8 py-6 text-base font-bold rounded-2xl bg-gradient-to-r from-[hsl(40,80%,55%)] to-[hsl(30,70%,50%)] text-[hsl(25,20%,15%)] hover:shadow-2xl hover:shadow-[hsl(40,80%,55%)]/30 hover:scale-105 transition-all duration-300 border-0"
               >
                 {t.hero.cta1} <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
               <Button
                 variant="outline"
-                onClick={() => scrollTo("contact")}
+                onClick={() => scrollTo("systems")}
                 className="px-8 py-6 text-base font-bold rounded-2xl border-2 border-white/30 text-white bg-white/5 hover:bg-white/15 hover:border-white/50 transition-all duration-300"
               >
                 {t.hero.cta2}
               </Button>
             </div>
 
-            {/* Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-1000">
               {t.hero.stats.map((stat, i) => (
                 <div key={i} className="text-center sm:text-left">
@@ -378,7 +441,6 @@ export default function FrontPage() {
           </div>
         </div>
 
-        {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
           <ChevronDown className="w-8 h-8 text-white/50" />
         </div>
@@ -423,8 +485,52 @@ export default function FrontPage() {
         </div>
       </section>
 
-      {/* ════════ SERVICES SECTION ════════ */}
-      <section id="services" className="py-24 lg:py-32 bg-gradient-to-b from-[hsl(30,30%,97%)] to-white">
+      {/* ════════ INTERNAL SYSTEMS SECTION ════════ */}
+      <section id="systems" className="py-24 lg:py-32 bg-gradient-to-b from-[hsl(30,30%,97%)] to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-[hsl(175,40%,92%)] text-[hsl(175,50%,30%)] text-xs font-bold tracking-widest mb-6">
+              {t.systems.tag}
+            </span>
+            <h2 className="text-4xl lg:text-5xl font-black text-[hsl(25,10%,15%)] mb-4">
+              {t.systems.title}
+            </h2>
+            <p className="text-lg text-[hsl(25,10%,45%)] max-w-2xl mx-auto">{t.systems.desc}</p>
+          </div>
+
+          <div className="space-y-12">
+            {t.systems.categories.map((cat, ci) => (
+              <div key={ci}>
+                <h3 className="text-xl font-bold text-[hsl(25,10%,20%)] mb-6 flex items-center gap-3">
+                  <div className="w-1.5 h-8 rounded-full bg-gradient-to-b from-[hsl(175,50%,40%)] to-[hsl(175,60%,25%)]" />
+                  {cat.title}
+                </h3>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {cat.items.map((item, i) => (
+                    <button
+                      key={i}
+                      onClick={() => navigate(item.url)}
+                      className="group text-left p-5 rounded-2xl bg-white border border-[hsl(30,20%,92%)] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 hover:border-[hsl(175,40%,75%)]"
+                    >
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform`}>
+                        {iconMap[item.icon]}
+                      </div>
+                      <h4 className="font-bold text-[hsl(25,10%,15%)] mb-1">{item.name}</h4>
+                      <p className="text-sm text-[hsl(25,10%,50%)]">{item.desc}</p>
+                      <div className="mt-3 flex items-center gap-1 text-xs font-semibold text-[hsl(175,50%,35%)] opacity-0 group-hover:opacity-100 transition-opacity">
+                        {lang === "vi" ? "Mở" : "Open"} <ArrowRight className="w-3 h-3" />
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════ SERVICES / CAPACITY SECTION ════════ */}
+      <section id="services" className="py-24 lg:py-32 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <span className="inline-block px-4 py-1.5 rounded-full bg-[hsl(40,60%,92%)] text-[hsl(30,60%,40%)] text-xs font-bold tracking-widest mb-6">
@@ -437,10 +543,10 @@ export default function FrontPage() {
 
           <div className="grid md:grid-cols-2 gap-8">
             {t.services.items.map((svc, i) => (
-              <div key={i} className="group relative p-8 rounded-3xl bg-white border border-[hsl(30,20%,92%)] shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
+              <div key={i} className="group relative p-8 rounded-3xl bg-[hsl(30,30%,97%)] border border-[hsl(30,20%,92%)] shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
                 <div className="flex items-start gap-5">
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[hsl(175,50%,40%)] to-[hsl(175,60%,28%)] flex items-center justify-center text-white shrink-0">
-                    <Microscope className="w-7 h-7" />
+                    {iconMap[svc.icon]}
                   </div>
                   <div className="flex-1">
                     <h3 className="text-xl font-bold text-[hsl(25,10%,15%)] mb-2">{svc.title}</h3>
@@ -493,7 +599,7 @@ export default function FrontPage() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="order-2 lg:order-1">
               <div className="rounded-3xl overflow-hidden shadow-2xl">
-                <img src={dentalServices} alt="Our team at work" className="w-full h-[450px] object-cover" />
+                <img src={dentalServices} alt="Team at work" className="w-full h-[450px] object-cover" />
               </div>
             </div>
             <div className="order-1 lg:order-2">
@@ -524,52 +630,8 @@ export default function FrontPage() {
         </div>
       </section>
 
-      {/* ════════ TESTIMONIALS SECTION ════════ */}
-      <section id="testimonials" className="py-24 lg:py-32 bg-gradient-to-b from-[hsl(30,30%,97%)] to-[hsl(30,25%,95%)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-[hsl(40,60%,92%)] text-[hsl(30,60%,40%)] text-xs font-bold tracking-widest mb-6">
-              {t.testimonials.tag}
-            </span>
-            <h2 className="text-4xl lg:text-5xl font-black text-[hsl(25,10%,15%)]">{t.testimonials.title}</h2>
-          </div>
-
-          <div className="max-w-3xl mx-auto">
-            {t.testimonials.items.map((item, i) => (
-              <div
-                key={i}
-                className={`transition-all duration-700 ${i === activeTestimonial ? "block" : "hidden"}`}
-              >
-                <div className="bg-white rounded-3xl p-10 shadow-xl border border-[hsl(30,20%,92%)] text-center">
-                  <Quote className="w-12 h-12 text-[hsl(175,40%,75%)] mx-auto mb-6" />
-                  <p className="text-xl lg:text-2xl text-[hsl(25,10%,25%)] leading-relaxed mb-8 italic">
-                    "{item.text}"
-                  </p>
-                  <div className="flex justify-center gap-1 mb-4">
-                    {Array.from({ length: item.rating }).map((_, j) => (
-                      <Star key={j} className="w-5 h-5 fill-[hsl(40,80%,55%)] text-[hsl(40,80%,55%)]" />
-                    ))}
-                  </div>
-                  <div className="font-bold text-[hsl(25,10%,15%)]">{item.name}</div>
-                  <div className="text-sm text-[hsl(175,50%,35%)] font-medium">{item.clinic}</div>
-                </div>
-              </div>
-            ))}
-            <div className="flex justify-center gap-2 mt-8">
-              {t.testimonials.items.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveTestimonial(i)}
-                  className={`w-3 h-3 rounded-full transition-all ${i === activeTestimonial ? "bg-[hsl(175,50%,35%)] w-8" : "bg-[hsl(25,10%,80%)]"}`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════ CONTACT SECTION ════════ */}
-      <section id="contact" className="py-24 lg:py-32 bg-white">
+      {/* ════════ CONTACT / INTERNAL INFO SECTION ════════ */}
+      <section id="contact" className="py-24 lg:py-32 bg-gradient-to-b from-[hsl(30,30%,97%)] to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16">
             <div>
@@ -596,35 +658,35 @@ export default function FrontPage() {
               </div>
             </div>
 
-            {/* Contact Form */}
-            <div className="bg-[hsl(30,30%,97%)] rounded-3xl p-8 border border-[hsl(30,20%,92%)]">
-              <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
-                <div>
-                  <label className="block text-sm font-bold text-[hsl(25,10%,25%)] mb-2">
-                    {lang === "vi" ? "Họ và tên" : "Full Name"}
-                  </label>
-                  <input className="w-full px-4 py-3 rounded-xl border border-[hsl(30,20%,88%)] bg-white focus:ring-2 focus:ring-[hsl(175,50%,40%)] focus:border-transparent outline-none transition-all text-[hsl(25,10%,20%)]" />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-[hsl(25,10%,25%)] mb-2">Email</label>
-                  <input type="email" className="w-full px-4 py-3 rounded-xl border border-[hsl(30,20%,88%)] bg-white focus:ring-2 focus:ring-[hsl(175,50%,40%)] focus:border-transparent outline-none transition-all text-[hsl(25,10%,20%)]" />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-[hsl(25,10%,25%)] mb-2">
-                    {lang === "vi" ? "Phòng khám / Tổ chức" : "Clinic / Organization"}
-                  </label>
-                  <input className="w-full px-4 py-3 rounded-xl border border-[hsl(30,20%,88%)] bg-white focus:ring-2 focus:ring-[hsl(175,50%,40%)] focus:border-transparent outline-none transition-all text-[hsl(25,10%,20%)]" />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-[hsl(25,10%,25%)] mb-2">
-                    {lang === "vi" ? "Nội dung tin nhắn" : "Message"}
-                  </label>
-                  <textarea rows={4} className="w-full px-4 py-3 rounded-xl border border-[hsl(30,20%,88%)] bg-white focus:ring-2 focus:ring-[hsl(175,50%,40%)] focus:border-transparent outline-none transition-all resize-none text-[hsl(25,10%,20%)]" />
-                </div>
-                <Button className="w-full py-6 text-base font-bold rounded-2xl bg-gradient-to-r from-[hsl(175,50%,35%)] to-[hsl(175,60%,25%)] text-white hover:shadow-xl hover:shadow-[hsl(175,50%,35%)]/20 transition-all duration-300">
-                  {lang === "vi" ? "Gửi tin nhắn" : "Send Message"} <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </form>
+            {/* Quick Access Panel instead of Contact Form */}
+            <div className="bg-white rounded-3xl p-8 border border-[hsl(30,20%,92%)] shadow-lg">
+              <h3 className="text-xl font-bold text-[hsl(25,10%,15%)] mb-6 flex items-center gap-2">
+                <Zap className="w-5 h-5 text-[hsl(175,50%,35%)]" />
+                {t.contact.quickLinks}
+              </h3>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { label: "IT Portal", url: "/", icon: <Monitor className="w-5 h-5" />, color: "from-blue-500 to-blue-600" },
+                  { label: "Training", url: "/training-center/dashboard", icon: <GraduationCap className="w-5 h-5" />, color: "from-indigo-500 to-indigo-600" },
+                  { label: "News", url: "/news/center", icon: <MessageSquare className="w-5 h-5" />, color: "from-red-500 to-red-600" },
+                  { label: "Material Request", url: "/material-request", icon: <Package className="w-5 h-5" />, color: "from-orange-500 to-orange-600" },
+                  { label: "Media Gallery", url: "/media-gallery", icon: <Image className="w-5 h-5" />, color: "from-rose-500 to-rose-600" },
+                  { label: "Dictionary", url: "/dictionary", icon: <BookOpen className="w-5 h-5" />, color: "from-teal-500 to-teal-600" },
+                  { label: "TV Display", url: "/tv-display", icon: <Tv className="w-5 h-5" />, color: "from-amber-500 to-amber-600" },
+                  { label: "User Permissions", url: "/user-permissions", icon: <Settings className="w-5 h-5" />, color: "from-gray-500 to-gray-600" },
+                ].map((link, i) => (
+                  <button
+                    key={i}
+                    onClick={() => navigate(link.url)}
+                    className="flex items-center gap-3 p-3 rounded-xl bg-[hsl(30,30%,97%)] hover:bg-[hsl(175,40%,95%)] border border-[hsl(30,20%,92%)] hover:border-[hsl(175,40%,80%)] transition-all text-left group"
+                  >
+                    <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${link.color} flex items-center justify-center text-white shrink-0 group-hover:scale-110 transition-transform`}>
+                      {link.icon}
+                    </div>
+                    <span className="text-sm font-semibold text-[hsl(25,10%,25%)]">{link.label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -643,9 +705,13 @@ export default function FrontPage() {
                 </div>
               </div>
               <p className="text-white/50 text-sm leading-relaxed mb-6">{t.footer.slogan}</p>
+              <div className="flex items-center gap-2 text-white/40 text-xs">
+                <Heart className="w-3 h-3" />
+                <span>Made with love by IT Department</span>
+              </div>
             </div>
             <div>
-              <h4 className="font-bold mb-4 text-[hsl(40,80%,65%)]">{lang === "vi" ? "Liên kết" : "Quick Links"}</h4>
+              <h4 className="font-bold mb-4 text-[hsl(40,80%,65%)]">{lang === "vi" ? "Điều hướng" : "Navigation"}</h4>
               <div className="space-y-2">
                 {navLinks.map(link => (
                   <button key={link.id} onClick={() => scrollTo(link.id)} className="block text-white/50 hover:text-white text-sm transition-colors">
@@ -655,16 +721,18 @@ export default function FrontPage() {
               </div>
             </div>
             <div>
-              <h4 className="font-bold mb-4 text-[hsl(40,80%,65%)]">{lang === "vi" ? "Pháp lý" : "Legal"}</h4>
+              <h4 className="font-bold mb-4 text-[hsl(40,80%,65%)]">{lang === "vi" ? "Hỗ trợ" : "Support"}</h4>
               <div className="space-y-2">
                 {t.footer.links.map((link, i) => (
-                  <a key={i} href="#" className="block text-white/50 hover:text-white text-sm transition-colors">{link}</a>
+                  <button key={i} className="block text-white/50 hover:text-white text-sm transition-colors">
+                    {link}
+                  </button>
                 ))}
               </div>
             </div>
           </div>
           <div className="border-t border-white/10 pt-8 text-center">
-            <p className="text-white/40 text-sm">{t.footer.copyright}</p>
+            <p className="text-white/30 text-sm">{t.footer.copyright}</p>
           </div>
         </div>
       </footer>
@@ -673,9 +741,9 @@ export default function FrontPage() {
       {showBackTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-[hsl(175,50%,35%)] text-white shadow-xl hover:bg-[hsl(175,50%,30%)] transition-all animate-in fade-in"
+          className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-[hsl(175,50%,35%)] text-white shadow-xl hover:shadow-2xl hover:scale-110 transition-all flex items-center justify-center"
         >
-          <ChevronUp className="w-6 h-6 mx-auto" />
+          <ChevronUp className="w-6 h-6" />
         </button>
       )}
     </div>
