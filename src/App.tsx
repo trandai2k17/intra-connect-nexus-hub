@@ -41,6 +41,7 @@ import DictionaryNG from "./pages/training/DictionaryNG";
 import QuizCenter from "./pages/training/QuizCenter";
 import ThankCorner from "./pages/training/ThankCorner";
 import MasterDataUpload from "./pages/MasterDataUpload";
+import FrontPage from "./pages/FrontPage";
 
 const queryClient = new QueryClient();
 
