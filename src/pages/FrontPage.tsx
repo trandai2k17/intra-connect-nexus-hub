@@ -665,6 +665,54 @@ export default function FrontPage() {
         </div>
       </section>
 
+      {/* ════════ MILESTONES SECTION ════════ */}
+      <section id="milestones" className="py-24 lg:py-32 bg-gradient-to-b from-white to-[hsl(30,30%,97%)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-[hsl(40,60%,92%)] text-[hsl(30,60%,40%)] text-xs font-bold tracking-widest mb-6">
+              {t.milestones.tag}
+            </span>
+            <h2 className="text-4xl lg:text-5xl font-black text-[hsl(25,10%,15%)] mb-4">
+              {t.milestones.title}
+            </h2>
+            <p className="text-lg text-[hsl(25,10%,45%)] max-w-2xl mx-auto">{t.milestones.desc}</p>
+          </div>
+
+          {/* Timeline */}
+          <div className="relative">
+            {/* Vertical line */}
+            <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[hsl(175,50%,40%)] via-[hsl(40,80%,55%)] to-[hsl(175,50%,40%)]" />
+
+            <div className="space-y-12">
+              {t.milestones.items.map((item, i) => (
+                <div key={i} className={`relative flex items-start gap-8 ${i % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}>
+                  {/* Dot on timeline */}
+                  <div className="absolute left-6 lg:left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-white border-4 border-[hsl(175,50%,40%)] shadow-lg flex items-center justify-center z-10">
+                    <div className="text-[hsl(175,50%,30%)]">
+                      {iconMap[item.icon] || <Calendar className="w-5 h-5" />}
+                    </div>
+                  </div>
+
+                  {/* Content card */}
+                  <div className={`ml-20 lg:ml-0 lg:w-[calc(50%-3rem)] ${i % 2 === 0 ? 'lg:pr-8 lg:text-right' : 'lg:pl-8'}`}>
+                    <div className="group p-6 rounded-2xl bg-white border border-[hsl(30,20%,92%)] shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-500">
+                      <div className={`flex items-center gap-3 mb-3 ${i % 2 === 0 ? 'lg:justify-end' : ''}`}>
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-[hsl(175,50%,40%)] to-[hsl(175,60%,30%)] text-white text-sm font-bold">
+                          <Calendar className="w-3.5 h-3.5" />
+                          {item.year}
+                        </span>
+                      </div>
+                      <h3 className="text-xl font-bold text-[hsl(25,10%,15%)] mb-2">{item.title}</h3>
+                      <p className="text-[hsl(25,10%,45%)] leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ════════ CONTACT / INTERNAL INFO SECTION ════════ */}
       <section id="contact" className="py-24 lg:py-32 bg-gradient-to-b from-[hsl(30,30%,97%)] to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
