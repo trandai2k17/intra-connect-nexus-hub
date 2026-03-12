@@ -95,6 +95,7 @@ const App = () => (
               <Route path="/tv-display" element={<FullPageLayout><TVDisplay /></FullPageLayout>} />
               <Route path="/tv/bonus-summary" element={<FullPageLayout><TVBonusSummary /></FullPageLayout>} />
               <Route path="/tv/production-dashboard" element={<FullPageLayout><ProductionDashboard /></FullPageLayout>} />
+              <Route path="/frontpage" element={<FullPageLayout><FrontPage /></FullPageLayout>} />
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<DashboardLayout><NotFound /></DashboardLayout>} />
