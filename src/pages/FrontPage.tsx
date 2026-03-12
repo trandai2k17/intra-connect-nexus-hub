@@ -241,6 +241,21 @@ const content = {
         { name: "Tech. Pham Minh Duc", role: "RPD Department Head", exp: "10 years experience" }
       ]
     },
+    milestones: {
+      tag: "MILESTONES",
+      title: "Our Journey",
+      desc: "Key milestones marking the continuous growth of Digital Age Dental Lab.",
+      items: [
+        { year: "2009", title: "Company Founded", desc: "Digital Age Dental Lab officially established in Binh Duong with 20 founding employees.", icon: "flag" },
+        { year: "2012", title: "ISO 13485 Certified", desc: "Quality management system achieved international standards for medical devices.", icon: "award" },
+        { year: "2015", title: "International Expansion", desc: "Expanded market to Japan, Australia and ASEAN countries.", icon: "globe" },
+        { year: "2017", title: "CAD/CAM Investment", desc: "Deployed comprehensive digital design and manufacturing system.", icon: "cpu" },
+        { year: "2019", title: "100 Employees", desc: "Team grew to 100 technicians, factory phase 2 expansion.", icon: "users" },
+        { year: "2021", title: "FDA Approved", desc: "Achieved US FDA certification, expanding exports to the American market.", icon: "star" },
+        { year: "2023", title: "134K+ Units/Month", desc: "Reached capacity of 134,000+ product units per month with 200+ employees.", icon: "trending" },
+        { year: "2025", title: "Full Digital Transformation", desc: "Deployed MES, ERP and 42+ internal applications for operations.", icon: "zap" },
+      ]
+    },
     contact: {
       tag: "INTERNAL CONTACT",
       title: "Contact Information",
